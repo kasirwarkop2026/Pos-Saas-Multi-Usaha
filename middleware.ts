@@ -42,7 +42,6 @@ export async function middleware(request: NextRequest) {
 
   if (adminError || !admin || admin.status !== "ACTIVE" ||
       !["SUPER_ADMIN", "PLATFORM_ADMIN"].includes(admin.role)) {
-    await supabase.auth.signOut();
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 
