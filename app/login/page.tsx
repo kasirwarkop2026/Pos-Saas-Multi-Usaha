@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -10,6 +10,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [setupRequired, setSetupRequired] = useState(false);
+
+  useEffect(() => {
+    setSetupRequired(new URLSearchParams(window.location.search).get("setup") === "1");
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -57,6 +62,11 @@ export default function LoginPage() {
         <div style={{fontSize:12,fontWeight:800,letterSpacing:".12em",color:"#5264a8"}}>POS SAAS MULTI-USAHA</div>
         <h1 style={{fontSize:26,margin:"12px 0 6px",color:"#18233b"}}>Login Administrator</h1>
         <p style={{fontSize:14,color:"#69758b",margin:"0 0 26px"}}>Masuk menggunakan akun administrator platform yang telah didaftarkan.</p>
+        {setupRequired && (
+          <p role="alert" style={{background:"#fff6e5",color:"#8a5a00",padding:12,borderRadius:8,fontSize:13,margin:"0 0 16px"}}>
+            Environment Supabase belum dikonfigurasi pada deployment. Atur NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY pada environment Production, lalu deploy ulang.
+          </p>
+        )}
         <form onSubmit={handleSubmit} style={{display:"grid",gap:15}}>
           <label style={{display:"grid",gap:7,fontSize:13,fontWeight:650,color:"#34415b"}}>
             Email
@@ -67,7 +77,7 @@ export default function LoginPage() {
             <input type="password" autoComplete="current-password" required value={password} onChange={e=>setPassword(e.target.value)} placeholder="Masukkan kata sandi" style={{height:44,padding:"0 12px",border:"1px solid #d8deea",borderRadius:9,fontSize:14}}/>
           </label>
           {error && <p role="alert" style={{margin:0,color:"#b42318",fontSize:13}}>{error}</p>}
-          <button type="submit" disabled={loading} style={{height:46,border:0,borderRadius:9,background:"#273b83",color:"#fff",fontWeight:700,fontSize:14,cursor:loading?"wait":"pointer",opacity: loading ? 0.7 : 1}}>{loading?"Memeriksa akun…":"Masuk"}</button>
+          <button type="submit" disabled={loading || setupRequired} style={{height:46,border:0,borderRadius:9,background:"#273b83",color:"#fff",fontWeight:700,fontSize:14,cursor:loading?"wait":"pointer",opacity: loading || setupRequired ? 0.7 : 1}}>{loading?"Memeriksa akun…":"Masuk"}</button>
         </form>
         <p style={{fontSize:11,color:"#929bad",margin:"22px 0 0",lineHeight:1.5}}>Akses hanya untuk SUPER_ADMIN dan PLATFORM_ADMIN yang berstatus ACTIVE. Pendaftaran publik tidak tersedia.</p>
       </section>
