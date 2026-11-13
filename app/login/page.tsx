@@ -69,7 +69,7 @@ export default function LoginPage() {
             <input type="password" autoComplete="current-password" required value={password} onChange={e=>setPassword(e.target.value)} placeholder="Masukkan kata sandi" style={{height:44,padding:"0 12px",border:"1px solid #d8deea",borderRadius:9,fontSize:14}}/>
           </label>
           {error && <p role="alert" style={{margin:0,color:"#b42318",fontSize:13}}>{error}</p>}
-          <button type="submit" disabled={loading} style={{height:46,border:0,borderRadius:9,background:"#273b83",color:"#fff",fontWeight:700,fontSize:14,cursor:loading?"wait":"pointer",opacity:loading?.7:1}}>{loading?"Memeriksa akun…":"Masuk"}</button>
+          <button type="submit" disabled={loading} style={{height:46,border:0,borderRadius:9,background:"#273b83",color:"#fff",fontWeight:700,fontSize:14,cursor:loading?"wait":"pointer",opacity: loading ? 0.7 : 1}}>{loading?"Memeriksa akun…":"Masuk"}</button>
         </form>
         <p style={{fontSize:11,color:"#929bad",margin:"22px 0 0",lineHeight:1.5}}>Akses hanya untuk SUPER_ADMIN dan PLATFORM_ADMIN yang berstatus ACTIVE. Pendaftaran publik tidak tersedia.</p>
       </section>
