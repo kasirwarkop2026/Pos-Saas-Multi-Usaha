@@ -30,6 +30,9 @@
   "overrides": {
     "next": {
       "postcss": "^8.5.23"
+    },
+    "@typescript-eslint": {
+      "minimatch": "^11.0.1"
     }
   }
 }
