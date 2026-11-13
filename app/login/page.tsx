@@ -57,7 +57,6 @@ export default function LoginPage() {
         <div style={{fontSize:12,fontWeight:800,letterSpacing:".12em",color:"#5264a8"}}>POS SAAS MULTI-USAHA</div>
         <h1 style={{fontSize:26,margin:"12px 0 6px",color:"#18233b"}}>Login Administrator</h1>
         <p style={{fontSize:14,color:"#69758b",margin:"0 0 26px"}}>Masuk menggunakan akun administrator platform yang telah didaftarkan.</p>
-        {search.get("setup")==="1" && <p role="alert" style={{background:"#fff6e5",color:"#8a5a00",padding:12,borderRadius:8,fontSize:13}}>Environment Supabase belum dikonfigurasi pada deployment.</p>}
         <form onSubmit={handleSubmit} style={{display:"grid",gap:15}}>
           <label style={{display:"grid",gap:7,fontSize:13,fontWeight:650,color:"#34415b"}}>
             Email
