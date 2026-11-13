@@ -100,3 +100,13 @@
 @media(max-width:1050px){.notification-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.notification-intro{flex-direction:column}.notification-toolbar .search-wrap{flex-basis:100%;max-width:none}.notification-filter-panel{grid-template-columns:1fr}.notification-list-head{flex-wrap:wrap}.notification-item{grid-template-columns:32px minmax(0,1fr)}.notification-actions{grid-column:2;flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap}.notification-meta{gap:6px 10px}}
 @media(max-width:420px){.notification-stats .card{padding:13px}.notification-stats b{font-size:21px}.notification-item{padding:12px;gap:9px}.notification-title-row h3{font-size:11px}}
+
+/* Staff directory table: fit all audit fields inside the tenant detail modal. */
+.user-modal .staff-table-wrap{width:100%;overflow-x:hidden}
+.user-modal .staff-table{width:100%;min-width:0;table-layout:fixed;white-space:normal}
+.user-modal .staff-table th,.user-modal .staff-table td{padding:9px 6px;font-size:9px;line-height:1.45;vertical-align:top;overflow-wrap:anywhere;word-break:break-word}
+.user-modal .staff-table th{font-size:8px;letter-spacing:.02em}
+.user-modal .staff-table .business-name{font-size:9px;overflow-wrap:anywhere}
+.user-modal .staff-table .business-id{font-size:8px;overflow-wrap:anywhere}
+.user-modal .staff-table .role-chip,.user-modal .staff-table .tag{font-size:8px;padding:4px 6px;white-space:normal}
+@media(max-width:520px){.user-modal .staff-table th,.user-modal .staff-table td{padding:8px 4px;font-size:8px}.user-modal .staff-table th{font-size:7px}.user-modal .staff-table .role-chip,.user-modal .staff-table .tag{font-size:7px;padding:3px 4px}}
