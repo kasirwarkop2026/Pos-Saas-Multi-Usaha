@@ -80,3 +80,24 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Audit dependencies
         run: npm audit --audit-level=high
+
+  lockfile:
+    name: Generate reproducible npm lockfile
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate package lock
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Upload generated lockfile for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: pos-saas-package-lock
+          path: package-lock.json
+          if-no-files-found: error
+          retention-days: 3
