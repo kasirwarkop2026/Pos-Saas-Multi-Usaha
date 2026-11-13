@@ -1,9 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import type { LucideIcon } from "lucide-react";
 import { Activity, AlertTriangle, ArrowDownRight, ArrowUpRight, Bell, Building2, CheckCircle2, ChevronDown, CircleHelp, CreditCard, Database, Download, FileBarChart, Gauge, LayoutDashboard, LifeBuoy, MapPinned, Menu, MoreHorizontal, Search, Settings, ShieldCheck, Users, Wallet, X } from "lucide-react";
 
-type MenuItem={label:string;icon:typeof LayoutDashboard;group:string;description:string};
+type MenuItem={label:string;icon:LucideIcon;group:string;description:string};
 const menus:MenuItem[]=[
  {label:"Dashboard",icon:LayoutDashboard,group:"UTAMA",description:"Ringkasan kesehatan dan performa platform SaaS."},
  {label:"Manajemen Bisnis",icon:Building2,group:"MANAJEMEN",description:"Daftar tenant, profil bisnis, pemilik, paket, dan status."},
@@ -19,7 +20,7 @@ const menus:MenuItem[]=[
 ];
 const activities=[["business","Bisnis baru mendaftar","Kedai Kopi Nusantara mengirim pendaftaran","8 menit lalu"],["payment","Pembayaran diterima","Invoice INV-DEMO-1042 berhasil dibayar","24 menit lalu"],["user","Pengguna baru dibuat","Akun pemilik bisnis menyelesaikan registrasi","1 jam lalu"],["security","Percobaan login perlu ditinjau","Terdeteksi aktivitas login tidak biasa (demo)","2 jam lalu"]];
 const businesses=[["Kedai Kopi Nusantara","BIZ-DEMO-001","Rizky Pratama","Banda Aceh","Pro","Aktif"],["Toko Berkah Jaya","BIZ-DEMO-002","Siti Rahma","Aceh Besar","Basic","Aktif"],["Depot Air Sejuk","BIZ-DEMO-003","Fajar Hidayat","Banda Aceh","Pro","Menunggu"],["Roti Pagi","BIZ-DEMO-004","Dina Amelia","Lhokseumawe","Basic","Aktif"]];
-function Stat({title,value,sub,icon:Icon,trend}:{title:string;value:string;sub:string;icon:typeof Building2;trend?:string}){return <div className="card"><div className="stat-top"><span>{title}</span><span className="stat-icon"><Icon size={17}/></span></div><div className="stat-value">{value}</div><div className="stat-foot">{trend&&<span className="positive"><ArrowUpRight size={12} style={{display:"inline",verticalAlign:"middle"}}/> {trend} </span>}{sub}</div></div>}
+function Stat({title,value,sub,icon:Icon,trend}:{title:string;value:string;sub:string;icon:LucideIcon;trend?:string}){return <div className="card"><div className="stat-top"><span>{title}</span><span className="stat-icon"><Icon size={17}/></span></div><div className="stat-value">{value}</div><div className="stat-foot">{trend&&<span className="positive"><ArrowUpRight size={12} style={{display:"inline",verticalAlign:"middle"}}/> {trend} </span>}{sub}</div></div>}
 export default function Home(){
  const [active,setActive]=useState("Dashboard");const [mobileOpen,setMobileOpen]=useState(false);const [query,setQuery]=useState("");
  const filtered=useMemo(()=>businesses.filter(b=>b.join(" ").toLowerCase().includes(query.toLowerCase())),[query]);
