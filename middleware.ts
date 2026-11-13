@@ -11,12 +11,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login?setup=1", request.url));
   }
 
+  type CookieToSet = {
+    name: string;
+    value: string;
+    options?: Parameters<typeof response.cookies.set>[2];
+  };
+
   const supabase = createServerClient(url, key, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
       },
-      setAll(cookiesToSet, headers) {
+      setAll(cookiesToSet: CookieToSet[], headers: Record<string, string>) {
         cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
         response = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
@@ -25,7 +31,7 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  if (request.nextUrl.pathname === "/login") return response;
+  if (request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/unauthorized") return response;
 
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user) {
