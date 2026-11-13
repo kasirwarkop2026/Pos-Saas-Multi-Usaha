@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !key) {
-    if (request.nextUrl.pathname === "/login") return response;
+    if (request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/unauthorized") return response;
     return NextResponse.redirect(new URL("/login?setup=1", request.url));
   }
 
