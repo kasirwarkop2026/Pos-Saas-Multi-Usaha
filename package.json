@@ -31,7 +31,7 @@
     "next": {
       "postcss": "^8.5.23"
     },
-    "@typescript-eslint": {
+    "@typescript-eslint/typescript-estree": {
       "minimatch": "^11.0.1"
     }
   }
