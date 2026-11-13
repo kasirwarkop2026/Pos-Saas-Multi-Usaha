@@ -9,6 +9,7 @@ export default function SessionControls() {
   const [identity, setIdentity] = useState<{email:string;role:string}|null>(null);
 
   useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) return;
     const supabase = createClient();
     let active = true;
     supabase.auth.getUser().then(async ({data}) => {
