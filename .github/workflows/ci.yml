@@ -102,8 +102,8 @@ jobs:
         env:
           BRANCH_NAME: ${{ github.head_ref }}
         run: |
-          if git diff --quiet -- package-lock.json; then
-            echo "package-lock.json is already current"
+          if [ -f package-lock.json ] && git ls-files --error-unmatch package-lock.json >/dev/null 2>&1 && git diff --quiet -- package-lock.json; then
+            echo "Tracked package-lock.json is already current"
             exit 0
           fi
           git config user.name "github-actions[bot]"
