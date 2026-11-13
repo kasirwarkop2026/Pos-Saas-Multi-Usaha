@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  if (request.nextUrl.pathname === "/login") return response;
+  if (request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/unauthorized") return response;
 
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user) {
