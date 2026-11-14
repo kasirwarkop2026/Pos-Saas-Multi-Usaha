@@ -40,7 +40,7 @@ export default function PlatformAdminPage() {
   const descriptions: Record<Section, string> = {
     "Dashboard": "Ringkasan pekerjaan operasional dalam batas penugasan Platform Admin.",
     "Monitoring Tenant": "Pemantauan status tenant dan informasi operasional. Tidak ada perubahan status langsung.",
-    "Operasional Harga": "Permintaan perubahan harga diteruskan untuk persetujuan sesuai kewenangan.",
+    "Operasional Harga": "Perubahan harga terarah hanya tersedia jika grant individual dan scope target sesuai; perubahan massal khusus Super Admin.",
     "Permintaan Refund": "Platform Admin dapat mengajukan refund; keputusan tetap berada pada Super Admin.",
     "Support": "Penanganan tiket bantuan dan koordinasi operasional sesuai penugasan.",
     "Akses Bantuan": "Akses lintas tenant harus spesifik, beralasan, terbatas waktu, dan diaudit.",
@@ -62,14 +62,14 @@ export default function PlatformAdminPage() {
         {notice && <div className={styles.notice} role="status">{notice}</div>}
         {active === "Dashboard" && <>
           <div className={styles.stats}>
-            <article><small>Tenant dalam pemantauan</small><strong>48</strong><span>Data ilustrasi</span></article>
-            <article><small>Permintaan operasional</small><strong>07</strong><span>3 menunggu persetujuan</span></article>
-            <article><small>Tiket support aktif</small><strong>12</strong><span>2 prioritas tinggi</span></article>
-            <article><small>Akses bantuan aktif</small><strong>02</strong><span>Dengan batas waktu</span></article>
+            <article><small>Tiket yang ditugaskan</small><strong>02</strong><span>Contoh antrean pribadi · DEMO</span></article>
+            <article><small>Refund yang diajukan</small><strong>01</strong><span>Status dapat dipantau · DEMO</span></article>
+            <article><small>Keputusan menunggu Super Admin</small><strong>01</strong><span>Hanya status read-only · DEMO</span></article>
+            <article><small>Tindak lanjut support</small><strong>02</strong><span>Contoh assignment · DEMO</span></article>
           </div>
           <div className={styles.grid}>
-            <section className={styles.card}><div className={styles.cardHead}><div><h2>Antrean pekerjaan</h2><p>Item yang memerlukan tindak lanjut</p></div><span className={styles.pill}>DEMO</span></div>{requests.map(r=><div className={styles.request} key={r.id}><div><b>{r.title}</b><small>{r.id} · {r.type}</small></div><span>{r.status}</span></div>)}</section>
-            <section className={styles.card}><div className={styles.cardHead}><div><h2>Batas kewenangan</h2><p>Pengingat kontrol operasional</p></div></div><ul className={styles.rules}><li>Perubahan harga diajukan untuk persetujuan.</li><li>Refund memerlukan keputusan Super Admin.</li><li>Tidak ada self-approval.</li><li>Akses lintas tenant harus dibatasi dan memiliki alasan.</li><li>Seluruh tindakan produksi wajib diaudit di sisi server.</li></ul></section>
+            <section className={styles.card}><div className={styles.cardHead}><div><h2>Antrean pekerjaan</h2><p>Contoh tugas yang ditugaskan pada akun ini, bukan ringkasan global tenant atau platform.</p></div><span className={styles.pill}>DEMO</span></div>{requests.map(r=><div className={styles.request} key={r.id}><div><b>{r.title}</b><small>{r.id} · {r.type}</small></div><span>{r.status}</span></div>)}</section>
+            <section className={styles.card}><div className={styles.cardHead}><div><h2>Batas kewenangan</h2><p>Pengingat kontrol operasional</p></div></div><ul className={styles.rules}><li>Perubahan harga terarah memerlukan grant individual dan scope target yang cocok.</li><li>Refund memerlukan keputusan Super Admin.</li><li>Tidak ada self-approval.</li><li>Akses lintas tenant harus dibatasi dan memiliki alasan.</li><li>Seluruh tindakan produksi wajib diaudit di sisi server.</li></ul></section>
           </div>
         </>}
         {active === "Monitoring Tenant" && <section className={styles.card}>
@@ -77,8 +77,8 @@ export default function PlatformAdminPage() {
           <div className={styles.tableWrap}><table><thead><tr><th>BUSINESS</th><th>PEMILIK</th><th>WILAYAH</th><th>PAKET</th><th>STATUS</th><th>KESEHATAN</th><th></th></tr></thead><tbody>{filteredTenants.map(t=><tr key={t.id}><td><b>{t.name}</b><small>{t.id}</small></td><td>{t.owner}</td><td>{t.region}</td><td>{t.plan}</td><td><span className={styles.tag}>{t.status}</span></td><td>{t.health}</td><td><button className={styles.link} onClick={()=>setSelectedTenant(t)}>Lihat ringkasan</button></td></tr>)}</tbody></table>{filteredTenants.length===0&&<div className={styles.empty}>Tidak ada tenant yang cocok.</div>}</div>
         </section>}
         {active === "Operasional Harga" && <div className={styles.grid}>
-          <section className={styles.card}><h2>Permintaan perubahan harga</h2><p>Platform Admin menyiapkan permintaan. Harga tidak berubah sebelum persetujuan yang berwenang.</p><div className={styles.priceRow}><div><b>Paket Basic</b><small>Harga contoh saat ini</small></div><strong>Rp99.000/bln</strong></div><div className={styles.priceRow}><div><b>Paket Pro</b><small>Harga contoh saat ini</small></div><strong>Rp199.000/bln</strong></div><button className={styles.primary} onClick={()=>openRequest("Permintaan perubahan harga")}>Buat permintaan perubahan harga</button></section>
-          <section className={styles.card}><h2>Kontrol perubahan</h2><ul className={styles.rules}><li>Permintaan memiliki alasan dan jejak audit.</li><li>Perubahan harga tidak diterapkan langsung dari panel ini.</li><li>Persetujuan mengikuti permission spesifik.</li><li>Perubahan massal tetap memerlukan kewenangan Super Admin.</li></ul></section>
+          <section className={styles.card}><h2>Perubahan harga terarah · DEMO</h2><p>Simulasi perubahan untuk satu target paket. Pada implementasi nyata, tindakan langsung hanya boleh dilakukan jika akun memiliki grant individual khusus dan scope target sesuai.</p><div className={styles.priceRow}><div><b>Paket Basic</b><small>Target tunggal · harga ilustrasi saat ini</small></div><strong>Rp99.000/bln</strong></div><div className={styles.priceRow}><div><b>Paket Pro</b><small>Target tunggal · harga ilustrasi saat ini</small></div><strong>Rp199.000/bln</strong></div><button className={styles.primary} onClick={()=>openRequest("Simulasi perubahan harga terarah · satu target")}>Simulasikan perubahan terarah</button><p className={styles.warning}>Tidak ada perubahan harga yang diterapkan. Approval tambahan hanya berlaku bila diwajibkan kebijakan; perubahan massal tetap SUPER_ADMIN-only.</p></section>
+          <section className={styles.card}><h2>Kontrol perubahan</h2><ul className={styles.rules}><li>Grant harus bersifat individual, spesifik pada akun, dan sesuai target.</li><li>Scope target dan perubahan yang diminta harus terlihat sebelum konfirmasi.</li><li>Approval tambahan hanya diterapkan jika kebijakan yang disahkan mewajibkannya.</li><li>Perubahan massal hanya dapat dilakukan SUPER_ADMIN.</li><li>Server wajib memvalidasi grant, scope, nilai, status, dan mencatat audit.</li></ul></section>
         </div>}
         {active === "Permintaan Refund" && <div className={styles.grid}>
           <section className={styles.card}><h2>Pengajuan refund</h2><p>Platform Admin dapat memulai permintaan refund. Super Admin menjadi pihak yang menyetujui atau menolak.</p><div className={styles.priceRow}><div><b>INV-DEMO-003</b><small>Depot Air Sejuk · BIZ-DEMO-003</small></div><strong>Rp199.000</strong></div><button className={styles.primary} onClick={()=>openRequest("Permintaan refund")}>Ajukan refund DEMO</button></section>
