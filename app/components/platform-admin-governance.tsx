@@ -3,51 +3,68 @@
 import { useMemo, useState } from "react";
 import { AlertTriangle, CheckCircle2, Clock3, LockKeyhole, Search, ShieldCheck, Users } from "lucide-react";
 
-type Permission = { id:string; name:string; group:string; description:string; risk:"Rendah"|"Sedang"|"Tinggi"; approval:string; };
-const permissions:Permission[] = [
- {id:"dashboard.read",name:"Lihat dashboard operasional",group:"Monitoring",description:"Melihat ringkasan operasional platform yang tersedia sesuai lingkup akses.",risk:"Rendah",approval:"Grant sesuai kebutuhan tugas"},
- {id:"tenant.read",name:"Lihat daftar dan detail tenant",group:"Tenant",description:"Membaca data profil dan status tenant tanpa mengubah data.",risk:"Rendah",approval:"Grant sesuai kebutuhan tugas"},
- {id:"tenant.status.change",name:"Ajukan perubahan status tenant",group:"Tenant",description:"Mengajukan aktivasi atau penonaktifan tenant; eksekusi harus mengikuti otorisasi dan audit server.",risk:"Tinggi",approval:"Permission khusus, alasan wajib, audit wajib"},
- {id:"tenant.user.read",name:"Lihat pengguna tenant",group:"Pengguna Tenant",description:"Melihat direktori akun Owner dan staff tenant dalam lingkup yang diizinkan.",risk:"Sedang",approval:"Grant terbatas pada kebutuhan tugas"},
- {id:"subscription.read",name:"Lihat paket dan langganan",group:"Billing",description:"Membaca paket, status langganan, dan informasi tagihan.",risk:"Rendah",approval:"Grant sesuai kebutuhan tugas"},
- {id:"payment.verify",name:"Tindak lanjut verifikasi pembayaran",group:"Billing",description:"Melakukan langkah operasional verifikasi pembayaran yang ditetapkan; bukan mengubah bukti pembayaran dari klien.",risk:"Tinggi",approval:"Permission khusus, verifikasi sumber pembayaran, audit wajib"},
- {id:"refund.request",name:"Ajukan permintaan refund",group:"Billing",description:"Mengajukan refund untuk ditinjau. Platform Admin tidak menyetujui permintaannya sendiri.",risk:"Tinggi",approval:"Persetujuan Super Admin; larangan self-approval"},
- {id:"support.manage",name:"Kelola tiket support",group:"Support",description:"Melihat dan menangani tiket sesuai penugasan serta batas data yang diperlukan.",risk:"Sedang",approval:"Grant sesuai cakupan tugas dan audit"},
- {id:"cross_tenant.request",name:"Ajukan akses bantuan lintas tenant",group:"Akses Bantuan",description:"Mengajukan sesi bantuan dengan target tenant, alasan, masa berlaku, dan default read-only.",risk:"Tinggi",approval:"Persetujuan terpisah; write access memerlukan grant tambahan dan persetujuan Super Admin"},
- {id:"audit.scoped.read",name:"Lihat audit dalam lingkup tugas",group:"Audit",description:"Membaca aktivitas sendiri dan target yang sedang ditangani; bukan audit global.",risk:"Sedang",approval:"Lingkup terbatas; audit global hanya Super Admin"},
- {id:"analytics.read",name:"Lihat analitik platform",group:"Monitoring",description:"Melihat metrik platform yang tidak melewati batas tenant dan privasi.",risk:"Rendah",approval:"Grant sesuai kebutuhan tugas"},
- {id:"notification.read",name:"Lihat notifikasi operasional",group:"Monitoring",description:"Membaca notifikasi yang ditujukan ke lingkup operasional terkait.",risk:"Rendah",approval:"Grant sesuai kebutuhan tugas"}
-];
-const groups=["Semua kategori",...Array.from(new Set(permissions.map(p=>p.group)))];
+type CapabilityConcept = {
+  name: string;
+  group: string;
+  description: string;
+  risk: "Rendah" | "Sedang" | "Tinggi";
+  guardrail: string;
+};
 
-export default function PlatformAdminGovernance(){
- const [query,setQuery]=useState("");
- const [group,setGroup]=useState("Semua kategori");
- const [selected,setSelected]=useState(permissions[0].id);
- const [preview,setPreview]=useState<string[]>([]);
- const filtered=useMemo(()=>permissions.filter(p=>(group==="Semua kategori"||p.group===group)&&[p.id,p.name,p.description,p.approval,p.risk].join(" ").toLocaleLowerCase("id-ID").includes(query.trim().toLocaleLowerCase("id-ID"))),[group,query]);
- const current=permissions.find(p=>p.id===selected)??permissions[0];
- const toggle=(id:string)=>setPreview(items=>items.includes(id)?items.filter(x=>x!==id):[...items,id]);
- return <div className="platform-admin-governance">
-  <div className="card platform-governance-banner"><AlertTriangle size={17}/><div><b>Direktori akun belum terhubung</b><p>Tidak ada identitas administrator fiktif yang ditampilkan. Katalog di bawah adalah rancangan permission dan pratinjau pemilihan lokal, bukan pemberian akses nyata.</p></div></div>
-  <div className="platform-role-grid">
-   <div className="card platform-role-card"><div className="platform-role-heading"><ShieldCheck size={17}/><div><h3>SUPER_ADMIN</h3><span>Kendali dan tata kelola platform</span></div><b className="role-chip">Platform role</b></div><ul><li>Mengelola direktori administrator platform dan katalog permission.</li><li>Memberikan, meninjau, dan mencabut grant permission.</li><li>Menyetujui tindakan sensitif dan permintaan akses lintas tenant sesuai kebijakan.</li><li>Memiliki visibilitas audit platform secara global.</li></ul></div>
-   <div className="card platform-role-card"><div className="platform-role-heading"><Users size={17}/><div><h3>PLATFORM_ADMIN</h3><span>Satu role platform dengan grant individual</span></div><b className="role-chip">Platform role</b></div><ul><li>Tidak ada sub-role operasional. Nama role yang sama tidak otomatis berarti kumpulan permission yang sama.</li><li>Akses efektif ditentukan oleh grant individual yang aktif, terbatas, dan dapat ditinjau.</li><li>Tidak dapat memberikan permission kepada diri sendiri atau meningkatkan kewenangannya sendiri.</li><li>Tidak memiliki akses audit global atau persetujuan refund atas pengajuan sendiri.</li></ul></div>
-  </div>
-  <section className="card platform-permission-section">
-   <div className="platform-permission-head"><div><h2>Katalog permission operasional</h2><p>Daftar kandidat permission untuk pengelolaan akses Platform Admin.</p></div><span className="demo-pill">KATALOG KONSEPTUAL</span></div>
-   <div className="platform-permission-toolbar"><div className="search-wrap"><Search size={14}/><input className="search" aria-label="Cari permission" placeholder="Cari nama, kode, atau keterangan..." value={query} onChange={e=>setQuery(e.target.value)}/></div><select aria-label="Filter kategori permission" value={group} onChange={e=>setGroup(e.target.value)}>{groups.map(g=><option key={g}>{g}</option>)}</select></div>
-   <div className="platform-permission-layout">
-    <div className="platform-permission-list">{filtered.map(p=><button type="button" key={p.id} className={selected===p.id?"platform-permission-item selected":"platform-permission-item"} onClick={()=>setSelected(p.id)}><span><b>{p.name}</b><small>{p.id} · {p.group}</small></span><span className={"permission-risk risk-"+p.risk.toLowerCase()}>{p.risk}</span></button>)}{filtered.length===0&&<div className="empty-state">Tidak ada permission yang cocok.</div>}</div>
-    <div className="platform-permission-detail"><span className="settings-label">DETAIL PERMISSION</span><h3>{current.name}</h3><code>{current.id}</code><p>{current.description}</p><div className="permission-approval"><LockKeyhole size={14}/><span>{current.approval}</span></div><label className="permission-preview-check"><input type="checkbox" checked={preview.includes(current.id)} onChange={()=>toggle(current.id)}/> Masukkan ke pratinjau grant</label><small>Centang hanya mengubah daftar pratinjau pada halaman ini. Tidak membuat grant atau mengubah akun.</small></div>
-   </div>
-   <div className="platform-preview-summary"><div><b>Pratinjau grant dipilih: {preview.length}</b><p>{preview.length?preview.join(" · "):"Belum ada permission yang dipilih."}</p></div><button type="button" className="secondary-btn" onClick={()=>setPreview([])} disabled={preview.length===0}>Kosongkan pratinjau</button></div>
-  </section>
-  <div className="platform-policy-grid">
-   <div className="card platform-policy-card"><div><Clock3 size={16}/><b>Grant berbatas waktu</b></div><p>Grant elevated dan akses lintas tenant memiliki masa berlaku. Tidak ada perpanjangan diam-diam; perpanjangan harus ditinjau dan disetujui kembali.</p></div>
-   <div className="card platform-policy-card"><div><CheckCircle2 size={16}/><b>Least privilege & review</b></div><p>Berikan hanya permission yang dibutuhkan, dengan alasan dan cakupan yang jelas. Grant persisten memerlukan alasan serta peninjauan berkala.</p></div>
-   <div className="card platform-policy-card"><div><ShieldCheck size={16}/><b>Audit & pemisahan tugas</b></div><p>Grant, revoke, expiry, approval, dan penggunaan akses sensitif harus dicatat di audit server. Pemohon tidak menyetujui permintaannya sendiri.</p></div>
-  </div>
-  <div className="card platform-role-boundaries"><h3 className="card-title">Batas kewenangan dan implementasi</h3><p><b>Hanya Super Admin:</b> mengelola katalog permission, grant/revoke administrator platform, mengangkat Super Admin, mengubah kebijakan otorisasi, serta melihat audit global.</p><p><b>Cross-tenant support:</b> wajib target tenant, alasan, masa berlaku, default read-only, dan audit. Akses tulis memerlukan grant terpisah serta persetujuan Super Admin.</p><p className="demo-disclaimer">UI ini tidak menegakkan authorization. Enforcement wajib berada di server/database; menyembunyikan komponen UI bukan kontrol keamanan. Tidak ada backend, database, atau akun yang diubah.</p></div>
- </div>;
+const capabilityConcepts: CapabilityConcept[] = [
+  { name: "Melihat dashboard operasional", group: "Monitoring", description: "Melihat ringkasan operasional platform sesuai lingkup tugas dan batas data.", risk: "Rendah", guardrail: "Scope dan field yang boleh terlihat masih harus ditetapkan." },
+  { name: "Membaca detail bisnis secara read-only", group: "Tenant", description: "PLATFORM_ADMIN hanya dapat membaca detail bisnis dengan kewenangan individual, scope target yang cocok, dan field allowlist.", risk: "Sedang", guardrail: "Field allowlist final per kategori bisnis masih OPEN." },
+  { name: "Aktivasi atau deaktivasi tenant", group: "Tenant", description: "Tindakan dapat dilakukan PLATFORM_ADMIN hanya jika memiliki permission individual khusus untuk target yang sesuai.", risk: "Tinggi", guardrail: "Scope target dan detail teknis permission belum final; tindakan harus diaudit server-side." },
+  { name: "Melihat pengguna tenant", group: "Pengguna Tenant", description: "Melihat data Owner dan staff hanya sejauh diperlukan untuk tugas yang diizinkan.", risk: "Sedang", guardrail: "Minimum necessary fields dan scope harus diberlakukan." },
+  { name: "Melihat paket dan langganan", group: "Billing", description: "Membaca informasi paket, status langganan, dan tagihan sesuai lingkup tugas.", risk: "Rendah", guardrail: "Data yang dapat dibaca tetap memerlukan scope dan field allowlist." },
+  { name: "Menindaklanjuti verifikasi pembayaran", group: "Billing", description: "Menangani langkah operasional pembayaran sesuai proses yang kelak disahkan.", risk: "Tinggi", guardrail: "Sumber verifikasi, lifecycle, dan batas tindakan harus ditetapkan sebelum implementasi." },
+  { name: "Mengajukan permintaan refund", group: "Billing", description: "PLATFORM_ADMIN dapat mengajukan refund; keputusan refund dilakukan SUPER_ADMIN.", risk: "Tinggi", guardrail: "Pemohon tidak dapat menyetujui pengajuannya sendiri; review dan pemrosesan adalah tahap terpisah." },
+  { name: "Mengajukan perubahan harga terarah", group: "Harga", description: "PLATFORM_ADMIN dapat mengubah harga hanya untuk target tertentu jika memiliki permission khusus.", risk: "Tinggi", guardrail: "Perubahan harga massal hanya SUPER_ADMIN. Batas nominal, tanggal efektif, dan approval tambahan masih OPEN." },
+  { name: "Menangani tiket support", group: "Support", description: "Menangani tiket berdasarkan assignment dan scope tugas dengan data pelanggan minimum yang diperlukan.", risk: "Sedang", guardrail: "Kategori tiket, SLA, attachment access, dan detail assignment masih OPEN." },
+  { name: "Mengajukan sesi bantuan lintas tenant", group: "Akses Bantuan", description: "Mengajukan sesi pada bisnis sasaran tertentu dengan alasan dan expiry; read-only menjadi default.", risk: "Tinggi", guardrail: "Write access memerlukan grant terpisah dan persetujuan SUPER_ADMIN." },
+  { name: "Membaca audit dalam lingkup tugas", group: "Audit", description: "Melihat aktivitas sendiri dan aktivitas target/tiket yang berada dalam scope tugas.", risk: "Sedang", guardrail: "Audit global hanya SUPER_ADMIN; batas riwayat aktivitas admin lain masih OPEN." },
+  { name: "Melihat analitik platform", group: "Monitoring", description: "Melihat metrik platform yang memang diizinkan tanpa melewati batas tenant dan privasi.", risk: "Rendah", guardrail: "Definisi metrik, sumber data, dan freshness masih perlu ditetapkan." },
+  { name: "Melihat notifikasi operasional", group: "Monitoring", description: "Membaca notifikasi yang ditujukan pada lingkup operasional terkait.", risk: "Rendah", guardrail: "Jenis notifikasi dan scope penerima masih perlu ditetapkan." }
+];
+
+const groups = ["Semua kategori", ...Array.from(new Set(capabilityConcepts.map((item) => item.group)))];
+
+export default function PlatformAdminGovernance() {
+  const [query, setQuery] = useState("");
+  const [group, setGroup] = useState("Semua kategori");
+  const [selected, setSelected] = useState(capabilityConcepts[0].name);
+  const [preview, setPreview] = useState<string[]>([]);
+  const filtered = useMemo(
+    () => capabilityConcepts.filter((item) =>
+      (group === "Semua kategori" || item.group === group) &&
+      [item.name, item.group, item.description, item.guardrail, item.risk]
+        .join(" ").toLocaleLowerCase("id-ID").includes(query.trim().toLocaleLowerCase("id-ID"))
+    ),
+    [group, query]
+  );
+  const current = capabilityConcepts.find((item) => item.name === selected) ?? capabilityConcepts[0];
+  const toggle = (name: string) => setPreview((items) => items.includes(name) ? items.filter((item) => item !== name) : [...items, name]);
+
+  return <div className="platform-admin-governance">
+    <div className="card platform-governance-banner"><AlertTriangle size={17}/><div><b>Rancangan konseptual — bukan katalog permission final</b><p>Tidak ada identitas administrator fiktif. Daftar ini menggambarkan kebutuhan capability untuk review, bukan permission key, grant, atau konfigurasi akses yang sudah disahkan.</p></div></div>
+    <div className="platform-role-grid">
+      <div className="card platform-role-card"><div className="platform-role-heading"><ShieldCheck size={17}/><div><h3>SUPER_ADMIN</h3><span>Kendali dan tata kelola platform</span></div><b className="role-chip">Platform role</b></div><ul><li>Mengelola katalog permission serta grant/revoke administrator platform.</li><li>Menyetujui tindakan yang secara konseptual memang mensyaratkan approval.</li><li>Menangani keputusan refund dan akses audit global.</li><li>Penghapusan permanen bisnis hanya melalui prosedur khusus SUPER_ADMIN.</li></ul></div>
+      <div className="card platform-role-card"><div className="platform-role-heading"><Users size={17}/><div><h3>PLATFORM_ADMIN</h3><span>Satu role dengan kewenangan individual</span></div><b className="role-chip">Platform role</b></div><ul><li>Role label yang sama tidak berarti kumpulan permission yang sama.</li><li>Akses efektif bergantung pada grant individual, scope target, status, dan expiry.</li><li>Tidak dapat self-grant, mengubah grant admin lain, atau menyetujui refund yang diajukan sendiri.</li><li>Tidak memiliki audit global atau perubahan harga massal.</li></ul></div>
+    </div>
+    <section className="card platform-permission-section">
+      <div className="platform-permission-head"><div><h2>Capability yang perlu ditinjau</h2><p>Daftar kebutuhan akses konseptual; bukan daftar permission key final.</p></div><span className="demo-pill">PROPOSED / REVIEW</span></div>
+      <div className="platform-permission-toolbar"><div className="search-wrap"><Search size={14}/><input className="search" aria-label="Cari capability" placeholder="Cari capability atau keterangan..." value={query} onChange={(event) => setQuery(event.target.value)}/></div><select aria-label="Filter kategori capability" value={group} onChange={(event) => setGroup(event.target.value)}>{groups.map((item) => <option key={item}>{item}</option>)}</select></div>
+      <div className="platform-permission-layout">
+        <div className="platform-permission-list">{filtered.map((item) => <button type="button" key={item.name} className={selected === item.name ? "platform-permission-item selected" : "platform-permission-item"} onClick={() => setSelected(item.name)}><span><b>{item.name}</b><small>{item.group} · Konsep, bukan permission key</small></span><span className={"permission-risk risk-" + item.risk.toLowerCase()}>{item.risk}</span></button>)}{filtered.length === 0 && <div className="empty-state">Tidak ada capability yang cocok.</div>}</div>
+        <div className="platform-permission-detail"><span className="settings-label">DETAIL KONSEP</span><h3>{current.name}</h3><p>{current.description}</p><div className="permission-approval"><LockKeyhole size={14}/><span>{current.guardrail}</span></div><label className="permission-preview-check"><input type="checkbox" checked={preview.includes(current.name)} onChange={() => toggle(current.name)}/> Masukkan ke daftar review lokal</label><small>Centang hanya mengubah pratinjau pada halaman ini. Tidak membuat permission key atau grant.</small></div>
+      </div>
+      <div className="platform-preview-summary"><div><b>Konsep dipilih untuk review: {preview.length}</b><p>{preview.length ? preview.join(" · ") : "Belum ada konsep yang dipilih."}</p></div><button type="button" className="secondary-btn" onClick={() => setPreview([])} disabled={preview.length === 0}>Kosongkan pratinjau</button></div>
+    </section>
+    <div className="platform-policy-grid">
+      <div className="card platform-policy-card"><div><Clock3 size={16}/><b>Grant berbatas waktu</b></div><p>Grant elevated dan akses lintas tenant bersifat time-bound secara default. Grant sementara auto-expire dan tidak diperpanjang diam-diam.</p></div>
+      <div className="card platform-policy-card"><div><CheckCircle2 size={16}/><b>Least privilege & review</b></div><p>Grant berkelanjutan memerlukan alasan, scope minimum, dan peninjauan berkala. Detail durasi standar masih OPEN.</p></div>
+      <div className="card platform-policy-card"><div><ShieldCheck size={16}/><b>Audit & pemisahan tugas</b></div><p>Grant, revoke, expiry, approval, dan penggunaan akses sensitif harus tercatat. Tidak ada self-approval atau auto-approval.</p></div>
+    </div>
+    <div className="card platform-role-boundaries"><h3 className="card-title">Batas kewenangan dan implementasi</h3><p><b>Hanya SUPER_ADMIN:</b> mengelola permission catalogue dan grant/revoke administrator platform, melihat audit global, melakukan perubahan harga massal, serta penghapusan permanen bisnis melalui prosedur khusus.</p><p><b>PLATFORM_ADMIN:</b> aktivasi/deaktivasi tenant dan perubahan harga hanya dengan permission individual khusus serta scope target yang sesuai. Refund hanya dapat diajukan; keputusan tetap pada SUPER_ADMIN.</p><p><b>Cross-tenant support:</b> wajib bisnis sasaran, alasan, expiry, dan default read-only. Write access memerlukan grant terpisah serta approval SUPER_ADMIN.</p><p className="demo-disclaimer">UI ini tidak menegakkan authorization. Enforcement wajib berada di server/database; menyembunyikan komponen UI bukan kontrol keamanan. Semua data dan interaksi tetap DEMO lokal. Tidak ada backend, database, atau akun yang diubah.</p></div>
+  </div>;
 }
