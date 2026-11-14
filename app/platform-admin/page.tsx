@@ -16,9 +16,9 @@ const tenants = [
   { id: "BIZ-DEMO-004", name: "Roti Pagi", owner: "Dina Amelia", region: "Lhokseumawe", plan: "Basic", status: "Aktif", health: "Normal" },
 ];
 const requests = [
-  { id: "OPS-DEMO-001", title: "Penyesuaian harga paket Pro", tenant: "Platform", status: "Menunggu persetujuan", type: "Permintaan perubahan harga", date: "14 Nov 2026 · 09.20" },
-  { id: "OPS-DEMO-002", title: "Refund invoice INV-DEMO-003", tenant: "BIZ-DEMO-003", status: "Menunggu Super Admin", type: "Permintaan refund", date: "14 Nov 2026 · 08.45" },
-  { id: "OPS-DEMO-003", title: "Investigasi kendala laporan", tenant: "BIZ-DEMO-002", status: "Dalam peninjauan", type: "Support", date: "13 Nov 2026 · 16.10" },
+  { id: "TKT-DEMO-001", title: "Tindak lanjut tiket login", tenant: "BIZ-DEMO-001", status: "Ditugaskan", type: "Tiket support · assignment demo", date: "14 Nov 2026 · 09.20" },
+  { id: "OPS-DEMO-002", title: "Refund invoice INV-DEMO-003", tenant: "BIZ-DEMO-003", status: "Menunggu Super Admin", type: "Refund diajukan akun ini · status read-only", date: "14 Nov 2026 · 08.45" },
+  { id: "TKT-DEMO-003", title: "Investigasi kendala laporan", tenant: "BIZ-DEMO-002", status: "Dalam peninjauan", type: "Tiket support · assignment demo", date: "13 Nov 2026 · 16.10" },
 ];
 const audit = [
   { id: "AUD-DEMO-101", action: "TENANT_STATUS_VIEW", target: "BIZ-DEMO-001", result: "Berhasil", time: "14 Nov 2026 · 09.15" },
