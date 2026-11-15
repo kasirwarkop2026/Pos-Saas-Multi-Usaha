@@ -62,7 +62,7 @@ These are architecture-level statements. Field definitions, types, FK/unique/che
 
 ## 4. A10, A11 and A12 decision lineage
 
-The RMD-12 source-mapped register covers A10-A through A10-F, A10-T1 through A10-T5, A11-F01 through A11-F10, and A12.1 through A12.17. Later source material extends A12 provenance and readiness work.
+The RMD-12 source-mapped register covers A10-A through A10-F, A10-T1 through A10-T5, A11-F01 through A11-F10, and A12.1 through A12.17. It is explicitly PARTIAL and uses AP-02 documented-decision provenance; EV-01/EV-02 do not establish physical schema, enforcement, or executed tests. Later source material extends A12 provenance and readiness work.
 
 | Decision family | Recorded status | Interpretation |
 |---|---|---|
@@ -74,7 +74,7 @@ The RMD-12 source-mapped register covers A10-A through A10-F, A10-T1 through A10
 | A12.37.10.1 | FIX / supersession | MWA grouping is per business + product/variant + inventory location; supersedes older cross-location wording |
 | A12.38 | Physical dictionary audit | Audit specification does not verify a deployed physical dictionary |
 | A12.39 | CLOSED at conceptual relationship/constraint specification level | Physical constraint verification remains OPEN |
-| A12.40 | PARTIAL / OPEN | Readiness/documentation acceptance criteria not fully satisfied |
+| A12.40 | PARTIAL / OPEN | Readiness/documentation acceptance criteria not fully satisfied; all AC40-01–AC40-12 require evidence-based reassessment |
 | A12.41 | NOT STARTED | Final readiness reassessment is gated on A12.40 closure |
 
 ## 5. Authorization and category decisions
@@ -86,6 +86,14 @@ The RMD-12 source-mapped register covers A10-A through A10-F, A10-T1 through A10
 - Capability taxonomy, scope boundaries, SoD, permission catalogues and cross-category matrices must not be represented as production authorization grants.
 - No role/module/capability assignment should be inferred from candidate eligibility.
 
-## 6. Change control
+## 6. REC reconciliation status
+
+- REC-01 is PARTIAL: the approval basis for conceptual R56-D01–D12 is verified, but the three RMD-56 v1.2 content variants remain retained and no canonical file is selected.
+- REC-02 is PARTIAL: 115 of 123 names are present once in the current Library snapshot; eight are ABSENT / UNRESOLVED. Current byte hashes were not recomputed for the 115 remaining files.
+- REC-03 is PARTIAL: snapshots 322, 328 and 333 are reconciled at aggregate level, but raw snapshot 328 is unavailable and the exact historical boundary is limited.
+- REC-04 is PARTIAL: the 54-name normalized basename set-difference is reconstructed; the older 56 claim remains a discrepancy; three names in the 63-to-66 delta remain unidentified.
+- REC-05 through REC-08 remain backlog items unless a dedicated completion artifact and acceptance evidence are located. Related RMD/security documents do not automatically close those REC workstreams.
+
+## 7. Change control
 
 Any change to a FIX decision requires a specific technical reason, traceable evidence, and explicit review/approval. A conceptual decision does not grant permission to implement database, security, API, backend, code, CI, deployment or Production changes.
