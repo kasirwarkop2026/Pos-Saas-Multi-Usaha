@@ -27,16 +27,24 @@ A12.40 remains PARTIAL / OPEN in the latest located readiness material. A12.41 i
 
 ## 3. A12.40 closeout gate
 
-The latest readiness handoff records A12.40 as PARTIAL / OPEN and identifies unresolved acceptance criteria, including:
+The latest readiness material records A12.40 as PARTIAL / OPEN. The documented AC40 status set is:
 
-- AC40-01 — source inventory: PARTIAL.
-- AC40-02 — master metadata/version consistency: OPEN.
-- AC40-03 — entity inventory reconciliation: PARTIAL.
-- AC40-04 — canonical decision index: PARTIAL / OPEN.
-- AC40-05 — individual source/provenance: OPEN.
-- AC40-06 — D40 traceability: PARTIAL.
+| Criterion | Scope | Recorded status | Remaining issue |
+|---|---|---|---|
+| AC40-01 | Source inventory 5.9.1–5.9.8 | PARTIAL | Baseline source coverage is incomplete; 5.9.7–5.9.8 are not final in the referenced baseline |
+| AC40-02 | Master metadata/version consistency | OPEN | Version and metadata reconciliation remains incomplete |
+| AC40-03 | Entity inventory reconciliation | PARTIAL | Conceptual baseline/discrepancies documented; physical schema not verified |
+| AC40-04 | Canonical decision index | OPEN / PARTIAL | Decision locator and individual coverage remain incomplete |
+| AC40-05 | Approval provenance | OPEN / PARTIAL | RMD-06 reconciliation does not establish AP-01 approval for all items |
+| AC40-06 | Supersession traceability | PARTIAL | Some supersession links are explicit; complete register is not established |
+| AC40-07 | Version/change index | OPEN | Full change/version lineage remains incomplete |
+| AC40-08 | Standard status taxonomy | PARTIAL | Status normalization is incomplete across all source records |
+| AC40-09 | Full D40 finding register | OPEN | Complete individual D40 register not established |
+| AC40-10 | Closure evidence sufficiency | PARTIAL | Existing documentation does not satisfy all closure evidence requirements |
+| AC40-11 | Unresolved blocker register | PARTIAL | Blockers are recorded, but consolidated completeness/traceability remains open |
+| AC40-12 | Historical integrity | PARTIAL | Historical records are retained, but integrity/reconciliation evidence is not fully closed |
 
-The complete acceptance set is AC40-01 through AC40-12. This summary is not a substitute for reviewing all twelve criteria. Do not close A12.40 by deferring unresolved work or by treating a register entry as proof of acceptance.
+These are the latest status labels visible in the referenced readiness lineage, not a fresh re-certification of each criterion. REC-01 through REC-04 add evidence for specific archive/provenance questions but do not close A12.40. REC-05 through REC-08 remain not verified as completed workstreams in the current REC folder. Do not close A12.40 by deferring unresolved work or treating a register entry as proof of acceptance.
 
 ## 4. A12.41 and final gates
 
