@@ -87,3 +87,14 @@ The folder arrangement is an archive organization aid. It does not by itself est
 ## 10. Later archive snapshot — 15 November 2026
 
 The 198-file count above is the earlier point-in-time snapshot and remains historical. The later verified recursive Library listing is recorded in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md`: 200 files across seven subject folders. Use that addendum for the later path/count snapshot; do not infer file loss or content completeness from the difference. Both REC-06 artifacts are verified in the current `/Arsip Proyek POS SaaS/REC/` folder. REC-05 and REC-06 remain PARTIAL, not CLOSED.
+
+
+## 11. Append-only correction — current archive and documentation map (15 November 2026)
+
+The 198-file statement in §5 is a historical snapshot, not the current inventory. The later verified Library snapshot is **200 files across seven folders**: Audit 11, Authorization 17, Blueprint 10, ERD 71, REC 19, Review 11 and RMD 61. Use `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md` for the current path/count observation. This remains metadata evidence, not a full content audit.
+
+The documentation map in §3 is extended by these artifacts:
+- `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md` — later verified 200-file / seven-folder Library snapshot and REC status clarification.
+- `docs/REC-06-PERMISSION-CATALOGUE-OVERLAY.md` — GitHub-side summary of the REC-06 Education/Hotel conceptual overlay and its OPEN boundaries.
+
+PR #3, “Docs: archive inventory and reconciliation baseline”, was merged into `main` on 15 November 2026. Merge commit: `c3748aa0f6f89d12622cce33ca49ccb813a253f6`. Its former draft/open status is historical. This does not authorize merging any subsequent PR.

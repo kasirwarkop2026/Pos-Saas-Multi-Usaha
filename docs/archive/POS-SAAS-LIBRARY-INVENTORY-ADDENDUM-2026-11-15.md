@@ -261,3 +261,8 @@ The earlier 198-file snapshot and this 200-file snapshot are separate point-in-t
 ## 7. Change-control statement
 
 No Library source file was modified, moved, renamed or deleted during this verification. No GitHub application code, database, SQL, migration, RLS, Auth, API, CI workflow, deployment or Production operation was performed. `DB_PUSH_BLOCKED: ACTIVE` remains in force. PR #3 remains open pending review; no merge is authorized by this addendum.
+
+
+## 8. Append-only correction — GitHub PR #3 disposition (15 November 2026)
+
+The PR #3 status sentence in §7 reflects the state when this addendum was first written and is now historical. PR #3, “Docs: archive inventory and reconciliation baseline”, was merged into `main` on 15 November 2026. Merge commit: `c3748aa0f6f89d12622cce33ca49ccb813a253f6`. The merge incorporates this inventory addendum and the related documentation corrections. No Library source file was modified by that merge. This historical PR disposition does not authorize merge of any later pull request.

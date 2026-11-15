@@ -748,3 +748,12 @@ The initial worklist in §4 and the interim table in §10 recorded REC-05 and RE
 The later Library snapshot is documented in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md`: 200 files across seven folders, replacing the earlier 198-file/one-visible-folder snapshot only as the later point-in-time path/count observation. The earlier snapshot is retained as historical evidence. The current REC path is `/Arsip Proyek POS SaaS/REC/`, and both REC-06 v0.1 artifacts are present there: the Permission Catalogue Overlay and the Education/Hotel Workflow-to-Capability Traceability Matrix.
 
 REC-05 remains partial because full source coverage, provenance and acceptance are not verified. REC-06 remains partial because G02 exact category × module mapping and G04 submodule/workflow decomposition remain OPEN, along with final capability/action, scope, data-purpose, SoD and stable permission-key mapping. File presence or folder organization does not satisfy substantive acceptance criteria.
+
+
+## 13. Append-only correction — current Library snapshot and PR #3 disposition (15 November 2026)
+
+The 198-file / one-folder observation in §2 and the reference to “all 198 files” in §15.10 describe the earlier 14:40:50 UTC snapshot only. They are not the latest Library state. The later recursive listing captured in `POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md` records **200 files across seven folders** (Audit 11, Authorization 17, Blueprint 10, ERD 71, REC 19, Review 11, RMD 61). The 198-file source inventory remains historical evidence; the later snapshot does not by itself close REC-03 or establish content-level audit of all 200 files.
+
+The initial REC-05/REC-06 OPEN worklist and later PARTIAL dispositions remain governed by the subsequent erratum in §12 and the current Master Audit Coverage register. REC-01 through REC-08 remain PARTIAL; none is CLOSED by this inventory update.
+
+The documentation baseline PR #3 was merged into `main` on 15 November 2026, merge commit `c3748aa0f6f89d12622cce33ca49ccb813a253f6`. Any earlier statement that PR #3 remains open or awaits merge is historical only. No further PR is thereby approved for merge.
