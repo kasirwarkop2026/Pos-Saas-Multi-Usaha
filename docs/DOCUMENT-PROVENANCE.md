@@ -135,3 +135,10 @@ The current REC folder path is `/Arsip Proyek POS SaaS/REC/`. Both REC-06 artifa
 ## 12. Append-only correction — current archive snapshot status (15 November 2026)
 
 The statement in §2 that the latest folder inventory records 198 files is superseded for current snapshot reporting only. The 198-file count is retained as a historical point-in-time result. The later recursive Library listing documented in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md` records **200 files across seven folders** (Audit 11, REC 19, ERD 71, Blueprint 10, Authorization 17, RMD 61, Review 11). Use the 200-file snapshot as the later verified path/count observation; do not infer deletion or loss from the difference. This remains metadata/path evidence and does not establish that all 200 files have been content-audited, are unique by content, or are canonical.
+
+
+## 13. Append-only correction — latest snapshot wording and merged baseline PR (15 November 2026)
+
+For current inventory reporting, the 198-file count in §2 and the phrase “latest 198-file folder snapshot” in §8 are historical references only. The later verified snapshot is **200 files across seven folders** (Audit 11, Authorization 17, Blueprint 10, ERD 71, REC 19, Review 11, RMD 61), as detailed in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md`. Do not infer file loss from the difference. Both 198 and 200 observations remain preserved as point-in-time evidence; neither is a content-completeness or canonicality claim.
+
+The GitHub documentation baseline PR #3 was merged into `main` on 15 November 2026 (merge commit `c3748aa0f6f89d12622cce33ca49ccb813a253f6`). References to PR #3 as OPEN/DRAFT are historical only. This update does not change the status of REC workstreams or approve implementation.
