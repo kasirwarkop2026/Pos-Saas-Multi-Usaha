@@ -149,3 +149,62 @@ The individual `Audit_Rekonsiliasi_Provenance_RMD-56_v1.2_REC-01_v0.1_2026-11-15
 REC-01 disposition: **PARTIAL / PROVENANCE GAP — NOT CLOSED**. Preserve all three byte variants and both A entries. Do not designate a canonical version until original conversation evidence and decision-to-document crosswalk for D01–D12/refinements D02, D04, D09, D10, D12 are verified.
 
 This is a content-level update to the GitHub reconciliation baseline; it does not change the source documents or any conceptual FIX.
+
+
+## 10. Later REC addenda reviewed — 15 November 2026
+
+The nested folder `REC — Rekonsiliasi & Coverage` contains subsequent addenda. These later, more specific records qualify earlier summary statements above; use the dispositions below where they differ.
+
+### REC-01 v0.2 — approval context recovered; canonical file still not selected
+
+The addendum `REC-01_Addendum_Verifikasi_Persetujuan_Asli_RMD-56_v0.2_2026-11-15.docx` directly links the user's statement “Tetapkan seperti rekomendasi kamu” at 2026-11-14 10:04:04 UTC to the recommendation at 10:02:50 UTC to retain R56-D01–D12 with refinements (including D10 as a workflow-specific, proportional compliance gate). This verifies the conceptual FIX approval basis.
+
+The phrases “Ok, lakukan” and “Iya ikuti seperti rekomendasi kamu” are **not proven** as RMD-56 approval in the recovered context and must not be used to extend or alter that approval. R56-D01–D12 remain FIX — Conceptual Baseline. REC-01 remains **PARTIAL** because the canonical-file decision is intentionally not made; Variant A's approval attribution is supported, while B/C's quoted approval attributions are unverified. Keep all three variants and both A copies.
+
+### REC-02 v0.2 — hash/path scope remains PARTIAL
+
+The later `REC-02_Rekonsiliasi_Hash_123_v0.2_2026-11-15.docx` supersedes the earlier simplistic interpretation of the 123-group CSV discrepancy:
+
+- CSV: 123 rows; `jumlah_sal inan` total 318 (96×2 + 18×4 + 9×6); historical archive-count column totals 246 (123×2).
+- Current audit found 115 of the 123 names once each under `/Arsip Proyek POS SaaS/`; 8 names were absent from the entire Library listing at that audit.
+- The 115 current file sizes matched the historical CSV size values; this is not byte-identity proof.
+- SHA-256 values were **NOT REHASHED** for the 115 remaining files. Earlier BYTE-IDENTICAL claims remain historical evidence only.
+- The 8 absent names have unresolved causes; do not infer deletion, restore, or move without further evidence and authorization.
+- REC-02 status: **PARTIAL**. Keep the original report and CSV unchanged; use the REC-02 v0.2 path/hash register for its stated scope.
+
+### REC-03 v0.1 — archive snapshot reconciliation
+
+The later REC-03 addendum reconciles three historical snapshots:
+- Inventory reconciliation snapshot: 322 entries (root/Batch Audit split not separately recorded).
+- Batch 1–9 addendum snapshot: 306 root + 22 Batch Audit = 328.
+- REC-03 listing: 311 root + 22 Batch Audit = 333.
+
+The 322→328 delta is +6 entries; 328→333 is +5. REC-03 describes 125 repeated-name groups (250 entries) and 83 singletons in the 333-entry snapshot. The 63→66 outside-coverage change is +3 unique names, not six files. REC-03 remains **PARTIAL** because the exact baseline listing and full content coverage are not thereby established.
+
+This historical 333-entry snapshot must not be confused with the direct Library listing captured for this GitHub inventory, which currently returned 198 file entries recursively under the parent folder and one visible nested REC folder. Different snapshots/scopes/listing states are recorded; the delta remains unresolved. No inference of file loss or deletion is authorized.
+
+### REC-04 v0.3 and v0.2 erratum — exact set-difference is partial
+
+REC-04 v0.3 reconstructs Manifest 157 minus Coverage 137 at normalized basename level:
+- Manifest 157 rows normalize to 155 unique basenames.
+- Coverage 137 normalizes to 136 unique basenames.
+- The resulting set difference is 54 basenames.
+- The 9 out-of-manifest items cited by the inventory report are descriptions/groups, not verified exact filenames.
+- 54 + 9 + 3 = 66 reconciles an aggregate only; the 3-name delta and complete 66-name list remain UNKNOWN/UNVERIFIED because the raw 328-entry snapshot export is unavailable.
+
+REC-04 v0.2 erratum explicitly withdraws the claim that the nine fully written names in the earlier v0.1 report are individually verified exact filenames. Retain the six source descriptions (one covers four versions) as descriptions only. Coverage remains 47 REVIEWED / 90 PARTIAL; presence in an inventory does not promote review status. REC-04 remains **PARTIAL / OPEN**.
+
+### Updated REC status register
+
+| REC | Latest reviewed evidence | Current disposition |
+|---|---|---|
+| REC-01 | v0.2 approval-context addendum | PARTIAL — conceptual approval verified; no canonical file selection |
+| REC-02 | v0.2 hash/path reconciliation | PARTIAL — 115 current files, 8 absent/unresolved, no rehash |
+| REC-03 | v0.1 snapshot reconciliation | PARTIAL — 322/328/333 snapshots explained at aggregate level |
+| REC-04 | v0.3 set-difference + v0.2 erratum | PARTIAL — 54 normalized basenames mapped; 66 complete list not verified |
+| REC-05 | Not yet individually re-audited in this pass | OPEN |
+| REC-06 | Not yet individually re-audited in this pass | OPEN |
+| REC-07 | Not yet individually re-audited in this pass | OPEN |
+| REC-08 | Not yet individually re-audited in this pass | OPEN |
+
+The later REC addenda are more specific evidence than the earlier Batch 1–9 summary. This section records those qualifications; it does not overwrite any historical source document or promote an unresolved REC item to CLOSED.
