@@ -92,7 +92,10 @@ The RMD-12 source-mapped register covers A10-A through A10-F, A10-T1 through A10
 - REC-02 is PARTIAL: 115 of 123 names are present once in the current Library snapshot; eight are ABSENT / UNRESOLVED. Current byte hashes were not recomputed for the 115 remaining files.
 - REC-03 is PARTIAL: snapshots 322, 328 and 333 are reconciled at aggregate level, but raw snapshot 328 is unavailable and the exact historical boundary is limited.
 - REC-04 is PARTIAL: the 54-name normalized basename set-difference is reconstructed; the older 56 claim remains a discrepancy; three names in the 63-to-66 delta remain unidentified.
-- REC-05 through REC-08 remain backlog items unless a dedicated completion artifact and acceptance evidence are located. Related RMD/security documents do not automatically close those REC workstreams.
+- REC-05 has a draft master decision/provenance index and supporting FIX decision records; it is PARTIAL until the index's full source coverage and acceptance are verified.
+- REC-06 has recorded Education (RMD-66 E-01–E-03) and Hotel (RMD-68 H-01–H-03) conceptual approvals, but Permission Catalogue v1.0 remains DRAFT and the consolidated append-only overlay was not located. REC-06 is PARTIAL.
+- REC-07 has a 38-file version inventory and lineage register plus individual A12.18–A12.28 and A12.31–A12.36 audits. The inventory explicitly says targeted content review, not full content audit; individual provenance remains OPEN. REC-07 is PARTIAL.
+- REC-08 has security/readiness summaries in v9.6.4, v9.6.6 and v9.6.7, but the original Batch 7–9 source reports and a complete consolidated finding register were not located in the current archive. Severity-level closure remains unverified; retain HIGH/CRITICAL items as OPEN.
 
 ## 7. Change control
 
