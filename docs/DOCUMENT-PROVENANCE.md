@@ -52,7 +52,7 @@ The two archive files are inventory/reconciliation records, not copies of the co
 - Stage 5.9.3 working consolidation series, including the v9.6.x addenda
 - A10, A11 and A12 decision/provenance records
 
-The ERD Master Working Draft explicitly identifies itself as a working draft, not a final canonical master or proof of implementation. The latest located Stage 5.9.3 lineage in the current archive inventory extends through v9.8.8 (listed in REC-04 v0.3); the v9.8.8 source must be inspected before it is treated as the active working reference. The security/readiness material remains a working reference, not a physical schema certification.
+The ERD Master Working Draft explicitly identifies itself as a working draft, not a final canonical master or proof of implementation. The ERD Version Inventory and Lineage Register identify v9.6.9 as the most complete ERD working reference, not a canonical master. v9.8.8 is RMD-45, an R-03 × R-05 offboarding authorization consistency audit; v9.8.9 is RMD-46, an R-05 permission catalogue/Manager scope decision brief appended to v9.8.8. Neither is a new ERD master. R-05 remains OPEN/REVIEW; all RMD-46 recommendations are PROPOSED/REVIEW and not implementation approval. The security/readiness material remains a working reference, not a physical schema certification.
 
 ### Authorization and category work
 - Capability/action taxonomy and authorization archive index
@@ -115,12 +115,12 @@ Do not promote AP-02 to AP-01 or EV-01/EV-02 to EV-03/EV-04/EV-05.
 | REC-02 | v0.2 addendum and CSV path/hash register | PARTIAL; eight names absent/unresolved; remaining 115 not rehashed |
 | REC-03 | v0.1 snapshot reconciliation | PARTIAL; totals 322/328/333 reconciled at aggregate level; raw 328 listing missing |
 | REC-04 | v0.4 addendum, v0.3 set-difference and CSV | PARTIAL; 54 names reconstructed; historical 56 discrepancy and three unidentified delta names remain |
-| REC-05 | No standalone artifact identified in REC folder | NOT VERIFIED as completed |
-| REC-06 | No standalone artifact identified in REC folder | NOT VERIFIED as completed |
-| REC-07 | Related ERD lineage sources exist; no standalone REC artifact identified | PARTIAL / NOT VERIFIED |
-| REC-08 | Related Batch 7–9 security sources exist; no standalone REC artifact identified | NOT VERIFIED as a completed consolidated register |
+| REC-05 | Master Decision & Provenance Index v0.1, O-01–O-12 register, CR/Q addenda | PARTIAL; index is DRAFT and completeness/acceptance remain to be checked |
+| REC-06 | Permission Catalogue v1.0; RMD-66 and RMD-68 approval addenda | PARTIAL; Education E-01–E-03 and Hotel H-01–H-03 are conceptual FIX; catalogue overlay not located; E-04/H-04 remain OPEN |
+| REC-07 | ERD Version Inventory v1.0; ERD Lineage Register v0.1; A12.18–A12.28 and A12.31–A12.36 individual audits | PARTIAL; 38 files inventoried but targeted content review only; individual provenance gaps remain |
+| REC-08 | v9.6.4/v9.6.6/v9.6.7 security/readiness reconciliations and Batch 7–9 references | PARTIAL; original Batch 7–9 reports and complete consolidated finding register not located in current archive |
 
-This table describes the evidence visible in the REC folder and must not be interpreted as a complete search of every Library folder.
+This table summarizes evidence found across the current seven-folder archive. Missing dedicated REC closeout files do not prove that no related source exists elsewhere.
 
 ## 10. Maintenance
 
