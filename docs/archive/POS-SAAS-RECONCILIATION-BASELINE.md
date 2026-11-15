@@ -333,3 +333,146 @@ RMD-66 and RMD-68 approval addenda approve their named role/Manager/module-group
 ### 13.5 Audit disposition
 
 The category-level conceptual FIX decisions RMD-55–RMD-69 and cross-category CR/Q decisions are retained as FIX at their stated conceptual scope. No category FIX is reopened. The unresolved matrix, permission, scope, SoD, data-classification, threshold, credential and test-execution work remains OPEN/PROPOSED/CANDIDATE/NOT READY as stated. No permission key, role grant, module grant, schema, RLS, API, or implementation is approved by this audit.
+
+
+## 14. RMD-47–RMD-54 role, permission, Owner authority, and approval audit
+
+### 14.1 RMD-47 decision lineage — preserve each decision's actual status
+
+RMD-47 v1.0 is an audit/decision brief, not a blanket approval. Its appendices must be read in sequence and their status boundaries preserved:
+
+| Decision | Disposition established by source | Boundary / unresolved detail |
+|---|---|---|
+| R05-D13 | FIX — one Manager role per Business; authority varies through explicit permission and effective scope | No automatic Business-wide scope; technical resolver and enforcement not approved |
+| R05-D14 | FIX — Custom Roles available on all Business packages; package may vary quota | No quota values or technical enforcement approved; package cannot unlock restricted permissions |
+| R05-D15 | FIX — one member may hold multiple active business roles; effective permissions are combined | No implicit inheritance; all guards and SoD still apply; conflict/deny precedence remains OPEN under D25 |
+| R05-D16 | FIX only for category-based role policy principle | Specific category-to-role mapping remains PROPOSED/REVIEW; role availability follows actual category/workflow |
+| R05-D17 | FIX — only verified Owner manages Custom Roles (create/edit/disable/retire/archive); no default delegation to Manager/staff; preserve history | Lifecycle/versioning and handling active assignments on disable/retire remain OPEN |
+| R05-D18 | FIX — Owner may grant/revoke roles in own Business; Manager only with explicit permission and effective scope covering target; no self-assignment/self-escalation | Final permission keys, sensitive target role classification, dual-control matrix and approval details remain OPEN |
+| R05-D19 | PROPOSED/REVIEW, not final FIX | Sensitive-role taxonomy, Owner approval vs dual control per action, permission keys, scope of delegation and thresholds remain OPEN |
+| R05-D21 | FIX — Category A absolutely prohibited for Custom Role; Category B ineligible for Custom Role and only via official standard-role path with special controls; Category C conditionally eligible | Stable keys, metadata, standard-role mapping for B, numeric thresholds and per-action approval matrix remain OPEN |
+
+Additional RMD-47 appendices:
+- D13–D15, D17–D18 and D21 are distinct conceptual/product policy approvals; do not collapse them into a single generic “RMD-47 approved” statement.
+- RMD-47 v1.4 D16 approves the principle that standard staff-role offerings follow Business category and operational need; the specific role list per category is explicitly PROPOSED/REVIEW.
+- RMD-47 v1.5 D17 confirms Owner-only Custom Role governance; Manager/staff delegation is not approved.
+- RMD-47 v1.6 D18 confirms Owner and permission/scope-bounded Manager role assignment authority.
+- RMD-47 v1.7/v1.8 D19 risk classification remains PROPOSED/REVIEW. It is not a final risk policy or a stable permission catalogue.
+- RMD-47 v1.9 D21 brief was PROPOSED/REVIEW, then v2.0 explicitly approved the restricted-permission category policy as conceptual FIX. Use v2.0 for D21 status.
+- Custom Role permission selection is Owner-only, but Owner cannot use Custom Role as a bypass for restricted capabilities. No hard-delete for used/referenced role, assignment or audit history.
+
+### 14.2 RMD-48 and RMD-49 — candidate catalogue review, not approved keys
+
+RMD-48 Global Permission Catalogue v1.0 is DRAFT / PROPOSED / REVIEW. Its candidate keys and initial A/B/C tier assignments are not final stable keys, approved grants, or a complete role-permission matrix.
+
+The catalogue's conceptual separation is retained:
+- Global permission describes the action/capability; Business role is tenant-scoped.
+- Permission does not supply scope; scope does not create permission.
+- Owner authority is not a business-role permission and must not be granted through roles/member_roles.
+- Platform permissions are separate from tenant business-role permissions.
+- Multiple active roles do not bypass guards or SoD.
+- Custom Role can only use explicitly eligible Category C permissions; Category A and B are excluded.
+- Unknown, disabled, deprecated, incompatible, or ineligible permissions fail closed.
+
+RMD-49 is a read-only candidate refinement, not a FIX decision. Its findings are important constraints for the next mapping stage:
+- F49-01: Custom Role create/update/retire must not be modeled as ordinary business-role permission grants; D17 makes this Owner-only.
+- F49-02: Owner authority cannot be represented as a role permission; it needs a separate authoritative ownership resolver.
+- F49-03: assignment view, request, approve/reject, grant/execute, revoke, and scope change are distinct actions.
+- F49-04: Manager scope is a separate authorization input and must cover the target member and assignment context.
+- Membership inactive/expired/revoked blocks access even if historical role assignment exists; role grant cannot activate membership.
+- Sensitive employee/member data and bulk export require separate review and classification.
+- Audit changes to grant/revoke/scope/Custom Role require append-only audit events.
+All RMD-49 revised permission inventories remain CANDIDATE/REVIEW. No key is promoted by this audit.
+
+### 14.3 RMD-50 — Manager role assignment allowlist
+
+RMD-50 v1.0 is a proposal; RMD-50 v1.1 D50-01–D50-05 is the conceptual FIX source. Preserve:
+- Manager may directly grant/revoke only operational roles explicitly present in the product allowlist for the relevant Business category/module, with active assignment permission, valid membership, target-matching effective scope and all guards.
+- Supervisor/Shift Lead is not in the default Manager allowlist; Owner approval or independent control is required.
+- Finance/Accounting and Employee/HR Operator are not in the default Manager allowlist; Owner approval/control is required according to capability and sensitivity.
+- Manager role grant/revoke/replacement is Owner-only through verified Owner authority.
+- Custom Role create/update/retire and permission selection remain Owner-only.
+- Owner authority may grant/revoke roles through a separate ownership path, but does not bypass approval, dual control, SoD, threshold, source-authority, audit or non-waivable controls.
+- Missing/ambiguous allowlist, membership, permission, scope, ownership resolver, approval state or metadata must fail closed.
+
+Still OPEN/REVIEW: detailed allowlist per category/module and catalogue version; stable permission keys; sensitive role/permission matrix; Owner resolver technical model; multi-scope/expiry/revocation; approval workflow; audit event schema; concurrency/idempotency/cache invalidation; negative/acceptance tests; server-side/RLS enforcement.
+
+### 14.4 RMD-51 — sensitive assignment and dual-control decisions
+
+RMD-51 v1.1 records R51-01–R51-07 as conceptual FIX:
+- L0: Manager delegated execution for operational roles explicitly in allowlist, with active permission, valid membership, target scope and all guards.
+- L1: verified Owner approval for grant of Supervisor/Shift Lead, operational non-final Finance/Accounting and limited Employee/HR Operator.
+- L2: dual control for Finance final/high-impact and HR/payroll/compensation/clearance/waiver/final-offboarding capabilities, with capability-level detail still required.
+- L3: prohibited or separate authority path.
+- Manager may revoke sensitive roles within effective scope for containment without waiting for grant approval, with append-only audit and notification/review. This does not permit ledger changes, history deletion, clearance resolution, waiver or bypass of non-waivable obligations.
+- Manager assignment/replacement is Owner-only through verified Owner authority.
+- Custom Role governance remains Owner-only.
+
+R51-08 is explicitly FIX — NOT APPROVED: emergency Manager suspension/revocation outside the Owner authority path is not approved. Do not describe it as an available emergency capability or an ordinary TODO awaiting implementation.
+
+OPEN/REVIEW remains for capability-level role/key mapping, Owner resolver edge cases, expiry/timeout/escalation/cancellation/delegation, emergency containment, scope-change approvals and Custom Role changes after use. Security readiness is NOT READY; implementation is NOT APPROVED.
+
+### 14.5 RMD-52 — Owner authority resolver and ownership lifecycle
+
+R52-D01–D10 are conceptual FIX:
+- Every Business requires an authoritative ownership record/history. Profile, business role, member_roles, membership, invitation or user claim alone is not proof of Owner authority.
+- Joint Owner is not supported as the product baseline. Ambiguous or multiple claims are held for verification; do not auto-select an Owner. No quorum/voting/any-one/all-required model is approved.
+- Ownership transfer is append-only, preserving old/new party, Business, effective_at vs recorded_at, reason, evidence, actor, approval and status. Historical ownership must not be overwritten.
+- Credible ownership dispute holds/rejects high-risk Owner-only actions according to policy.
+- Owner unavailable/inactive/suspended does not automatically transfer authority; successor/representative requires separate verified process.
+- Until multiple-Owner rules are explicitly decided, ambiguous multiple-owner cases fail closed.
+- Resolver outcomes are AUTHORIZED, DENIED, PENDING_REVIEW, INDETERMINATE. Only AUTHORIZED may proceed.
+- Approval binds to stable identity, Business, action, target, scope, material payload and time validity; material change invalidates prior approval.
+- Platform Super Admin has no default Owner authority and cannot become replacement Owner. Recovery/legal-hold/emergency path is separate and not approved by R52-D09.
+- Ownership claim, verification, transfer, correction, dispute, suspension, revocation, succession, resolver outcome and approval require append-only audit history.
+
+OPEN/REVIEW/TODO: technical ownership record schema/evidence storage/resolver, legal evidence process, successor/representative policy, joint ownership legal/operational handling, approval lifecycle integration, expiry/timeout/concurrency/idempotency, audit schema, stable keys, server-side/RLS enforcement and tests. Owner authority and application access remain separate checks.
+
+### 14.6 RMD-53 — approval lifecycle and delegation
+
+R53-D01–D12 are conceptual FIX:
+- Lifecycle states: DRAFT, SUBMITTED, PENDING_APPROVAL, APPROVED, REJECTED, CANCELLED, EXPIRED, EXECUTED, EXECUTION_FAILED, SUPERSEDED.
+- Approval is not execution and never independently grants access.
+- Request submission locks an immutable material payload/revision: Business, requester stable identity, target, action, role/capability, scope, reason, evidence/reference, expiry and policy version. Material change requires a new revision and invalidates prior approval.
+- Requester cannot approve own request; SoD uses stable human identity across accounts, roles and sessions.
+- L1 requires verified Owner approval; L2 requires at least two distinct human identities according to policy/capability. Multiple-Owner quorum remains undecided under R52-D06.
+- Revalidate ownership, requester/approver/executor eligibility, membership, permission, scope, target state, SoD, expiry, policy version and payload/revision before execution.
+- Request/approval expiry is explicit; no auto-approval or auto-extension.
+- Cancellation/withdrawal is controlled by state and policy.
+- Delegation is bounded by action, Business, scope, recipient stable identity, reason, period and authority; default no sub-delegation. Ownership/platform authority, Category A, Custom Role governance, Manager assignment and non-waivable clearance cannot be delegated through ordinary paths.
+- Revocation/expiry blocks next authorization check and cancels dependent pending requests/approvals.
+- Authority changes before execution require revalidation; uncertain or lost authority blocks execution.
+- Approval/revoke/expiry/cancel/execute require request/revision identity and idempotency/concurrency controls.
+- Notification is not approval; delivery status cannot change approval state.
+
+OPEN/REVIEW/TODO: technical state machine, delegation schema, capability-specific policy matrix, expiry configuration, cancellation after partial approvals, escalation/approver unavailability, emergency delegation/recovery, stable permission keys, idempotency/concurrency and audit implementation. No emergency Manager suspension outside Owner path.
+
+### 14.7 RMD-54 — capability-level mapping principles
+
+R54-D01–D12 are conceptual FIX, but all actual permission keys and detailed mappings remain candidate/open:
+- Capability/action is the smallest unit of permission mapping. View, create, update, request, approve, execute, export, reverse and administer must be separated where risk, authority, scope or SoD differs.
+- Candidate standard role catalogue principle is accepted; actual role availability per Business category remains governed by category-specific eligibility.
+- POS operational transaction capability is separate from discount, void and cash variance.
+- Inventory movement is separate from adjustment, count reconciliation, transfer approval, dispatch and receipt.
+- Finance input is separate from final posting, payout, settlement close, reversal and write-off; final/high-impact actions require L2 or stricter applicable control.
+- Basic HR is separate from sensitive personal data, payroll, compensation, clearance, waiver and final offboarding; clearance follows OA-4 authoritative source-owner/delegate authority.
+- Role assignment view/request/approve/execute/revoke/scope-change are separate capabilities.
+- Custom Role create/update/retire/archive and permission selection remain Owner-only via Owner authority path.
+- Audit event view and export are separate; audit modify/delete remains Category A prohibited; audit history append-only.
+- Scope vocabulary is conceptually FIX: business, outlet, register, warehouse, assigned-record, own-record, none/platform. Actual scope must be explicit and resource-compatible; Business-wide scope is explicit, not inherited from role.
+- All permission keys in RMD-54 v1.0 remain candidate only. D12 retains all listed gaps OPEN/REVIEW/TODO.
+
+OPEN/REVIEW/TODO includes stable key catalogue/metadata, category role availability, final role-permission matrix, numeric thresholds, Finance approver eligibility, Manager scope/allowlist details, D25 deny/conflict precedence across multiple active roles, Owner resolver technical design, approval/delegation technical design, idempotency/concurrency/audit schema, server-side enforcement, RLS and executed acceptance/negative tests.
+
+### 14.8 Cross-source reconciliation and audit disposition
+
+The Authorization/Scope/SoD Index v1.1 Erratum is the later source for its corrections:
+- Education and Hotel have dedicated conceptual approval addenda (E-01–E-04 and H-01–H-04); the older index v1.0 statements that those mappings were not approved are stale. Their explicitly OPEN details remain OPEN.
+- RMD-69 D01–D12 is conceptual FIX; Lainnya remains a temporary classification/exception path, not an ordinary operational category.
+- RMD-56 D01–D12 is conceptual FIX, but category × role/module, capability keys, scope, SoD, thresholds, data classification, test execution and implementation remain OPEN/NOT APPROVED.
+- Capability/Action Taxonomy, Scope Dimension Matrix and SoD/Approval & Sensitive Data Classification Matrix remain PROPOSED/CANDIDATE.
+- Cross-category CR/Q approvals do not make the entire matrix FIX.
+
+No contradiction in this pass authorizes reopening a previously approved FIX. In particular, D19's proposal status must not be confused with D21's later FIX; D21 does not resolve D19's full risk/approval matrix. R51-08 remains NOT APPROVED. R52-D06 leaves joint-owner quorum undefined. RMD-48/49/54 keys remain candidates, not a final permission catalogue.
+
+**Overall disposition:** conceptual policy baselines D13–D18, D21, D50, R51-01–07, R52-D01–D10, R53-D01–D12, and R54-D01–D12 are preserved at their stated scope. D16 specific category mapping, D19 full risk policy, detailed Manager allowlist, stable permission keys, role-permission matrix, scope resolver, approval matrix per capability, technical Owner resolver, D25 conflict precedence, schema/enforcement/RLS, audit event implementation and tests remain OPEN/REVIEW/TODO/NOT APPROVED as applicable. Security Readiness remains NOT READY. This audit grants no implementation authority.
