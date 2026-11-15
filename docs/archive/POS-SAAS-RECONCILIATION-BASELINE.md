@@ -740,3 +740,11 @@ The 13-category/12-standard-role baseline is preserved. Owner and Platform Super
 The exact source files labelled RMD-20, RMD-43 and RMD-46 are still not present under those exact identifiers in the current visible Library listing. Searches using those identifiers and authorization/permission terms surfaced related RMD-47/RMD-48 material, not the original source documents. Do not infer their contents from downstream references. Mark their direct provenance UNVERIFIED until located.
 
 **Next work:** retrieve exact original RMD-20/RMD-43/RMD-46 files if available elsewhere in the archive; complete a source-to-capability trace for every category; then resolve the remaining matrix gaps. The final role × module × capability × permission × scope matrix remains NOT FINAL / NOT APPROVED. This addendum records audit findings only; no implementation authority is granted.
+
+## 12. Append-only erratum — later archive snapshot and REC-05/REC-06 dispositions
+
+The initial worklist in §4 and the interim table in §10 recorded REC-05 and REC-06 as `OPEN` before the later individual evidence updates were incorporated. For current status reporting, those interim entries are superseded by the later evidence-based dispositions: **REC-05 PARTIAL** and **REC-06 PARTIAL**. Neither is CLOSED. REC-07 and REC-08 also remain PARTIAL with the limitations stated in the current Master Audit Coverage register.
+
+The later Library snapshot is documented in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md`: 200 files across seven folders, replacing the earlier 198-file/one-visible-folder snapshot only as the later point-in-time path/count observation. The earlier snapshot is retained as historical evidence. The current REC path is `/Arsip Proyek POS SaaS/REC/`, and both REC-06 v0.1 artifacts are present there: the Permission Catalogue Overlay and the Education/Hotel Workflow-to-Capability Traceability Matrix.
+
+REC-05 remains partial because full source coverage, provenance and acceptance are not verified. REC-06 remains partial because G02 exact category × module mapping and G04 submodule/workflow decomposition remain OPEN, along with final capability/action, scope, data-purpose, SoD and stable permission-key mapping. File presence or folder organization does not satisfy substantive acceptance criteria.
