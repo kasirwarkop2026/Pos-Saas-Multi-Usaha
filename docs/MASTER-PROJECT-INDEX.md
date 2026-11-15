@@ -83,3 +83,7 @@ The folder arrangement is an archive organization aid. It does not by itself est
 3. Resolve source/provenance gaps using verifiable evidence; do not infer missing approvals.
 4. Reassess all readiness criteria and gates.
 5. Obtain explicit authorization before any implementation work.
+
+## 10. Later archive snapshot — 15 November 2026
+
+The 198-file count above is the earlier point-in-time snapshot and remains historical. The later verified recursive Library listing is recorded in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md`: 200 files across seven subject folders. Use that addendum for the later path/count snapshot; do not infer file loss or content completeness from the difference. Both REC-06 artifacts are verified in the current `/Arsip Proyek POS SaaS/REC/` folder. REC-05 and REC-06 remain PARTIAL, not CLOSED.
