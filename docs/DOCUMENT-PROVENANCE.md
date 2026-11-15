@@ -52,7 +52,7 @@ The two archive files are inventory/reconciliation records, not copies of the co
 - Stage 5.9.3 working consolidation series, including the v9.6.x addenda
 - A10, A11 and A12 decision/provenance records
 
-The ERD Master Working Draft explicitly identifies itself as a working draft, not a final canonical master or proof of implementation. The latest located Stage 5.9.3 security/readiness document is a working reference, not a physical schema certification.
+The ERD Master Working Draft explicitly identifies itself as a working draft, not a final canonical master or proof of implementation. The latest located Stage 5.9.3 lineage in the current archive inventory extends through v9.8.8 (listed in REC-04 v0.3); the v9.8.8 source must be inspected before it is treated as the active working reference. The security/readiness material remains a working reference, not a physical schema certification.
 
 ### Authorization and category work
 - Capability/action taxonomy and authorization archive index
@@ -107,6 +107,21 @@ Do not promote AP-02 to AP-01 or EV-01/EV-02 to EV-03/EV-04/EV-05.
 - The RMD-13/A12.40 material records unresolved provenance and traceability acceptance criteria.
 - Implementation status remains NOT VERIFIED where only documentation evidence is available.
 
-## 9. Maintenance
+## 9. REC evidence map (15 November 2026)
+
+| REC | Latest evidence in the REC folder | Status and caveat |
+|---|---|---|
+| REC-01 | v0.2 approval/provenance addendum | PARTIAL; R56-D01–D12 conceptual approval basis is recovered; no canonical v1.2 variant selected |
+| REC-02 | v0.2 addendum and CSV path/hash register | PARTIAL; eight names absent/unresolved; remaining 115 not rehashed |
+| REC-03 | v0.1 snapshot reconciliation | PARTIAL; totals 322/328/333 reconciled at aggregate level; raw 328 listing missing |
+| REC-04 | v0.4 addendum, v0.3 set-difference and CSV | PARTIAL; 54 names reconstructed; historical 56 discrepancy and three unidentified delta names remain |
+| REC-05 | No standalone artifact identified in REC folder | NOT VERIFIED as completed |
+| REC-06 | No standalone artifact identified in REC folder | NOT VERIFIED as completed |
+| REC-07 | Related ERD lineage sources exist; no standalone REC artifact identified | PARTIAL / NOT VERIFIED |
+| REC-08 | Related Batch 7–9 security sources exist; no standalone REC artifact identified | NOT VERIFIED as a completed consolidated register |
+
+This table describes the evidence visible in the REC folder and must not be interpreted as a complete search of every Library folder.
+
+## 10. Maintenance
 
 Update this document append-only when source families, explicit supersession, or archive locations materially change. Record date, exact source, scope affected and evidence basis. Do not silently replace historical lineage.
