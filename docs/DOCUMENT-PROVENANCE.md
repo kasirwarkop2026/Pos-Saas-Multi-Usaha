@@ -125,3 +125,9 @@ REC-06 overlay v0.1 is an append-only reconciliation artifact, not a final permi
 ## 10. Maintenance
 
 Update this document append-only when source families, explicit supersession, or archive locations materially change. Record date, exact source, scope affected and evidence basis. Do not silently replace historical lineage.
+
+## 11. Later archive inventory addendum — 15 November 2026
+
+The earlier 198-file snapshot in this document is retained as a historical point-in-time record. A later complete recursive listing (three pages consumed; no pagination remaining) is recorded in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md`: 200 files across seven subject folders (Audit 11, REC 19, ERD 71, Blueprint 10, Authorization 17, RMD 61, Review 11). No duplicate exact paths were returned.
+
+The current REC folder path is `/Arsip Proyek POS SaaS/REC/`. Both REC-06 artifacts are verified there: the Permission Catalogue Overlay v0.1 and the separate Education/Hotel Workflow-to-Capability Traceability Matrix v0.1. REC-06 remains PARTIAL; the traceability matrix is a working audit artifact, not a final permission catalogue or implementation approval. REC-05 remains PARTIAL pending full source coverage and acceptance. The later addendum clarifies current path/count metadata without replacing historical source records or asserting content-level review of all 200 files.
