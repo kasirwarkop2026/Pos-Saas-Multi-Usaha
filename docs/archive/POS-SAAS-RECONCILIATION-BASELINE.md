@@ -248,3 +248,88 @@ The Authorization/Scope/SoD index erratum confirms:
 Content review in this pass has directly read the REC-01 v0.1/v0.2, REC-02 v0.2, REC-03 v0.1, REC-04 v0.2/v0.3, A12.18–A12.28 provenance audit, A12.31–A12.36 provenance audit, ERD Master Working Draft, Blueprint v3.0, Category Consolidation, Audit Register v1.3, and Authorization/Scope/SoD index erratum.
 
 This is a targeted content review, not a full-content audit of all 198 files in the current recursive Library listing. Other RMD decisions, authorization addenda, ERD version documents, REC-05–REC-08, and the full 38-document ERD lineage still require individual review and crosswalk. The GitHub source inventory remains a metadata list only. Do not claim that all archive content has been audited.
+
+
+## 13. RMD-55–RMD-69 category decision and authorization-matrix audit
+
+### 13.1 Category decision baseline
+
+The category decision addenda reviewed in this pass establish the following conceptual FIX baselines. These are source-level architecture/workflow approvals, not technical implementation approval.
+
+| Source | Conceptual decision status | Important OPEN / boundary retained |
+|---|---|---|
+| RMD-55 v1.1 | R55-D01–D12 FIX | Category taxonomy is initial baseline; category definitions, role availability, Manager allowlist, final permission keys remain OPEN/CANDIDATE |
+| RMD-56 v1.2 | R56-D01–D12 FIX; F56 findings/refinements retained | See REC-01: approval context supports Variant A attribution; no canonical v1.2 artifact selected. Cross-category matrices and technical authorization remain OPEN |
+| RMD-57 v1.1 Retail | R57-D01–D12 and WF-01–WF-12 FIX | Discount/refund/stock/PO/cash thresholds, exact allowlist, permission keys OPEN |
+| RMD-58 v1.1 Wholesale/Distributor | R58-D01–D12 and WF-01–WF-14 FIX | Pricing/credit/PO/receiving/return/AR/AP thresholds OPEN; warehouse/bin is default scope; dispatch and destination receipt remain separate events |
+| RMD-59 v1.1 F&B | R59-D01–D12 and WF-01–WF-14 FIX | Tax/service charge, discount/comp/refund, waste, recipe costing and procurement thresholds OPEN |
+| RMD-60 v1.1 Service Provider | R60-D01–D12 and WF-01–WF-14 FIX | Work-order lifecycle, QC, warranty, quote/price/refund/travel/cancellation and payout policy details OPEN |
+| RMD-61 v1.1 Salon/Beauty | R61-D01–D12 and WF-01–WF-14 FIX | Sensitive consultation/consent data need-to-know; consent types distinct; commission, package, refund, hygiene and thresholds OPEN |
+| RMD-62 v1.1 Manufacturing | R62-D01–D12 and WF-01–WF-14 FIX | Versioned BOM/formula/routing, release/quality gates and genealogy principles FIX; costing/WIP/MRP, yield, traceability and release thresholds OPEN |
+| RMD-63 v1.1 Rental | R63-D01–D12 FIX | Unique internal asset identity, availability vs operational/safety readiness, custody and lifecycle separation FIX; pricing, damage, maintenance and write-off thresholds OPEN |
+| RMD-64 v1.1 Pharmacy | R64-D01–D12 FIX | Prescription intake vs professional review/dispensing separated; batch/expiry/FEFO/quarantine principles FIX; regulated/controlled workflows require verified credentials and compliance gates; policy thresholds OPEN |
+| RMD-65 v1.1 Laundry | R65-D01–D12 FIX | Order identity, custody chain, batch compatibility, process/QC and handover events separated; compensation/refund/adjustment thresholds OPEN |
+| RMD-66 approval addendum | E-01 Manager Allowlist, E-02 Role Eligibility, E-03 Module Eligibility approved FIX; E-04 retains OPEN details | Approval applies to named Education mappings and 14 module groups; no implementation approval; student/minor/safeguarding restrictions remain |
+| RMD-67 v1.1 Parfum/Fragrance | R67-D01–D12 FIX | Two distinct tracks: Retail/Refill and Formulation/Manufacturing; formula confidentiality, batch/QC/recall principles FIX; numeric tolerances, formula parameters, material lists and regulatory thresholds OPEN |
+| RMD-68 approval addendum | H-01 Manager Allowlist, H-02 Role Eligibility, H-03 Module Eligibility approved FIX; H-04 retains OPEN details | Approval applies to named Hotel mappings and 14 module groups; 16 workflows; property/room/shift scope and guest-data SoD remain; no implementation approval |
+| RMD-69 v1.1 unclassified/other | R69-D01–D12 FIX | Temporary classification lifecycle, fail-closed minimum safe mode, human review and no specialist auto-eligibility FIX; status transitions, SLA/expiry, reviewer authority and safe-mode function list OPEN |
+
+The individual category addenda retain their stated thresholds, policy details, exact role allowlists, and technical requirements as OPEN/REVIEW where specified. Do not fill in numeric thresholds or infer role permissions from role names, category, module eligibility, or workflow membership.
+
+### 13.2 Cross-category decisions CR and Q
+
+The cross-category decision addenda establish:
+- CR-01–CR-10: FIX — conceptual.
+- Q-01–Q-06: FIX — conceptual in Decision Addendum v1.3; no Q item remains OPEN in that decision set.
+- Finance/Accounting and Employee/HR Operator are CONDITIONAL across categories, not universal access bundles.
+- Manager is a Business-level governance role; category-specific eligibility/allowlist and effective permission/scope remain separate.
+- Education Instructor duties map to Production/Service Operator with assigned class/session scope; no new Instructor role approved at this stage.
+- Hotel Housekeeping duties map to Production/Service Operator with assigned room/task scope; no new Housekeeping role approved at this stage.
+- Supervisor/Shift Lead is CONDITIONAL only where shift/team/oversight workflow requires it.
+- Inventory Operator and Warehouse Operator may be combined only where workflow, team, scope, responsibility, and controls/SoD permit.
+- Pharmacy professional controls are not replaced by generic role eligibility.
+- Parfum refill and formulation/manufacturing remain separate tracks.
+- Specialist role eligibility must follow actual workflow, module eligibility, scope and controls; category alone is insufficient.
+
+R51-08 (emergency Manager suspension outside Owner authority path) remains NOT APPROVED.
+
+### 13.3 Cross-category matrix and workflow-to-module crosswalk are not final
+
+The following source documents remain design/candidate artifacts, not final authorization matrices:
+- Cross-Category Matrix Source Reconciliation v1.2: DRAFT / PARTIAL SOURCE RECONCILIATION / NOT FINAL / NOT FIX.
+- Category Workflow-to-Module Crosswalk v1.3: DRAFT / CANDIDATE CROSSWALK / NOT FINAL / NOT FIX.
+- Shared Core × Operational Module Eligibility Matrix v1.0: PROPOSED/CANDIDATE.
+- Capability/Action Taxonomy v1.0: PROPOSED/CANDIDATE; vocabulary is not stable permission keys.
+- Scope Dimension Matrix v1.0: PROPOSED/CANDIDATE; object scope and geographic/organizational scope are independent.
+- SoD/Approval & Sensitive Data Classification Matrix v1.0: PROPOSED/CANDIDATE; field-level classifications, thresholds and exact approver mapping remain OPEN.
+
+The Crosswalk v1.3 makes an important distinction:
+- SOURCE FIX = category workflow/module-group principle approved conceptually.
+- SOURCE APPROVED = Education/Hotel mapping approval specifically recorded for E-01–E-04 / H-01–H-04.
+- CANDIDATE M-ID = proposed alignment to Shared Core M01–M21, not final approved module mapping.
+
+Therefore, no category × M01–M21 cell is promoted to FIX by the crosswalk. In particular:
+- G01 canonical module IDs/names: PARTIALLY RESOLVED; canonical catalogue approval OPEN.
+- G02 exact category × module mapping: OPEN.
+- G03 shared foundation vs operational module boundaries: PARTIALLY RESOLVED; exact foundation capability/per-role access OPEN.
+- G04 submodule/workflow decomposition: OPEN.
+- G05 capability/action taxonomy: PARTIALLY RESOLVED; vocabulary is not stable keys or grants.
+- G06 scope dimensions: PARTIALLY RESOLVED; resolver, inheritance, multi-scope, expiry and per-module mapping OPEN.
+- G07 SoD/approval/threshold/dual control: PARTIALLY RESOLVED; exact approver eligibility, thresholds and capability-level L0–L3 matrix OPEN.
+- G08 sensitive data classification/field allowlists: PARTIALLY RESOLVED; field-level classification, masking, export, retention and jurisdiction mapping OPEN.
+- G09 credential/regulatory/jurisdiction gates: PARTIALLY RESOLVED; evidence catalogue and exact gates OPEN. Pharmacy professional/controlled workflows remain NOT ELIGIBLE / NOT READY pending verified credentials/compliance.
+- G10 negative-test mapping: PARTIALLY RESOLVED; tests are conceptual acceptance criteria, not executed evidence. Full traceability to M-ID/action/resource/scope/data class and expected allow/deny remains OPEN.
+
+RMD-66 and RMD-68 approval addenda approve their named role/Manager/module-group mappings, not a blanket grant or every candidate M-ID. For other categories, M01–M21 alignments remain candidate unless explicitly approved by a source decision.
+
+### 13.4 Category-specific safeguards preserved
+
+- RMD-69 has no automatic specialist module or specialist-role eligibility. Do not invent the safe-mode function list.
+- RMD-64 regulated/professional workflows require credential/compliance review; safe Pharmacy workflows are not automatically all blocked.
+- RMD-67 M10/Formulation is conditional on confirmed formulation/manufacturing activity; retail/refill does not automatically require full manufacturing workflow.
+- Hotel room/bed capacity, Education class/session capacity, Rental assets, and ordinary inventory are distinct resource domains; do not map them interchangeably.
+- CORE/CONDITIONAL/REG is not a permission grant. Role eligibility is not module eligibility; module eligibility is not capability/action; none of these alone supplies scope or authorization.
+
+### 13.5 Audit disposition
+
+The category-level conceptual FIX decisions RMD-55–RMD-69 and cross-category CR/Q decisions are retained as FIX at their stated conceptual scope. No category FIX is reopened. The unresolved matrix, permission, scope, SoD, data-classification, threshold, credential and test-execution work remains OPEN/PROPOSED/CANDIDATE/NOT READY as stated. No permission key, role grant, module grant, schema, RLS, API, or implementation is approved by this audit.
