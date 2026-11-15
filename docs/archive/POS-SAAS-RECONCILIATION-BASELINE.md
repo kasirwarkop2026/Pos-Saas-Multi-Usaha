@@ -476,3 +476,140 @@ The Authorization/Scope/SoD Index v1.1 Erratum is the later source for its corre
 No contradiction in this pass authorizes reopening a previously approved FIX. In particular, D19's proposal status must not be confused with D21's later FIX; D21 does not resolve D19's full risk/approval matrix. R51-08 remains NOT APPROVED. R52-D06 leaves joint-owner quorum undefined. RMD-48/49/54 keys remain candidates, not a final permission catalogue.
 
 **Overall disposition:** conceptual policy baselines D13–D18, D21, D50, R51-01–07, R52-D01–D10, R53-D01–D12, and R54-D01–D12 are preserved at their stated scope. D16 specific category mapping, D19 full risk policy, detailed Manager allowlist, stable permission keys, role-permission matrix, scope resolver, approval matrix per capability, technical Owner resolver, D25 conflict precedence, schema/enforcement/RLS, audit event implementation and tests remain OPEN/REVIEW/TODO/NOT APPROVED as applicable. Security Readiness remains NOT READY. This audit grants no implementation authority.
+
+
+## 15. Capability-level mapping, cross-category matrix, scope and SoD source audit
+
+### 15.1 Status hierarchy — do not conflate eligibility with authorization
+
+The following source artefacts were reviewed in this pass: Capability/Action Taxonomy v1.0; Cross-Category Matrix Design v1.0; Review & Refinements v1.1; Decision Addenda v1.2 and v1.3; Reconciled Matrix v1.1; Source Reconciliation v1.2; Permission Catalogue & Category × Role × Module Eligibility v1.0; Scope Dimension Matrix v1.0; SoD/Approval & Sensitive Data Classification Matrix v1.0; page-permission-scope matrix v1.0; and category workflow audits RMD-57 through RMD-62, plus Education and Hotel approval addenda.
+
+The binding distinctions remain:
+1. Category/activity classification is not authorization.
+2. Role eligibility is not a role assignment or permission grant.
+3. Module eligibility/entitlement is not capability authorization.
+4. Capability/action is not sufficient without a valid permission, scope, context, object state and required approval.
+5. UI/page visibility is not server-side authorization.
+6. Owner and Platform Super Admin remain separate from the 12 standard Business roles; no new standard role is introduced by these design artefacts.
+
+### 15.2 Cross-category matrix decisions and unresolved matrix status
+
+The decision addenda establish:
+- CR-01–CR-10: FIX — conceptual.
+- Q-01–Q-06: FIX — conceptual (Q decisions were separately approved in v1.3; do not use v1.2 alone as the latest Q status).
+- Finance/Accounting and Employee/HR Operator are CONDITIONAL across categories, not CORE or automatic assignments.
+- Manager is a separate Business-level governance role, one per Business; operational authority requires the category/workflow allowlist plus permission and effective scope.
+- Supervisor/Shift Lead is CONDITIONAL and tied to actual shift/team oversight.
+- Education instructor duties map to Production/Service Operator with assigned class/session scope; no Instructor standard role.
+- Hotel housekeeping maps to Production/Service Operator with assigned room/task/property/shift scope; no Housekeeping standard role.
+- Inventory Operator and Warehouse Operator may be combined only when workflow, team, scope, volume, controls and SoD remain effective.
+- Pharmacy professional/regulated actions require credential/compliance gates; generic role labels do not authorize prescription review, dispensing or controlled products.
+- Parfum refill and formulation/manufacturing are separate workflows; simple refill does not imply full manufacturing capability.
+- Specialist roles cannot be inferred from Business category alone.
+- CORE CANDIDATE and CONDITIONAL are eligibility labels, never permission grants or authorization.
+
+The reconciled Cross-Category Matrix v1.1 remains DRAFT / PROPOSED / CANDIDATE, not final. Source Reconciliation v1.2 remains DRAFT / SOURCE-RECONCILED PARTIAL / NOT FINAL / NOT FIX. Its review identifies unresolved G01–G10, including exact category × M01–M21 mapping, canonical module definitions, submodule/workflow decomposition, capability/action mapping, object/geographic scope, data classification and field allowlists, approval/SoD, and negative tests. Category workflow anchors are not a final M01–M21 permission grant matrix.
+
+### 15.3 Capability/action taxonomy — vocabulary only
+
+Capability/Action Taxonomy v1.0 is PROPOSED/CANDIDATE, not a final permission catalogue. Its action families (discover/list, view/read, create/draft, update/edit, assign/allocate, submit/request, review/verify, approve/reject, execute/process, export/download/share, administer/configure, reconcile/close, inspect/certify, publish/activate) are descriptive vocabulary only. They do not establish stable permission identifiers, role grants, final scope, approval thresholds, or implementation.
+
+The mapping unit must be a specific action on a resource/object within a workflow. Split actions when authority, risk, scope or SoD differs. In particular:
+- Request/submit is not approve; approve is not execute.
+- View is not export; create/edit is not publish/release.
+- Record facts is not approve a discrepancy or reconcile a ledger.
+- Complete work is not independent QC/release.
+- Payment capture is not refund/reversal/payout/settlement authority.
+- Assignment is not scope grant; role assignment is not Owner authority.
+- A category/module or UI flag cannot substitute for runtime authorization.
+
+Every eventual mapping needs traceable resource/object, workflow/state, role eligibility, module eligibility, stable permission key, object scope, organizational/geographic scope, data class/field allowlist, context, approval/SoD, credential/compliance, expiry/revocation and audit provenance.
+
+### 15.4 Permission Catalogue & Category × Role × Module Eligibility v1.0
+
+This combined catalogue is DRAFT conceptual, not a final permission catalogue or implementation approval. Its own status register says:
+- Standard-role catalogue: CANDIDATE.
+- Category × Role mapping: PROPOSED/CANDIDATE.
+- Module eligibility mapping: PROPOSED/CANDIDATE.
+- Manager allowlist per category: OPEN/REVIEW.
+- Permission names/keys: OPEN/REVIEW.
+- Scope resolver, technical SoD and backend enforcement: OPEN/NOT READY.
+
+A checkmark in its tables means candidate conceptual eligibility only. The document explicitly excludes automatic access. It must be read with the later CR/Q decision addenda and category-specific approvals; stale earlier draft labels cannot override later approval addenda. Platform roles are not tenant roles. Unknown, missing, ambiguous or unvalidated category must fail closed for eligibility and sensitive actions.
+
+### 15.5 Scope Dimension Matrix v1.0
+
+Scope Dimension Matrix v1.0 is PROPOSED/CANDIDATE. It provides a useful conceptual two-axis model:
+- Object scope: which record/resource/object may be accessed (for example register, order, invoice, warehouse, room, assigned job, student, lot/batch).
+- Organizational/geographic scope: which Business-owned unit/location/branch/team/property/site/warehouse applies.
+
+Effective access is the intersection of the two dimensions plus capability, permission, membership, context, state, approval/SoD and compliance. Neither dimension creates permission.
+
+Guardrails to preserve:
+- No cross-Business inheritance.
+- No upward inheritance from a child outlet/register to the parent Business.
+- Parent-to-child inheritance is not a universal default; it requires explicit policy for the scope type, role/workflow and action.
+- Business-wide scope must be explicit and bounded; it is not inferred from Manager or Owner labels.
+- Multi-outlet/multi-warehouse access is an explicit list of active scopes.
+- Object assignment does not expand geographic scope; geographic scope does not grant every object.
+- Temporary scope needs expiry, revocation, reason and audit; exact lifecycle remains OPEN.
+- Sensitive fields require purpose/relationship/field-level controls even inside an otherwise valid scope.
+
+### 15.6 SoD, approval and sensitive data matrix v1.0
+
+SoD/Approval/Sensitive Data Classification Matrix v1.0 is PROPOSED/CANDIDATE, not a final approval matrix. It provides design guardrails but does not settle nominal thresholds, exact tier assignment, approver counts or final role-to-approver mapping.
+
+Preserve the binding cross-source FIX rules from R-03/RMD-51/RMD-53:
+- Stable human identity, not separate login/session/device, is the SoD identity basis.
+- No self-approval; no auto-approval because an approver is unavailable or a deadline expires.
+- Approval and execution are separate.
+- Material payload change requires revalidation/new approval.
+- Revalidate actor, membership, scope, object state, approval validity and expiry before execution.
+- Delegation does not erase independence or expand scope.
+- High-risk/emergency controls cannot become a permanent bypass.
+- Sensitive data needs need-to-know, object/unit scope and field allowlists; export/share is a separate action.
+
+Still OPEN: numeric thresholds, exact risk-tier mapping per action, number of approvers, per-category approver eligibility, exception criteria, field-level classification/masking, retention, and technical enforcement.
+
+### 15.7 Page × permission × scope matrix v1.0
+
+The page matrix is PROPOSED and explicitly says its permission labels are descriptive examples, not technical keys. It is a UI/access design review, not a final catalogue or implementation approval. It records useful platform-side distinctions:
+- PLATFORM_ADMIN has individual per-account grants; role label alone does not grant access.
+- Platform support is target-specific and read-only by default, time-bound; write access is a separate grant.
+- Refund separation: PLATFORM_ADMIN may submit/track; SUPER_ADMIN approves under the documented policy. Requester cannot approve their own request.
+- Mass price changes and permanent Business deletion remain SUPER_ADMIN-only under the stated special procedures.
+- Revocation must affect the next authorization request; active sessions must not preserve revoked privileges.
+- Server-side checks, audit events, exact PA scope, write grants, API/RLS/schema and stable permission keys remain OPEN.
+
+These platform controls do not merge PLATFORM_ADMIN with Owner or tenant roles and do not authorize cross-tenant access by default.
+
+### 15.8 Category workflow audit sample — RMD-57 through RMD-62
+
+The six category workflow audits are workflow discovery and candidate mapping sources; their recommendations must not be promoted to FIX merely because the documents exist. The later cross-category source reconciliation and approved category addenda control status. Specific workflow findings from the reviewed sources:
+
+- **RMD-57 Retail:** Cashier sale/payment/receipt remains register/outlet scoped; discount, price override, void, refund, cash variance, count variance and reconciliation are separate candidate actions. Receiving facts, discrepancy approval, stock adjustment and transfer dispatch/receipt must not collapse into one permission. Customer lookup and export/sensitive fields require distinct controls.
+- **RMD-58 Grosir/Distributor:** Supplier onboarding/terms, purchase request, PO create/submit/approve/amend, receiving/inspection/discrepancy, warehouse putaway, allocation/reservation, pick/dispatch, proof of delivery, invoice/payment allocation, credit/refund and transfer lifecycle are distinct candidate actions. PO creator/requester and approver, dispatch and receipt, credit/refund and inventory disposition require separation where policy mandates.
+- **RMD-59 F&B:** Menu/recipe/version/price, table/reservation, order amendment, kitchen ticket, ingredient movement/waste, purchasing/receiving, payment capture, discount/comp/void/refund, cash close/variance and customer handoff are distinct workflow capabilities. Kitchen completion is not payment authority; readiness is not customer handoff; thresholds remain OPEN.
+- **RMD-60 Service Provider:** Quotation/price exception, appointment/resource scheduling, work-order scope, assignment/dispatch, worker evidence, material issue/consumption/return, independent QC/rework/completion, invoice/payment, warranty/complaint and refund/reversal are distinct. Assigned worker scope is limited to assigned work/task; job completion is not QC or settlement authority.
+- **RMD-61 Salon/Beauty:** Treatment/service catalogue and price, customer consultation/consent/sensitive notes, appointment/check-in, assigned treatment execution, qualification/eligibility, product usage/waste, package entitlement/redemption, payment, refund/void/complimentary service and room/resource readiness are distinct. Sensitive customer notes and treatment data need field-level purpose controls; qualification records are not role permissions.
+- **RMD-62 Manufacturing:** Engineering/spec/BOM/formula/routing version approval/release, planning, production order release, material reservation/issue/return, work-center execution, QC/hold/disposition, production receipt/putaway, lot/serial genealogy/recall, maintenance return-to-service, subcontracting and cost/period close are distinct. Production completion is not quality release or unrestricted stock availability; cost adjustment/posting and period close require separate finance authority.
+
+For these category audits, candidate role names are not grants. Scope is resource/workflow-specific (register, warehouse, order, assigned work, station, plant, work center, lot/batch, etc.); exact keys, thresholds, approval level and role mapping require separate decision records. Do not transpose one category's detailed workflow decision into another category without source authority.
+
+### 15.9 Later category approval addenda checked in this pass
+
+- RMD-66 Education approval addendum: E-01 Manager allowlist, E-02 role eligibility and E-03 module eligibility are FIX conceptual approvals. E-04 explicitly preserves all detailed OPEN items. Instructor/Tutor, Examiner/Assessor and Admissions Officer remain functions mapped to standard roles/capabilities or credential/assignment context, not new standard roles.
+- RMD-68 Hotel v1.1 approval addendum: H-01 Manager allowlist, H-02 role eligibility and H-03 module eligibility are FIX conceptual approvals. H-04 preserves all nine groups of OPEN details. Housekeeping remains mapped to Production/Service Operator with assigned room/task/property/shift scope; no new Housekeeping role.
+- These approvals do not approve capability keys, detailed scope, sensitive data access, thresholds, approval/SoD, technical enforcement or Production implementation.
+
+### 15.10 Audit disposition and remaining source gaps
+
+**Confirmed status:** CR-01–CR-10 and Q-01–Q-06 are FIX conceptual; the reconciled Cross-Category Matrix remains DRAFT/PARTIAL/NOT FINAL; Capability/Action Taxonomy, Permission Catalogue v1.0, Scope Dimension Matrix v1.0, SoD Matrix v1.0 and page-permission-scope matrix v1.0 remain PROPOSED/CANDIDATE. RMD-66 and RMD-68 have approved eligibility addenda with their explicit OPEN details retained. RMD-57–RMD-62 workflow documents are candidate audit sources, not blanket approvals.
+
+**Not established by this pass:** final M01–M21 category mapping; final category × role × module × capability matrix; final stable permission keys; exact role-to-permission grants; object/geographic scope resolver; field-level allowlists and data classification; approval tier/threshold/approver per capability; D25 deny/conflict precedence; executed negative tests; server-side/RLS enforcement and Security Readiness.
+
+The precise source documents labelled RMD-20, RMD-43 and RMD-46 were not located by exact filename in the current visible Library listing for this folder. References to their baseline in later RMD-47/RMD-48 material are not a substitute for inspecting those originals. Their individual source lineage and any unique decisions remain UNVERIFIED until the exact documents are located and read.
+
+**Next audit sequence:** locate and inspect the original RMD-20/RMD-43/RMD-46 sources; then continue category workflow source audits RMD-63–RMD-65, RMD-67 and RMD-69 and their approval addenda/errata; then reconcile all category decision sources against M01–M21 and capability/action taxonomy. No final role-permission matrix should be issued as approved until this lineage and each capability's approval/scope/data/SoD requirements are traceable.
+
+This section is documentation-only. No source archive file was changed. No permission key, role grant, module grant, schema, RLS, API, code or implementation status is approved by this audit. DB_PUSH_BLOCKED remains ACTIVE; Security Readiness remains NOT READY.
