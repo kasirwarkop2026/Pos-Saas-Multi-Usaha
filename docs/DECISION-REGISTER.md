@@ -100,3 +100,9 @@ The RMD-12 source-mapped register covers A10-A through A10-F, A10-T1 through A10
 ## 7. Change control
 
 Any change to a FIX decision requires a specific technical reason, traceable evidence, and explicit review/approval. A conceptual decision does not grant permission to implement database, security, API, backend, code, CI, deployment or Production changes.
+
+## 8. Later archive inventory verification — 15 November 2026
+
+A later recursive Library listing is captured in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md`: 200 files across seven folders, with no duplicate exact paths in the returned listing. Both REC-06 artifacts are verified at `/Arsip Proyek POS SaaS/REC/`: `REC-06_Permission_Catalogue_Overlay_Education_Hotel_v0.1_2026-11-15.md` and `REC-06_Education_Hotel_Workflow_to_Capability_Traceability_Matrix_v0.1_2026-11-15.md`.
+
+This corrects the earlier uncertainty about their current Library location. It does not change their status: REC-06 remains PARTIAL; G02/G04 and technical authorization details remain OPEN/CANDIDATE. REC-05 also remains PARTIAL pending full provenance coverage and acceptance. No workstream is marked CLOSED by file presence alone.
