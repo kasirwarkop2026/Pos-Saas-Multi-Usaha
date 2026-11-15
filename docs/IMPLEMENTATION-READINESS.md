@@ -44,7 +44,7 @@ The latest readiness material records A12.40 as PARTIAL / OPEN. The documented A
 | AC40-11 | Unresolved blocker register | PARTIAL | Blockers are recorded, but consolidated completeness/traceability remains open |
 | AC40-12 | Historical integrity | PARTIAL | Historical records are retained, but integrity/reconciliation evidence is not fully closed |
 
-These are the latest status labels visible in the referenced readiness lineage, not a fresh re-certification of each criterion. REC-01 through REC-04 add evidence for specific archive/provenance questions but do not close A12.40. REC-05 through REC-08 remain not verified as completed workstreams in the current REC folder. Do not close A12.40 by deferring unresolved work or treating a register entry as proof of acceptance.
+These are the latest status labels visible in the referenced readiness lineage, not a fresh re-certification of each criterion. REC-01 through REC-04 add evidence for specific archive/provenance questions but do not close A12.40. REC-05 has a draft decision/provenance index; REC-06 has Education/Hotel conceptual approvals but no consolidated catalogue overlay located; REC-07 has a 38-file inventory/lineage register that explicitly is not a full content audit; REC-08 has security summaries but no located complete Batch 7–9 consolidated finding register. These are PARTIAL evidence states, not closure. Do not close A12.40 by deferring unresolved work or treating a register entry as proof of acceptance.
 
 ## 4. A12.41 and final gates
 
