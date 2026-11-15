@@ -132,3 +132,20 @@ This baseline is intentionally PARTIAL. It records the current metadata inventor
 - `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`
 
 This source list is not an exhaustive list of all archive files; see the source inventory manifest. Additional source documents must be linked as their content and lineage are reviewed.
+
+
+## 9. REC-01 detailed content review — 15 November 2026
+
+The individual `Audit_Rekonsiliasi_Provenance_RMD-56_v1.2_REC-01_v0.1_2026-11-15.docx` was read in full. It confirms:
+
+- Variant A: 42,520 bytes; 96 paragraphs; SHA-256 `68c4bda1d4ea0d...` (full hash recorded in the source report). A-copy is byte-identical to A.
+- Variant B: 42,965 bytes; 101 paragraphs; distinct SHA-256.
+- Variant C: 42,309 bytes; 71 paragraphs and one table; distinct SHA-256.
+- All three variants state R56-D01–D12 as conceptual FIX, but their wording, structure, refinement presentation, and approval phrase differ.
+- The approval phrases recorded by the variants are not independently proven by the DOCX files. Library timestamps are storage metadata; DOCX core properties are generic and do not establish approval order.
+- Variant B has the most explicit guardrail/status coverage and may be used only as a **working comparison reference — non-canonical**. It is not approved as the canonical source.
+- RMD-56 v1.1 itself asked for explicit approval before v1.2; source-chat evidence linking the three phrases to exact context/order remains missing.
+
+REC-01 disposition: **PARTIAL / PROVENANCE GAP — NOT CLOSED**. Preserve all three byte variants and both A entries. Do not designate a canonical version until original conversation evidence and decision-to-document crosswalk for D01–D12/refinements D02, D04, D09, D10, D12 are verified.
+
+This is a content-level update to the GitHub reconciliation baseline; it does not change the source documents or any conceptual FIX.
