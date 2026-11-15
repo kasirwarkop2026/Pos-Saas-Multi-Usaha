@@ -613,3 +613,130 @@ The precise source documents labelled RMD-20, RMD-43 and RMD-46 were not located
 **Next audit sequence:** locate and inspect the original RMD-20/RMD-43/RMD-46 sources; then continue category workflow source audits RMD-63–RMD-65, RMD-67 and RMD-69 and their approval addenda/errata; then reconcile all category decision sources against M01–M21 and capability/action taxonomy. No final role-permission matrix should be issued as approved until this lineage and each capability's approval/scope/data/SoD requirements are traceable.
 
 This section is documentation-only. No source archive file was changed. No permission key, role grant, module grant, schema, RLS, API, code or implementation status is approved by this audit. DB_PUSH_BLOCKED remains ACTIVE; Security Readiness remains NOT READY.
+
+
+## 16. Category decision addenda RMD-57–RMD-69 — provenance and capability boundaries
+
+This pass checked the decision addenda for RMD-57–RMD-68 and RMD-69, alongside their audit briefs where available. The addenda are the authority for conceptual FIX status; the original audit briefs remain preserved as source history. All decisions below are conceptual only and do not approve stable permission keys, exact role grants, thresholds, schema/RLS, code or implementation.
+
+### 16.1 RMD-57 through RMD-62 status reconciliation
+
+| Category source | Decision status | Specific controls fixed conceptually | Still OPEN / NOT APPROVED |
+|---|---|---|---|
+| RMD-57 Retail | R57-D01–D12 FIX | WF-01–12 baseline; Cashier register/outlet boundary; separate discount/override/void/refund/cash variance; inventory count/variance/adjustment separation; procurement vs PO approval; customer minimum necessary; Finance action separation | Discount/refund/stock-count/PO/cash thresholds; final keys and exact allowlists; implementation |
+| RMD-58 Wholesale/Distributor | R58-D01–D12 FIX | WF-01–14; procurement/PO/receiving/discrepancy/payment separation; warehouse/bin scope; reservation ≠ movement; fulfillment lifecycle; finance and returns/transfer events separated | Pricing/credit/PO/receiving/return/AR/AP thresholds; exact keys and allowlists; implementation |
+| RMD-59 F&B | R59-D01–D12 FIX | WF-01–14; menu/recipe/pricing/costing separation; order/fulfillment lifecycle; reservation ≠ consumption; procurement/receiving; Cashier boundary; waste/spoilage/comp/remake distinct; customer minimization; register close vs variance | Tax/service charge, discount/comp/refund, waste, recipe costing, procurement and cash thresholds; exact keys/allowlists; implementation |
+| RMD-60 Service Provider | R60-D01–D12 FIX | WF-01–14; catalog/quotation/price approval/customer acceptance/work-order scope distinct; lifecycle stages separate; assigned worker scope; execution vs independent QC; material events separate; finance separation; partner/subcontractor scope | Work-order change/partial completion/reopen, quality/evidence, warranty, costing, subcontractor and financial thresholds; exact keys/allowlists; implementation |
+| RMD-61 Salon/Beauty | R61-D01–D12 FIX | WF-01–14; restricted consultation/photo data; assigned treatment scope; skill eligibility ≠ permission/legal license; treatment vs QC; retail product vs consumables; package entitlement lifecycle; Cashier vs finance boundary | Commission/payout, package, consent/retention, product usage, refund and hygiene thresholds; exact keys/allowlists; implementation |
+| RMD-62 Manufacturing | R62-D01–D12 FIX | WF-01–14; controlled engineering/BOM/routing versioning; planning vs production order/release/execution; immutable material movements; independent QC; quality release before unrestricted finished-goods availability; traceability; maintenance return-to-service; subcontracting controls | BOM effectivity, MRP, release gates, partial completion/rework, lot/serial rules, costing/WIP/variance, quality and write-off thresholds; exact keys/allowlists; implementation |
+
+RMD-57 through RMD-62 addenda explicitly retain OPEN thresholds and exact role allowlists/permission keys. Their conceptual FIX decisions must not be mistaken for numerical policy or implementation approval.
+
+### 16.2 RMD-63 Rental / Equipment
+
+R63-D01–D12 are FIX conceptual:
+- Unique internal asset identity per Business.
+- Booking availability is distinct from operational readiness, inspection, safety and maintenance status; active hold blocks booking/dispatch as applicable.
+- Reservation, booking confirmation, contract acceptance, dispatch, handover, return and close are separate lifecycle stages.
+- Rate-plan authoring/approval, quotation, discount/override, waiver and contract amendment are separate capabilities.
+- Prevent double booking with conflict validation, hold expiry, idempotency and concurrency control.
+- Quotation/contract are versioned; material change after customer acceptance requires amendment/re-acceptance.
+- Handover and return are separate custody events with evidence.
+- Inspection/damage assessment is separate from charge/claim approval where SoD applies.
+- Payment capture, deposit allocation, invoice/AR, refund, payout, claim settlement and write-off are separate.
+- Maintenance/safety hold cannot be cleared just by closing a work order; return-to-service needs appropriate inspection/approval.
+- Branch/yard/location is the default scope for assets, booking, handover and maintenance.
+- Customer identity, documents, photos and incident/claim data require purpose-limited access.
+
+OPEN: discount/rate/waiver, purchase/repair/maintenance cost, write-off/asset disposal thresholds and detailed compliance. No final keys/allowlists or implementation.
+
+### 16.3 RMD-64 Pharmacy / Apotek
+
+R64-D01–D12 are FIX conceptual:
+- Pharmacy product classification includes prescription, storage and handling requirements.
+- Batch/lot/expiry traceability; distinct stock states include available, reserved, quarantine, recalled, expired, damaged and returned-pending-assessment.
+- FEFO is the conceptual baseline for expiry-controlled products; override cannot bypass expired/recalled/quality-blocked status.
+- Prescription intake/administration is separate from professional review and dispensing authorization.
+- Professional actions require verified qualification/registration/license, assignment and supervision as applicable; app role name alone is insufficient.
+- Review, authorization, picking, final check, labeling, handover and counseling documentation are separate.
+- OTC sale is separate from prescription dispensing.
+- Return/complaint/recall includes quarantine and batch traceability.
+- Count, adjustment, expiry write-off, recall disposition and destruction are separate SoD actions.
+- Prescription/patient data is need-to-know and purpose/scope limited.
+- Controlled/special products require a separate validated regulatory gate before activation.
+
+OPEN: FEFO exceptions, expiry horizons, purchasing/receiving/adjustment/write-off/destruction thresholds, local regulatory/professional verification, exact keys/allowlists and implementation. No dispensing policy or regulated workflow is approved by generic role eligibility or subscription entitlement.
+
+### 16.4 RMD-65 Laundry
+
+R65-D01–D12 are FIX conceptual:
+- Unique order identity and item/group traceability where required.
+- Intake facts and customer confirmation are recorded separately from later processing.
+- Custody events are separate across intake, sorting, production, finishing, packing, storage, pickup/delivery and handover.
+- Sorting/batching requires compatibility; production stages and QC/rework are distinct.
+- QC pass/reject, rewash, damage, loss and complaint are separate statuses/events; independent review cannot self-approve.
+- Packing/storage follow order manifest; ready-for-pickup requires item-level completion/quality controls.
+- Dispatch, pickup, delivery, failed delivery and handover are separate events with proof.
+- Production, custody and payment states are distinct.
+- Complaint/damage assessment is separate from compensation/refund/claim approval.
+- Consumables/spare parts are separate Business inventory from customer-owned items.
+- Outlet/assignment is default scope; customer photos/address/instructions are restricted.
+
+OPEN: discount/price/compensation/refund/stock/write-off thresholds, operational policies, exact keys/allowlists and implementation.
+
+### 16.5 RMD-66 Education and RMD-67 Parfum
+
+RMD-66 approval addendum: E-01 Manager allowlist, E-02 role eligibility and E-03 module eligibility are FIX conceptual; E-04 preserves detailed OPEN items. The separate R66-D01–D12 addendum is also FIX conceptual. Instructor/Tutor, Examiner/Assessor and Admissions Officer are functions mapped to existing roles/capabilities or credential/assignment context, not new standard roles. Student/minor data, grades, safeguarding, payroll, refunds and scholarship access remain purpose/scope/SoD restricted; detailed policy remains OPEN where the source says so.
+
+R67-D01–D12 are FIX conceptual for Parfum/Fragrance:
+- Separate simple refill and formulation/manufacturing tracks; category/business model does not grant access.
+- Preserve volume/unit integrity and distinguish customer-owned containers from shop-owned containers.
+- Refill consumption is recorded as inventory movement; formula/ingredients are confidential.
+- Formula create/edit/review/approve/release/export are distinct and versioned.
+- Batch/lot traceability applies where needed; production lifecycle, yield, QC/hold/release are distinct.
+- Procurement, packaging and costing controls are separated.
+- Candidate operational roles have bounded capabilities and scope; role is not a permission bundle.
+- Safety/regulatory/recall readiness remains a prerequisite for relevant workflow activation.
+
+OPEN: numeric tolerances, PO/price/refund/write-off/variance/batch-release thresholds, exact permission keys/allowlists/capability matrix, technical implementation and compliance review.
+
+### 16.6 RMD-68 Hotel / Penginapan
+
+R68-D01–D12 are FIX conceptual, alongside H-01–H-03 approved Manager/role/module eligibility and H-04 preserving all nine groups of OPEN detail:
+- Room inventory, booking availability and operational readiness are distinct.
+- Unit readiness, housekeeping task and room assignment lifecycle are separately tracked.
+- Reservation lifecycle/concurrency and guest data protection apply.
+- Front Desk and housekeeping are property/task/unit scoped; housekeeping uses existing Production/Service Operator mapping, not a new standard role.
+- Maintenance and return-to-service are distinct.
+- Folio/charge integrity, rate-plan authoring/approval/publication/override and finance SoD/night audit are separated.
+- Group/corporate/agency access follows booking/billing relationship and purpose.
+- Integration, safety and compliance controls remain distinct.
+
+OPEN: overbooking, rate/discount/cancellation/no-show, folio/ledger/write-off thresholds, detailed scope/permission keys and technical enforcement. H-04 remains OPEN; the addendum does not approve all details.
+
+### 16.7 RMD-69 Other / Unclassified
+
+R69-D01–D12 are FIX conceptual:
+- “Other / Unclassified” is a temporary classification and exception path, not an ordinary operational category or universal access route.
+- One primary category plus activity tags; tags do not grant module entitlement, role eligibility or access.
+- Conceptual classification lifecycle includes UNCLASSIFIED, UNDER_REVIEW, TEMPORARY, CLASSIFIED, RECLASSIFICATION_REQUIRED and RESTRICTED.
+- Fail-closed and minimum safe mode apply; sensitive, regulated and high-risk capabilities are held pending review.
+- Ambiguity/high risk requires human review by authorized reviewer.
+- Module eligibility is based on confirmed workflow and minimum need, not selecting “Other”.
+- Role, capability, scope, approval and SoD remain separate; no generic superuser role.
+- Reclassification preserves history, reason, actor/reviewer, timestamps and effective date.
+- Change triggers/periodic review, exceptions/restrictions/suspension/appeal, data minimization and taxonomy promotion are governed and auditable.
+
+OPEN: exact status transitions, SLA/expiry, escalation, evidence/reviewer criteria, minimum safe-mode functions, confidence/human-review thresholds, impact on active tenant/module/contract/billing, retention/privacy, final matrix/keys and technical implementation.
+
+### 16.8 Consolidated category status
+
+RMD-57–RMD-69 D01–D12 are recorded as conceptual FIX in their respective decision addenda, with category-specific boundaries above. RMD-66 and RMD-68 also have distinct approval addenda for Manager allowlist, role eligibility and module eligibility; those addenda expressly preserve E-04/H-04 OPEN detail. None of these decisions approves final permission keys, exact grants, numeric thresholds, schema/RLS, API or implementation.
+
+The 13-category/12-standard-role baseline is preserved. Owner and Platform Super Admin remain separate. No new standard role is inferred from category workflows. A role/capability assignment must still be separately justified by actual workflow, module eligibility, stable permission, explicit scope, data classification, SoD/approval, credentials/compliance and audit.
+
+### 16.9 Source lookup status — RMD-20, RMD-43, RMD-46
+
+The exact source files labelled RMD-20, RMD-43 and RMD-46 are still not present under those exact identifiers in the current visible Library listing. Searches using those identifiers and authorization/permission terms surfaced related RMD-47/RMD-48 material, not the original source documents. Do not infer their contents from downstream references. Mark their direct provenance UNVERIFIED until located.
+
+**Next work:** retrieve exact original RMD-20/RMD-43/RMD-46 files if available elsewhere in the archive; complete a source-to-capability trace for every category; then resolve the remaining matrix gaps. The final role × module × capability × permission × scope matrix remains NOT FINAL / NOT APPROVED. This addendum records audit findings only; no implementation authority is granted.
