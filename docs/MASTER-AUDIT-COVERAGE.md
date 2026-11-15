@@ -15,13 +15,28 @@ This document consolidates the known audit workstreams and their evidence bounda
 | Archive inventory | Archive source inventory and folder listing | Snapshot of visible paths and metadata | OPEN — reconcile prior snapshots and confirm full scope |
 | Archive reconciliation | REC records and reconciliation baseline | Append-only comparison; no inferred file loss | PARTIAL / OPEN |
 | Blueprint | Blueprint v3.0, Stage 5.9.1 / 5.9.2, category consolidation, Super Admin blueprint | Product/design reference set | Source/version alignment must remain traceable |
-| ERD Stage 5.9.3 | ERD Master Working Draft v0.1; latest located working reference v9.6.6; lineage/version audits | Working conceptual inventory and integration audit | NOT FINAL; physical schema and enforcement unverified |
+| ERD Stage 5.9.3 | ERD Master Working Draft v0.1; latest located working-reference lineage through v9.8.8 (REC-04 v0.3 basename list; inspect v9.8.8 source before treating as current technical baseline); lineage/version audits | Working conceptual inventory and integration audit | NOT FINAL; physical schema and enforcement unverified |
 | Inventory and costing | 17-table conceptual baseline and A10–A12 decision material | Architecture rules documented; MWA default and FIFO alternative | Field/constraint/implementation details retain REVIEW/TODO where stated |
 | Authorization | Capability/action taxonomy, scope/SoD and cross-category matrix | Design work exists; cross-category matrix explicitly DRAFT / PROPOSED / CANDIDATE | NOT APPROVED AS FINAL; security enforcement unverified |
 | Category audits | RMD-47 through RMD-69 materials and category review records | Category-specific audits and conceptual decisions | Preserve each source's own status; do not generalize all rows to FIX |
 | Manager allowlist | Review folder and 13-category manager allowlist audit | Review evidence for category/workflow eligibility | Confirm only against the applicable final source and approvals |
 | A12.40 readiness | v9.0 onward readiness control and RMD-13 disposition material | Acceptance criteria have unresolved gaps | PARTIAL / OPEN |
 | A12.41 | Latest readiness handoff | Final readiness reassessment is gated on A12.40 closure | NOT STARTED |
+
+### REC-01–REC-08 disposition (evidence checked 15 November 2026)
+
+| ID | Scope | Evidence located | Current disposition |
+|---|---|---|---|
+| REC-01 | RMD-56 v1.2 variants and approval provenance | REC-01 v0.1 and approval-verification addendum v0.2 | PARTIAL — conceptual approval R56-D01–D12 verified from recovered context; no canonical v1.2 file selected; retain all variants |
+| REC-02 | Hash-123 scope vs current Library | v0.1/v0.2 addenda and CSV registers | PARTIAL — 115 names found once, 8 absent/unresolved; 115 retained files not rehashed; historical CSV count mismatch explained, not fully closed |
+| REC-03 | Inventory snapshots 322/328/333 | v0.1 addendum | PARTIAL — aggregate snapshots reconciled; raw 328 export unavailable; 66-name content mapping remains open |
+| REC-04 | Coverage 137 vs Manifest 157 and 328 snapshot | v0.1–v0.4 addenda, 54-name CSV | PARTIAL — 54-name basename set-difference reconstructed; 56 historical claim remains discrepancy; 3 delta names and raw 328 snapshot unresolved |
+| REC-05 | Authorization decision index | No standalone REC-05 artifact identified in the REC folder listing | NOT VERIFIED as a completed REC workstream; retain as backlog, do not infer closure from related RMD docs |
+| REC-06 | Permission Catalogue overlay | No standalone REC-06 artifact identified in the REC folder listing | NOT VERIFIED as a completed REC workstream; Education/Hotel conceptual approvals are noted in source material, overlay completion not evidenced |
+| REC-07 | ERD 38-document and A12 crosswalk | ERD lineage/version audits and RMD addenda exist; no standalone REC-07 artifact identified | PARTIAL / NOT VERIFIED; individual provenance and source links remain incomplete |
+| REC-08 | Security findings Batch 7–9 consolidated register | Batch 7–9 source reports and security/readiness addenda referenced; no standalone REC-08 artifact identified | NOT VERIFIED as a completed consolidated register; HIGH/CRITICAL findings remain open in source summaries |
+
+The REC folder currently contains 17 files, including the above REC-01 through REC-04 artifacts and supporting inventory/hash records. Absence of a standalone REC-05–REC-08 file in this folder is a folder-level observation, not proof that no related work exists elsewhere.
 
 ## 3. Archive inventory facts and limits
 
