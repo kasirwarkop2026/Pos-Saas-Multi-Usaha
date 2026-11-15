@@ -208,3 +208,43 @@ REC-04 v0.2 erratum explicitly withdraws the claim that the nine fully written n
 | REC-08 | Not yet individually re-audited in this pass | OPEN |
 
 The later REC addenda are more specific evidence than the earlier Batch 1–9 summary. This section records those qualifications; it does not overwrite any historical source document or promote an unresolved REC item to CLOSED.
+
+
+## 11. A12 individual provenance and blueprint alignment review
+
+### A12.31–A12.36 individual provenance
+
+The individual provenance audit confirms that group-level partial notes must not be interpreted as individual decisions:
+
+- A12.31A–D; A12.32A–I; A12.33A–C; A12.34; A12.35: individual source/approval not recovered; **UNVERIFIED / OPEN**.
+- A12.31E: **OPEN**. A12.37.10.1 independently records MWA pool per business + product/variant + inventory location and supersedes the old cross-location MWA wording, but no primary decision/approval proves that A12.31E itself had that scope or was superseded by A12.37.
+- A12.36: **OPEN**; individual decision mapping incomplete.
+- A12.36.1: **UNVERIFIED / REVIEW**; explicit approval of Alternative B Fulfillment Item was not found. Do not treat it as FIX based on use of similar terminology elsewhere.
+- AP-01 was not found for the 21 individual IDs in the audit scope. AP-02 applies only where the relevant consolidated source explicitly documents the decision; it does not prove direct approval for each individual ID. AP-05 is a gap record, not a primary decision source.
+- Technical and implementation status for unrecovered individual decisions is NOT ASSESSED. A12.40 remains PARTIAL / OPEN; A12.41 remains NOT STARTED.
+
+No individual supersession may be inferred from topic similarity or adjacent decision numbers.
+
+### ERD working draft — scope boundary reaffirmed
+
+The ERD Master Working Draft v0.1 is accepted only as a working consolidation/navigation aid for the 17 conceptual inventory and costing tables. It is NOT APPROVED as a final/canonical ERD, physical schema, implementation design, or deployment basis. Its REVIEW items include source identity, idempotency, concurrency/locking, partial shipment receipt, stock-count cutoff/reconciliation, parent/batch balance reconciliation, landed-cost correction, lifecycle, constraints/indexes, RLS/server enforcement, and executed tests.
+
+### Blueprint and authorization cross-check
+
+The Blueprint POS SaaS v3.0 remains a draft working consolidation. Its 71 entries across stages 5.3–5.8 are conceptual table entries, not a final physical table count. One Owner account → one Business remains a product rule; one Business may have multiple outlets and warehouses. `business_id` tenant boundary and server authorization remain design requirements, not proof of implementation.
+
+The Blueprint Category Consolidation v1.0 contains an older status snapshot and is qualified by later errata/addenda. Do not repeat its stale statements that RMD-56 is PROPOSED or that Education/Hotel are not yet approved: RMD-56 D01–D12, RMD-66 Education, RMD-68 Hotel, and RMD-69 D01–D12 have later conceptual FIX evidence as described above. These approvals do not finalize the cross-category matrix or technical authorization.
+
+The Authorization/Scope/SoD index erratum confirms:
+- Education (RMD-66) Manager Allowlist, Role Eligibility, Module Eligibility are conceptual FIX; E-04 and technical details remain OPEN.
+- Hotel (RMD-68) Manager Allowlist × Role Eligibility × Module Eligibility are conceptual FIX; H-04 and technical details remain OPEN.
+- RMD-69 D01–D12 are conceptual FIX; “Lainnya/Belum Diklasifikasikan” remains temporary classification/exception; safe-mode/lifecycle technical details OPEN.
+- Shared Core × Module Eligibility, Capability/Action Taxonomy, Scope Dimension, SoD/Data Classification remain PROPOSED/CANDIDATE with their listed gaps.
+- Cross-category matrix remains DRAFT; CR-01–CR-10 and Q-01–Q-06 conceptual FIX do not promote the entire matrix to FIX.
+- Final permission keys, final role-permission matrix, exact scope resolver, field-level data classification, thresholds, and implementation remain OPEN / NOT APPROVED.
+
+## 12. Current audit progress and limitations
+
+Content review in this pass has directly read the REC-01 v0.1/v0.2, REC-02 v0.2, REC-03 v0.1, REC-04 v0.2/v0.3, A12.18–A12.28 provenance audit, A12.31–A12.36 provenance audit, ERD Master Working Draft, Blueprint v3.0, Category Consolidation, Audit Register v1.3, and Authorization/Scope/SoD index erratum.
+
+This is a targeted content review, not a full-content audit of all 198 files in the current recursive Library listing. Other RMD decisions, authorization addenda, ERD version documents, REC-05–REC-08, and the full 38-document ERD lineage still require individual review and crosswalk. The GitHub source inventory remains a metadata list only. Do not claim that all archive content has been audited.
