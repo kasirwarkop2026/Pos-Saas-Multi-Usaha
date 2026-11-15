@@ -80,3 +80,9 @@ An earlier inventory snapshot differs materially from the latest 198-file snapsh
 ## 6. Closure rule
 
 A workstream may be marked CLOSED only when its documented acceptance criteria are met by evidence appropriate to that workstream. Moving an item to a folder, adding it to an index, or recording it in a register does not satisfy its substantive acceptance criteria.
+
+## 9. Archive snapshot and REC-05/REC-06 status clarification — 15 November 2026
+
+The later verified Library snapshot is recorded in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md`: 200 file entries across seven subject folders (Audit 11, REC 19, ERD 71, Blueprint 10, Authorization 17, RMD 61, Review 11). It supersedes the earlier 198-file snapshot only for the later point-in-time path/count view; the earlier inventory remains historical evidence. The two REC-06 artifacts are both verified in `/Arsip Proyek POS SaaS/REC/`: the Permission Catalogue Overlay v0.1 and the separate Education/Hotel Workflow-to-Capability Traceability Matrix v0.1.
+
+REC-05 and REC-06 are both **PARTIAL**, not CLOSED. Earlier `OPEN` entries in the initial reconciliation worklist are historical starting statuses and must not be read as their latest disposition. REC-05 still lacks full source-coverage/acceptance verification. REC-06 still has G02/G04 and capability, scope, data-purpose, SoD, stable-key and cross-category acceptance work OPEN. The seven-folder inventory and the presence of REC-06 documents do not close either workstream or authorize implementation.
