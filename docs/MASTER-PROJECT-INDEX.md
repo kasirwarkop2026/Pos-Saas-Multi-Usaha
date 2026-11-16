@@ -150,3 +150,15 @@ Authority and scope are deliberately bounded:
 - ARC/ARC-OPEN labels are local editorial identifiers, not source-native decision IDs or approvals.
 
 DOC-03 remains DRAFT / REVIEW REQUIRED and is a PR-branch draft only until review, Documentation CI, explicit user merge approval and post-merge verification. Stage 5 remains documentation-only; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED. This index remains a navigation/status summary and does not supersede DOC-00 or domain/source authorities.
+
+
+## 16. Append-only DOC-03 PR and CI checkpoint — 17 November 2026
+
+DOC-03 publication is under DRAFT PR #10: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/10. The PR includes only:
+- `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md` — reconstructed DOC-03 working master;
+- `docs/00-governance/MASTER-PROJECT-CONTROL.md` — append-only ST5-06 checkpoint and CI result;
+- `docs/MASTER-PROJECT-INDEX.md` — append-only DOC-03 publication/CI navigation checkpoint.
+
+Documentation CI run #7 passed all three jobs: Markdown lint, internal documentation links and documentation structure. Application CI run #69 succeeded; the application change detector classified the PR as documentation-only and skipped the four application jobs as designed.
+
+PR #10 remains DRAFT / OPEN / NOT MERGED pending substantive review and explicit user merge approval. The PR branch is not the active `main` authority. No application, database, Supabase, backend, CI workflow, deployment or Production changes are included. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
