@@ -241,3 +241,29 @@ The DOC-02 package remains DRAFT and is not adopted until review, CI, explicit m
 | ST5-16 | NOT STARTED | Final documentation consistency audit |
 
 Stage 5 remains documentation-only. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
+
+
+## 15. Append-only checkpoint — ST5-06 DOC-03 architecture master publication (17 November 2026)
+
+ST5-05 — DOC-02 Category & Workflow Master — was merged through PR #9 on 17 November 2026 (merge commit `2ab9b8aa1972c2408130793a221f6c519c2b9292`) and verified as the latest completed migration package. The repository was checked before this work: `main` is the default branch, PRs #5–#9 are merged, and no open PR was present.
+
+ST5-06 — DOC-03 System Architecture Master — is prepared on branch `docs/st5-06-doc03-architecture-2026-11-17` at `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md`. It is a structured, source-aligned consolidation of archived DOC-03 v0.8, not a verbatim transcription or replacement of the Library source. The document preserves conceptual vs physical/enforcement boundaries, A10/A11/A12 decision scope, DOC-04/DOC-05 authority boundaries, Batch 05–07 secondary-source classification, XG-01–XG-20 derived crosswalk limitations, and REC-08 recovery gaps.
+
+| ID | Updated status at 17 Nov 2026 | Evidence / next action |
+|---|---|---|
+| ST5-01 | COMPLETE — VERIFIED | Repository, default branch and prior PR state inspected |
+| ST5-02 | COMPLETE — MERGED & VERIFIED | DOC-00 / PR #5 |
+| ST5-03 | COMPLETE — MERGED & VERIFIED | Index/provenance reconciliation / PR #6 |
+| ST5-04 | COMPLETE — MERGED & VERIFIED | DOC-01 / PR #7 |
+| ST5-CI-01–05 | COMPLETE — MERGED & VALIDATED | Documentation CI / PR #8 |
+| ST5-05 | COMPLETE — MERGED & VERIFIED | DOC-02 / PR #9 |
+| ST5-06.01–06.10F | COMPLETE — SOURCE AUDIT AND DOC-03 EDITORIAL REVIEW | DOC-03 v0.8 archived; final editorial consistency review completed |
+| ST5-06.11 | COMPLETE — APPEND-ONLY DOC-00/DOC-12 WORKING REVISIONS | DOC-00 v0.2 and DOC-12 v0.6 present in Library; DOC-12 v0.6 verified |
+| ST5-06.12 | IN PROGRESS — ONE DOCUMENTATION PR PREPARED | Review branch changes, links and CI; do not merge without explicit user approval |
+| ST5-06.13 | NOT STARTED | Documentation CI on PR |
+| ST5-06.14 | NOT STARTED | Review findings and obtain explicit user merge approval |
+| ST5-06.15 | NOT STARTED | Merge only after approval; verify all affected files on main |
+| ST5-07–ST5-15 | NOT STARTED | Proceed one package at a time after ST5-06 is merged and verified |
+| ST5-16 | NOT STARTED | Final documentation consistency audit and migration acceptance |
+
+The DOC-03 package remains a PR-branch draft until review, CI and explicit merge approval. No source archive file is modified. The DOC-03 publication does not close physical-schema, security-enforcement, test, implementation, source-locator or Production dependencies. Stage 5 remains documentation-only; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
