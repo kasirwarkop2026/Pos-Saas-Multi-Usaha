@@ -307,4 +307,4 @@ The DOC-04 working master does not finalize physical field names/types/precision
 | ST5-07.14 | NOT STARTED | Substantive review and obtain explicit user merge approval |
 | ST5-07.15 | NOT STARTED | Merge only after explicit approval; verify all changed files on main |
 
-This checkpoint is append-only and does not rewrite the historical ST5-01–ST5-16 tables above. The exact GitHub DOC-04 publication path remains to be finalized in ST5-07.12; the Library artifact is not yet a GitHub main document. No source archive document was modified. Stage 5 remains documentation-only; DB_PUSH_BLOCKED: ACTIVE; Stage 6 remains NOT AUTHORIZED.
+This checkpoint is append-only and does not rewrite the historical ST5-01–ST5-16 tables above. The proposed GitHub DOC-04 publication path is `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, created on the same documentation branch for the single ST5-07 PR; it remains a PR-branch draft until review, CI and merge approval. No source archive document was modified. Stage 5 remains documentation-only; DB_PUSH_BLOCKED: ACTIVE; Stage 6 remains NOT AUTHORIZED.
