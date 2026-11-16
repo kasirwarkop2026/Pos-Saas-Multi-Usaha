@@ -142,3 +142,28 @@ The statement in §2 that the latest folder inventory records 198 files is super
 For current inventory reporting, the 198-file count in §2 and the phrase “latest 198-file folder snapshot” in §8 are historical references only. The later verified snapshot is **200 files across seven folders** (Audit 11, Authorization 17, Blueprint 10, ERD 71, REC 19, Review 11, RMD 61), as detailed in `docs/archive/POS-SAAS-LIBRARY-INVENTORY-ADDENDUM-2026-11-15.md`. Do not infer file loss from the difference. Both 198 and 200 observations remain preserved as point-in-time evidence; neither is a content-completeness or canonicality claim.
 
 The GitHub documentation baseline PR #3 was merged into `main` on 15 November 2026 (merge commit `c3748aa0f6f89d12622cce33ca49ccb813a253f6`). References to PR #3 as OPEN/DRAFT are historical only. This update does not change the status of REC workstreams or approve implementation.
+
+## 14. Append-only governance alignment — active authority and archive snapshot taxonomy (17 November 2026)
+
+DOC-00 `docs/00-governance/MASTER-PROJECT-CONTROL.md` was merged through PR #5 into GitHub `main` (merge commit `bcde694cdf913f1cc1916d8d463cd6c2c57a405c`). For current project control, continuation checklist and stage status, DOC-00 is the control-plane entry point. This provenance document remains authoritative only for source-lineage, archive classification and evidence-handling guidance within its stated scope. Domain documents and primary decision sources retain their own subject authority.
+
+GitHub `main` is the sole active working reference for maintained project documentation after DOC-00 adoption. The ChatGPT Library archive is historical/source evidence used to establish provenance and support migration; it is not the active work-control workspace. This policy does not authorize deletion, relocation, renaming or rewriting of Library source files.
+
+### 14.1 Distinct archive observations — do not conflate
+
+| Observation | Evidence type | Permitted interpretation | Limitation |
+|---|---|---|---|
+| 198 files / one visible folder (15 Nov, 14:40:50 UTC) | Recursive path/metadata snapshot | Historical point-in-time listing | Superseded for later 15 Nov folder/path reporting by the 200-file snapshot |
+| 200 files / seven subject folders (15 Nov, 16:01:55 UTC) | Recursive path/metadata snapshot | Later verified 15 Nov path/count observation | Not a full content audit or canonicality determination |
+| 231 entries (16 Nov manifest) | Manifest/integrity baseline | Historical manifest scope and integrity reference | Not interchangeable with a later path listing |
+| 249 entries (16 Nov listing) | Later path/listing inventory | Path inventory observation | No re-hash; does not establish content integrity or content review for all entries |
+
+The 198, 200, 231 and 249 observations must not be summed or reconciled by arithmetic. A valid reconciliation requires matching root, inclusion rules, file/folder treatment, snapshot time, pagination completeness and exact path-level set comparison. Until those conditions are evidenced, retain the snapshot relationship as OPEN / PARTIAL. Do not infer deletion, loss, duplication, or content completeness from count differences alone.
+
+### 14.2 Evidence authority and maintenance
+
+- Use DOC-00 for current stage, checklist, guardrails and next action.
+- Use this document for source lineage, snapshot distinctions and evidence-label semantics.
+- Use the relevant subject master/primary source for domain decisions; this provenance guide does not promote a summary into an approval.
+- Keep AP-01/AP-02 and EV-01 through EV-05 distinctions unchanged.
+- Any later snapshot must be appended with its timestamp, root, inclusion rules, pagination result, exact manifest/listing identity and known limitations. Never overwrite the historical observations above.
