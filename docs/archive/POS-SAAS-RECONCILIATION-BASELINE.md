@@ -757,3 +757,32 @@ The 198-file / one-folder observation in §2 and the reference to “all 198 fil
 The initial REC-05/REC-06 OPEN worklist and later PARTIAL dispositions remain governed by the subsequent erratum in §12 and the current Master Audit Coverage register. REC-01 through REC-08 remain PARTIAL; none is CLOSED by this inventory update.
 
 The documentation baseline PR #3 was merged into `main` on 15 November 2026, merge commit `c3748aa0f6f89d12622cce33ca49ccb813a253f6`. Any earlier statement that PR #3 remains open or awaits merge is historical only. No further PR is thereby approved for merge.
+
+## 17. Append-only Stage 5 governance reconciliation — DOC-00 and archive observation boundaries (17 November 2026)
+
+### 17.1 DOC-00 adoption
+
+DOC-00 `docs/00-governance/MASTER-PROJECT-CONTROL.md` was merged into GitHub `main` through PR #5, merge commit `bcde694cdf913f1cc1916d8d463cd6c2c57a405c`. Current stage status, guardrails and migration checklist are governed by DOC-00. This reconciliation baseline remains a historical evidence and discrepancy record; it does not replace the current control-plane checklist.
+
+### 17.2 Archive observations remain separate
+
+The archive evidence currently carried into GitHub contains distinct observations:
+- 198 files / one visible folder at 15 November 2026 14:40:50 UTC.
+- 200 files / seven subject folders at 15 November 2026 16:01:55 UTC.
+- 231 entries in the 16 November manifest/integrity baseline.
+- 249 entries in the later 16 November path/listing inventory, without a re-hash.
+
+The first two observations are separately timestamped 15 November path snapshots. The latter two are different 16 November evidence products (manifest versus later listing). They are not directly comparable without a path-level set crosswalk and aligned inclusion rules. The 249 listing must not be described as a re-hash or integrity verification. The 231 manifest must not be silently replaced by the 249 listing.
+
+### 17.3 Current disposition
+
+| Reconciliation item | Status | Required evidence / action |
+|---|---|---|
+| Historical 198-to-200 snapshot relationship | PARTIAL — documented | Preserve both timestamps and the later snapshot's scope; do not infer loss |
+| 200-to-231 manifest relationship | OPEN | Exact path-set crosswalk and manifest scope confirmation |
+| 231-to-249 listing relationship | OPEN | Exact path-set crosswalk, inclusion rules and listing scope |
+| Content completeness of archive entries | NOT VERIFIED | Content-level audit; path presence alone is insufficient |
+| Duplicate/canonical disposition beyond individually evidenced cases | OPEN where not individually evidenced | Hash/content comparison plus provenance and explicit scope; no deletion authority |
+| Current GitHub working authority | ESTABLISHED — DOC-00 adopted | Maintain active project documents on `main`; archive remains historical/source evidence |
+
+This reconciliation is documentation-only. No Library files were changed. No implementation, database, SQL, migration, RLS/Auth, CI workflow, deployment, Supabase Preview/Staging or Production activity is authorized by this update. `DB_PUSH_BLOCKED: ACTIVE` remains in force.
