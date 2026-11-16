@@ -57,7 +57,8 @@ The original snapshot records and earlier sections remain intact. No historical 
 | Content completeness for all archive entries | NOT VERIFIED |
 | Duplicate/canonical disposition beyond individually evidenced cases | OPEN |
 | Source-content backlink implementation under C12.14 | OPEN |
-| Stage 4.7.8 and Stage 4.9 acceptance | NOT MET / PARTIAL as recorded in DOC-00 |
+| Stage 4.7.8 | PARTIAL — GATE NOT PASSED |
+| Stage 4.9 | PARTIAL — ACCEPTANCE NOT MET |
 
 ## 6. Guardrails
 
