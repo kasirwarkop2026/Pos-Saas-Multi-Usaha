@@ -521,6 +521,6 @@ END OF DOC-06 v0.2 — RECONCILED WORKING MASTER (REVISION 0.2.1)
 
 Status: DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL
 
-Next: ST5-09.17 — Apply audited corrections on PR #16 branch; then perform
-final diff review and CI verification. PR merge requires separate explicit
-user approval.
+Next: ST5-09.20 — Post-merge verification of the merged DOC-06 Markdown
+master and append-only governance checkpoint. This document remains DRAFT,
+REVIEW REQUIRED, NOT CANONICAL, and NOT FINAL.
