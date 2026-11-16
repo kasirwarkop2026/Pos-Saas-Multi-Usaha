@@ -212,3 +212,24 @@ Unresolved status is preserved: A12.38 physical dictionary OPEN; A12.39 physical
 Next package recommendation: ST5-08 / DOC-05 Authorization Master, after ST5-07.16 is fully merged and verified. This index remains a navigation aid; DOC-00 and source-native decision authorities retain their respective precedence.
 
 `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
+
+
+## 19. Append-only ST5-07.16 post-merge closeout — 17 November 2026
+
+PR #12, `Docs: reconcile final ST5-07 control checkpoints`, merged successfully into `main` at `f4b639b5028190b63f3241b0e379d46627d28d10`. The merge contains exactly the two intended control/navigation documents, with 57 additions and zero deletions. Documentation CI #13 passed all three documentation checks; POS SaaS CI #75 passed change detection and skipped application jobs under the documentation-only guard. The substantive diff review found no blocking issues.
+
+Post-merge read-back from `main` verified both changed paths:
+- `docs/00-governance/MASTER-PROJECT-CONTROL.md` — Section 18 reconciliation present; `DB_PUSH_BLOCKED: ACTIVE` retained;
+- `docs/MASTER-PROJECT-INDEX.md` — Section 18 final publication/merge checkpoint present; `DB_PUSH_BLOCKED: ACTIVE` retained.
+
+| ST5-07 item | Current authoritative status |
+|---|---|
+| ST5-07.01–07.15 | COMPLETE — as recorded in the preceding final checkpoints |
+| ST5-07.16.01–07.05 | COMPLETE — reconciliation, CI, review, explicit user authorization, merge and post-merge verification |
+| ST5-07.16 | COMPLETE — final control-document reconciliation; PR #12 merged at `f4b639b5028190b63f3241b0e379d46627d28d10` |
+
+The preceding Section 18 `IN PROGRESS` entry is retained as the status at the time it was written; this Section 19 is the authoritative post-merge closeout. DOC-04 remains RECONSTRUCTED WORKING MASTER — NOT CANONICAL / NOT FINAL. Physical dictionary and physical ERD verification remain OPEN; A12.18–A12.28 remain OPEN/UNVERIFIED; A12.40 remains PARTIAL/OPEN including D40-203–216 UNRECOVERED; A12.41 remains NOT STARTED. `inventory_cost_layer_movements` remains CANDIDATE, not an approved eighteenth entity.
+
+Next documentation work package: ST5-08 / DOC-05 Authorization Master, after this closeout checkpoint is merged and verified on `main`. No Stage 6 or implementation authorization is implied.
+
+`DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
