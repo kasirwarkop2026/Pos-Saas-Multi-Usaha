@@ -414,7 +414,7 @@ dan PR #16. Otorisasi terbatas tersebut tidak mengubah hasil Stage 4.9,
 tidak mengesahkan semua proposed paths, tidak mengotorisasi migrasi
 dokumen lain, dan tidak mengotorisasi Stage 6 atau implementasi.
 
-## 14.4 Provenance limitations
+### 14.4 Provenance limitations
 
 ### 14.4 Provenance limitations
 
