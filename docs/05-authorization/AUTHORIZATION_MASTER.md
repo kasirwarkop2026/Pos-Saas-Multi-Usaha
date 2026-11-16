@@ -318,7 +318,7 @@ Authorization Audit Tahap 2.4 records the following 17 files in `/Arsip Proyek P
 | 9 | `Indeks_Arsip_Authorization_Scope_SoD_POS_SaaS_v1.1_Erratum_2026-11-14.docx` | Append-only index/status correction for its stated scope |
 | 10 | `Keputusan_FIX_Otorisasi_POS_SaaS_O01-O12_v1.0.docx` | O-01–O-12 conceptual FIX decision register |
 | 11 | `Matriks_Halaman_Permission_Scope_POS_SaaS_v1.0.docx` | PROPOSED page/access/scope design; not final catalogue |
-| 12 | `Permission_Catalogue_Category_Role_Module_Eligibility_POS_SAAS_v1.0.docx` | DRAFT conceptual eligibility catalogue; no final permission keys |
+| 12 | `Permission_Catalogue_Category_Role_Module_Eligibility_POS_SaaS_v1.0.docx` | DRAFT conceptual eligibility catalogue; no final permission keys |
 | 13 | `Rekomendasi_Penyelesaian_12_Open_Items_Otorisasi_POS_SaaS_v1.0.docx` | Recommendation provenance for O-01–O-12; residual OPEN details preserved |
 | 14 | `Scope_Dimension_Object_Geographic_Boundary_Matrix_Design_v1.0.docx` | PROPOSED/CANDIDATE scope model |
 | 15 | `Shared_Core_Operational_Module_Eligibility_Matrix_Design_v1.0.docx` | PROPOSED/CANDIDATE; G01–G10 not fully closed |
