@@ -233,3 +233,30 @@ The preceding Section 18 `IN PROGRESS` entry is retained as the status at the ti
 Next documentation work package: ST5-08 / DOC-05 Authorization Master, after this closeout checkpoint is merged and verified on `main`. No Stage 6 or implementation authorization is implied.
 
 `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
+
+
+## 20. Append-only ST5-08 / DOC-05 Authorization Master checkpoint — 17 November 2026
+
+ST5-07.16 is COMPLETE — merged and verified on `main` through PR #13 (merge commit `89a86860b2d8363fc86bfdda0409c59778105658`).
+
+ST5-08 / DOC-05 Authorization Master is in progress. Proposed file: `docs/05-authorization/AUTHORIZATION_MASTER.md`, branch `docs/st5-08-doc05-authorization-master-2026-11-17`. DOC-05 v0.1.0 is a reconstructed, evidence-bounded working master, not a final permission catalogue or technical authorization specification.
+
+The package carries forward:
+- O-01–O-12, CR-01–CR-10 and Q-01–Q-06 as conceptual FIX only;
+- 12 Business standard roles, with Owner and platform roles separate;
+- independent gates for identity/tenant, category/workflow, role, module/entitlement, capability/action, object/geographic scope, purpose/data, approval/SoD and server-side authorization;
+- D0–D4 as a proposed conceptual data-classification framework;
+- REC-06 PARTIAL; G01–G10, Scope O01–O10, SoD A01–A12 and all residual O-01–O-12 parameters remain OPEN/PARTIAL as recorded;
+- negative scenarios as designed acceptance checks only, not executed tests.
+
+| ST5-08 item | Current status |
+|---|---|
+| ST5-08.01 — Authorization source inventory and audit | COMPLETE — scoped to available 17-file archive inventory and Authorization Audit Tahap 2.4 |
+| ST5-08.02 — O/CR/Q decision reconciliation | COMPLETE — conceptual FIX decisions preserved |
+| ST5-08.03 — DOC-05 working master draft | COMPLETE — PR branch only |
+| ST5-08.04 — Control/index checkpoint | IN PROGRESS — PR branch only |
+| ST5-08.05 — Substantive review and Documentation CI | PENDING |
+| ST5-08.06 — Explicit merge approval | PENDING |
+| ST5-08.07 — Merge and post-merge verification | PENDING |
+
+DOC-05 is not the active `main` authority until its PR is reviewed, CI passes, explicitly approved, merged and verified. This package does not close REC-05/REC-06 or any technical authorization gap. Stage 5 remains documentation-only; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
