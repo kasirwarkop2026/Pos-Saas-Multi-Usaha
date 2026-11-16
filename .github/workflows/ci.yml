@@ -6,11 +6,21 @@ on:
     paths-ignore:
       - "docs/**"
       - "README.md"
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/docs-ci.yml"
+      - ".markdownlint-cli2.jsonc"
+      - ".lychee.toml"
+      - "scripts/docs-ci/**"
   push:
     branches: [main]
     paths-ignore:
       - "docs/**"
       - "README.md"
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/docs-ci.yml"
+      - ".markdownlint-cli2.jsonc"
+      - ".lychee.toml"
+      - "scripts/docs-ci/**"
 
 # CI is read-only: dependency installation and validation use the committed lockfile.
 permissions:
