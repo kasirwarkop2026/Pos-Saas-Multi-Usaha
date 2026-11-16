@@ -267,3 +267,24 @@ ST5-06 — DOC-03 System Architecture Master — is prepared on branch `docs/st5
 | ST5-16 | NOT STARTED | Final documentation consistency audit and migration acceptance |
 
 The DOC-03 package remains a PR-branch draft until review, CI and explicit merge approval. No source archive file is modified. The DOC-03 publication does not close physical-schema, security-enforcement, test, implementation, source-locator or Production dependencies. Stage 5 remains documentation-only; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
+
+
+## 16. Append-only checkpoint — ST5-06.13 Documentation CI result (17 November 2026)
+
+PR #10, `Docs: publish DOC-03 system architecture master`, was opened as a DRAFT PR from `docs/st5-06-doc03-architecture-2026-11-17` to `main`. The PR contains exactly three documentation paths: DOC-03 System Architecture Master, this DOC-00 checkpoint, and the Master Project Index checkpoint.
+
+Documentation CI run #7 (run ID `43934090088`) completed SUCCESS:
+- Markdown lint — SUCCESS.
+- Internal documentation links — SUCCESS.
+- Documentation structure — SUCCESS.
+
+Application CI run #69 (run ID `43934089797`) completed SUCCESS. The change detector identified a documentation-only change; ESLint, TypeScript typecheck, dependency security audit and Next.js build were conditionally SKIPPED as designed. No application source was changed.
+
+| ID | Updated status at 17 Nov 2026 | Evidence / next action |
+|---|---|---|
+| ST5-06.12 | COMPLETE — DRAFT PR #10 OPEN | PR #10; three documentation files; draft retained for review |
+| ST5-06.13 | COMPLETE — CI PASS | Documentation CI #7 success; Application CI #69 success with app jobs skipped |
+| ST5-06.14 | NOT STARTED | Perform substantive review and obtain explicit user merge approval |
+| ST5-06.15 | NOT STARTED | Merge only after explicit approval; verify all three files on main |
+
+PR #10 is NOT MERGED. Its draft state is intentional. No merge, branch promotion, implementation or Production authorization is implied. `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
