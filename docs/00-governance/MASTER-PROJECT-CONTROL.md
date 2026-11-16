@@ -192,7 +192,7 @@ Checklist status correction (this section supplements, and does not erase, the o
 |---|---|---|
 | ST5-01 | COMPLETE — VERIFIED | Repository, branch and prior baseline PR state checked |
 | ST5-02 | COMPLETE — MERGED & VERIFIED | PR #5 merged; DOC-00 verified on `main`, blob `12b80e21b1c044e2d8d8d1bcf4afe409e2397183` |
-| ST5-03 | IN PROGRESS — PR PREPARATION | Reconcile index, provenance and archive snapshot observations through append-only corrections; do not rewrite historical snapshots |
+| ST5-03 | IN PROGRESS — PR #6 OPEN / REVIEW | Reconcile index, provenance and archive snapshot observations through append-only corrections; review and CI are in progress; do not rewrite historical snapshots |
 | ST5-04–ST5-15 | NOT STARTED | Proceed after ST5-03 review, merge and post-merge verification |
 | ST5-16 | NOT STARTED | Final documentation consistency audit after migration packages |
 
