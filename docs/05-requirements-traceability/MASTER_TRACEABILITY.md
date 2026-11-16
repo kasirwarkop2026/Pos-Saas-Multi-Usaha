@@ -1,11 +1,13 @@
 # DOC-06 — REQUIREMENTS & TRACEABILITY MASTER
 
-**POS SaaS Multi-Usaha v3.0  
-**Version 0.2 \| 17 November 2026  
+**POS SaaS Multi-Usaha v3.0**  
+**Version:** 0.2  
+**Revision:** 0.2.1 — structural heading-numbering correction only  
+**Date:** 17 November 2026  
 DRAFT — RECONCILED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL /
 NOT FINAL
 
-# Document control
+## Document control
 
 | Field                | Value                                                                                                  |
 |----------------------|--------------------------------------------------------------------------------------------------------|
@@ -15,10 +17,10 @@ NOT FINAL
 | Status               | DRAFT — RECONCILED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL                        |
 | Mode                 | READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE                                                      |
 | Previous version     | DOC-06 v0.1 — preserved as historical version                                                          |
-| Proposed GitHub path | docs/05-requirements-traceability/MASTER_TRACEABILITY.md — not authorized for migration                |
+| Proposed GitHub path | `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` — target used by the separately authorized DOC-06 PR #16; this document does not authorize other migrations |
 | Revision note        | v0.2.1: structural heading-numbering correction only; no decision, status, evidence, or scope changes. |
 
-# 1. Tujuan dan ruang lingkup
+## 1. Tujuan dan ruang lingkup
 
 DOC-06 menjadi master traceability untuk menghubungkan kebutuhan produk
 dan kategori Business, workflow operasional, module eligibility,
@@ -32,7 +34,7 @@ grant matrix, bukti implementasi server authorization/RLS, bukti test
 execution/PASS, atau persetujuan migrasi GitHub, Stage 5, Stage 6,
 maupun perubahan Production.
 
-# 2. Otoritas sumber dan batas penggunaan
+## 2. Otoritas sumber dan batas penggunaan
 
 | Sumber                               | Peran                                                     | Batas otoritas                                |
 |--------------------------------------|-----------------------------------------------------------|-----------------------------------------------|
@@ -62,7 +64,7 @@ maupun perubahan Production.
 
 - Jangan mengarang relasi atau hasil yang tidak tersedia.
 
-# 3. Required end-to-end traceability chain
+## 3. Required end-to-end traceability chain
 
 Category → Workflow → Module → Capability/Action → Scope → Data/Purpose
 → SoD/Approval → Server Authorization → Test Evidence
@@ -73,7 +75,7 @@ lineage, owner/reviewer/approver bila ditetapkan, serta technical
 evidence bila tersedia. Relasi tanpa dukungan sumber harus ditandai NOT
 MAPPED atau OPEN.
 
-# 4. Traceability status vocabulary
+## 4. Traceability status vocabulary
 
 | Status                    | Makna                                              | Bukti minimum                         |
 |---------------------------|----------------------------------------------------|---------------------------------------|
@@ -94,7 +96,7 @@ MAPPED atau OPEN.
 DESIGNED tidak sama dengan IMPLEMENTED, EXECUTED, PASSED, EVIDENCED,
 atau RETESTED.
 
-# 5. Category and workflow baseline
+## 5. Category and workflow baseline
 
 | Category | Kategori                       | Workflow baseline  | Keputusan dan batas                                  |
 |----------|--------------------------------|--------------------|------------------------------------------------------|
@@ -112,17 +114,21 @@ atau RETESTED.
 | CAT-12   | Lainnya/Belum Diklasifikasikan | 14                 | Temporary classification/exception; fail-closed      |
 | CAT-13   | Parfum/Fragrance               | RF-01–10; FM-01–12 | Retail/Refill dan Formulation/Manufacturing terpisah |
 
-## 5.1 Category-specific boundaries
+### 5.1 Category-specific boundaries
 
 - Pharmacy: credential, jurisdiction, prescription/dispensing, legal,
   dan compliance gate wajib diverifikasi; regulated workflow NOT READY
   sebelum bukti tersedia.
 
-- Education: E-01–E-03 FIX konseptual; E-04 OPEN. Student/minor,
+- Education: E-01–E-03 FIX konseptual. Keputusan untuk mempertahankan
+  rincian residual E-04 sebagai OPEN telah disetujui; status rincian
+  teknis E-04 tetap OPEN. Student/minor,
   guardian consent, safeguarding, dan assessment integrity safeguards
   tetap wajib diverifikasi.
 
-- Hotel: H-01–H-03 FIX konseptual; H-04 OPEN. Guest identity,
+- Hotel: H-01–H-03 FIX konseptual. Keputusan untuk mempertahankan
+  rincian residual H-04 sebagai OPEN telah disetujui; status rincian
+  teknis H-04 tetap OPEN. Guest identity,
   room/property scope, safety/readiness, dan folio/refund safeguards
   tetap perlu diverifikasi.
 
@@ -132,7 +138,7 @@ atau RETESTED.
 - Parfum: RF-01–RF-10 Retail/Refill dan FM-01–FM-12
   Formulation/Manufacturing; tidak digabung menjadi satu workflow/grant.
 
-## 5.2 RMD-56 version control
+### 5.2 RMD-56 version control
 
 - RMD-56 v1.2 memiliki beberapa varian yang belum canonical.
 
@@ -143,7 +149,7 @@ atau RETESTED.
 - Tidak ada pemilihan canonical tanpa keputusan document-control
   tersendiri; historical sources dipertahankan.
 
-# 6. Module, action, dan permission mapping
+## 6. Module, action, dan permission mapping
 
 | Relasi                                    | Status                                        |
 |-------------------------------------------|-----------------------------------------------|
@@ -164,7 +170,7 @@ atau RETESTED.
 
 - Nama workflow/module yang mirip bukan dasar untuk mengisi mapping.
 
-# 7. Scope, data classification, dan purpose
+## 7. Scope, data classification, dan purpose
 
 Setiap protected action perlu mengidentifikasi Business/tenant,
 resource/object dan lifecycle state, object scope,
@@ -179,7 +185,7 @@ catalogue, masking, export, retention, dan jurisdiction rules tetap
 OPEN/PARTIAL. Tidak boleh menyatakan field-level implementation telah
 diverifikasi.
 
-# 8. Approval, SoD, dan compliance
+## 8. Approval, SoD, dan compliance
 
 - No self-approval; requester dan independent approver harus aktor
   manusia berbeda.
@@ -199,7 +205,7 @@ timeout/expiry/cancellation/escalation/delegation/re-authentication,
 credential/compliance evidence, enforcement, dan negative test evidence
 masih OPEN.
 
-# 9. Server authorization dan tenant boundary
+## 9. Server authorization dan tenant boundary
 
 Setiap protected request harus memvalidasi actor identity/account state;
 active Business membership atau ownership authority; target business_id
@@ -219,9 +225,9 @@ policies, database constraints, middleware/service enforcement,
 integration test execution, dan runtime security evidence tetap OPEN/NOT
 VERIFIED.
 
-# 10. Test catalogue dan evidence register
+## 10. Test catalogue dan evidence register
 
-## 10.1 Inventaris 133 Test ID
+### 10.1 Inventaris 133 Test ID
 
 | Keluarga | Rentang | Jumlah | Status sumber                     |
 |----------|---------|--------|-----------------------------------|
@@ -238,14 +244,15 @@ VERIFIED.
 - 65 ID memiliki sumber konseptual; 10 ID memiliki bukti historis
   terbatas; 58 ID belum ditemukan sumber primernya.
 
-## 10.2 Namespace dan provenance
+### 10.2 Namespace dan provenance
 
 - Tidak ada dasar untuk menyatakan seluruh 133 test sudah dieksekusi
   atau PASS.
 
-- Sumber primer SoD memakai SA-01–SA-18; DOC-06 memakai keluarga
-  SOD-SA-01–18. Pertahankan source ID dan nyatakan mapping namespace
-  secara eksplisit.
+- Sumber primer SoD memakai ID `SA-01–SA-18`; keluarga katalog DOC-06
+  memakai `SOD-SA-01–SOD-SA-18`. Perlakukan keduanya sebagai source ID
+  dan catalogue alias yang dipetakan secara eksplisit; jangan mengganti
+  ID primer atau menggabungkannya dengan `ERD96-SA-01–10`.
 
 - ERD96-SA-01–10 adalah keluarga historis terpisah; jangan digabung
   dengan SOD-SA. Status historis dapat berupa NOT RUN, NOT ASSESSED, NOT
@@ -257,7 +264,7 @@ VERIFIED.
 - MS-01–16, G08-T01–18, dan G09-T01–24 tetap dipertahankan tanpa
   mengarang deskripsi/expected result.
 
-## 10.3 Test execution status
+### 10.3 Test execution status
 
 | Kriteria                  | Status                   |
 |---------------------------|--------------------------|
@@ -275,7 +282,7 @@ Pharmacy credential gate, Education/Hotel safeguards, dan REC-08
 remediation/retest tidak boleh dinyatakan dieksekusi tanpa retained
 evidence.
 
-# 11. Minimum test traceability record
+## 11. Minimum test traceability record
 
 - test_id; category_id; workflow_id; module_id; action_id; actor_role;
   permission_key; business_id; resource_id; object_scope;
@@ -285,7 +292,7 @@ evidence.
 
 Field yang belum disetujui atau belum tersedia harus tetap unresolved.
 
-# 12. Open traceability gap register
+## 12. Open traceability gap register
 
 | Gap ID      | Missing relationship/evidence                | Dependency                   | Closure requirement                                                    |
 |-------------|----------------------------------------------|------------------------------|------------------------------------------------------------------------|
@@ -308,9 +315,9 @@ Field yang belum disetujui atau belum tersedia harus tetap unresolved.
 Seluruh ID asli Stage 3.3 tetap menjadi pengendali. DOC-06 tidak membuat
 pengganti atau menutup gap hanya dengan mencantumkannya.
 
-# 13. REC-06 dan Audit 2.7 cross-domain dependencies
+## 13. REC-06 dan Audit 2.7 cross-domain dependencies
 
-## 13.1 REC-06
+### 13.1 REC-06
 
 REC-06 memiliki Workflow-to-Capability Traceability Matrix v0.1 dan
 Permission Catalogue Overlay v0.1. Status REC-06 tetap PARTIAL / OPEN /
@@ -335,7 +342,7 @@ Education dan Hotel memiliki 14 dan 16 workflow; seluruh 30 workflow
 belum memiliki approved specific M-ID mapping. M01–M21 tetap CANDIDATE.
 REC-06 tidak memberikan permission grant.
 
-## 13.2 Audit 2.7
+### 13.2 Audit 2.7
 
 Audit 2.7 memiliki 16 temuan XDOM-01–16 dengan status PASS WITH OPEN
 RECONCILIATION / EVIDENCE DEPENDENCIES. Education/Hotel approval
@@ -344,11 +351,13 @@ scope, data, SoD, authorization adalah layer berbeda; Pharmacy NOT
 READY; Lainnya fail-closed; Parfum dua track; REC-06 bukan final
 crosswalk; audit dokumentasi bukan implementation/security readiness.
 XDOM-01–16 dan seluruh XDOM-OPEN items tetap dipertahankan. Tidak ada
-FIX dibuka kembali.
+FIX dibuka kembali. Ringkasan ini membuktikan cakupan temuan, bukan
+locator individual per XDOM; exact source/page/section locator untuk
+setiap temuan tetap OPEN sampai diverifikasi.
 
-# 14. Provenance, locator, dan source lineage
+## 14. Provenance, locator, dan source lineage
 
-## 14.1 Stage 4.7.8
+### 14.1 Stage 4.7.8
 
 Stage 4.7.8 membuktikan inbound source routing DOC-00–DOC-12 terdaftar,
 DOC-06 memiliki inbound source family, sejumlah locator primer
@@ -357,7 +366,7 @@ diperiksa, dan routing dua arah tersedia pada tingkat register.
 Status: PARTIAL — REGISTER-LEVEL ROUTING PASS; SOURCE/CONTENT-LEVEL
 CLOSURE BLOCKED. Ini bukan exhaustive locator verification.
 
-## 14.2 Stage 4.9.9
+### 14.2 Stage 4.9.9
 
 Status: PARTIAL — ACCEPTANCE NOT MET. Terdapat 13 master documents;
 master-to-source references dan register-level routes tersedia pada
@@ -365,11 +374,49 @@ tingkat berbeda; exact claim-level locators belum lengkap; backlink
 konten sumber ke master tidak ditemukan pada sepuluh sumber primer yang
 disampel; audit tidak mengklaim pemeriksaan menyeluruh seluruh arsip.
 
-Stage 4.9.10 tercatat sebagai langkah berikutnya dalam audit tersebut.
-Status keseluruhan Stage 4.9 tetap memerlukan pemeriksaan checkpoint
-terbaru sebelum dinyatakan selesai.
+Stage 4.9.10 telah dilaksanakan sebagai Path/Topology Conflict Audit;
+hasilnya PARTIAL dan konflik P410-01–P410-09 tetap OPEN atau
+OPEN / CONTROL. Tidak ada path yang menjadi canonical secara otomatis.
 
-## 14.3 Provenance limitations
+## 14.3 Stage 4.9.11 — Final re-audit dan acceptance evaluation
+
+Laporan Stage 4.9.11 v0.1 tanggal 16 November 2026 melakukan targeted
+re-audit atas 13 master DOC-00–DOC-12, dengan batasan bahwa audit ini
+bukan byte-for-byte comparison seluruh draft, bukan audit halaman demi
+halaman atas seluruh 231 manifest files/249 historical observed paths,
+bukan pemeriksaan seluruh source documents, bukan GitHub inspection,
+dan tidak melakukan SHA-256 recomputation, database/code inspection,
+test execution, atau Production verification.
+
+**Final Stage 4.9 disposition: PARTIAL — ACCEPTANCE NOT MET.**
+
+Temuan yang dikonsolidasikan:
+- S49-F01: CLOSED untuk snapshot awal setelah DOC-11 v0.2 ditemukan
+  dan diverifikasi; temuan historis tetap valid pada snapshot asal.
+- S49-F02, S49-F03, S49-F04, S49-F06, S49-F07, S49-F08: OPEN.
+- S49-F05: CORRECTED — LIMITED SCOPE; koreksi DOC-12 hanya untuk
+  DOC-11 path/identity, bukan seluruh inkonsistensi DOC-12.
+- P99-01 sampai P99-09: tetap OPEN / NOT MET atau OPEN / CONTROL
+  sesuai disposition laporan.
+- P410-01 sampai P410-09: tetap OPEN atau OPEN / CONTROL sesuai
+  disposition laporan.
+
+Acceptance gate Stage 4.9 tetap tidak terpenuhi: claim-level locator
+coverage dan content backlinks belum terbukti; status/scope serta
+version/topology reconciliation masih PARTIAL; proposed path/topology
+approval belum terpenuhi dalam audit tersebut. Stage 4.9.11 bukan
+user acceptance dan bukan bukti implementation/security readiness.
+
+**Governance timing:** laporan Stage 4.9.11 mencatat Stage 5 dan Stage 6
+NOT AUTHORIZED pada saat laporan diterbitkan. Setelah itu, user memberi
+otorisasi terbatas untuk menyiapkan DOC-06 Markdown master pada branch
+dan PR #16. Otorisasi terbatas tersebut tidak mengubah hasil Stage 4.9,
+tidak mengesahkan semua proposed paths, tidak mengotorisasi migrasi
+dokumen lain, dan tidak mengotorisasi Stage 6 atau implementasi.
+
+## 14.4 Provenance limitations
+
+### 14.4 Provenance limitations
 
 - Exact section/page/decision locator per klaim masih OPEN.
 
@@ -389,7 +436,7 @@ terbaru sebelum dinyatakan selesai.
   REC-06, Audit 2.7, dan sumber primer terkait; daftar lineage bukan
   bukti semua klaim diverifikasi.
 
-# 15. G10 acceptance baseline
+## 15. G10 acceptance baseline
 
 G10.7 tetap COMPLETE — PARTIAL / ACCEPTANCE NOT MET.
 
@@ -410,9 +457,9 @@ Aggregate: 1 PASS, 5 PARTIAL, 4 NOT MET. G10 tidak dibuka kembali atau
 diturunkan tanpa material new evidence. G10.7 bukan bukti DOC-06 atau
 seluruh 133 test selesai.
 
-# 16. Acceptance, governance, dan readiness
+## 16. Acceptance, governance, dan readiness
 
-## 16.1 Acceptance criteria DOC-06
+### 16.1 Acceptance criteria DOC-06
 
 - Setiap kategori/workflow memiliki identifier, source locator, dan
   decision status.
@@ -437,7 +484,7 @@ seluruh 133 test selesai.
 
 - Review akhir dan document-control approval telah diperoleh.
 
-## 16.2 Readiness checkpoint
+### 16.2 Readiness checkpoint
 
 | Tahap                    | Status                                                              |
 |--------------------------|---------------------------------------------------------------------|
@@ -445,11 +492,13 @@ seluruh 133 test selesai.
 | Stage 4.7.8              | PARTIAL — GATE NOT PASSED                                           |
 | Stage 4.8                | DOC-06 v0.2 DRAFT / RECONCILED WORKING MASTER                       |
 | Stage 4.9.9              | PARTIAL — ACCEPTANCE NOT MET                                        |
+| Stage 4.9.10             | PARTIAL — P410-01–P410-09 OPEN / OPEN CONTROL                        |
+| Stage 4.9.11             | PARTIAL — ACCEPTANCE NOT MET                                        |
 | Stage 4.9.10 onward      | Status harus diverifikasi dari checkpoint terbaru                   |
-| Stage 5 GitHub Migration | NOT AUTHORIZED by this document                                     |
+| Stage 5 GitHub Migration | Limited DOC-06 PR #16 authorization only; no blanket migration approval |
 | Stage 6 Implementation   | NOT AUTHORIZED                                                      |
 
-## 16.3 Governance guardrails
+### 16.3 Governance guardrails
 
 - READ-ONLY dan APPEND-ONLY; DB_PUSH_BLOCKED: ACTIVE.
 
@@ -467,10 +516,14 @@ seluruh 133 test selesai.
 - Tidak ada OPEN/REVIEW/PARTIAL/UNVERIFIED/CANDIDATE yang dipromosikan
   tanpa sumber dan approval.
 
-- Tidak ada GitHub commit/PR/merge yang diotorisasi oleh dokumen ini.
+- Otorisasi DOC-06 PR #16 diberikan secara terpisah oleh user; dokumen
+  ini sendiri tidak memberikan otorisasi commit, PR, merge, migrasi
+  dokumen lain, atau perubahan implementasi.
 
-END OF DOC-06 v0.2 — RECONCILED WORKING MASTER
+END OF DOC-06 v0.2 — RECONCILED WORKING MASTER (REVISION 0.2.1)
 
 Status: DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL
 
-Next: ST5-09.10 — Final Documentation Review and PR Preparation.
+Next: ST5-09.17 — Apply audited corrections on PR #16 branch; then perform
+final diff review and CI verification. PR merge requires separate explicit
+user approval.
