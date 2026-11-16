@@ -378,7 +378,7 @@ Stage 4.9.10 telah dilaksanakan sebagai Path/Topology Conflict Audit;
 hasilnya PARTIAL dan konflik P410-01–P410-09 tetap OPEN atau
 OPEN / CONTROL. Tidak ada path yang menjadi canonical secara otomatis.
 
-## 14.3 Stage 4.9.11 — Final re-audit dan acceptance evaluation
+### 14.3 Stage 4.9.11 — Final re-audit dan acceptance evaluation
 
 Laporan Stage 4.9.11 v0.1 tanggal 16 November 2026 melakukan targeted
 re-audit atas 13 master DOC-00–DOC-12, dengan batasan bahwa audit ini
@@ -494,7 +494,6 @@ seluruh 133 test selesai.
 | Stage 4.9.9              | PARTIAL — ACCEPTANCE NOT MET                                        |
 | Stage 4.9.10             | PARTIAL — P410-01–P410-09 OPEN / OPEN CONTROL                        |
 | Stage 4.9.11             | PARTIAL — ACCEPTANCE NOT MET                                        |
-| Stage 4.9.10 onward      | Status harus diverifikasi dari checkpoint terbaru                   |
 | Stage 5 GitHub Migration | Limited DOC-06 PR #16 authorization only; no blanket migration approval |
 | Stage 6 Implementation   | NOT AUTHORIZED                                                      |
 
