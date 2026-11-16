@@ -180,4 +180,4 @@ The working master explicitly carries forward unresolved items: A12.18–A12.28 
 | ST5-07.11 | IN PROGRESS — append-only DOC-00 and index checkpoint prepared on documentation branch |
 | ST5-07.12–07.15 | NOT STARTED — GitHub DOC-04 publication, one PR, CI, review/explicit merge approval, merge and main verification |
 
-The Library artifact is not yet published in GitHub main. The final GitHub path will be established during ST5-07.12. This index remains a navigation/status summary and does not supersede DOC-00, the A10/A11/A12 source decisions, or DOC-01/DOC-02/DOC-03 in their respective scopes. Stage 5 remains documentation-only; DB_PUSH_BLOCKED: ACTIVE; Stage 6 remains NOT AUTHORIZED.
+The proposed GitHub path is `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`; the file is present on the ST5-07 PR branch only and is not yet published in GitHub main. This index remains a navigation/status summary and does not supersede DOC-00, the A10/A11/A12 source decisions, or DOC-01/DOC-02/DOC-03 in their respective scopes. Stage 5 remains documentation-only; DB_PUSH_BLOCKED: ACTIVE; Stage 6 remains NOT AUTHORIZED.
