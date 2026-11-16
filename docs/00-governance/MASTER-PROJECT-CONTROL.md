@@ -308,3 +308,29 @@ The DOC-04 working master does not finalize physical field names/types/precision
 | ST5-07.15 | NOT STARTED | Merge only after explicit approval; verify all changed files on main |
 
 This checkpoint is append-only and does not rewrite the historical ST5-01–ST5-16 tables above. The proposed GitHub DOC-04 publication path is `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, created on the same documentation branch for the single ST5-07 PR; it remains a PR-branch draft until review, CI and merge approval. No source archive document was modified. Stage 5 remains documentation-only; DB_PUSH_BLOCKED: ACTIVE; Stage 6 remains NOT AUTHORIZED.
+
+
+## 18. Append-only checkpoint — ST5-07.16 Final checkpoint reconciliation (17 November 2026)
+
+This checkpoint supersedes the interim ST5-07 status wording in Section 17 only for the final publication/merge state. It does not rewrite or delete the historical audit narrative or prior checkpoint. The user-provided Continuation Handoff — ST5-07 Final and GitHub main evidence were reconciled against merge commit `27caef4e83f73e17c19c023ad775c42b16a7a22b`.
+
+PR #11, `Docs: publish DOC-04 ERD and data dictionary working master`, was merged to `main`. Merge commit: `27caef4e83f73e17c19c023ad775c42b16a7a22b`. The commit contains exactly the three intended documentation paths: `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, this DOC-00 control document, and `docs/MASTER-PROJECT-INDEX.md`. DOC-04 was read back from `main` and remains RECONSTRUCTED WORKING MASTER — NOT CANONICAL / NOT FINAL.
+
+PR #11 validation record: Documentation CI PASS (Markdown lint, internal documentation links, documentation structure); Application CI change-detection PASS with application build, ESLint, TypeScript and dependency-audit jobs skipped under the documentation-only guard. The PR record identifies Documentation CI run #8 (run ID `43934106125`) and Application CI run #70 (run ID `43934106121`). No application, database, SQL/DDL/DML, Supabase, RLS/Auth, API/backend, CI workflow, Vercel, deployment or Production change is included.
+
+| ID | Final status at 17 Nov 2026 | Evidence / boundary |
+|---|---|---|
+| ST5-07.01–07.09 | COMPLETE — SCOPED AUDIT ACCEPTED | Prior audit checkpoint retained; residual provenance/physical gaps remain OPEN |
+| ST5-07.10 | COMPLETE — DOC-04 v0.1 CREATED AND ARCHIVED | Reconstructed working master; NOT CANONICAL / NOT FINAL |
+| ST5-07.11 | COMPLETE — APPEND-ONLY DOC-00 / INDEX UPDATE PUBLISHED | Both control documents contain the ST5-07 checkpoint on `main` |
+| ST5-07.12 | COMPLETE — DOC-04 PUBLISHED THROUGH PR #11 | Three intended documentation paths merged |
+| ST5-07.13 | COMPLETE — DOCUMENTATION CI PASS | Documentation CI #8 PASS; Application CI #70 change-detection PASS with app jobs skipped by docs-only guard |
+| ST5-07.14 | COMPLETE — REVIEW AND EXPLICIT USER MERGE AUTHORIZATION RECORDED | Conditional merge authorization was given after verification |
+| ST5-07.15 | COMPLETE — MERGED AND POST-MERGE FILE VERIFICATION | PR #11 merged; merge commit `27caef4e83f73e17c19c023ad775c42b16a7a22b`; DOC-04 and control/index paths verified on `main` |
+| ST5-07.16 | IN PROGRESS — FINAL CONTROL-DOCUMENT RECONCILIATION | This append-only correction is submitted as a separate documentation-only PR; CI, review and explicit merge approval remain required |
+
+DOC-04 remains a reconstructed conceptual working master. The 17 conceptual entities remain the baseline; `inventory_cost_layer_movements` remains CANDIDATE, not an approved eighteenth entity. A12.38 physical dictionary and A12.39 physical verification remain OPEN; A12.18–A12.28 remain OPEN/UNVERIFIED; A12.40 remains PARTIAL/OPEN including D40-203–216 UNRECOVERED; A12.41 remains NOT STARTED. No physical field dictionary, keys, constraints, indexes, RLS/server enforcement, locking, idempotency or test evidence is approved by this publication.
+
+The next documentation work package is ST5-08 / DOC-05 Authorization Master, but it must begin only after this reconciliation PR is reviewed, CI passes, explicitly approved for merge, merged and verified on `main`. This recommendation does not authorize Stage 6 or implementation.
+
+`DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
