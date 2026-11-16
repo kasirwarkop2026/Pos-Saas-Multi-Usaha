@@ -181,3 +181,23 @@ Never describe a PR-branch document as the current `main` authority before merge
 Stage 5 authorization applies only to documentation migration and documentation corrections in GitHub. It does not authorize implementation, schema design changes, SQL, migrations, RLS/Auth changes, backend/API work, CI workflow changes, Vercel deployment, or Production activity.
 
 Stage 6 remains **NOT AUTHORIZED**. `DB_PUSH_BLOCKED: ACTIVE` remains in force.
+
+## 12. Append-only checkpoint correction — DOC-00 adoption and Stage 5 checklist (17 November 2026)
+
+DOC-00 was merged into `main` through PR #5 (merge commit `bcde694cdf913f1cc1916d8d463cd6c2c57a405c`) and its file was verified on `main`. Therefore, the statements in §§1 and 8 describing DOC-00 as proposed or awaiting merge are historical creation-stage wording only. For current status, DOC-00 is adopted as the active project-control entry point.
+
+Checklist status correction (this section supplements, and does not erase, the original checkpoint table in §9):
+
+| ID | Updated status at 17 Nov 2026 | Evidence / next action |
+|---|---|---|
+| ST5-01 | COMPLETE — VERIFIED | Repository, branch and prior baseline PR state checked |
+| ST5-02 | COMPLETE — MERGED & VERIFIED | PR #5 merged; DOC-00 verified on `main`, blob `12b80e21b1c044e2d8d8d1bcf4afe409e2397183` |
+| ST5-03 | IN PROGRESS — PR #6 OPEN / REVIEW | Reconcile index, provenance and archive snapshot observations through append-only corrections; review and CI are in progress; do not rewrite historical snapshots |
+| ST5-04–ST5-15 | NOT STARTED | Proceed after ST5-03 review, merge and post-merge verification |
+| ST5-16 | NOT STARTED | Final documentation consistency audit after migration packages |
+
+PR #5 details: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/5. CI run #57 completed SUCCESS. PR #5 was merged using squash; merge commit `bcde694cdf913f1cc1916d8d463cd6c2c57a405c`.
+
+The archive snapshot distinctions and reconciliation boundaries are recorded in the append-only Stage 5 corrections to the project index, provenance guide and reconciliation baseline. Counts 198, 200, 231 and 249 refer to distinct observations/evidence products and must not be conflated. The 249-entry listing is not a re-hash; the 231-entry manifest remains its own integrity baseline. Exact path-level crosswalk remains OPEN.
+
+This correction changes documentation status reporting only. It does not close Stage 4.7.8 or Stage 4.9, does not complete C12.15–C12.18, and does not authorize Stage 6 or any implementation activity.

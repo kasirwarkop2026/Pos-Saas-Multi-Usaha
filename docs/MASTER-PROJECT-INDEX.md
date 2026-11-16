@@ -98,3 +98,19 @@ The documentation map in §3 is extended by these artifacts:
 - `docs/REC-06-PERMISSION-CATALOGUE-OVERLAY.md` — GitHub-side summary of the REC-06 Education/Hotel conceptual overlay and its OPEN boundaries.
 
 PR #3, “Docs: archive inventory and reconciliation baseline”, was merged into `main` on 15 November 2026. Merge commit: `c3748aa0f6f89d12622cce33ca49ccb813a253f6`. Its former draft/open status is historical. This does not authorize merging any subsequent PR.
+
+## 12. Append-only governance alignment — DOC-00 adoption and archive snapshot distinctions (17 November 2026)
+
+DOC-00, `docs/00-governance/MASTER-PROJECT-CONTROL.md`, was merged into `main` through PR #5 (merge commit `bcde694cdf913f1cc1916d8d463cd6c2c57a405c`). It is now the project-control entry point and continuation checklist. This index remains the navigation/status map for the subject documents listed here; it does not supersede DOC-00 or domain-specific decision sources.
+
+For active project work, use the maintained documentation in GitHub `main`. The ChatGPT Library archive is retained as historical/source evidence for provenance and migration, not as the active work-control location. Do not modify or delete historical Library files as part of this migration.
+
+Archive observations must be distinguished by their evidence type and capture scope:
+- 198 files / one visible folder: earlier 15 November path snapshot, retained as historical.
+- 200 files / seven subject folders: later 15 November recursive path/metadata snapshot documented in the inventory addendum; not a full content audit.
+- 231 entries: 16 November manifest/integrity baseline; preserve as a distinct manifest snapshot and its stated scope.
+- 249 entries: later 16 November path/listing inventory; metadata/path evidence only and not a re-hash or proof that all entries are content-audited.
+
+These figures are not interchangeable and must not be added, subtracted, or treated as one continuous count without a path-level crosswalk and matching scope. The 231 manifest and 249 listing are separate evidence products. The 200-file snapshot remains the verified 15 November recursive listing, not the latest count for every subsequent observation.
+
+Current stage and gate status is governed by DOC-00. Historical statuses and PR-state statements elsewhere in this index remain historical unless explicitly updated by an append-only correction. Stage 5 remains documentation-only; Stage 6 is NOT AUTHORIZED and `DB_PUSH_BLOCKED: ACTIVE` remains in force.
