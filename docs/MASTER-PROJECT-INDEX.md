@@ -194,7 +194,7 @@ The merge contains exactly:
 
 DOC-04 was read back from GitHub `main`. Its status remains RECONSTRUCTED WORKING MASTER — NOT CANONICAL / NOT FINAL. The historical 17 conceptual entities remain unchanged; `inventory_cost_layer_movements` remains a candidate, not an approved eighteenth entity.
 
-PR #11 validation record: Documentation CI #8 (run ID `43934106125`) passed Markdown lint, internal documentation links and documentation structure. Application CI #70 (run ID `43934106121`) passed change-detection and skipped application build, ESLint, TypeScript and dependency-audit jobs under the documentation-only guard. This was a documentation-only change; it is not application or implementation verification.
+PR #11 validation record: The PR #11 validation record states that Documentation CI passed Markdown lint, internal documentation links and documentation structure. Application CI change-detection passed and skipped application build, ESLint, TypeScript and dependency-audit jobs under the documentation-only guard. Exact workflow run identifiers are not asserted here. This was a documentation-only change; it is not application or implementation verification.
 
 | ST5-07 item | Final status at 17 Nov 2026 |
 |---|---|
