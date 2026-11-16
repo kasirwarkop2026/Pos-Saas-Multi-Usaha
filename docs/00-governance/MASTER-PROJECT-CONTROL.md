@@ -316,7 +316,7 @@ This checkpoint supersedes the interim ST5-07 status wording in Section 17 only 
 
 PR #11, `Docs: publish DOC-04 ERD and data dictionary working master`, was merged to `main`. Merge commit: `27caef4e83f73e17c19c023ad775c42b16a7a22b`. The commit contains exactly the three intended documentation paths: `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, this DOC-00 control document, and `docs/MASTER-PROJECT-INDEX.md`. DOC-04 was read back from `main` and remains RECONSTRUCTED WORKING MASTER — NOT CANONICAL / NOT FINAL.
 
-PR #11 validation record: Documentation CI PASS (Markdown lint, internal documentation links, documentation structure); Application CI change-detection PASS with application build, ESLint, TypeScript and dependency-audit jobs skipped under the documentation-only guard. The PR record identifies Documentation CI run #8 (run ID `43934106125`) and Application CI run #70 (run ID `43934106121`). No application, database, SQL/DDL/DML, Supabase, RLS/Auth, API/backend, CI workflow, Vercel, deployment or Production change is included.
+PR #11 validation record: Documentation CI PASS (Markdown lint, internal documentation links, documentation structure); Application CI change-detection PASS with application build, ESLint, TypeScript and dependency-audit jobs skipped under the documentation-only guard. The PR record identifies Documentation CI PASS and Application CI change-detection PASS; exact workflow run identifiers are not asserted in this checkpoint. No application, database, SQL/DDL/DML, Supabase, RLS/Auth, API/backend, CI workflow, Vercel, deployment or Production change is included.
 
 | ID | Final status at 17 Nov 2026 | Evidence / boundary |
 |---|---|---|
@@ -324,7 +324,7 @@ PR #11 validation record: Documentation CI PASS (Markdown lint, internal documen
 | ST5-07.10 | COMPLETE — DOC-04 v0.1 CREATED AND ARCHIVED | Reconstructed working master; NOT CANONICAL / NOT FINAL |
 | ST5-07.11 | COMPLETE — APPEND-ONLY DOC-00 / INDEX UPDATE PUBLISHED | Both control documents contain the ST5-07 checkpoint on `main` |
 | ST5-07.12 | COMPLETE — DOC-04 PUBLISHED THROUGH PR #11 | Three intended documentation paths merged |
-| ST5-07.13 | COMPLETE — DOCUMENTATION CI PASS | Documentation CI #8 PASS; Application CI #70 change-detection PASS with app jobs skipped by docs-only guard |
+| ST5-07.13 | COMPLETE — DOCUMENTATION CI PASS | Documentation CI PASS; Application CI change-detection PASS with app jobs skipped by docs-only guard |
 | ST5-07.14 | COMPLETE — REVIEW AND EXPLICIT USER MERGE AUTHORIZATION RECORDED | Conditional merge authorization was given after verification |
 | ST5-07.15 | COMPLETE — MERGED AND POST-MERGE FILE VERIFICATION | PR #11 merged; merge commit `27caef4e83f73e17c19c023ad775c42b16a7a22b`; DOC-04 and control/index paths verified on `main` |
 | ST5-07.16 | IN PROGRESS — FINAL CONTROL-DOCUMENT RECONCILIATION | This append-only correction is submitted as a separate documentation-only PR; CI, review and explicit merge approval remain required |
