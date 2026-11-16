@@ -416,8 +416,6 @@ dokumen lain, dan tidak mengotorisasi Stage 6 atau implementasi.
 
 ### 14.4 Provenance limitations
 
-### 14.4 Provenance limitations
-
 - Exact section/page/decision locator per klaim masih OPEN.
 
 - Exhaustive source locator verification dan actual content backlink
