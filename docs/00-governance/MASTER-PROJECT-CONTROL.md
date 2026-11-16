@@ -359,3 +359,33 @@ This closeout resolves the stale interim `IN PROGRESS` labels in the preceding c
 Next documentation work package: ST5-08 / DOC-05 Authorization Master, after this closeout checkpoint is merged and verified on `main`. This remains documentation-only and does not authorize Stage 6 or implementation.
 
 `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
+
+
+## 20. Append-only checkpoint — ST5-08 / DOC-05 Authorization Master (17 November 2026)
+
+ST5-07.16 was closed through PR #13 and verified on `main` at merge commit `89a86860b2d8363fc86bfdda0409c59778105658`. The next documentation package, ST5-08 / DOC-05 Authorization Master, is now in progress.
+
+DOC-05 v0.1.0 is prepared on branch `docs/st5-08-doc05-authorization-master-2026-11-17` at `docs/05-authorization/AUTHORIZATION_MASTER.md` as a reconstructed, evidence-bounded working master. It consolidates the authorization source inventory and audit, O-01–O-12 platform decisions, CR-01–CR-10 and Q-01–Q-06 cross-category decisions, the 12 Business-role baseline, action vocabulary, scope, data classification, SoD/approval, platform-admin boundaries, negative acceptance scenarios and open-gap registers.
+
+The package preserves these boundaries:
+- O-01–O-12, CR-01–CR-10 and Q-01–Q-06 remain FIX only at their approved conceptual scope;
+- permission catalogue v1.0, shared-core/module matrices, capability/action taxonomy, scope matrix, SoD/data-classification matrix and page × permission × scope matrix remain DRAFT / PROPOSED / CANDIDATE as applicable;
+- REC-06 remains PARTIAL; G01–G10, Scope O01–O10, SoD A01–A12 and the O-01–O-12 residual details remain open/partial as recorded;
+- no final permission keys, grants, scope resolver, field-level policy, technical enforcement or executed negative-test evidence is asserted;
+- no historical Library source is modified.
+
+| ID | Current status | Evidence / next action |
+|---|---|---|
+| ST5-07.01–ST5-07.16 | COMPLETE — MERGED & VERIFIED | ST5-07.16 closeout PR #13; merge commit `89a86860b2d8363fc86bfdda0409c59778105658` |
+| ST5-08.01 | COMPLETE — source inventory and authority audit | Authorization Audit Tahap 2.4 and 17-file archive inventory reviewed |
+| ST5-08.02 | COMPLETE — decision reconciliation | O-01–O-12, CR-01–CR-10 and Q-01–Q-06 preserved at conceptual FIX scope |
+| ST5-08.03 | COMPLETE — working master prepared | DOC-05 v0.1.0 on the ST5-08 branch |
+| ST5-08.04 | IN PROGRESS — control/index checkpoint prepared | This append-only checkpoint; review and CI pending |
+| ST5-08.05 | PENDING — substantive review and Documentation CI | Review DOC-05 plus both control documents; one PR only |
+| ST5-08.06 | PENDING — explicit user merge authorization | Do not merge before explicit approval |
+| ST5-08.07 | PENDING — merge and post-merge verification | Verify DOC-05, DOC-00 and Master Project Index on `main` |
+| ST5-09 — DOC-06 Requirements/Traceability/Test Master | NOT STARTED | Begins only after ST5-08 is merged and verified |
+
+This checkpoint is proposed on the ST5-08 PR branch and is not yet the active `main` status. DOC-05 remains DRAFT / RECONSTRUCTED WORKING MASTER / NOT FINAL until reviewed and merged. No Stage 6 or implementation authorization is implied.
+
+`DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
