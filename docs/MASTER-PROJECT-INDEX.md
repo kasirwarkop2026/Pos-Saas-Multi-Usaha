@@ -225,7 +225,7 @@ Post-merge read-back from `main` verified both changed paths:
 | ST5-07 item | Current authoritative status |
 |---|---|
 | ST5-07.01–07.15 | COMPLETE — as recorded in the preceding final checkpoints |
-| ST5-07.16.01–07.05 | COMPLETE — reconciliation, CI, review, explicit user authorization, merge and post-merge verification |
+| ST5-07.16.01–ST5-07.16.05 | COMPLETE — reconciliation, CI, review, explicit user authorization, merge and post-merge verification |
 | ST5-07.16 | COMPLETE — final control-document reconciliation; PR #12 merged at `f4b639b5028190b63f3241b0e379d46627d28d10` |
 
 The preceding Section 18 `IN PROGRESS` entry is retained as the status at the time it was written; this Section 19 is the authoritative post-merge closeout. DOC-04 remains RECONSTRUCTED WORKING MASTER — NOT CANONICAL / NOT FINAL. Physical dictionary and physical ERD verification remain OPEN; A12.18–A12.28 remain OPEN/UNVERIFIED; A12.40 remains PARTIAL/OPEN including D40-203–216 UNRECOVERED; A12.41 remains NOT STARTED. `inventory_cost_layer_movements` remains CANDIDATE, not an approved eighteenth entity.
