@@ -134,3 +134,31 @@ The package keeps three status layers distinct: (1) category/workflow conceptual
 Known gaps are explicitly retained: full workflow titles and detailed sequence for several categories, individual RMD claim-level locators, direct RMD-69 v1.1 locator, residual E-04/H-04 details, regulated/compliance gates, exact allowlists/permission keys and technical enforcement. No source detail is invented and no historical Library source is modified.
 
 DOC-02 is a PR-branch draft only until review, CI, explicit merge approval and post-merge verification. For current status, DOC-00 remains the control-plane entry point.
+
+
+## 15. Append-only DOC-03 architecture publication checkpoint — 17 November 2026
+
+DOC-03 System Architecture Master is prepared on branch `docs/st5-06-doc03-architecture-2026-11-17` at `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md` as a reconstructed, source-aligned working master based on archived DOC-03 v0.8. It consolidates platform/tenant trust boundaries, conceptual application layers, domain source-of-truth boundaries, inventory/costing/transfer, payment/finance/accounting, integration/offline, audit/security/reporting, reliability/DR limitations, decision provenance and open technical dependencies.
+
+Authority and scope are deliberately bounded:
+- DOC-03 does not replace product/category decisions in DOC-01/DOC-02, ERD/data dictionary detail in DOC-04, authorization detail in DOC-05, or source-native A10/A11/A12 decisions and approval addenda.
+- A10 remains CLOSED — Architecture Baseline; A11 remains FIX only at architecture/business-rule level; A12.17 Alternative 1, A12.30F-01–04, A12.37.10.1, A12.38 and A12.39 retain their recorded scopes.
+- MWA remains per Business + Product/Variant + Inventory Location; FIFO remains an alternative; internal transfer carries source cost context and is not a new purchase.
+- The historical 17-entity inventory baseline is preserved; `inventory_cost_layer_movements` remains a candidate, not an approved eighteenth entity.
+- Batch 05–07 mappings are secondary consolidation sources; XG-01–XG-20 are derived cross-domain audit references, not primary approvals.
+- REC-08 standalone Batch 7/8/9 security reports and consolidated finding register remain UNRECOVERED. Current Production security posture and implementation are NOT VERIFIED.
+- ARC/ARC-OPEN labels are local editorial identifiers, not source-native decision IDs or approvals.
+
+DOC-03 remains DRAFT / REVIEW REQUIRED and is a PR-branch draft only until review, Documentation CI, explicit user merge approval and post-merge verification. Stage 5 remains documentation-only; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED. This index remains a navigation/status summary and does not supersede DOC-00 or domain/source authorities.
+
+
+## 16. Append-only DOC-03 PR and CI checkpoint — 17 November 2026
+
+DOC-03 publication is under DRAFT PR #10: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/10. The PR includes only:
+- `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md` — reconstructed DOC-03 working master;
+- `docs/00-governance/MASTER-PROJECT-CONTROL.md` — append-only ST5-06 checkpoint and CI result;
+- `docs/MASTER-PROJECT-INDEX.md` — append-only DOC-03 publication/CI navigation checkpoint.
+
+Documentation CI run #7 passed all three jobs: Markdown lint, internal documentation links and documentation structure. Application CI run #69 succeeded; the application change detector classified the PR as documentation-only and skipped the four application jobs as designed.
+
+PR #10 remains DRAFT / OPEN / NOT MERGED pending substantive review and explicit user merge approval. The PR branch is not the active `main` authority. No application, database, Supabase, backend, CI workflow, deployment or Production changes are included. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
