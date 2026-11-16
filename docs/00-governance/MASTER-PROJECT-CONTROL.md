@@ -389,3 +389,39 @@ The package preserves these boundaries:
 This checkpoint is proposed on the ST5-08 PR branch and is not yet the active `main` status. DOC-05 remains DRAFT / RECONSTRUCTED WORKING MASTER / NOT FINAL until reviewed and merged. No Stage 6 or implementation authorization is implied.
 
 `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
+
+
+## 21. Append-only post-merge closeout — ST5-08 / DOC-05 (17 November 2026)
+
+PR #14, `Docs: add reconstructed DOC-05 authorization master`, was merged to `main` and post-merge verified.
+
+- Merge commit: `26dbdf0b41bd1e2eb2ca467e1b50879832bf9b1b`
+- PR state: CLOSED; merged: true.
+- DOC-05 path: `docs/05-authorization/AUTHORIZATION_MASTER.md`.
+- DOC-05 v0.1.0 is present on `main`; DOC-00 and Master Project Index Section 20 are present.
+- Pre-merge Documentation CI #18 and POS SaaS CI #80 completed successfully. Documentation CI passed all three checks; POS SaaS CI passed the docs-only change detector and skipped application jobs as expected.
+- Substantive PR review recorded no blocking finding.
+
+### ST5-08 closeout checklist
+
+| ID | Status | Verification |
+|---|---|---|
+| ST5-08.01 | COMPLETE | Authorization Audit Tahap 2.4 and 17-file inventory |
+| ST5-08.02 | COMPLETE | O-01–O-12, CR-01–CR-10 and Q-01–Q-06 reconciled at conceptual FIX scope |
+| ST5-08.03 | COMPLETE | DOC-05 v0.1.0 on `main` |
+| ST5-08.04 | COMPLETE | DOC-00 and Master Project Index checkpoints on `main` |
+| ST5-08.05 | COMPLETE | Substantive review and both CI workflows passed |
+| ST5-08.06 | COMPLETE | Explicit user approval to merge PR #14 |
+| ST5-08.07 | COMPLETE | PR #14 merged and all three files read back from `main` |
+
+**ST5-08 is COMPLETE — MERGED & VERIFIED.** DOC-05 remains DRAFT / RECONSTRUCTED WORKING MASTER / NOT FINAL; this checkpoint does not convert any candidate matrix or open decision parameter into a final policy.
+
+### Remaining authorization gaps (not closed by ST5-08)
+
+REC-06 remains PARTIAL. G01–G10, Scope O01–O10, SoD A01–A12, O-01–O-12 residual parameters, permission-key catalogue, final category/module/action mapping, field-level classification, scope resolver, technical enforcement and executed negative-test evidence remain OPEN/PARTIAL/NOT VERIFIED as documented in DOC-05. No implementation is inferred.
+
+### Next package
+
+ST5-09 / DOC-06 Requirements, Traceability & Test Master is the next proposed documentation package and remains NOT STARTED. Its source inventory and scope must be audited before drafting. No work is authorized to close the technical gaps through implementation.
+
+`DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.

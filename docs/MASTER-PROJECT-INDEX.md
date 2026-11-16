@@ -260,3 +260,25 @@ The package carries forward:
 | ST5-08.07 — Merge and post-merge verification | PENDING |
 
 DOC-05 is not the active `main` authority until its PR is reviewed, CI passes, explicitly approved, merged and verified. This package does not close REC-05/REC-06 or any technical authorization gap. Stage 5 remains documentation-only; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
+
+
+## 21. Append-only ST5-08 post-merge closeout — 17 November 2026
+
+**ST5-08 / DOC-05 Authorization Master is COMPLETE — MERGED & VERIFIED.**
+
+PR #14 was merged to `main` (merge commit `26dbdf0b41bd1e2eb2ca467e1b50879832bf9b1b`). Post-merge readback verified:
+- `docs/05-authorization/AUTHORIZATION_MASTER.md`
+- `docs/00-governance/MASTER-PROJECT-CONTROL.md` Section 20
+- `docs/MASTER-PROJECT-INDEX.md` Section 20
+
+Documentation CI #18 and POS SaaS CI #80 passed; the docs-only guard skipped application jobs as expected. Substantive review reported no blocking findings. ST5-08.01–ST5-08.07 are COMPLETE.
+
+DOC-05 remains DRAFT / RECONSTRUCTED WORKING MASTER / NOT FINAL. O-01–O-12, CR-01–CR-10 and Q-01–Q-06 remain FIX only at conceptual scope. REC-06 remains PARTIAL; G01–G10, Scope O01–O10, SoD A01–A12, residual O-items, final permission keys/mappings, field-level classification, scope resolver and technical enforcement remain OPEN/PARTIAL/NOT VERIFIED.
+
+| Next item | Status |
+|---|---|
+| ST5-07.01–ST5-07.16 | COMPLETE — MERGED & VERIFIED |
+| ST5-08.01–ST5-08.07 | COMPLETE — MERGED & VERIFIED |
+| ST5-09 — DOC-06 Requirements, Traceability & Test Master | NOT STARTED — next proposed documentation package |
+
+ST5-09 must begin with source inventory/provenance audit and preserve all unresolved authorization gaps. No implementation is implied. Stage 5 remains documentation-only; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
