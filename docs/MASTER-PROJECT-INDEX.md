@@ -123,3 +123,14 @@ DOC-01 Product Blueprint Master is prepared on the Stage 5 PR branch at `docs/01
 The DOC-01 source/status corrections include: E-04 and H-04 are approved decisions to preserve residual OPEN details (the underlying details remain OPEN); CAT-11 and CAT-12 statuses follow Erratum Category Consolidation v1.1 rather than stale v1.0 labels; CAT-12 remains temporary/fail-closed; regulated CAT-08 workflows remain gated; and cross-category M01–M21 mapping remains DRAFT/CANDIDATE. Exact source gaps and implementation boundaries are recorded in DOC-01.
 
 DOC-01 is a PR-branch draft only until review, CI, explicit merge approval and post-merge verification. For active project work, the GitHub `main` branch remains the only active reference; no PR-branch content is treated as adopted before merge.
+
+
+## 14. Append-only DOC-02 category/workflow publication checkpoint — 17 November 2026
+
+DOC-02 Category & Workflow Master has been prepared on the Stage 5 branch at `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md`, with 13 category reference pages in `docs/02-business-domains/categories/`. It is a reconstructed source-aligned working master, not a replacement for RMD audits, conceptual FIX addenda, approval addenda or errata.
+
+The package keeps three status layers distinct: (1) category/workflow conceptual decisions, (2) Manager/standard-role/module eligibility, and (3) technical authorization/implementation. It corrects the earlier shorthand for E-04 and H-04: each is an approved decision to preserve residual OPEN details. CAT-11 and CAT-12 follow Erratum Category Consolidation v1.1. CAT-12 remains temporary/fail-closed; CAT-08 regulated workflows remain NOT READY until gates are evidenced; CAT-13 keeps Retail/Refill and Formulation/Manufacturing separate. M01–M21 crosswalk v1.3 remains DRAFT/CANDIDATE, not a final authorization map.
+
+Known gaps are explicitly retained: full workflow titles and detailed sequence for several categories, individual RMD claim-level locators, direct RMD-69 v1.1 locator, residual E-04/H-04 details, regulated/compliance gates, exact allowlists/permission keys and technical enforcement. No source detail is invented and no historical Library source is modified.
+
+DOC-02 is a PR-branch draft only until review, CI, explicit merge approval and post-merge verification. For current status, DOC-00 remains the control-plane entry point.
