@@ -334,3 +334,28 @@ DOC-04 remains a reconstructed conceptual working master. The 17 conceptual enti
 The next documentation work package is ST5-08 / DOC-05 Authorization Master, but it must begin only after this reconciliation PR is reviewed, CI passes, explicitly approved for merge, merged and verified on `main`. This recommendation does not authorize Stage 6 or implementation.
 
 `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
+
+
+## 19. Append-only ST5-07.16 post-merge closeout — 17 November 2026
+
+This checkpoint closes ST5-07.16 after PR #12 was merged and both control documents were read back from GitHub `main`. PR #12, `Docs: reconcile final ST5-07 control checkpoints`, merged successfully at `f4b639b5028190b63f3241b0e379d46627d28d10`. The merged PR contains exactly the two intended documentation paths, with 57 additions and zero deletions.
+
+Post-merge verification on `main` confirmed:
+- `docs/00-governance/MASTER-PROJECT-CONTROL.md` contains the ST5-07.16 final reconciliation checkpoint and retains `DB_PUSH_BLOCKED: ACTIVE`;
+- `docs/MASTER-PROJECT-INDEX.md` contains the ST5-07 final publication/merge checkpoint and retains `DB_PUSH_BLOCKED: ACTIVE`;
+- PR #12 is closed and merged; merge commit is `f4b639b5028190b63f3241b0e379d46627d28d10`.
+
+| ID | Final status | Evidence |
+|---|---|---|
+| ST5-07.16.01 | COMPLETE — control checkpoint reconciliation prepared | PR #12 changed only DOC-00 and Master Project Index |
+| ST5-07.16.02 | COMPLETE — CI validation | Documentation CI #13 PASS; POS SaaS CI #75 PASS for change detection with application jobs skipped by documentation-only guard |
+| ST5-07.16.03 | COMPLETE — substantive diff review | No blocking findings; append-only, 57 additions, zero deletions |
+| ST5-07.16.04 | COMPLETE — explicit user merge authorization | User instructed to merge once all checks were fixed |
+| ST5-07.16.05 | COMPLETE — merge and post-merge verification | PR #12 merged; both changed files read back from `main` |
+| ST5-07.16 | COMPLETE — FINAL CONTROL-DOCUMENT RECONCILIATION | Merge commit `f4b639b5028190b63f3241b0e379d46627d28d10` |
+
+This closeout resolves the stale interim `IN PROGRESS` labels in the preceding checkpoint as historical statuses; the authoritative current status is COMPLETE as recorded here. It does not change the underlying DOC-04 maturity or close any physical-schema/provenance gap. DOC-04 remains RECONSTRUCTED WORKING MASTER — NOT CANONICAL / NOT FINAL. A12.38 and A12.39 remain OPEN; A12.18–A12.28 remain OPEN/UNVERIFIED; A12.40 remains PARTIAL/OPEN with D40-203–216 UNRECOVERED; A12.41 remains NOT STARTED. `inventory_cost_layer_movements` remains CANDIDATE, not an approved eighteenth entity.
+
+Next documentation work package: ST5-08 / DOC-05 Authorization Master, after this closeout checkpoint is merged and verified on `main`. This remains documentation-only and does not authorize Stage 6 or implementation.
+
+`DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
