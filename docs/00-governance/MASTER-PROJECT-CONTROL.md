@@ -201,3 +201,21 @@ PR #5 details: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/5. C
 The archive snapshot distinctions and reconciliation boundaries are recorded in the append-only Stage 5 corrections to the project index, provenance guide and reconciliation baseline. Counts 198, 200, 231 and 249 refer to distinct observations/evidence products and must not be conflated. The 249-entry listing is not a re-hash; the 231-entry manifest remains its own integrity baseline. Exact path-level crosswalk remains OPEN.
 
 This correction changes documentation status reporting only. It does not close Stage 4.7.8 or Stage 4.9, does not complete C12.15–C12.18, and does not authorize Stage 6 or any implementation activity.
+
+
+## 13. Append-only checkpoint correction — ST5-03 completion and DOC-01 migration (17 November 2026)
+
+ST5-03 was completed through PR #6, merged into `main` with merge commit `80a422e4c2bd91a30b3937cc465fd1f7220d66a9`. The following five files were verified readable on `main`: this project-control document, `docs/DOCUMENT-PROVENANCE.md`, `docs/MASTER-PROJECT-INDEX.md`, `docs/archive/POS-SAAS-RECONCILIATION-BASELINE.md`, and `docs/archive/ST5-03-ARCHIVE-GOVERNANCE-RECONCILIATION-ADDENDUM-2026-11-17.md`.
+
+ST5-04 — DOC-01 Product Blueprint Master — is now prepared on branch `docs/st5-04-doc01-product-blueprint-2026-11-17` as a source-aligned reconstructed working master at `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md`. It remains a PR-branch draft until reviewed, CI-checked, explicitly approved and merged. Source gaps and implementation boundaries are recorded in DOC-01; no historical Library file was modified.
+
+| ID | Updated status at 17 Nov 2026 | Evidence / next action |
+|---|---|---|
+| ST5-01 | COMPLETE — VERIFIED | Repository, branch and baseline PRs inspected |
+| ST5-02 | COMPLETE — MERGED & VERIFIED | PR #5; DOC-00 adopted on `main` |
+| ST5-03 | COMPLETE — MERGED & VERIFIED | PR #6; merge commit `80a422e4c2bd91a30b3937cc465fd1f7220d66a9`; five changed files verified on `main` |
+| ST5-04 | IN PROGRESS — DOC-01 CREATED ON PR BRANCH | Review source alignment, scope/status semantics, gaps and CI; do not merge without explicit user approval |
+| ST5-05–ST5-15 | NOT STARTED | Continue one PR at a time after ST5-04 merge and post-merge verification |
+| ST5-16 | NOT STARTED | Final documentation consistency audit after all migration packages |
+
+This checkpoint is an append-only status correction. It does not close Stage 4.7.8 or Stage 4.9, complete C12.15–C12.18, or authorize Stage 6. `DB_PUSH_BLOCKED: ACTIVE` remains in force.
