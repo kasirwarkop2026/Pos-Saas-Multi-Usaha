@@ -1,0 +1,65 @@
+name: Documentation CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "README.md"
+      - ".github/workflows/docs-ci.yml"
+      - ".github/workflows/ci.yml"
+      - ".markdownlint-cli2.jsonc"
+      - ".lychee.toml"
+      - "scripts/docs-ci/**"
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "README.md"
+      - ".github/workflows/docs-ci.yml"
+      - ".github/workflows/ci.yml"
+      - ".markdownlint-cli2.jsonc"
+      - ".lychee.toml"
+      - "scripts/docs-ci/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  markdown:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: |
+            README.md
+            docs/**/*.md
+
+  links:
+    name: Internal documentation links
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate local links without network dependency
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress --include-fragments README.md docs
+          fail: true
+
+  structure:
+    name: Documentation structure
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate required documentation structure
+        run: python3 scripts/docs-ci/check_structure.py

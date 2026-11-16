@@ -1,0 +1,4 @@
+# Keep link validation deterministic and independent of external uptime.
+offline = true
+no_progress = true
+include_fragments = true
