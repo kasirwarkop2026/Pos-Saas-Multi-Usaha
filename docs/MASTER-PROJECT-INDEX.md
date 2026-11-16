@@ -181,3 +181,34 @@ The working master explicitly carries forward unresolved items: A12.18–A12.28 
 | ST5-07.12–07.15 | NOT STARTED — GitHub DOC-04 publication, one PR, CI, review/explicit merge approval, merge and main verification |
 
 The proposed GitHub path is `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`; the file is present on the ST5-07 PR branch only and is not yet published in GitHub main. This index remains a navigation/status summary and does not supersede DOC-00, the A10/A11/A12 source decisions, or DOC-01/DOC-02/DOC-03 in their respective scopes. Stage 5 remains documentation-only; DB_PUSH_BLOCKED: ACTIVE; Stage 6 remains NOT AUTHORIZED.
+
+
+## 18. Append-only ST5-07 final publication and merge checkpoint — 17 November 2026
+
+This entry corrects the interim ST5-07 publication status recorded in Section 17. It is append-only and does not erase the historical checkpoint. PR #11, `Docs: publish DOC-04 ERD and data dictionary working master`, was merged into `main` at commit `27caef4e83f73e17c19c023ad775c42b16a7a22b`.
+
+The merge contains exactly:
+- `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` — DOC-04 v0.1 reconstructed conceptual working master;
+- `docs/00-governance/MASTER-PROJECT-CONTROL.md` — append-only ST5-07 control checkpoint;
+- `docs/MASTER-PROJECT-INDEX.md` — append-only DOC-04 navigation/status checkpoint.
+
+DOC-04 was read back from GitHub `main`. Its status remains RECONSTRUCTED WORKING MASTER — NOT CANONICAL / NOT FINAL. The historical 17 conceptual entities remain unchanged; `inventory_cost_layer_movements` remains a candidate, not an approved eighteenth entity.
+
+PR #11 validation record: Documentation CI #8 (run ID `43934106125`) passed Markdown lint, internal documentation links and documentation structure. Application CI #70 (run ID `43934106121`) passed change-detection and skipped application build, ESLint, TypeScript and dependency-audit jobs under the documentation-only guard. This was a documentation-only change; it is not application or implementation verification.
+
+| ST5-07 item | Final status at 17 Nov 2026 |
+|---|---|
+| ST5-07.01–07.09 | COMPLETE — scoped audit accepted; residual gaps retained |
+| ST5-07.10 | COMPLETE — DOC-04 v0.1 created and archived |
+| ST5-07.11 | COMPLETE — append-only DOC-00 and Index checkpoint published |
+| ST5-07.12 | COMPLETE — DOC-04 published through PR #11 |
+| ST5-07.13 | COMPLETE — Documentation CI PASS |
+| ST5-07.14 | COMPLETE — substantive review and explicit conditional merge authorization recorded |
+| ST5-07.15 | COMPLETE — PR #11 merged and post-merge files verified on `main` |
+| ST5-07.16 | IN PROGRESS — this final append-only control-document reconciliation PR awaits CI, review, explicit merge approval and post-merge verification |
+
+Unresolved status is preserved: A12.38 physical dictionary OPEN; A12.39 physical verification OPEN; A12.18–A12.28 OPEN/UNVERIFIED; A12.31E OPEN; A12.36.1 UNVERIFIED/REVIEW; A12.40 PARTIAL/OPEN with D40-203–216 UNRECOVERED; A12.41 NOT STARTED. DOC-04 is not canonical or final and does not establish physical schema or implementation readiness.
+
+Next package recommendation: ST5-08 / DOC-05 Authorization Master, after ST5-07.16 is fully merged and verified. This index remains a navigation aid; DOC-00 and source-native decision authorities retain their respective precedence.
+
+`DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
