@@ -3,8 +3,14 @@ name: POS SaaS CI
 on:
   pull_request:
     branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "README.md"
   push:
     branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "README.md"
 
 # CI is read-only: dependency installation and validation use the committed lockfile.
 permissions:
