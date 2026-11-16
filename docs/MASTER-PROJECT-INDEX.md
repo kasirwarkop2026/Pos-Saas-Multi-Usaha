@@ -162,3 +162,22 @@ DOC-03 publication is under DRAFT PR #10: https://github.com/kasirwarkop2026/Pos
 Documentation CI run #7 passed all three jobs: Markdown lint, internal documentation links and documentation structure. Application CI run #69 succeeded; the application change detector classified the PR as documentation-only and skipped the four application jobs as designed.
 
 PR #10 remains DRAFT / OPEN / NOT MERGED pending substantive review and explicit user merge approval. The PR branch is not the active `main` authority. No application, database, Supabase, backend, CI workflow, deployment or Production changes are included. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
+
+## 17. Append-only DOC-04 ERD & data dictionary working-master checkpoint — 17 November 2026
+
+ST5-07.01–ST5-07.09 completed the scoped source and consistency audit for the inventory/costing ERD baseline. The audit covered source authority/provenance, the 17 conceptual entities, A10/A11/A12 decision scopes and supersession, conceptual relationships/cardinality, physical dictionary gaps, reconciliation with DOC-01/DOC-02/DOC-03, source-to-claim traceability and residual gaps.
+
+ST5-07.10 produced DOC-04 v0.1, titled DOC-04 — ERD & Data Dictionary Master, as a reconstructed working master dated 17 November 2026. The document is archived in ChatGPT Library at /Arsip Proyek POS SaaS/Master Documents/ and is NOT CANONICAL / NOT FINAL. It is an evidence-bounded consolidation, not a verbatim recovery or physical schema approval.
+
+DOC-04 retains the 17 conceptual inventory/costing entities. inventory_cost_layer_movements remains a candidate conceptual bridge, not an approved eighteenth entity. A10 remains CLOSED only at architecture-baseline scope; A11 remains FIX at architecture/business-rule scope; A12.17 Alternative 1 remains the active cardinality decision superseding A12.16 only in its stated scope; A12.30F closes four conceptual decisions only; A12.37.10.1 keeps MWA per Business + Product/Variant + Inventory Location with FIFO as alternative; A12.38 conceptual audit is complete while physical dictionary remains OPEN; A12.39 conceptual relationship/constraint specification is complete while physical verification remains OPEN.
+
+The working master explicitly carries forward unresolved items: A12.18–A12.28 OPEN/UNVERIFIED; A12.31E OPEN; A12.36.1 UNVERIFIED/REVIEW; A12.40 PARTIAL/OPEN with D40-203–216 UNRECOVERED; A12.41 NOT STARTED. Physical field definitions, keys, constraints, indexes, RLS/server enforcement, locking, idempotency and executed tests are not approved or verified by DOC-04.
+
+| ST5-07 item | Status at 17 Nov 2026 |
+|---|---|
+| ST5-07.01–07.09 | COMPLETE — scoped audit accepted; residual gaps remain OPEN |
+| ST5-07.10 | COMPLETE — DOC-04 v0.1 created and archived in ChatGPT Library |
+| ST5-07.11 | IN PROGRESS — append-only DOC-00 and index checkpoint prepared on documentation branch |
+| ST5-07.12–07.15 | NOT STARTED — GitHub DOC-04 publication, one PR, CI, review/explicit merge approval, merge and main verification |
+
+The Library artifact is not yet published in GitHub main. The final GitHub path will be established during ST5-07.12. This index remains a navigation/status summary and does not supersede DOC-00, the A10/A11/A12 source decisions, or DOC-01/DOC-02/DOC-03 in their respective scopes. Stage 5 remains documentation-only; DB_PUSH_BLOCKED: ACTIVE; Stage 6 remains NOT AUTHORIZED.
