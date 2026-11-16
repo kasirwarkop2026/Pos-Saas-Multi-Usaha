@@ -288,3 +288,23 @@ Application CI run #69 (run ID `43934089797`) completed SUCCESS. The change dete
 | ST5-06.15 | NOT STARTED | Merge only after explicit approval; verify all three files on main |
 
 PR #10 is NOT MERGED. Its draft state is intentional. No merge, branch promotion, implementation or Production authorization is implied. `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
+
+## 17. Append-only checkpoint — ST5-07 DOC-04 ERD & Data Dictionary working master (17 November 2026)
+
+ST5-07.01–ST5-07.09 are complete at their recorded audit scopes. The source inventory, authority/provenance hierarchy, 17-entity conceptual baseline, A10/A11/A12 decision and supersession review, conceptual relationship/cardinality review, physical dictionary gap review, DOC-01/DOC-02/DOC-03 reconciliation, source-to-claim crosswalk/gap register, and scoped audit acceptance were completed. Acceptance is an audit checkpoint only; it is not user approval of a canonical physical ERD or implementation.
+
+ST5-07.10 produced DOC-04 — ERD & Data Dictionary Master, version v0.1 dated 17 November 2026, as a reconstructed working master based on the verified audit evidence. It is retained in the ChatGPT Library archive under /Arsip Proyek POS SaaS/Master Documents/. Its status is RECONSTRUCTED WORKING MASTER — NOT CANONICAL / NOT FINAL. It records the 17 conceptual entities, A10/A11/A12 scope, conceptual relationships, source-to-claim traceability, and open physical/provenance gaps. inventory_cost_layer_movements remains a candidate and is not an approved eighteenth entity.
+
+The DOC-04 working master does not finalize physical field names/types/precision/nullability/defaults, PK/FK/composite FK, UNIQUE/CHECK/indexes, RLS, server enforcement, locking, idempotency, or tests. A12.38 physical dictionary remains OPEN; A12.39 physical verification remains OPEN; A12.18–A12.28 provenance remains OPEN/UNVERIFIED; A12.40 remains PARTIAL/OPEN including D40-203–216 UNRECOVERED; A12.41 remains NOT STARTED.
+
+| ID | Updated status at 17 Nov 2026 | Evidence / next action |
+|---|---|---|
+| ST5-07.01–07.09 | COMPLETE — AUDIT ACCEPTED AT SCOPED LEVEL | Audit work completed; unresolved gaps remain explicit |
+| ST5-07.10 | COMPLETE — DOC-04 v0.1 CREATED AND ARCHIVED | ChatGPT Library: /Arsip Proyek POS SaaS/Master Documents/; reconstructed working master, not canonical |
+| ST5-07.11 | IN PROGRESS — APPEND-ONLY DOC-00 / INDEX UPDATE | This checkpoint and matching index navigation entry are prepared on one documentation PR branch; verify links and CI |
+| ST5-07.12 | NOT STARTED | Prepare one PR containing DOC-04 publication plus the approved append-only control/index updates, after ST5-07.11 review scope is finalized |
+| ST5-07.13 | NOT STARTED | Run Documentation CI on the single PR |
+| ST5-07.14 | NOT STARTED | Substantive review and obtain explicit user merge approval |
+| ST5-07.15 | NOT STARTED | Merge only after explicit approval; verify all changed files on main |
+
+This checkpoint is append-only and does not rewrite the historical ST5-01–ST5-16 tables above. The exact GitHub DOC-04 publication path remains to be finalized in ST5-07.12; the Library artifact is not yet a GitHub main document. No source archive document was modified. Stage 5 remains documentation-only; DB_PUSH_BLOCKED: ACTIVE; Stage 6 remains NOT AUTHORIZED.
