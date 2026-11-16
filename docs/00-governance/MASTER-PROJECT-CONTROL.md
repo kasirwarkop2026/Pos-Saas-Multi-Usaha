@@ -425,3 +425,56 @@ REC-06 remains PARTIAL. G01–G10, Scope O01–O10, SoD A01–A12, O-01–O-12 r
 ST5-09 / DOC-06 Requirements, Traceability & Test Master is the next proposed documentation package and remains NOT STARTED. Its source inventory and scope must be audited before drafting. No work is authorized to close the technical gaps through implementation.
 
 `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
+
+## 22. Append-only closeout — ST5-09 / DOC-06 and next package (17 November 2026)
+
+**ST5-09 — DOC-06 Requirements, Traceability & Test Master is COMPLETE — MERGED & VERIFIED within its documentation scope.**
+
+PR #16, `Docs: add reconciled DOC-06 requirements and traceability master`, was merged into `main` at merge commit `e786e98bad62dc969fa4e2508556e6c4362df054`.
+
+Verified publication:
+- `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` is present on `main`.
+- DOC-06 is Version 0.2, Revision 0.2.1; status remains DRAFT — RECONCILED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- PR #16 changed one Markdown file: 526 additions, zero deletions.
+- The merged file retains the 133 Test ID inventory (65 conceptual-source IDs, 10 with limited historical evidence, 58 UNRECOVERED), TRC-OPEN-01–15, REC-06 and Audit 2.7 dependencies, and the Stage 4.7.8/4.9 provenance and acceptance limitations.
+- No historical Library DOCX was modified or migrated by this PR.
+
+Validation and merge:
+- Documentation CI #28: SUCCESS; Markdown lint, internal documentation links and documentation structure all passed.
+- POS SaaS CI #90: SUCCESS; documentation-only change detection passed and application jobs were skipped as expected.
+- PR #16 was explicitly approved for merge by the user, merged, and its resulting file was read back from `main`.
+- Merge commit: `e786e98bad62dc969fa4e2508556e6c4362df054`.
+
+### ST5-09 closeout checklist
+
+| ID | Status | Evidence / boundary |
+|---|---|---|
+| ST5-09.01–09.14 | COMPLETE — scoped source inventory, audits, reconciliation and DOC-06 validation | Existing audit checkpoints; unresolved provenance and acceptance gaps retained |
+| ST5-09.15 | COMPLETE — Markdown/CI technical review | MD024 duplicate heading corrected; final Documentation CI passed |
+| ST5-09.16 | COMPLETE — correction list finalized | Corrections applied without promoting unresolved statuses |
+| ST5-09.17 | COMPLETE — DOC-06 corrections applied | PR #16 branch; final head `d9f462be5934f6c7c5549aa66989532bf9668f9c` |
+| ST5-09.18 | COMPLETE — final CI and review | Documentation CI #28 and POS SaaS CI #90 successful; no blocking review findings |
+| ST5-09.19 | COMPLETE — explicit user merge authorization | User instructed merge once all items were fixed |
+| ST5-09.20 | COMPLETE — merge and post-merge verification | PR #16 merged; DOC-06 read back from `main` |
+
+**ST5-09 is closed only for the DOC-06 documentation publication workflow.** This closeout does not mean Stage 4.9 acceptance has been met, does not close TRC-OPEN items, does not recover the 58 missing test sources, and does not establish test execution, physical schema, RLS/server enforcement or Production security posture.
+
+### Authoritative current work-package status
+
+| Work package | Current status | Next action |
+|---|---|---|
+| ST5-07 / DOC-04 | COMPLETE — MERGED & VERIFIED | Do not repeat without new evidence |
+| ST5-08 / DOC-05 | COMPLETE — MERGED & VERIFIED | Do not repeat without new evidence |
+| ST5-09 / DOC-06 | COMPLETE — MERGED & VERIFIED | Do not repeat; retain all recorded gaps |
+| ST5-10 / DOC-07 Security Evidence Master | NEXT — NOT STARTED | Begin with source inventory, provenance and evidence-availability audit; preserve REC-08 Batch 7/8/9 and consolidated finding-register gaps as UNRECOVERED where not found |
+| ST5-11 / DOC-08 Decision Register Master | NOT STARTED | After ST5-10 is reviewed, merged and verified |
+| ST5-12 / DOC-09 Dependency Register Master | NOT STARTED | One PR at a time |
+| ST5-13 / DOC-10 Conflict/Supersession Master | NOT STARTED | One PR at a time |
+| ST5-14 / DOC-11 Roadmap/Release Gates Master | NOT STARTED | One PR at a time |
+| ST5-15 / DOC-12 Archive/Document Index Master | NOT STARTED | One PR at a time |
+| ST5-16 / Final documentation consistency audit | NOT STARTED | After all planned documentation packages are merged and verified |
+
+The next task is ST5-10.01 — inventory the available security evidence sources and establish exact source/provenance status before drafting DOC-07. Do not repeat the DOC-06 audit. Continue one PR at a time.
+
+`DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains **NOT AUTHORIZED**.
+
