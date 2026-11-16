@@ -219,3 +219,25 @@ ST5-04 — DOC-01 Product Blueprint Master — is now prepared on branch `docs/s
 | ST5-16 | NOT STARTED | Final documentation consistency audit after all migration packages |
 
 This checkpoint is an append-only status correction. It does not close Stage 4.7.8 or Stage 4.9, complete C12.15–C12.18, or authorize Stage 6. `DB_PUSH_BLOCKED: ACTIVE` remains in force.
+
+
+## 14. Append-only checkpoint — ST5-04 completion and DOC-02 migration (17 November 2026)
+
+ST5-04 — DOC-01 Product Blueprint Master — was merged through PR #7 (merge commit `c1621c974172d3bcf4175d9210cc27695df6fd65`) and verified on `main`. The Documentation CI workstream was implemented and merged through PR #8 (merge commit `e89b0b33c8c7e3ae7690197058bd0b6b45ff8876`); Documentation CI passed its three jobs. Application CI remains triggered to preserve required check contexts and conditionally skips application jobs for documentation-only/configuration-only changes.
+
+ST5-05 — DOC-02 Category & Workflow Master — is prepared on branch `docs/st5-05-doc02-category-workflow-2026-11-17`. The branch contains a reconstructed source-aligned master at `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` and 13 category reference pages under `docs/02-business-domains/categories/`. This package separates category/workflow decision status, Manager/role/module eligibility status, and technical authorization/implementation status. It explicitly corrects E-04/H-04 semantics, CAT-11/CAT-12 status according to Erratum v1.1, CAT-08 regulated readiness, CAT-12 temporary/fail-closed scope, CAT-13 separate RF/FM tracks, and the DRAFT/CANDIDATE status of the M01–M21 crosswalk.
+
+The DOC-02 package remains DRAFT and is not adopted until review, CI, explicit merge approval and post-merge verification. Missing individual workflow titles and claim-level source locators remain PARTIAL/UNRECOVERED as listed in DOC-02; no missing detail is inferred. No historical Library source was modified.
+
+| ID | Updated status at 17 Nov 2026 | Evidence / next action |
+|---|---|---|
+| ST5-01 | COMPLETE — VERIFIED | Repository and baseline verified |
+| ST5-02 | COMPLETE — MERGED & VERIFIED | DOC-00 / PR #5 |
+| ST5-03 | COMPLETE — MERGED & VERIFIED | PR #6 |
+| ST5-04 | COMPLETE — MERGED & VERIFIED | DOC-01 / PR #7 |
+| ST5-CI-01–05 | COMPLETE — MERGED & VALIDATED | Documentation CI / PR #8 |
+| ST5-05 | IN PROGRESS — DOC-02 ON PR BRANCH | Review source status, locators, category pages and CI; do not merge without explicit approval |
+| ST5-06–ST5-15 | NOT STARTED | Continue after ST5-05 merge and verification |
+| ST5-16 | NOT STARTED | Final documentation consistency audit |
+
+Stage 5 remains documentation-only. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
