@@ -114,3 +114,12 @@ Archive observations must be distinguished by their evidence type and capture sc
 These figures are not interchangeable and must not be added, subtracted, or treated as one continuous count without a path-level crosswalk and matching scope. The 231 manifest and 249 listing are separate evidence products. The 200-file snapshot remains the verified 15 November recursive listing, not the latest count for every subsequent observation.
 
 Current stage and gate status is governed by DOC-00. Historical statuses and PR-state statements elsewhere in this index remain historical unless explicitly updated by an append-only correction. Stage 5 remains documentation-only; Stage 6 is NOT AUTHORIZED and `DB_PUSH_BLOCKED: ACTIVE` remains in force.
+
+
+## 13. Append-only product blueprint publication checkpoint — 17 November 2026
+
+DOC-01 Product Blueprint Master is prepared on the Stage 5 PR branch at `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md`. It consolidates the product vision, Owner/Business model, tenant and ownership boundaries, platform/business role separation, 13-category taxonomy, product operating principles and source/gap register. It is explicitly a reconstructed working master, not a verbatim archive recovery or implementation approval.
+
+The DOC-01 source/status corrections include: E-04 and H-04 are approved decisions to preserve residual OPEN details (the underlying details remain OPEN); CAT-11 and CAT-12 statuses follow Erratum Category Consolidation v1.1 rather than stale v1.0 labels; CAT-12 remains temporary/fail-closed; regulated CAT-08 workflows remain gated; and cross-category M01–M21 mapping remains DRAFT/CANDIDATE. Exact source gaps and implementation boundaries are recorded in DOC-01.
+
+DOC-01 is a PR-branch draft only until review, CI, explicit merge approval and post-merge verification. For active project work, the GitHub `main` branch remains the only active reference; no PR-branch content is treated as adopted before merge.
