@@ -549,3 +549,23 @@ For current decisions, §§23.3–23.4 control:
 - `DB_PUSH_BLOCKED: ACTIVE`; no database, schema, migration, RLS/Auth, API/backend, source-code, CI-workflow, Vercel, deployment, or Production change is authorized by this clarification.
 
 This dated scope clarification is append-only. It does not change historical decisions or authorize any package beyond its separately approved scope.
+
+
+## 24. Append-only authorization reconciliation — DOC-11, DOC-12 and PR #31 (18 November 2026)
+
+This addendum reconciles the dated authorization snapshot in §§23.3–23.5 with later, separately approved and completed documentation packages. It does not rewrite the earlier snapshot or grant blanket Stage 5 authority.
+
+| Package / action | Current verified status | Scope boundary |
+|---|---|---|
+| DOC-11 publication | COMPLETE — MERGED & READ-BACK VERIFIED; PR #29, merge commit `61926b56dc4dde6939b61b5fe20a60dd2c9c21d4` | Working-master Markdown only at `docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md`; remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. |
+| DOC-12 publication | COMPLETE — MERGED & READ-BACK VERIFIED; PR #30, merge commit `38197d2e833be6007744218278f1b9cb44027af0` | Working-master Markdown only at `docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md`; remains DRAFT / REVIEW REQUIRED; manifest transcription check is not content-wide source review. |
+| Master Checklist PR #31 | COMPLETE — MERGED & READ-BACK VERIFIED; merge commit `29847dcbbf06ac95a5acfe31058767cdcadc2236` | Append-only post-merge record §22 only. |
+| Stage 5 blanket archive migration | NOT AUTHORIZED | The above are named package-specific exceptions only. No blanket migration authority. |
+| Stage 6 implementation | NOT AUTHORIZED | Separate explicit authorization and readiness gates required. |
+| Database push | `DB_PUSH_BLOCKED: ACTIVE` | No SQL/DDL/DML, schema, migration, RLS/Auth or database changes. |
+
+The statements in §23.3 and §23.5 that DOC-11/DOC-12 publication was not authorized or not started are retained as historical snapshots and are superseded only for the package-specific publication status in the table above. No other package is authorized by this addendum.
+
+The next project work is limited to resolving documentation/specification dependencies that block implementation readiness, using the current Master Checklist and Master Open Register. This is preparation only; it does not authorize implementation, database, backend, application, CI workflow, Vercel, deployment or Production changes.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
