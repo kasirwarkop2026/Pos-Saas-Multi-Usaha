@@ -517,6 +517,17 @@ seluruh 133 test selesai.
   ini sendiri tidak memberikan otorisasi commit, PR, merge, migrasi
   dokumen lain, atau perubahan implementasi.
 
+END OF DOC-06 v0.2 — RECONCILED WORKING MASTER (REVISION 0.2.1)
+
+Status: DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL
+
+Next: ST5-09.20 — Post-merge verification of the merged DOC-06 Markdown
+master and append-only governance checkpoint. This document remains DRAFT,
+REVIEW REQUIRED, NOT CANONICAL, and NOT FINAL.
+
+
+Historical ending above is preserved verbatim as the pre-closeout checkpoint. The following append-only addendum is the current publication and navigation checkpoint.
+
 ## 17. Append-only post-merge publication closeout — DOC-06 (17 November 2026)
 
 **Current publication checkpoint:** DOC-06 is COMPLETE — MERGED & VERIFIED for the separately authorized documentation publication package PR #16. This section supersedes the former `Next: ST5-09.20` navigation instruction as a current next-step pointer only; it does not remove that historical checkpoint from the record.
