@@ -1,17 +1,17 @@
 # DOC-11 — Project Roadmap & Release Gates
 
-*POS SaaS Multi-Usaha v3.0 | Revised working master v0.3 | 18 November 2026*
+POS SaaS Multi-Usaha v3.0 | Revised working master v0.3 | 18 November 2026
 
 > Repository-native Markdown transcription of the DOC-11 v0.3 Library working artifact. Source paragraphs and tables are retained in their original document order. This publication does not promote the document to canonical/final status.
 
-**DOC-11**
+DOC-11
 
 PROJECT ROADMAP
 & RELEASE GATES
 
-**POS SaaS Multi-Usaha v3.0**
+POS SaaS Multi-Usaha v3.0
 
-**REVISED WORKING MASTER — v0.3**
+REVISED WORKING MASTER — v0.3
 
 
 | Document control | Recorded value |
@@ -285,7 +285,7 @@ No new SHA-256 hash was computed for DOC-11 v0.2, DOC-12 v0.6, or DOC-09 v0.2. N
 | Approval | No new technical decision, canonical path approval, Stage 5 blanket authorization or Stage 6 authorization is granted by this document. |
 
 
-_END OF DOC-11 v0.3 — REVISED WORKING MASTER_
+END OF DOC-11 v0.3 — REVISED WORKING MASTER
 
 
 ## 13. Append-only publication authorization and repository placement — 18 November 2026
