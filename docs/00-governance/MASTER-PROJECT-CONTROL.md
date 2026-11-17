@@ -535,3 +535,17 @@ This navigation supersedes earlier next-package wording only as a current naviga
 READ-ONLY • APPEND-ONLY. No Production changes; no SQL/DDL/DML, schema, migration, RLS, Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, or Supabase Preview/Staging changes. Stage 6 remains NOT AUTHORIZED. `DB_PUSH_BLOCKED: ACTIVE`.
 
 This section records governance and publication status only. It does not make any draft canonical/final, close unresolved dependencies, or establish implementation/test evidence.
+
+
+### 23.5 Append-only clarification — Stage 5 authorization scope (18 November 2026)
+
+The header label `Migration state: Stage 5 — AUTHORIZED / IN PROGRESS` is a broad historical summary and must not be interpreted as blanket authorization to migrate the entire ChatGPT archive or all remaining documents.
+
+For current decisions, §§23.3–23.4 control:
+- Specific documentation packages may proceed only within their separately approved scope, through a branch/PR and required checks.
+- ST5-11 / DOC-08 and ST5-12 / DOC-09 publication remain NOT AUTHORIZED unless separately approved.
+- ST5-13 / DOC-10, ST5-14 / DOC-11, ST5-15 / DOC-12, and ST5-16 final consistency audit remain NOT AUTHORIZED / NOT STARTED as listed in §23.3.
+- No blanket archive migration, no direct production/main mutation outside approved PR controls, and no Stage 6 implementation is authorized.
+- `DB_PUSH_BLOCKED: ACTIVE`; no database, schema, migration, RLS/Auth, API/backend, source-code, CI-workflow, Vercel, deployment, or Production change is authorized by this clarification.
+
+This dated scope clarification is append-only. It does not change historical decisions or authorize any package beyond its separately approved scope.

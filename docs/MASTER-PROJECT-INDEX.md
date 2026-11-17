@@ -314,3 +314,32 @@ Next action: ST5-10.01 — inventory available security evidence and establish s
 
 This index is a navigation/status aid. DOC-00 remains the project-control entry point, and source-native decisions retain their respective authority. `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
 
+
+
+## 12. Append-only audit source index — Stage 2.1–2.7 and Stage 3.1–3.6 (18 November 2026)
+
+This index supplies the GOV-OPEN-08 navigation chain. The archive files remain historical/source evidence; listing them does not publish them into this repository or certify full content review. ADD IDs are those established by the Stage 4.7.6 Root & Additional Artifacts Source Mapping.
+
+| Source ID | Stage | Exact source filename | Archive locator | Main routing relationship |
+|---|---|---|---|---|
+| ADD-001 | Audit 2.1 | `POS_SAAS_AUDIT_2_1_MASTER_ARCHIVE_INDEX_REGISTER_STATUS_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-00, DOC-12, DOC-10; manifest path reconciliation and GOV findings |
+| ADD-002 | Audit 2.2 | `POS_SAAS_AUDIT_2_2_BLUEPRINT_ARCHITECTURE_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-01, DOC-03, DOC-11, DOC-08–DOC-10 |
+| ADD-003 | Audit 2.3 | `POS_SAAS_AUDIT_2_3_ERD_A01_A12_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-03, DOC-04, DOC-08–DOC-10 |
+| ADD-004 | Audit 2.4 | `POS_SAAS_AUDIT_2_4_AUTHORIZATION_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-05, DOC-06, DOC-08–DOC-10 |
+| ADD-005 | Audit 2.5 | `POS_SAAS_AUDIT_2_5_RMD_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-02, DOC-05, DOC-08–DOC-10 |
+| ADD-006 | Audit 2.6 | `POS_SAAS_AUDIT_2_6_REC_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-00, DOC-05–DOC-10, DOC-12 |
+| ADD-007 | Audit 2.7 | `POS_SAAS_AUDIT_2_7_CROSS_DOMAIN_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-02, DOC-05, DOC-06, DOC-08–DOC-10 |
+| ADD-008 | Stage 3.1 | `POS_SAAS_STAGE3_CATEGORY_DECISION_REGISTER_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-02, DOC-06, DOC-08–DOC-10 |
+| ADD-009 | Stage 3.2 | `POS_SAAS_STAGE3_MASTER_FIX_DECISION_REGISTER_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-08, DOC-00, DOC-10 |
+| ADD-010 | Stage 3.3 | `POS_SAAS_STAGE3_MASTER_OPEN_REVIEW_TODO_REGISTER_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-09, DOC-11, DOC-06 |
+| ADD-011 | Stage 3.4 | `POS_SAAS_STAGE3_CONFLICT_VERSION_SUPERSESSION_REGISTER_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-00, DOC-10, DOC-08, DOC-09, DOC-12 |
+| ADD-012 | Stage 3.5 | `POS_SAAS_STAGE3_MASTER_TRACEABILITY_CROSS_REFERENCE_REGISTER_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-06, DOC-05, DOC-08–DOC-10 |
+| ADD-013 | Stage 3.6 | `POS_SAAS_STAGE3_6_FINAL_CONSOLIDATION_AUDIT_v0.1_2026-11-16.md` | `/Arsip Proyek POS SaaS/Audit/` | DOC-00, DOC-08–DOC-11; PASS WITH OPEN DEPENDENCIES |
+
+**Source relationship and authority:** Audit 2.1–2.7 establish the Stage 2 evidence baseline. Stage 3.1–3.5 consolidate category decisions, FIX, OPEN items, conflicts/supersession, and traceability; Stage 3.6 audits consistency across those five registers. Primary RMD/Blueprint/ERD/Authorization/REC approval sources retain authority within their explicit scope. The Stage 4.7.6 mapping is the provenance source for ADD-001–ADD-013 and the routing relationships above.
+
+**Locator limitation:** The archive folder and exact filenames are the recovered source locators for this index. Missing page/paragraph/claim-level locators, direct RMD-69 v1.1 path, and Stage 4.7.8 two-way backlink gaps remain OPEN. This index does not imply all 231 manifest files are content-reviewed.
+
+## 13. Append-only current navigation clarification — 18 November 2026
+
+For current Stage 5 package status and authorization, use DOC-00 `MASTER-PROJECT-CONTROL.md` §23.3–§23.5 together with the latest Master Checklist on `main`. Earlier Stage 5 tables in this index are historical navigation snapshots and are not the controlling current checkpoint. Stage 5 blanket archive migration remains NOT AUTHORIZED; Stage 6 remains NOT AUTHORIZED.

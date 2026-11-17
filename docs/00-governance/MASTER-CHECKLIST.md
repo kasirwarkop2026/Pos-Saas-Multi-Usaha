@@ -290,3 +290,18 @@ Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
 - `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 remain NOT AUTHORIZED.
 
 Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
+
+
+## 18. Append-only continuation checkpoint — GOV-OPEN-02–08 reconciliation (18 November 2026)
+
+- Re-read this Master Checklist, Master Project Control, Master Open Register, Master Project Index, Master Audit Coverage and DOC-02 from GitHub `main` before starting this package.
+- Confirmed PR #25 is merged; merge commit: `35291578770c8a2f46a1f9da6aebe89b4fbed533`. The earlier header/next-work wording that still pointed to GOV-OPEN-01 is a historical snapshot; this dated checkpoint supersedes it for current navigation.
+- Created a 231-row per-file structural baseline from the exact 16 November SHA-256 manifest, preserving row order, exact folder/path/filename/size/hash values. Separate `document_review_status` and `decision_status` columns are present.
+- All per-file content-review and decision values begin as `NOT_ASSESSED_PER_FILE`; controlling-source and supersession fields are explicitly unassessed. No content status or canonical version is inferred.
+- Prepared append-only reconciliation for GOV-OPEN-02–08. Proposed scope-limited dispositions: GOV-OPEN-02 PARTIAL; GOV-OPEN-03 CLOSED (field separation only); GOV-OPEN-04 CLOSED (procedure correction only); GOV-OPEN-05 DEFERRED; GOV-OPEN-06 CLOSED (Hotel/Other claim supersession only); GOV-OPEN-07 OPEN/UNRESOLVED; GOV-OPEN-08 CLOSED (master-index linkage only). These are proposed until merge and post-merge verification.
+- Added Stage 2.1–2.7 and Stage 3.1–3.6 exact archive source locators and ADD-001–ADD-013 routing relationships to the Master Project Index addendum.
+- No historical audit/register row was deleted or rewritten. No FIX decision was changed or broadened.
+- Current branch: `docs/gov-open-02-08-register-index-reconciliation-2026-11-18`. PR review and required CI checks are pending; no merge has been performed.
+- Next work after this package: continue evidence-backed per-file status/provenance assessment for GOV-OPEN-02; separately recover direct RMD-69 v1.1 locator and preserve GOV-OPEN-05/GOV-OPEN-07 gates.
+
+**Current controls:** `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application, backend, source-code, CI workflow, Vercel, deployment, or Production changes.
