@@ -240,3 +240,17 @@ Continue POS SaaS Multi-Usaha v3.0 using the latest **GitHub `main`** version of
 - Next action: review exact PR diff and applicable documentation CI; request separate explicit approval before merge. Do not invent the next checkpoint number.
 
 **READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE**  
+
+## 14. Append-only PR and CI validation update — GOV-OPEN-01 (18 November 2026)
+
+- Opened **draft PR #24**: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/24
+- PR scope is limited to this append-only GOV-MAI-001 correction and this Master Checklist progress record; exact comparison reports two changed files, no deletions, and no application/source/database changes.
+- Documentation CI run #49: **SUCCESS** — Markdown lint, internal documentation links, and documentation structure all passed.
+- POS SaaS CI run #111: **SUCCESS** — documentation-only change detection passed; application security/build/lint/typecheck jobs were skipped by the workflow's documentation-only conditions.
+- An initial Documentation CI run #48 failed only on the correction file's missing final newline. The formatting issue was corrected in commit `5cd83d7015f200bf17075199a01c7f7020465451`; the subsequent run #49 passed.
+- Current PR head at this update: `5cd83d7015f200bf17075199a01c7f7020465451`.
+- PR remains **DRAFT / OPEN / NOT MERGED**. No post-merge verification has occurred.
+- Dependencies closed: **none**. GOV-OPEN-01 remains TODO pending merge and post-merge verification; GOV-OPEN-02 remains OPEN.
+- Next action: final human review and explicit user approval before any merge. Do not promote the draft PR to merged or claim dependency closure.
+
+**READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE**
