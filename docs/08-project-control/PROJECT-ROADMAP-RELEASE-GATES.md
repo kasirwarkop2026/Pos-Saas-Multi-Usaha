@@ -302,3 +302,17 @@ The user explicitly approved preparation and publication of the DOC-11 and DOC-1
 - DOC-12 will be handled only after the DOC-11 PR workflow is completed, consistent with one PR at a time.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application, backend, CI workflow, Vercel, deployment or Production changes are included.
+
+
+## 14. Append-only current publication and navigation reconciliation — 18 November 2026
+
+This addendum supersedes only stale current-status statements in earlier DOC-11 snapshots. It does not rewrite their historical text or change the roadmap's draft/acceptance status.
+
+- **DOC-11 publication:** PR #29 merged to `main` at `61926b56dc4dde6939b61b5fe20a60dd2c9c21d4`; repository path `docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md`. The publication is complete for this named working-master package only. DOC-11 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- **DOC-12 publication:** PR #30 merged to `main` at `38197d2e833be6007744218278f1b9cb44027af0`; repository path `docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md`. This is a separate package-specific publication. DOC-12 remains DRAFT / REVIEW REQUIRED; its 231-row manifest transcription comparison is not a per-file content review.
+- **Master Checklist synchronization:** PR #31 merged to `main` at `29847dcbbf06ac95a5acfe31058767cdcadc2236`; its §22 records PR #30's post-merge verification. The current checklist on `main` is the navigation authority.
+- Accordingly, the statements in §4.1, §9 and §12 that DOC-11 publication is NOT AUTHORIZED or that its proposed destination is not approved are historical snapshots superseded for the actual PR #29 publication only. The source-lineage table in §11 is also a historical snapshot; current navigation must use the latest Master Checklist and Master Project Control addenda.
+- Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET. Neither DOC-11 nor DOC-12 publication closes GOV-OPEN-02 or any technical implementation dependency.
+- Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. `DB_PUSH_BLOCKED: ACTIVE` remains in force.
+
+**Next direction:** prioritize implementation-blocking specification gaps and source dependencies; do not repeat completed publication work or treat these working masters as canonical/final. Any further repository publication remains subject to a narrowly scoped package, one PR at a time, applicable checks and separate merge approval.
