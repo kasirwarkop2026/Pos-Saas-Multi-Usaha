@@ -294,7 +294,7 @@ The user explicitly approved preparation and publication of the DOC-11 and DOC-1
 
 - DOC-11 repository path: `docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md`.
 - DOC-12 repository path (separate subsequent PR): `docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md`.
-- The approved topology follows the existing `docs/00-governance/` directory; no new folder is created.
+- The approved topology extends the existing `docs/` sequence with `docs/08-project-control/` for DOC-11 and `docs/09-archive-index/` for DOC-12. Existing folders and files are not renamed, moved, deleted or overwritten.
 - DOC-11 publication is limited to a Markdown working master derived from the Library artifact `DOC-11_Project_Roadmap_Release_Gates_v0.3_DRAFT.docx`.
 - This publication does not promote DOC-11 to canonical/final status, satisfy Stage 4.9 acceptance, close GOV-OPEN items, or authorize implementation.
 - Branch creation, file publication, PR creation, CI, review, merge and post-merge verification remain distinct controls. Merge requires explicit user approval after final diff and CI review.
