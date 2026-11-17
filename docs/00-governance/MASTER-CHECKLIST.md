@@ -305,3 +305,17 @@ Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
 - Next work after this package: continue evidence-backed per-file status/provenance assessment for GOV-OPEN-02; separately recover direct RMD-69 v1.1 locator and preserve GOV-OPEN-05/GOV-OPEN-07 gates.
 
 **Current controls:** `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application, backend, source-code, CI workflow, Vercel, deployment, or Production changes.
+
+
+## 19. Append-only post-merge verification and GOV-OPEN audit update — 18 November 2026
+
+- PR #26, `docs(governance): reconcile GOV-OPEN-02–08 register and audit index`, successfully merged into `main` at `a9f7df2ed9dc7fde0a7bdaef3e7e7eae24317404`.
+- Verified that `main` points to the merge commit and read back all six PR #26 files from `main`. PR #26 is CLOSED / MERGED.
+- PR #26 validation: Documentation CI run #56 SUCCESS (documentation structure, internal links, Markdown lint). POS SaaS CI run #118 SUCCESS for documentation-only change detection; Next.js build, ESLint, TypeScript and dependency audit were SKIPPED, not passed.
+- This section supersedes the pending-review / not-merged statements in §18 and the pre-merge review snapshot at the end of the GOV-OPEN-02–08 addendum. The earlier text is retained as historical checkpoint evidence.
+- Read-only audit of GOV-OPEN-01–08 confirms: GOV-OPEN-01 CLOSED; GOV-OPEN-02 PARTIAL; GOV-OPEN-03 CLOSED for field separation only; GOV-OPEN-04 CLOSED for audit-order procedure only; GOV-OPEN-05 DEFERRED; GOV-OPEN-06 CLOSED for Hotel/Other documentation-claim supersession only; GOV-OPEN-07 OPEN / UNRESOLVED; GOV-OPEN-08 CLOSED for master-index linkage only.
+- Revalidated the 231-row baseline: 231 data rows, 18 columns, sequential IDs M231-001–M231-231, sequential manifest indices 0–230, 231 unique paths. All 231 rows still carry `NOT_ASSESSED_PER_FILE` for both document-review and decision status; therefore GOV-OPEN-02 remains PARTIAL.
+- Recovered the direct DOC02-G03 source locator: `/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx`, manifest row M231-223. Direct content review verified pp. 1–3, §§1–8. R69-D01–D12 are FIX at conceptual level only; safe-mode functions, lifecycle, SLA/expiry, reviewer authority and technical implementation remain OPEN.
+- One per-file review supplement records this source review without rewriting the 231-row baseline. The remaining per-file rows require separate evidence-backed review.
+- No new official checkpoint number is assigned. Continue GOV-OPEN-02 per-file review from the remaining unassessed entries; do not repeat completed Stage 2/Stage 3 audit work without new evidence.
+- Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application, backend, source-code, CI workflow, Vercel, deployment or Production changes.
