@@ -253,4 +253,14 @@ Continue POS SaaS Multi-Usaha v3.0 using the latest **GitHub `main`** version of
 - Dependencies closed: **none**. GOV-OPEN-01 remains TODO pending merge and post-merge verification; GOV-OPEN-02 remains OPEN.
 - Next action: final human review and explicit user approval before any merge. Do not promote the draft PR to merged or claim dependency closure.
 
-**READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE**
+Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
+
+## 15. Append-only CI formatting correction — GOV-OPEN-01 PR #24 (18 November 2026)
+
+- Documentation CI run #50 identified one Markdown lint issue (MD036) caused by the standalone bold guardrail line appended in section 14.
+- Corrected only that newly added formatting line to plain control text; no substantive checklist status or historical entry was changed.
+- Documentation CI run #50: **FAIL — MD036 only**; internal-link and structure jobs passed.
+- The correction is committed on the same PR branch. Re-run Documentation CI against the updated head before review/merge.
+- Dependencies closed: **none**. GOV-OPEN-01 remains TODO pending merge and post-merge verification; GOV-OPEN-02 remains OPEN.
+
+Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
