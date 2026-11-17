@@ -340,3 +340,14 @@ For each dependency correction or closure record, retain the following fields wi
 ### 8.7 Clarification of GitHub publication authorization
 
 The general prohibition in §7 against GitHub changes records the standing governance baseline and remains controlling for all work not separately authorized. It does not prohibit this narrowly scoped DOC-09 publication: the user separately authorized creation of the DOC-09 branch and PR, and this PR is limited to the single DOC-09 Markdown working master. This exception does not authorize archive migration, other document publication, repository-wide migration, CI/workflow changes, source-code changes, or any Stage 6/Production/database work. All such work remains subject to separate explicit authorization.
+
+
+## 3C. Append-only closure disposition — GOV-OPEN-01 (18 November 2026)
+
+| ID | Prior status | Verified closure evidence | Current disposition |
+|---|---|---|---|
+| GOV-OPEN-01 | TODO | PR #24 merged to `main`; addendum `docs/archive/GOV-MAI-001-INVENTORY-BASELINE-CORRECTION-2026-11-18.md` verified present on `main`. It references the 231-file 16 November SHA-256 manifest while explicitly retaining the 202-file 15 November historical root-plus-subfolder snapshot. | **CLOSED** |
+
+**Verification:** PR #24 merge commit `bd730f6d9571946fd94cf37fa972f83cda9d684a`. The addendum and Master Checklist were read back from `main` after merge. The original historical row above is retained unchanged; this dated closure disposition is append-only and controls the current status.
+
+**Scope boundary:** This closes only GOV-OPEN-01's stated archive-index baseline pointer criterion. GOV-OPEN-02 remains OPEN; the 231-row per-file Document Status Register is not delivered by this closure. No content-review, canonicality, implementation, or security approval is implied.
