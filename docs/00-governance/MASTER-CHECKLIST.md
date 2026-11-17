@@ -224,3 +224,19 @@ Continue POS SaaS Multi-Usaha v3.0 using the latest **GitHub `main`** version of
 
 **READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE**  
 **PROPOSED CHECKPOINT CONTROL — NOT ACTIVE ON `main` UNTIL MERGED AND VERIFIED**
+
+
+## 13. Append-only correction package preparation — GOV-OPEN-01 (18 November 2026)
+
+- Re-read the authoritative Master Checklist from `main`; latest evidenced checkpoint remains **ST5-12.06B — GOV-OPEN-01 primary-source recovery**. No new checkpoint number is assigned.
+- Reconciled the primary evidence for the inventory-baseline correction: GOV-MAI-001 v1.0 §9; GOV-DSR-001 v0.1 §2; GOV-DSR-001-A01 v0.1 §§2–4; Audit 2.1 §§1–4 / F-2.1-01; Stage 4.7.6 §§2.1–2.2 and §3.
+- Prepared the append-only correction at `docs/archive/GOV-MAI-001-INVENTORY-BASELINE-CORRECTION-2026-11-18.md`. It preserves the distinctions among 202 historical root-plus-subfolder files, the 231-entry 16 November SHA-256 manifest, the 233-file Audit 2.1 observation, and the 249-path Stage 4.7.6 observation.
+- Correction commit on PR branch: `79ab00d29965a0f3d6521c1a9f7197f43c401abd`.
+- Status: **CORRECTION PACKAGE PREPARED — PR/CI REVIEW PENDING**. This entry does not claim merge, post-merge verification, or dependency closure.
+- Dependencies closed: **none**.
+- Dependencies remaining: **GOV-OPEN-01 remains TODO pending merge and post-merge verification; GOV-OPEN-02 remains OPEN**; path-set crosswalk and content-review gaps remain OPEN/PARTIAL where stated by their controlling evidence.
+- FIX decisions changed: **none**.
+- Files changed on this branch: the new append-only correction above and this Master Checklist progress entry only. No source archive, database, application, backend, CI workflow, Vercel, or Production change.
+- Next action: review exact PR diff and applicable documentation CI; request separate explicit approval before merge. Do not invent the next checkpoint number.
+
+**READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE**  
