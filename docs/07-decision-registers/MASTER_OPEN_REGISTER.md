@@ -335,3 +335,8 @@ For each dependency correction or closure record, retain the following fields wi
 - No database, SQL/DDL/DML, migration, schema, RLS/Auth, trigger, API/backend, application source code, CI workflow, Vercel, deployment, or Production changes.
 - Do not use Supabase Preview/Staging.
 - Stage 5 broad GitHub migration and Stage 6 implementation remain NOT AUTHORIZED; only the separately authorized DOC-09 documentation PR is in scope.
+
+
+### 8.7 Clarification of GitHub publication authorization
+
+The general prohibition in §7 against GitHub changes records the standing governance baseline and remains controlling for all work not separately authorized. It does not prohibit this narrowly scoped DOC-09 publication: the user separately authorized creation of the DOC-09 branch and PR, and this PR is limited to the single DOC-09 Markdown working master. This exception does not authorize archive migration, other document publication, repository-wide migration, CI/workflow changes, source-code changes, or any Stage 6/Production/database work. All such work remains subject to separate explicit authorization.
