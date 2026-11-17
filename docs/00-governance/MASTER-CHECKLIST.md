@@ -333,3 +333,19 @@ Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
 - Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application/source code, CI workflow, Vercel, deployment or Production changes were made.
 
 **Next authorized documentation work:** continue evidence-backed per-file assessment for GOV-OPEN-02 from the remaining unassessed baseline entries, without repeating completed work or changing the original baseline.
+
+
+## 21. Append-only DOC-11 / DOC-12 publication continuation — 18 November 2026
+
+- PR #29, `docs(doc-11): publish roadmap and release gates working master`, successfully merged into `main` at `61926b56dc4dde6939b61b5fe20a60dd2c9c21d4`.
+- Post-merge read-back verified `docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md` on `main` (305 lines; DOC-11 v0.3 working master and its scoped publication addendum present).
+- DOC-11 PR #29 documentation checks: Markdown lint, documentation structure, internal documentation links and application-change detection SUCCESS. Dependency security audit, ESLint, Next.js build and TypeScript typecheck were SKIPPED for the documentation-only change; they are not recorded as passed.
+- DOC-12 v0.6 source artifact was read from the Master Documents Library at `/Arsip Proyek POS SaaS/Master Documents/DOC-12_Master_Archive_Document_Index_v0.6_DRAFT.docx`. It contains the DOC-12 v0.2 base and append-only v0.3, v0.4, v0.5 and v0.6 additions, 120 non-empty source paragraphs (128 paragraph elements), 10 tables, and 231 Appendix A manifest data rows.
+- Compared all 231 DOC-12 manifest rows, in order and across all six indexed fields (M231 ID, folder, filename, bytes, manifest SHA-256 and exact Library path), against `03_MANIFEST_SHA256_231_FILE_POS_SAAS_v1.0_2026-11-16.csv`: 231 rows compared; zero mismatches. No SHA-256 values were recomputed and no underlying source file contents were thereby certified as reviewed.
+- Prepared repository-native Markdown preserving all source paragraphs and tables in source order, then added a dated, append-only publication clarification. Older DOC-12 version/path statements remain historical snapshots; the clarification records DOC-11 v0.3's actual PR #29 publication and the approved DOC-12 destination.
+- DOC-12 repository destination: `docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md`. Existing folders and files are not renamed, moved, deleted or overwritten.
+- PR #30, `docs(doc-12): publish master archive and document index`, is OPEN / REVIEW PENDING. Branch: `docs/doc-12-archive-index-publication-2026-11-18`. No merge has been performed. CI and final diff review remain pending.
+- DOC-12 remains DRAFT / REVIEW REQUIRED. Its publication does not certify content review of all 231 manifest sources, close GOV-OPEN-02, satisfy Stage 4.9, close Stage 4.7.8, or authorize implementation.
+- No new official project checkpoint number is assigned. After PR #30 checks complete, review the complete diff and CI results; merge only after explicit user approval, then perform post-merge read-back.
+- Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application/backend, CI workflow, Vercel, deployment or Production changes.
+
