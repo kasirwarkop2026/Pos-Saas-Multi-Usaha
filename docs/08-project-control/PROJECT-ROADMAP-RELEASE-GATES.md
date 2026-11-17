@@ -290,7 +290,7 @@ _END OF DOC-11 v0.3 — REVISED WORKING MASTER_
 
 ## 13. Append-only publication authorization and repository placement — 18 November 2026
 
-The user explicitly approved preparation and publication of the DOC-11 and DOC-12 documentation packages using the existing repository governance directory. This is a narrow, package-specific authorization and does not authorize blanket Stage 5 archive migration.
+The user explicitly approved preparation and publication of the DOC-11 and DOC-12 documentation packages by extending the existing `docs/` folder sequence. This is a narrow, package-specific authorization and does not authorize blanket Stage 5 archive migration.
 
 - DOC-11 repository path: `docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md`.
 - DOC-12 repository path (separate subsequent PR): `docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md`.
