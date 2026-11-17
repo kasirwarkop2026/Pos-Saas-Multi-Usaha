@@ -275,3 +275,18 @@ Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
 - Next action: user final review and separate explicit merge approval. No merge action is taken.
 
 Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
+
+
+## 17. Post-merge verification and dependency closure record — GOV-OPEN-01 (18 November 2026)
+
+- PR #24 successfully merged to `main`; merge commit: `bd730f6d9571946fd94cf37fa972f83cda9d684a`.
+- Post-merge read-back verified both the correction addendum and this Master Checklist on `main`.
+- GOV-OPEN-01 closure criterion is met: a new addendum references the 231-file 16 November SHA-256 manifest while retaining the 202-file 15 November historical root-plus-subfolder snapshot.
+- GOV-OPEN-01 disposition: **CLOSED**, with its append-only closure entry being added to `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` in a follow-up documentation PR.
+- GOV-OPEN-02 remains **OPEN**: complete 231-row per-file Document Status Register not yet delivered.
+- Follow-up branch: `docs/gov-open-01-post-merge-closure-2026-11-18`. A direct write to `main` was rejected by repository rules requiring changes through a pull request and four required status checks; therefore the register/checklist synchronization is being routed through a separate PR.
+- This follow-up changes only the Master Open Register and Master Checklist, append-only. No historical row is deleted or rewritten.
+- No FIX decision changed. No database, application, backend, CI workflow, Vercel, deployment, or Production change.
+- `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 remain NOT AUTHORIZED.
+
+Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
