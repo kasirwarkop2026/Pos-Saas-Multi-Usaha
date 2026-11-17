@@ -467,3 +467,72 @@ E0–E5 is a project-local working classification scheme created for DOC-07 reco
 ST5-10.11 is COMPLETE WITH LIMITATIONS. DOC-07 v0.4 is a reviewed working master, not canonical or final. The source locator and snapshot additions improve traceability for available evidence but do not recover missing Batch reports or establish E3/E4/E5 control evidence. REC-08 remains PARTIAL; historical tenant/security readiness remains NOT READY on examined snapshots; current Production state remains UNVERIFIED. No finding is REMEDIATED, RETESTED or CLOSED, and no severity is reduced.
 
 Governance remains READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, migration, schema, RLS/Auth, API/backend, source-code, GitHub, PR, CI, Vercel, deployment or Production change. No Supabase Preview/Staging. Stage 5 remains NOT AUTHORIZED; Stage 6 remains NOT AUTHORIZED.
+
+# 25. ST5-10.14 — Limited Publication Authorization and PR Evidence Addendum
+
+Disposition: DOCUMENTATION PUBLICATION AUTHORIZED AND EXECUTED; PR OPEN; MERGE NOT AUTHORIZED. This section is an append-only status correction and publication record added after the DOC-07 v0.4 candidate was committed for review. It does not rewrite or erase historical text in Sections 14, 20, 21 or 24.
+
+## 25.1 Authority and scope
+
+A separate, limited user authorization was received on 17 November 2026 for the following documentation-only actions:
+- Create branch `docs/st5-10-12-doc07-security-evidence` from `main`.
+- Commit only the reviewed DOC-07 Markdown candidate.
+- Open one pull request targeting `main`.
+- Allow the PR checks to run and inspect their actual results.
+- Do not merge; merge requires separate explicit approval.
+
+This limited authorization is not blanket authorization for the full Stage 5 GitHub migration, implementation, database work, or any Production change. Stage 5 broader migration remains NOT AUTHORIZED; Stage 6 remains NOT AUTHORIZED.
+
+## 25.2 GitHub publication record
+
+| Item | Verified value |
+| --- | --- |
+| Repository | `kasirwarkop2026/Pos-Saas-Multi-Usaha` |
+| Base branch | `main` |
+| Publication branch | `docs/st5-10-12-doc07-security-evidence` |
+| Initial commit | `8fbd32567988a5a8beca3ecb5f1ffa16623307c5` |
+| Pull request | [PR #18](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/18) |
+| PR title | docs(security): add DOC-07 security evidence working master |
+| Target path | `docs/06-security-evidence/SECURITY_EVIDENCE.md` |
+| Initial PR scope | One Markdown file; 469 additions; 0 deletions |
+| PR state at this addendum | OPEN; not merged |
+| Initial branch file blob | `c4dc24c756b0cf2e5eb2e3c5b2c58b213896282b` |
+
+The DOCX archive remains outside the GitHub PR. No application source, SQL/DDL/DML, schema, RLS/Auth, API/backend, CI workflow, Vercel, deployment, or Production file was included in the verified PR file list.
+
+## 25.3 CI evidence
+
+| Workflow | Run | Result | Interpretation |
+| --- | --- | --- | --- |
+| Documentation CI | #32 / run 44051411869 | COMPLETED — SUCCESS | Internal documentation links, documentation structure, and Markdown lint jobs succeeded. |
+| POS SaaS CI | #94 / run 44051411816 | COMPLETED — SUCCESS | Change detection succeeded; application build, ESLint, TypeScript typecheck and dependency security audit jobs were SKIPPED because the change was documentation-only. |
+
+A successful workflow conclusion does not mean skipped application jobs executed or passed. These runs do not constitute security runtime tests, tenant/RLS tests, remediation evidence, or Production verification.
+
+## 25.4 Current publication and authorization state
+
+This dated addendum is the current DOC-07 publication-status checkpoint and takes precedence over older status wording in Sections 14, 20, 21 and 24.5–24.6 only for the publication activity and authorization described here:
+- Limited DOC-07 documentation publication: AUTHORIZED and EXECUTED on the named branch/PR.
+- PR #18: OPEN; not merged.
+- Documentation CI #32: SUCCESS.
+- POS SaaS CI #94: workflow SUCCESS with application-specific jobs SKIPPED.
+- Full Stage 5 GitHub migration: NOT AUTHORIZED.
+- Stage 6 implementation: NOT AUTHORIZED.
+- Merge PR #18: NOT AUTHORIZED until separate explicit user approval.
+- Current Production security state: UNVERIFIED.
+- REC-08: PARTIAL; original Batch 7/8/9 reports and original consolidated finding register remain UNRECOVERED.
+- No finding is newly REMEDIATED, RETESTED or CLOSED; no severity is reduced.
+
+For avoidance of doubt, older statements such as “no GitHub/PR/CI activity” or “publication not authorized” remain preserved as historical pre-publication review snapshots, not as the current publication status after this addendum.
+
+## 25.5 Governance controls retained
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. The limited documentation PR does not authorize SQL/DDL/DML, migrations, schema, RLS, Auth, API/backend, application source changes, Vercel configuration, deployment, or Production changes. No Supabase Preview/Staging was used. Merge remains a separate approval gate.
+
+## 25.6 Version record — v0.5
+
+| Version | Date | Change | Disposition |
+| --- | --- | --- | --- |
+| v0.5 | 17 Nov 2026 | Append-only ST5-10.14 publication authorization, GitHub PR #18 identity, changed-file scope, actual CI outcomes, and current publication/merge governance checkpoint. | Working-master status update; review required; not canonical/final. |
+
+v0.5 preserves the complete v0.4 body and appends Section 25. It corrects publication-status chronology only. It does not change historical security findings, source identities, severities, evidence classes, remediation/retest status, or readiness conclusions.
