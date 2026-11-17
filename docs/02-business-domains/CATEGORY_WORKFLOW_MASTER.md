@@ -130,3 +130,23 @@ Documentation only. Preserve historical sources and all FIX decisions. No SQL/DD
 ---
 
 **Provenance note:** DOC-02 is a reconstructed source-aligned working master. The source gaps in §10 remain open; this publication does not claim full content-level recovery or implementation readiness.
+
+
+## 12. Append-only direct source locator recovery — CAT-12 / DOC02-G03 (18 November 2026)
+
+The earlier locator gap in §9 and §10 stating that the direct RMD-69 v1.1 addendum path and page locators were not recovered is superseded for the locator criterion only.
+
+**Controlling conceptual addendum:**
+
+`/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx`
+
+Manifest identity: M231-223, zero-based index 222, 16 November 2026 SHA-256 manifest v1.0.
+
+Verified page/section locators:
+- **p. 1, §§1–2:** approval basis and R69-D01–D07 conceptual FIX.
+- **p. 2, §§2–5:** R69-D08–D12, WF-01–WF-14 conceptual baseline, authorization/operational guardrails and negative-test baseline.
+- **p. 3, §§6–8:** residual OPEN details, implementation gate and conceptual status.
+
+**Current DOC02-G03 status:** RECOVERED — direct source path and page/section locators. RMD-69 v1.0 remains the historical audit brief; v1.1 is the conceptual FIX addendum for R69-D01–D12.
+
+This locator recovery does not close the CAT-12 technical gaps. Safe-mode function list, lifecycle transitions, SLA/expiry, reviewer authority, confidence/review thresholds, evidence standards, appeal/restriction authority, permission keys, schema, RLS, API and implementation remain OPEN / NOT APPROVED as applicable. The category remains a temporary classification/exception path and fail-closed baseline, not a permissive operational category.

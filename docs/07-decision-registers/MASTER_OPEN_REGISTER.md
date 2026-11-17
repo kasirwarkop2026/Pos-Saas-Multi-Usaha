@@ -388,3 +388,16 @@ This dated procedure controls future navigation. Earlier §8 wording is retained
 - GOV-OPEN-05 and GOV-OPEN-07 remain open/deferred as stated; no closure is inferred from index presence.
 
 **Control:** READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 3E. Append-only DOC02-G03 direct locator recovery — 18 November 2026
+
+The locator statement in §3D that DOC02-G03's direct RMD-69 v1.1 locator remained UNRECOVERED is superseded for the file-path and page/section-locator criterion only.
+
+- **Recovered source:** `/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx`.
+- **Manifest identity:** M231-223; zero-based index 222; 16 November 2026 manifest v1.0; size 40,204 bytes; SHA-256 `405d273b5ba18700f9996b61da5b61cce6f7ae84cb55e438f79a12246633bef9` (transcribed from the manifest; not re-hashed in this audit).
+- **Verified locators:** pp. 1–3, §§1–8. Page 1 §§1–2 records the approval basis and R69-D01–D07; page 2 §§2–5 records R69-D08–D12, workflow baseline, guardrails and conceptual negative-test baseline; page 3 §§6–8 records residual OPEN items and implementation gates.
+- **DOC02-G03 disposition:** RECOVERED — direct file path and page/section locators. The prior UNRECOVERED status is retained as historical audit state, not current locator status.
+- **Decision boundary:** R69-D01–D12 remain FIX at conceptual level only. Safe-mode function list, lifecycle, SLA/expiry, reviewer authority, thresholds, evidence standards and technical enforcement remain OPEN. No module, role, capability, permission, schema, RLS, API or implementation approval is implied.
+- **GOV-OPEN-06 remains CLOSED only for Hotel/Other documentation-claim supersession.** This locator recovery does not broaden that closure or close RMD-OPEN-04 / XDOM-OPEN-09 technical details.
+- **GOV-OPEN-02 remains PARTIAL.** The separate per-file review supplement records M231-223; the original 231-row baseline is not rewritten, and all remaining unassessed rows require evidence-backed review.

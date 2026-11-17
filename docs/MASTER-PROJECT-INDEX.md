@@ -343,3 +343,12 @@ This index supplies the GOV-OPEN-08 navigation chain. The archive files remain h
 ## 13. Append-only current navigation clarification — 18 November 2026
 
 For current Stage 5 package status and authorization, use DOC-00 `MASTER-PROJECT-CONTROL.md` §23.3–§23.5 together with the latest Master Checklist on `main`. Earlier Stage 5 tables in this index are historical navigation snapshots and are not the controlling current checkpoint. Stage 5 blanket archive migration remains NOT AUTHORIZED; Stage 6 remains NOT AUTHORIZED.
+
+
+## 14. Append-only per-file review addendum index — 18 November 2026
+
+| Review addendum | Baseline row | Source path | Review scope | Current disposition |
+|---|---|---|---|---|
+| `DOCUMENT-STATUS-REVIEW-ADDENDUM-001.csv` | M231-223 | `/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx` | pp. 1–3, §§1–8; direct source and page/section locator review | CONTENT REVIEWED; R69-D01–D12 FIX conceptual; technical details OPEN |
+
+The review addendum supplements, and does not rewrite, `DOCUMENT-STATUS-REGISTER-231.csv`. The original manifest metadata and its transcribed SHA-256 value remain unchanged. This is one assessed file only; it does not imply the other 230 files have been content-reviewed or that GOV-OPEN-02 is closed.

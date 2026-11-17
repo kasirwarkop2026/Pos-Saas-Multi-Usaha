@@ -112,3 +112,27 @@ Stage 4.7.6 source mapping is the index evidence for the ADD IDs and routing rel
 
 ---
 **Review status:** DRAFT — pending PR review, required CI checks, merge approval and post-merge verification.
+
+
+## 11. Append-only post-merge verification and locator recovery — 18 November 2026
+
+PR #26 was successfully merged into GitHub `main` at commit `a9f7df2ed9dc7fde0a7bdaef3e7e7eae24317404`. Post-merge read-back verified all six files changed by that PR. Documentation CI run #56 passed all three documentation jobs. POS SaaS CI run #118 passed documentation-only change detection; application-specific build, lint, typecheck and dependency-audit jobs were skipped because no application files changed.
+
+This post-merge record supersedes the pre-merge review-status statement at the end of this addendum. The GOV-OPEN-02–08 dispositions in §§4 and the Master Open Register §3D are effective within their expressly limited scope after merge and read-back.
+
+### 11.1 DOC02-G03 — direct RMD-69 v1.1 locator recovered
+
+The prior statement that the direct RMD-69 v1.1 path and page locators were unrecovered is superseded for the locator criterion only. The exact Library path is:
+
+`/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx`
+
+The file is manifest row `M231-223` (zero-based manifest index 222; 16 November 2026 manifest v1.0). Direct content review verified:
+- Page 1, §§1–2: approval basis and R69-D01–D07 conceptual FIX.
+- Page 2, §§2–5: R69-D08–D12, workflow baseline, authorization/operational guardrails and conceptual negative-test baseline.
+- Page 3, §§6–8: residual OPEN details, implementation gate and conceptual status.
+
+**DOC02-G03 locator disposition:** RECOVERED — exact file path and page/section locators. This does not close the CAT-12 technical-detail gaps. Safe-mode function list, lifecycle transitions, SLA/expiry, reviewer authority, thresholds, evidence requirements, permission keys, schema, RLS, API and implementation remain OPEN / NOT APPROVED as applicable.
+
+A separate `DOCUMENT-STATUS-REVIEW-ADDENDUM-001.csv` records the per-file review without rewriting the original 231-row manifest baseline. GOV-OPEN-02 remains PARTIAL because the other per-file rows are not yet assessed.
+
+All other boundaries remain unchanged: GOV-OPEN-05 DEFERRED; GOV-OPEN-07 OPEN / UNRESOLVED; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED; `DB_PUSH_BLOCKED: ACTIVE`.
