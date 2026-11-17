@@ -224,3 +224,54 @@ Continue POS SaaS Multi-Usaha v3.0 using the latest **GitHub `main`** version of
 
 **READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE**  
 **PROPOSED CHECKPOINT CONTROL — NOT ACTIVE ON `main` UNTIL MERGED AND VERIFIED**
+
+
+## 13. Append-only correction package preparation — GOV-OPEN-01 (18 November 2026)
+
+- Re-read the authoritative Master Checklist from `main`; latest evidenced checkpoint remains **ST5-12.06B — GOV-OPEN-01 primary-source recovery**. No new checkpoint number is assigned.
+- Reconciled the primary evidence for the inventory-baseline correction: GOV-MAI-001 v1.0 §9; GOV-DSR-001 v0.1 §2; GOV-DSR-001-A01 v0.1 §§2–4; Audit 2.1 §§1–4 / F-2.1-01; Stage 4.7.6 §§2.1–2.2 and §3.
+- Prepared the append-only correction at `docs/archive/GOV-MAI-001-INVENTORY-BASELINE-CORRECTION-2026-11-18.md`. It preserves the distinctions among 202 historical root-plus-subfolder files, the 231-entry 16 November SHA-256 manifest, the 233-file Audit 2.1 observation, and the 249-path Stage 4.7.6 observation.
+- Correction commit on PR branch: `79ab00d29965a0f3d6521c1a9f7197f43c401abd`.
+- Status: **CORRECTION PACKAGE PREPARED — PR/CI REVIEW PENDING**. This entry does not claim merge, post-merge verification, or dependency closure.
+- Dependencies closed: **none**.
+- Dependencies remaining: **GOV-OPEN-01 remains TODO pending merge and post-merge verification; GOV-OPEN-02 remains OPEN**; path-set crosswalk and content-review gaps remain OPEN/PARTIAL where stated by their controlling evidence.
+- FIX decisions changed: **none**.
+- Files changed on this branch: the new append-only correction above and this Master Checklist progress entry only. No source archive, database, application, backend, CI workflow, Vercel, or Production change.
+- Next action: review exact PR diff and applicable documentation CI; request separate explicit approval before merge. Do not invent the next checkpoint number.
+
+**READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE**  
+
+## 14. Append-only PR and CI validation update — GOV-OPEN-01 (18 November 2026)
+
+- Opened **draft PR #24**: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/24
+- PR scope is limited to this append-only GOV-MAI-001 correction and this Master Checklist progress record; exact comparison reports two changed files, no deletions, and no application/source/database changes.
+- Documentation CI run #49: **SUCCESS** — Markdown lint, internal documentation links, and documentation structure all passed.
+- POS SaaS CI run #111: **SUCCESS** — documentation-only change detection passed; application security/build/lint/typecheck jobs were skipped by the workflow's documentation-only conditions.
+- An initial Documentation CI run #48 failed only on the correction file's missing final newline. The formatting issue was corrected in commit `5cd83d7015f200bf17075199a01c7f7020465451`; the subsequent run #49 passed.
+- Current PR head at this update: `5cd83d7015f200bf17075199a01c7f7020465451`.
+- PR remains **DRAFT / OPEN / NOT MERGED**. No post-merge verification has occurred.
+- Dependencies closed: **none**. GOV-OPEN-01 remains TODO pending merge and post-merge verification; GOV-OPEN-02 remains OPEN.
+- Next action: final human review and explicit user approval before any merge. Do not promote the draft PR to merged or claim dependency closure.
+
+Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
+
+## 15. Append-only CI formatting correction — GOV-OPEN-01 PR #24 (18 November 2026)
+
+- Documentation CI run #50 identified one Markdown lint issue (MD036) caused by the standalone bold guardrail line appended in section 14.
+- Corrected only that newly added formatting line to plain control text; no substantive checklist status or historical entry was changed.
+- Documentation CI run #50: **FAIL — MD036 only**; internal-link and structure jobs passed.
+- The correction is committed on the same PR branch. Re-run Documentation CI against the updated head before review/merge.
+- Dependencies closed: **none**. GOV-OPEN-01 remains TODO pending merge and post-merge verification; GOV-OPEN-02 remains OPEN.
+
+Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
+
+## 16. Append-only final validation record — GOV-OPEN-01 PR #24 (18 November 2026)
+
+- After the Markdown formatting correction, Documentation CI run #51 completed **SUCCESS**: Markdown lint, internal documentation links, and documentation structure all passed.
+- POS SaaS CI run #113 completed **SUCCESS**: documentation-only change detection passed; application-specific jobs were skipped by the workflow's documentation-only conditions.
+- Validated head at time of these runs: `d5f1dc7c0e5e018f562d567fc6b923c9c375cb4d`.
+- PR #24 remains DRAFT / OPEN / NOT MERGED. This is not a post-merge verification.
+- Dependencies closed: **none**. GOV-OPEN-01 remains TODO until merged and read back from `main`; GOV-OPEN-02 remains OPEN.
+- Next action: user final review and separate explicit merge approval. No merge action is taken.
+
+Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
