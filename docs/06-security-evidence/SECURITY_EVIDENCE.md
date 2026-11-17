@@ -536,3 +536,43 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. The limited documentation
 | v0.5 | 17 Nov 2026 | Append-only ST5-10.14 publication authorization, GitHub PR #18 identity, changed-file scope, actual CI outcomes, and current publication/merge governance checkpoint. | Working-master status update; review required; not canonical/final. |
 
 v0.5 preserves the complete v0.4 body and appends Section 25. It corrects publication-status chronology only. It does not change historical security findings, source identities, severities, evidence classes, remediation/retest status, or readiness conclusions.
+
+
+# 26. ST5-10 — Append-only post-merge publication closeout (17 November 2026)
+
+**Current publication checkpoint:** DOC-07 PR #18 is CLOSED / MERGED. This section supersedes the pre-merge publication-status statements in §25.2 and §25.4 only for the final PR, merge, and CI outcome. All historical pre-merge snapshots remain preserved.
+
+## 26.1 Final GitHub publication record
+
+| Item | Verified record |
+|---|---|
+| Repository | `kasirwarkop2026/Pos-Saas-Multi-Usaha` |
+| PR | [#18](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/18) |
+| Final PR state | CLOSED / MERGED |
+| Final PR head | `812524ddc0e5657b66f44133c088e5d7c1ba01af` |
+| Merge commit | `7b49438447a761c1afb2b8f9eb5cc88b8fcf0d86` |
+| Target path | `docs/06-security-evidence/SECURITY_EVIDENCE.md` |
+| Changed files | 1 Markdown file |
+| Final additions / deletions | 538 / 0 |
+| Current main blob SHA | `1cccd2c0c5d0a4f6e043de6faed0ab7f861fb41d` |
+
+## 26.2 Final CI evidence and interpretation
+
+| Workflow | Run | Final result | Interpretation |
+|---|---|---|---|
+| Documentation CI | #33 | SUCCESS | Documentation checks completed successfully. |
+| POS SaaS CI | #95 | SUCCESS | Workflow completed successfully; application-specific jobs were SKIPPED for this documentation-only change. |
+
+A successful workflow conclusion must not be represented as successful execution of skipped jobs. These workflow results do not establish application build/typecheck/security-audit execution, security runtime tests, RLS/tenant enforcement, remediation, retesting, or Production verification.
+
+## 26.3 Current document and evidence disposition
+
+**Current document disposition:** Version v0.6 working revision (v0.5 remains the historical version record at the preceding publication checkpoint); DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+
+The merge records publication only. REC-08 remains PARTIAL. Original Batch 7, Batch 8, Batch 9 reports and the original consolidated finding register remain UNRECOVERED where not available. SEC-OPEN-01–08, REC-OPEN-12–15, and EG-01–10 remain open as previously recorded. No finding is newly REMEDIATED, RETESTED, or CLOSED; no severity is reduced. Current Production security state remains UNVERIFIED.
+
+## 26.4 Governance boundary
+
+PR #18 was a limited documentation publication package. It does not authorize blanket Stage 5 GitHub migration, Stage 6 implementation, SQL/DDL/DML, schema/migrations, RLS/Auth, triggers, API/backend, application source, CI workflow changes, Vercel/deployment, or Production changes. No Supabase Preview/Staging was used. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
+
+This section updates publication chronology only. It does not change historical security findings, source identities, severities, evidence classes, remediation/retest status, or readiness conclusions.
