@@ -349,3 +349,16 @@ Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
 - No new official project checkpoint number is assigned. After PR #30 checks complete, review the complete diff and CI results; merge only after explicit user approval, then perform post-merge read-back.
 - Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application/backend, CI workflow, Vercel, deployment or Production changes.
 
+
+
+## 22. Append-only PR #30 post-merge verification — 18 November 2026
+
+- PR #30, `docs(doc-12): publish master archive and document index`, successfully squash-merged into `main` at `38197d2e833be6007744218278f1b9cb44027af0`.
+- Post-merge read-back confirmed `main` points to the PR #30 merge commit and both changed files are present on `main`.
+- DOC-12 repository file `docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md` read back from `main`: 612 lines, 102,310 characters, and all 231 manifest data rows (M231-001 through M231-231) present. The file blob SHA is `556e2f29436271d29d2433e6bf0bf1cd52758f68`.
+- Master Checklist read back from `main` and its existing §21 publication preparation record was verified. This §22 entry is the post-merge status update; §21 remains as historical pre-merge evidence and is not rewritten.
+- PR #30 validation on the merge commit: Documentation structure SUCCESS; Internal documentation links SUCCESS; Markdown lint SUCCESS; Detect application changes SUCCESS. Next.js production build, ESLint, TypeScript typecheck and dependency security audit were SKIPPED because the change was documentation-only; they are not represented as passed.
+- DOC-12 remains DRAFT / REVIEW REQUIRED. Publication does not certify content review of all 231 source files, close GOV-OPEN-02, satisfy Stage 4.9, close Stage 4.7.8 or authorize implementation.
+- PR #30 is CLOSED / MERGED. This entry does not assign a new official project checkpoint number. The next authorized project work remains evidence-backed per-file assessment for GOV-OPEN-02 from remaining unassessed baseline entries, as directed by the current checklist.
+- Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application/backend, CI workflow, Vercel, deployment or Production changes.
+
