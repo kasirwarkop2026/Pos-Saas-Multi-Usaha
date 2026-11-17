@@ -360,3 +360,26 @@ Additional REC-06 sources:
 **Current disposition:** DOC-05 v0.1.0 is a reconstructed working master for review. It is not a final authorization catalogue or technical authorization specification. REC-06, permission-key definitions, category/module/action mapping, scope resolver, field-level data classification, SoD parameters and implementation evidence remain open.
 
 `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 remains documentation-only; Stage 6 remains NOT AUTHORIZED.
+
+
+## 18. Append-only post-merge publication closeout — DOC-05 (17 November 2026)
+
+**Current publication checkpoint:** DOC-05 was published through the separately authorized documentation package PR #14 and is COMPLETE — MERGED & VERIFIED for that publication scope only. This section records publication chronology; it does not promote this reconstructed working master to canonical or final status.
+
+| Item | Verified record |
+|---|---|
+| Repository | `kasirwarkop2026/Pos-Saas-Multi-Usaha` |
+| PR | [#14](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/14) |
+| Merge commit | `26dbdf0b41bd1e2eb2ca467e1b50879832bf9b1b` |
+| Target path | `docs/05-authorization/AUTHORIZATION_MASTER.md` |
+| Changed files | 3 |
+| Additions / deletions | 419 / 0 |
+| Current main blob SHA | `01b07610c069adc17d53959e1b3f5aeb99d05a60` |
+
+The publication workflow items DOC05-08 (editorial consistency/link review), DOC05-09 (documentation CI and substantive diff review), DOC05-10 (explicit merge approval), and DOC05-11 (merge and post-merge verification) are COMPLETE for PR #14. This does not mean the underlying authorization architecture gaps have been resolved.
+
+**Current document disposition:** Version 0.1.1 working revision (the previously published v0.1.0 metadata is retained as historical publication metadata); DRAFT / RECONSTRUCTED AUTHORIZATION WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+
+The following remain OPEN, PARTIAL, or unverified: REC-06; G01–G10; Scope O01–O10; SoD A01–A12; permission-key definitions; category/module/action mapping; scope resolver; field-level data classification; technical enforcement; and negative acceptance test execution. No implementation, runtime enforcement, or test PASS is established by PR #14.
+
+This package-specific publication does not authorize the full Stage 5 GitHub migration, Stage 6 implementation, database changes, or Production changes. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.

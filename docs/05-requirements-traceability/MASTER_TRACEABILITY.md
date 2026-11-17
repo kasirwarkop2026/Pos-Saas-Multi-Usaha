@@ -524,3 +524,36 @@ Status: DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL
 Next: ST5-09.20 — Post-merge verification of the merged DOC-06 Markdown
 master and append-only governance checkpoint. This document remains DRAFT,
 REVIEW REQUIRED, NOT CANONICAL, and NOT FINAL.
+
+
+Historical ending above is preserved verbatim as the pre-closeout checkpoint. The following append-only addendum is the current publication and navigation checkpoint.
+
+## 17. Append-only post-merge publication closeout — DOC-06 (17 November 2026)
+
+**Current publication checkpoint:** DOC-06 is COMPLETE — MERGED & VERIFIED for the separately authorized documentation publication package PR #16. This section supersedes the former `Next: ST5-09.20` navigation instruction as a current next-step pointer only; it does not remove that historical checkpoint from the record.
+
+| Item | Verified record |
+|---|---|
+| Repository | `kasirwarkop2026/Pos-Saas-Multi-Usaha` |
+| PR | [#16](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/16) |
+| Merge commit | `e786e98bad62dc969fa4e2508556e6c4362df054` |
+| Target path | `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` |
+| Changed files | 1 |
+| Additions / deletions | 526 / 0 |
+| Current main blob SHA | `caebfcf60f20f777e9a0545ecf79bf7d142fe1e9` |
+
+ST5-09 publication and post-merge verification are complete. The PR publication does not establish Stage 4.7.8 or Stage 4.9 acceptance. Retain TRC-OPEN-01–15; the 133 Test ID inventory remains 65 conceptual-source IDs, 10 with limited historical evidence, and 58 UNRECOVERED. No test execution or PASS is established by this publication. Physical schema, RLS/server enforcement, and Production security posture remain outside the evidence established here.
+
+**Current document disposition:** Version 0.2, Revision 0.2.2 working revision (Revision 0.2.1 remains the historical revision recorded at the previous publication checkpoint); DRAFT / RECONCILED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+
+DOC-07 PR #18 is recorded as a subsequent documentation publication checkpoint in DOC-00 and DOC-07. This cross-reference is navigational only and does not close DOC-06 dependencies.
+
+### 17.1 Governance boundary
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. The limited DOC-06 PR #16 authorization did not authorize other document publications, implementation, database changes, CI workflow changes, deployment, or Production changes. Full Stage 5 GitHub migration remains NOT AUTHORIZED as blanket authority; Stage 6 remains NOT AUTHORIZED.
+
+END OF DOC-06 v0.2 — RECONCILED WORKING MASTER (REVISION 0.2.2)
+
+Status: DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL
+
+Next: Continue only with a separately authorized work package. No unresolved traceability or source-recovery dependency is closed by this publication.
