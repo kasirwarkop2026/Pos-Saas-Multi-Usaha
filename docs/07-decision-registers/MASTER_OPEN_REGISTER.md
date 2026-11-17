@@ -351,3 +351,40 @@ The general prohibition in §7 against GitHub changes records the standing gover
 **Verification:** PR #24 merge commit `bd730f6d9571946fd94cf37fa972f83cda9d684a`. The addendum and Master Checklist were read back from `main` after merge. The original historical row above is retained unchanged; this dated closure disposition is append-only and controls the current status.
 
 **Scope boundary:** This closes only GOV-OPEN-01's stated archive-index baseline pointer criterion. GOV-OPEN-02 remains OPEN; the 231-row per-file Document Status Register is not delivered by this closure. No content-review, canonicality, implementation, or security approval is implied.
+
+
+## 3D. Append-only GOV-OPEN-02–08 reconciliation disposition — 18 November 2026
+
+| ID | Prior status | Current dated disposition | Evidence / exact scope |
+|---|---|---|---|
+| GOV-OPEN-01 | TODO | **CLOSED** | Closure recorded in §3C; PR #24 and PR #25 post-merge verification. |
+| GOV-OPEN-02 | OPEN | **PARTIAL** | 231-row `DOCUMENT-STATUS-REGISTER-231.csv` baseline created from manifest. Per-file content review, controlling-source mapping, supersession and detailed evidence locators remain unassessed where unsupported. |
+| GOV-OPEN-03 | OPEN | **CLOSED — FIELD-SEPARATION CRITERION ONLY** | Separate `document_review_status` and `decision_status` columns exist; neither status is inferred from the other. |
+| GOV-OPEN-04 | TODO | **CLOSED — CURRENT AUDIT-ORDER PROCEDURE ONLY** | Current Stage 2.1–2.7 and Stage 3.1–3.6 order recorded in the dated GOV reconciliation addendum and Master Project Index. Historical wording remains unchanged. |
+| GOV-OPEN-05 | DEFERRED | **DEFERRED** | No blanket archive migration gate approval or completed full migration verification. |
+| GOV-OPEN-06 | TODO | **CLOSED — HOTEL/OTHER CLAIM SUPERSESSION ONLY** | DOC-02 §1/§3, CAT-11/CAT-12, and Category Consolidation Erratum v1.1 direct current interpretation to RMD-68/RMD-69; historical Category Consolidation v1.0 retained. DOC02-G03 direct RMD-69 v1.1 locator remains UNRECOVERED separately. |
+| GOV-OPEN-07 | OPEN / UNRESOLVED | **OPEN / UNRESOLVED** | REC-01 and XDOM-14 do not select a canonical RMD-56 v1.2 file. All variants remain preserved. |
+| GOV-OPEN-08 | TODO | **CLOSED — MASTER-INDEX LINKAGE CRITERION ONLY** | Master Project Index §12 links ADD-001–ADD-013, exact filenames/archive paths, stages, and routing relationships. Claim-level backlink gaps remain separately OPEN. |
+
+### 3D.1 Audit sequence correction (append-only)
+
+The current audit execution order is:
+
+`Stage 2.1 Index/Register → 2.2 Blueprint → 2.3 ERD/A12 → 2.4 Authorization → 2.5 RMD → 2.6 REC → 2.7 Cross-Domain`.
+
+The subsequent consolidation sequence is:
+
+`Stage 3.1 Category Decision → 3.2 Master FIX → 3.3 Master OPEN/REVIEW/TODO → 3.4 Conflict/Version/Supersession → 3.5 Traceability/Cross-Reference → 3.6 Final Consolidation Audit`.
+
+This dated procedure controls future navigation. Earlier §8 wording is retained as historical text and is not deleted or silently rewritten.
+
+### 3D.2 Register semantics and limitations
+
+- `document_review_status` and `decision_status` are independent dimensions.
+- The 231-row register's `NOT_ASSESSED_PER_FILE` values are explicit gaps, not inferred OPEN/FIX/CLOSED or a claim that no earlier review exists.
+- Filename-derived version labels are non-canonical hints only.
+- Manifest SHA-256 values are copied, not re-hashed by this package.
+- GOV-OPEN-02 remains PARTIAL until per-file content/status/provenance review fills the unsupported fields with direct evidence.
+- GOV-OPEN-05 and GOV-OPEN-07 remain open/deferred as stated; no closure is inferred from index presence.
+
+**Control:** READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
