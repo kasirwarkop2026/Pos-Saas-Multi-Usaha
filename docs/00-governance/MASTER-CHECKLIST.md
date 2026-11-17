@@ -319,3 +319,17 @@ Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
 - One per-file review supplement records this source review without rewriting the 231-row baseline. The remaining per-file rows require separate evidence-backed review.
 - No new official checkpoint number is assigned. Continue GOV-OPEN-02 per-file review from the remaining unassessed entries; do not repeat completed Stage 2/Stage 3 audit work without new evidence.
 - Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application, backend, source-code, CI workflow, Vercel, deployment or Production changes.
+
+
+## 20. Append-only PR #27 post-merge verification — 18 November 2026
+
+- PR #27, `docs(governance): correct post-merge GOV audit and recover RMD-69 locator`, was marked ready for review and successfully squash-merged into `main`.
+- Merge commit: `186fa446f9f522728242156c125327a77d5c5ecf`. PR #27 is CLOSED / MERGED; head commit reviewed: `5f1db1b929c13dee3349cd99505477aaa9740f17`.
+- PR #27 scope: six documentation files, 82 additions, zero deletions. The six changed paths were read back from `main` after merge, including this checklist's GOV audit context, the GOV-OPEN reconciliation addendum, Master Open Register, DOC-02, Master Project Index and `DOCUMENT-STATUS-REVIEW-ADDENDUM-001.csv`.
+- Post-merge checks on the merge commit: Documentation structure SUCCESS; Internal documentation links SUCCESS; Markdown lint SUCCESS; Detect application changes SUCCESS. Next.js production build, ESLint, TypeScript typecheck and dependency security audit were SKIPPED because the change was documentation-only. These skipped application checks are not represented as passed.
+- PR #27 records the recovered DOC02-G03 direct locator for RMD-69 v1.1 and the evidence-backed review of manifest row M231-223. R69-D01–D12 remain conceptual FIX only; technical details remain OPEN / NOT APPROVED as applicable.
+- GOV-OPEN-02 remains PARTIAL. The original 231-row baseline is preserved; the separate review supplement records only M231-223. The remaining rows still require evidence-backed per-file assessment. GOV-OPEN-07 remains OPEN / UNRESOLVED; no canonical physical RMD-56 v1.2 has been selected. GOV-OPEN-05 remains DEFERRED.
+- This entry supersedes PR #27's pre-merge DRAFT / NOT MERGED snapshot in its PR description as historical state; it does not rewrite that record or any earlier checklist entry.
+- Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application/source code, CI workflow, Vercel, deployment or Production changes were made.
+
+**Next authorized documentation work:** continue evidence-backed per-file assessment for GOV-OPEN-02 from the remaining unassessed baseline entries, without repeating completed work or changing the original baseline.
