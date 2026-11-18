@@ -658,3 +658,76 @@ Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no dat
 - Next action: review this focused DOC-07 §27 + checklist §25 publication PR, inspect exact two-file diff and documentation CI, then obtain separate explicit merge approval. Do not merge automatically.
 
 Controls remain: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; no database/schema, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 26. Append-only PR #47 closeout and readiness/acceptance review — 18 November 2026
+
+### 26.1 PR #47 post-merge verification
+
+- PR #47, `docs(security): add DOC-07 DOC-06 traceability crosswalk`, is CLOSED — MERGED.
+- Merge commit: `604fb88b5c05101ad7b07ea1c3cdc6be3baa90b7`.
+- Post-merge read-back on `main` verified DOC-07 §27 and this checklist §25. DOC-07 main blob SHA: `9b6cd2e7a9115794b9cb9009ab04e32aaa31ce84`.
+- Documentation CI run `44350865505`: SUCCESS (Markdown lint, documentation structure and internal links).
+- POS SaaS CI run `44350865379`: workflow conclusion SUCCESS; application-specific ESLint, TypeScript, production build and dependency security jobs were SKIPPED for this documentation-only change. Skipped jobs are not test passes.
+- No reviews, inline review threads or issue comments were present at verification. PR #47 changed two documentation files, with 87 additions and zero deletions.
+- DOC-07 §27 establishes a security-to-traceability crosswalk only. DOC-07 SEC-OPEN-01–08, REC-OPEN-12–15, EG-01–10 and DOC-06 TRC-OPEN-01–15 retain their existing statuses. Dependencies closed: 0; FIX decisions changed: 0.
+
+### 26.2 Readiness/acceptance review scope and method
+
+A read-only review was completed against the following current `main` documents:
+- `docs/IMPLEMENTATION-READINESS.md`;
+- `docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md`;
+- `docs/07-decision-registers/MASTER_OPEN_REGISTER.md`;
+- `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`;
+- `docs/00-governance/MASTER-PROJECT-CONTROL.md`;
+- `docs/05-authorization/AUTHORIZATION_MASTER.md`;
+- `docs/05-requirements-traceability/MASTER_TRACEABILITY.md`;
+- `docs/06-security-evidence/SECURITY_EVIDENCE.md`;
+- this active checklist.
+
+No database introspection, archive-source search, implementation, test execution, Production inspection or mutation was performed.
+
+### 26.3 Readiness findings
+
+| Area | Current review disposition | Evidence boundary |
+|---|---|---|
+| Stage 4.7.8 | PARTIAL — GATE NOT PASSED | Register-level routing exists; complete primary content backlinks and locator acceptance are not established. |
+| Stage 4.8 | 13/13 master documents drafted | Drafting does not mean canonical/final acceptance. |
+| Stage 4.9 | PARTIAL — ACCEPTANCE NOT MET | Cross-document consistency, locator/backlink completeness and final acceptance are not established. |
+| A12.40 | PARTIAL / OPEN — NOT ACCEPTED / NOT CLOSED | Current §22 reassessment: PASS 0/12; PARTIAL 10/12; AC40-05 OPEN/PARTIAL; AC40-09 OPEN. |
+| A12.41 | NOT STARTED / NOT VERIFIED | Must not be marked passed before A12.40 satisfies its exit criteria. |
+| DOC-04 physical schema | NOT ACCEPTED | 17/17 historical conceptual entities identified; 0/17 authoritative physical entity/field/key/constraint locator sets in the reviewed source scope. |
+| Purchasing / Sales | OPEN | Purchasing 14→15 and Sales 20→18 entity crosswalks remain incomplete. |
+| Authorization | OPEN / PARTIAL | AUTH-OPEN-01–27 remain at their recorded statuses; stable keys, scope, SoD, permission mapping and server enforcement are not fully verified. |
+| Security / traceability | OPEN / PARTIAL | SEC-OPEN, EG and TRC-OPEN dependencies remain; no new remediation, retest or test PASS is evidenced. |
+| Implementation readiness | NOT READY | Physical schema, RLS/server enforcement, executable test results and Production verification are not established by this documentation review. |
+
+### 26.4 A12.40 current criterion disposition
+
+The current criterion-by-criterion assessment in §22 controls over older status snapshots in earlier documents where the newer assessment explicitly reassesses the same criterion:
+
+- AC40-01 PARTIAL; AC40-02 PARTIAL; AC40-03 PARTIAL; AC40-04 PARTIAL.
+- AC40-05 OPEN / PARTIAL; AC40-06 PARTIAL; AC40-07 PARTIAL; AC40-08 PARTIAL.
+- AC40-09 OPEN; AC40-10 PARTIAL; AC40-11 PARTIAL; AC40-12 PARTIAL.
+- Overall: 0/12 PASS; 10/12 PARTIAL; 1/12 OPEN/PARTIAL; 1/12 OPEN.
+- ERD-OPEN-20 remains PARTIAL / OPEN; ERD-OPEN-22 remains UNRECOVERED. No dependency is closed by this review.
+
+### 26.5 A12.41 gate-count discrepancy — unresolved
+
+A source-level inconsistency remains and must not be silently reconciled:
+- `docs/IMPLEMENTATION-READINESS.md` §4 refers to GATE-01 through GATE-06.
+- `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §3C records A12.41 GATE-01 through GATE-07 as FAIL / NOT VERIFIED.
+- DOC-11 §4 describes six high-level project gates G1–G6; these are not automatically interchangeable with A12.41 gate IDs.
+- No primary A12.41 gate definition/acceptance source has been established in this review to decide whether A12.41 contains six or seven gates. Keep the discrepancy OPEN; do not infer a missing gate or delete a recorded gate.
+
+### 26.6 Readiness decision and next work
+
+- Readiness review: COMPLETE — WITH OPEN BLOCKERS.
+- Stage 4.7.8: NOT PASSED. Stage 4.9: ACCEPTANCE NOT MET.
+- A12.40: NOT ACCEPTED / NOT CLOSED. A12.41: NOT STARTED.
+- Implementation readiness: NOT READY.
+- Dependencies closed by this review: 0. FIX decisions changed: 0.
+- The next work is a bounded documentation-only correction package: resolve the A12.41 gate-definition discrepancy only if a controlling source already on `main` supports the answer; otherwise retain it as an explicit unresolved conflict. Then prioritize evidence-supported specification corrections without reopening unavailable source searches.
+- Do not repeat A12.38.3 or equivalent archive-source searches. Do not infer physical schema, approval, enforcement, test execution, remediation, retest or Production state.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no Supabase Preview/Staging; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
