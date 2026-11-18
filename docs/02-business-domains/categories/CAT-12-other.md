@@ -31,3 +31,14 @@ Erratum v1.1 pp.1–2 §§3–6; RMD-69 v1.1 filename/status in source map §4.4
 This page is a navigation summary, not a replacement for its primary RMD audit, FIX addendum or approval record. Where source-native workflow titles or exact page/section locators were not directly recovered, the gap is explicit. No workflow title, threshold, role grant, permission key or technical behavior is inferred.
 
 No SQL/DDL/DML, schema, RLS/Auth, API/backend, application code, deployment or Production change is authorized. Stage 6 remains NOT AUTHORIZED.
+
+
+## Append-only source-locator status clarification — 19 November 2026
+
+The earlier statements above that the direct RMD-69 v1.1 locator was not recovered are retained as historical audit context and are superseded for locator status only by this addendum and DOC-02 §12–§13.
+
+**Current locator disposition:** RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY.
+
+Controlling source: `/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx` (manifest M231-223; zero-based index 222; 16 November 2026 SHA-256 manifest v1.0). Verified locators: p.1 §§1–2; p.2 §§2–5; p.3 §§6–8.
+
+This clarification changes no CAT-12 decision or technical status. Safe-mode function list, lifecycle, SLA/expiry, reviewer authority and other residual details remain OPEN; no specialist role/module/capability is enabled by classification. Schema, RLS, API/backend enforcement and implementation remain NOT VERIFIED / NOT AUTHORIZED as applicable.

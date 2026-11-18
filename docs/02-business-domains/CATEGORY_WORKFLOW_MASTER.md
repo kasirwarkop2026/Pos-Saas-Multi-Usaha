@@ -150,3 +150,33 @@ Verified page/section locators:
 **Current DOC02-G03 status:** RECOVERED — direct source path and page/section locators. RMD-69 v1.0 remains the historical audit brief; v1.1 is the conceptual FIX addendum for R69-D01–D12.
 
 This locator recovery does not close the CAT-12 technical gaps. Safe-mode function list, lifecycle transitions, SLA/expiry, reviewer authority, confidence/review thresholds, evidence standards, appeal/restriction authority, permission keys, schema, RLS, API and implementation remain OPEN / NOT APPROVED as applicable. The category remains a temporary classification/exception path and fail-closed baseline, not a permissive operational category.
+
+
+## 13. Append-only DOC02-G03 locator consistency reconciliation — 19 November 2026
+
+### 13.1 Finding DOC02-F01
+
+A bounded current-`main` audit identified stale locator-status statements in this document: the RMD-69 v1.1 row in §9 still says the direct file locator was not recovered, and §10 DOC02-G03 still labels the locator UNRECOVERED. Those statements conflict with the later, controlling recovery already recorded in §12. The same stale statements also appear in the CAT-12 detail page's residual-details and source-locator sections.
+
+### 13.2 Current locator disposition
+
+For locator readiness only, the controlling disposition is **RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY**. The recovered source is:
+
+`/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx`
+
+Manifest identity: M231-223, zero-based index 222, 16 November 2026 SHA-256 manifest v1.0. Verified locators: p.1 §§1–2; p.2 §§2–5; p.3 §§6–8. See §12 for the original recovery record and locator scope.
+
+This §13 addendum supersedes only the stale current-status wording identified in DOC02-F01. The earlier wording in §9 and §10 is retained as historical audit context and must not be read as the current locator status.
+
+### 13.3 Preserved boundaries and audit disposition
+
+- DOC02-F01: **CORRECTED BY APPEND-ONLY LOCATOR-STATUS RECONCILIATION**.
+- DOC02-G03 locator criterion: **RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY**.
+- CAT-12 remains a temporary classification/exception path and fail-closed conceptual baseline, not a permanent permissive operating category.
+- Safe-mode function list, lifecycle transitions, SLA/expiry, reviewer authority, confidence/review thresholds, evidence standards, appeal/restriction authority, permission keys, schema, RLS, API/backend and implementation remain OPEN / NOT APPROVED / NOT VERIFIED as applicable.
+- DOC02-G01, G02 and G04–G10 remain at their existing statuses; no unrelated status is promoted.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+
+DOC-02 remains DRAFT — SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER; REVIEW REQUIRED; NOT CANONICAL / NOT FINAL. This correction does not establish technical authorization or implementation readiness.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
