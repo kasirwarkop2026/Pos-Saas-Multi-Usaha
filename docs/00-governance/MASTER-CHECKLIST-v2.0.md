@@ -1772,3 +1772,46 @@ Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIV
 - Next work package: **DOC-11 — Project Roadmap & Release Gates bounded read-only audit**, under §34.4 sequence item 7. Review the exact current-main DOC-11 path and necessary controlling gate sources. Do not repeat the DOC-08–DOC-10 crosswalk or A12.40 reassessment; preserve Stage 4.7.8 PARTIAL, Stage 4.9 PARTIAL, A12.40 PARTIAL/OPEN and A12.41 NOT STARTED unless new controlling evidence supports a change.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+
+## 51. DOC-11 bounded read-only roadmap/release-gate audit — 19 November 2026
+
+### 51.1 Audit identity and scope
+
+- Work package: **DOC-11 — Project Roadmap & Release Gates bounded read-only audit**, under §34.4 sequence item 7 (DOC-11–DOC-12 roadmap/archive audit).
+- Owning document: `docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md`, v0.3 revised working master, DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Current-main blob before correction: `b119041d773a9cb2efeeea4aa858ea19deb02fe0`; 319 lines before this audit addendum.
+- Reviewed DOC-11 §§1–14: document status/version lineage and authority hierarchy; stage map; G0–G6 release gates; package-specific publication controls and path topology; dependency/release blockers; control order; traceability/change protocol; readiness acceptance criteria; historical operational checkpoint; governance guardrails; source lineage; approval/status record; and append-only publication/current-status addenda.
+- Bounded current-main cross-checks: active Master Checklist v2.0 §§10, 21–24, 29–34 and §50; DOC-00 `docs/00-governance/MASTER-PROJECT-CONTROL.md` §§24–25 and §28; DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` for GOV/ERD/AUTH/REC/MIG/IMP source-native dependencies; DOC-10 `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md` §§10–11; DOC-12 `docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md` §§15 and current artifact navigation; `docs/IMPLEMENTATION-READINESS.md` §§1–7; and `docs/MASTER-PROJECT-INDEX.md` current/historical navigation entries.
+- Publication evidence checked: DOC-11 PR #29 / merge commit `61926b56dc4dde6939b61b5fe20a60dd2c9c21d4`; DOC-12 PR #30 / merge commit `38197d2e833be6007744218278f1b9cb44027af0`; Master Checklist PR #31 / merge commit `29847dcbbf06ac95a5acfe31058767cdcadc2236`; DOC-08 focused correction PR #20 / merge commit `5e7ed43691084c689afb835b66af5f805553886c`; DOC-09 PR #21 / merge commit `dbda10a28e8320785ff45eb4fe224ef0213fb8ef`; DOC-10 PR #22 / merge commit `90ee6d773474adc4e4368248f1c8b05fe142b4b0`; and DOC-10 clarification PR #73 / merge commit `148941c0262a49688ebbb77c9979185a3540e51c`.
+- Completed DOC-08–DOC-10 crosswalk audit §32, A12.40 reassessment §33, and DOC-10 audit §50 were not repeated. They were used only to verify the exact current publication and gate boundaries referenced by DOC-11.
+
+### 51.2 Findings and disposition
+
+- **DOC11-AUD-F01 — Grouped DOC-08–DOC-10 publication statement needs artifact-level scope.** DOC-11 §4 groups the three packages as “Published through their package-specific PR workflows.” This is too broad to identify what was actually published for DOC-08. Current verified evidence establishes the focused ST5-11.40 CVS correction only; the full reconstructed DOC-08 v1.5 Master FIX Register remains unpublished. DOC-09 v0.2 and DOC-10 v0.2 are separately published working masters. DOC-10 §11 now explicitly preserves this distinction. DOC-11 §15 adds an artifact-by-artifact publication record and clarifies that the §4 grouped row is a package-level summary, not evidence that the full DOC-08 master was migrated.
+- **DOC11-AUD-F02 — Stage and release-gate map.** DOC-11 §2 stages 1–6 and §3 G0–G6 were checked against the active Master Checklist, DOC-00 and Implementation Readiness. The reviewed high-level dispositions remain consistent: Stage 4.7.8 PARTIAL — GATE NOT PASSED; Stage 4.8 13/13 DRAFTED; Stage 4.9 PARTIAL — ACCEPTANCE NOT MET; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. G0 package-specific only; G1 PARTIAL; G2 PASS WITH OPEN DEPENDENCIES; G3/G4 PARTIAL; G5 Stage 4.9 PARTIAL; G6 NOT AUTHORIZED. No gate is promoted by this audit.
+- **DOC11-AUD-F03 — Historical snapshots are explicitly qualified.** DOC-11 §§4.1, 9, 11 and 12 retain pre-publication path/authorization, historical checkpoint and source-lineage wording. DOC-11 §14 expressly supersedes only the stale current-status statements for the verified PR #29/#30 publication packages and routes current navigation to the latest checklist and project control. These dated snapshots are not defects requiring deletion or rewrite; retain them.
+- **DOC11-AUD-F04 — A12.40/A12.41 and technical readiness boundaries.** DOC-11's roadmap does not override owning-source statuses. Current readiness remains NOT READY; A12.40 remains PARTIAL/OPEN; A12.41 remains NOT STARTED / NOT VERIFIED, including the unresolved six-versus-seven gate-definition discrepancy. Physical schema, authorization enforcement, executed tests, security remediation/retest and Production verification remain unestablished. No gate or dependency closure is supported.
+- **DOC11-AUD-F05 — DOC-12 and Master Project Index historical entries.** DOC-12 §15 and DOC-00 §24 verify DOC-11/DOC-12 package-specific publication and current paths. Older Master Project Index rows and DOC-12 version tables are dated snapshots and are explicitly subordinate to the current checklist/source-native addenda; no DOC-12 or Index correction is justified within this DOC-11 package.
+
+### 51.3 DOC-11 correction and first-commit CI
+
+- Evidence-supported correction: append DOC-11 §15 to specify the exact published artifact and scope for DOC-08 through DOC-12; preserve all prior sections and statuses.
+- PR #74: `docs(doc-11): clarify DOC-08 to DOC-10 publication scope`.
+- Branch: `docs/doc11-publication-scope-clarification-2026-11-19-v2`.
+- First audit/correction commit: `2ad70203379be8a662123a3ea87335d8edb44915`; DOC-11 §15 only.
+- First-commit diff: 1 file, 15 additions, 0 deletions.
+- Documentation CI run `44375884390`: Markdown lint SUCCESS; documentation structure SUCCESS; internal documentation links SUCCESS.
+- POS SaaS CI run `44375884636`: Detect application changes SUCCESS; ESLint, dependency security audit, TypeScript typecheck and Next.js production build SKIPPED by documentation-only guard. Skipped application jobs are not test passes.
+- First-commit branch read-back verified DOC-11 §15 at blob `bb22d876febfc5c72b8418ce7b69aa2bff49d37f`.
+- The separate Master Checklist checkpoint is the second commit in PR #74. Combined CI, full diff, review threads and mergeability must be rechecked after that commit. PR #74 remains subject to separate explicit user merge approval.
+
+### 51.4 Audit outcome and next controlled action
+
+- DOC-11 bounded read-only audit: **COMPLETE — ONE PUBLICATION-SCOPE CLARIFICATION JUSTIFIED; NO ROADMAP/GATE STATUS CORRECTION JUSTIFIED**.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**. Stage/gate promotions or demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
+- DOC-11 remains v0.3 DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Its package-specific Markdown publication does not satisfy Stage 4.9 or authorize implementation.
+- DOC-08 full v1.5 master remains unpublished; only its focused ST5-11.40 correction is published. DOC-09 and DOC-10 are separate v0.2 working-master publications. DOC-11 §15 records this artifact-level distinction.
+- Next work package: **DOC-12 — Master Archive & Document Index bounded read-only audit**, under §34.4 sequence item 7. Review current-main DOC-12, the current Master Project Index and only necessary controlling source/manifest evidence. Distinguish manifest transcription comparison from per-file content review; preserve historical snapshots and all unrecovered source/content gaps. Do not infer canonicality or claim 231-row content acceptance from index presence.
+- Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; A12.40 remains PARTIAL/OPEN; A12.41 remains NOT STARTED / NOT VERIFIED; Implementation Readiness remains NOT READY.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
