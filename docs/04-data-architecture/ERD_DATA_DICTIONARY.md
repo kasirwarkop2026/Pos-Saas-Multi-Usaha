@@ -457,3 +457,112 @@ The following remain explicitly **NOT ESTABLISHED** unless a controlling source 
 - `inventory_cost_layer_movements` remains candidate only; baseline remains 17 entities.
 - Source gaps and readiness statuses remain unchanged.
 
+
+
+## 18. Tenant-safe relationship and integrity matrix — inventory & costing (18 November 2026)
+
+### 18.1 Purpose, method and evidence boundary
+
+This addendum advances the next work item in §§16.5 and 17.5. It maps only relationships and cardinalities explicitly present in the DOC-04 §8 A12.39 conceptual relationship specification, cross-checked against:
+
+- `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§1–8, especially §§2–4 (A11 and 17-entity consistency; audit update, not implementation evidence).
+- `POS_SAAS_MIGRATION_MAPPING_BATCH_02_INVENTORY_COSTING_v0.1_2026-11-15.md`, §§3–5 and 7–8 (DRAFT mapping; supporting evidence only).
+- DOC-04 §8 and §10 (working-master consolidation of A12.39 conceptual relations and physical enforcement gaps).
+
+**This is a conceptual relationship and integrity matrix, not a physical FK specification.** No SQL identifiers, PK/FK column tuples, referenced unique keys, nullability, ON DELETE/UPDATE actions, indexes, deferrability, or enforcement mechanisms are approved here. The words “parent” and “child” below describe conceptual direction only. Tenant scope is required, but the exact composite-key tuple is not established by the reviewed sources.
+
+A12.39 closes only conceptual relationship/constraint specification. Physical FK/composite FK, UNIQUE/CHECK, delete/update behavior, indexes, RLS, locking, atomicity, idempotency enforcement and test evidence remain OPEN/UNVERIFIED.
+
+### 18.2 Explicit conceptual relationship matrix
+
+| ID | Conceptual parent / source | Conceptual child / target | Cardinality / invariant supported | Source locator | Key tuple / tenant FK status | Referential action |
+|---|---|---|---|---|---|---|
+| REL-01 | `inventory_adjustments` | `inventory_adjustment_items` | 1:N | DOC-04 §8; A12.39 | OPEN — no physical key tuple established; tenant consistency required | OPEN — not specified |
+| REL-02 | `stock_counts` | `stock_count_items` | 1:N | DOC-04 §8; A12.39 | OPEN — no physical key tuple established; tenant consistency required | OPEN — not specified |
+| REL-03 | `stock_transfers` | `stock_transfer_items` | 1:N | DOC-04 §8; A12.39; A11 F01–F02 | OPEN — no physical key tuple established; same-tenant transfer is a conceptual rule | OPEN — not specified |
+| REL-04 | `stock_transfers` | `stock_transfer_shipments` | 1:N | DOC-04 §8; A12.39; A11 F03–F06 | OPEN — no physical key tuple established; same-tenant scope required | OPEN — not specified |
+| REL-05 | `stock_transfer_items` | `stock_transfer_shipment_items` | One transfer item may be split across multiple shipment items | DOC-04 §8; A12.39; A11 F05–F07 | OPEN — no physical key tuple established; tenant consistency required | OPEN — not specified |
+| REL-06 | `stock_transfer_shipments` | `stock_transfer_shipment_items` | 1:N | DOC-04 §8; A12.39; A11 F06 | OPEN — no physical key tuple established; tenant consistency required | OPEN — not specified |
+| REL-07 | `stock_transfer_shipment_items` | Receipt events (event/detail structure not approved as one of the 17 entities) | 1:N; repeated/partial receipt allowed | DOC-04 §8; A12.39; A11 F04–F05 | OPEN — receipt-event entity/key model not established | OPEN — not specified |
+| REL-08 | Posted receipt detail (physical entity/record shape unresolved) | `inventory_movements` | Exactly one inventory movement per posted receipt detail | DOC-04 §8; A12.10 FIX conceptual; A12.39 | OPEN — exact receipt-detail locator and FK tuple not established here | OPEN — not specified |
+| REL-09 | Posted return detail (physical entity/record shape unresolved) | `inventory_movements` | Exactly one inventory movement per posted return detail | DOC-04 §8; A12.11 FIX conceptual; A12.39 | OPEN — exact return-detail locator and FK tuple not established here | OPEN — not specified |
+| REL-10 | `inventory_movements` | Cost-layer allocations (allocation structure not approved as an entity in the 17-entity baseline) | 1:N | DOC-04 §8; A12.39; A12.17 context | OPEN — allocation structure/key tuple unresolved; do not create an 18th table by inference | OPEN — not specified |
+| REL-11 | `inventory_cost_layers` | Cost-layer allocations (allocation structure not approved as an entity in the 17-entity baseline) | 1:N | DOC-04 §8; A12.39; A12.17 context | OPEN — allocation structure/key tuple unresolved | OPEN — not specified |
+| REL-12 | Eligible negative allocation | `inventory_cost_layer_consumptions` (original consumption) | Exactly 1:1 | DOC-04 §8; A12.17 Alternative 1 FIX; Update Audit v0.2 §§3–4 | Conceptual cardinality FIX; physical FK/unique tuple OPEN | OPEN — not specified |
+| REL-13 | Non-consumption allocation | `inventory_cost_layer_consumptions` | Exactly 1:0 — zero consumption | DOC-04 §8; A12.17 Alternative 1 FIX; Update Audit v0.2 §§3–4 | Conceptual zero-consumption invariant FIX; physical enforcement OPEN | OPEN — not specified |
+| REL-14 | Original `inventory_cost_layer_consumptions` | Compensation records (physical compensation representation unresolved) | 1:N partial compensations; aggregate compensation cannot exceed eligible original quantity | DOC-04 §8; A12.17 Alternative 1 FIX; Update Audit v0.2 §§3–4 | Conceptual cardinality/cap FIX; physical FK and cap enforcement OPEN | OPEN — not specified |
+| REL-15 | `inventory_reservations` | `inventory_reservation_items` | 1:N | DOC-04 §8; A12.39; A02 Alternative A | OPEN — no physical key tuple established; tenant consistency required | OPEN — not specified |
+| REL-16 | `inventory_reservation_items` | Physical batch allocations / `inventory_batches` | Multiple physical-batch allocations may exist for one reservation item | DOC-04 §8; A12.39; Batch 02 §§3–5 | OPEN — allocation structure, batch FK tuple and tenant scope tuple unresolved | OPEN — not specified |
+
+**Interpretation guardrails:**
+- REL-07, REL-08, REL-09, REL-10, REL-11, REL-13 and REL-14 refer to event/allocation/compensation concepts whose physical record structures are not fully established by this matrix. They must not be silently converted into new approved entities or columns.
+- The “exactly 1:1”, “exactly 1:0” and “1:N” values are conceptual cardinalities, not proof of UNIQUE/FK enforcement.
+- No deletion or update policy can be inferred from immutability or auditability principles alone.
+
+### 18.3 Tenant-scope and composite-FK integrity rules
+
+| Rule ID | Required conceptual integrity | Evidence | Physical specification status |
+|---|---|---|---|
+| TEN-01 | All tenant-owned inventory/costing records retain Business ownership context | DOC-04 §§9–10; Batch 02 §3 item 12; Master Checklist v2.0 §4 | Requirement established; exact tenant column on each entity and PK tuple OPEN |
+| TEN-02 | Parent/child references must not cross Business boundaries | Batch 02 §3 item 12; DOC-04 §10 | Conceptual requirement established; exact composite FK tuples OPEN |
+| TEN-03 | Stock transfer source and destination belong to the same tenant; source differs from destination | DOC-04 §3 entity 9; Batch 02 §4 entity 9; A11 baseline | Conceptual rule established; location key tuple and enforcement OPEN |
+| TEN-04 | MWA costing pool is scoped by Business + Product/Variant + Inventory Location; no cross-location pooling | DOC-04 §6; A12.37.10.1; Update Audit v0.2 §3 | Conceptual scope FIX; physical key/unique tuple OPEN |
+| TEN-05 | Physical batch identity and cost-layer identity remain distinct | DOC-04 §§3, 6; Batch 02 §§3–4 | Conceptual distinction FIX; exact independent key structures OPEN |
+| TEN-06 | Reservation source uses A02 Alternative A (`source_type/source_id` on reservation header) with strict server validation; do not conflate with A01 movement source registry | DOC-04 §5; Batch 02 §§5.3–5.4; Update Audit v0.2 §§3–6 | Conceptual placement FIX; polymorphic validation and physical FK strategy OPEN |
+| TEN-07 | Shipment, receipt, return and loss records must retain tenant-consistent lineage and reconcile to transfer/ledger events | DOC-04 §§7–8; A11 F04–F09 | Conceptual lifecycle FIX; physical tenant and event-link enforcement OPEN |
+
+The project-level design calls for composite foreign keys and server validation to preserve `business_id` consistency. However, the reviewed evidence does **not** establish whether every table uses a simple key, composite primary key, alternate unique key, or a particular ordered FK tuple. Do not invent a tuple such as (`business_id`, `id`) or promote generic `id`/`business_id` columns to approved physical definitions.
+
+### 18.4 Entity coverage and relationship gaps
+
+| Entity | Explicit relationship coverage in A12.39 matrix | Status / missing relationship evidence |
+|---|---|---|
+| `inventory_batches` | Referenced as physical batch allocation target | Allocation entity/key/FK unresolved |
+| `inventory_movements` | Receipt/return target; parent of cost-layer allocations | Source registry and allocation structure/key unresolved |
+| `inventory_balances` | No explicit parent/child relation in A12.39 list | Projection grain and link to ledger/batch projection require separate source-backed specification |
+| `inventory_batch_balances` | No explicit parent/child relation in A12.39 list | Parent-balance and batch relationship is described as reconciliation; physical FK not established |
+| `inventory_adjustments` | Parent of adjustment items | Conceptual 1:N; physical keys/actions OPEN |
+| `inventory_adjustment_items` | Child of adjustment header; movement generation rule | Movement-link cardinality/physical relation not established in A12.39 list |
+| `stock_counts` | Parent of stock-count items | Conceptual 1:N; physical keys/actions OPEN |
+| `stock_count_items` | Child of stock-count header | Movement/adjustment correction linkage requires source locator |
+| `stock_transfers` | Parent of transfer items and shipments | Conceptual 1:N; physical keys/actions OPEN |
+| `stock_transfer_items` | Parent of shipment items | Split 1:N conceptual; physical keys/actions OPEN |
+| `inventory_cost_exceptions` | No explicit parent/child relation in A12.39 list | Source movement/layer linkage remains REVIEW/OPEN |
+| `inventory_reservations` | Parent of reservation items | Conceptual 1:N; physical keys/actions OPEN |
+| `inventory_reservation_items` | Child of reservation; may allocate across physical batches | Allocation structure/key/FK unresolved |
+| `inventory_cost_layers` | Parent of cost-layer allocations | Allocation structure/key/FK unresolved |
+| `inventory_cost_layer_consumptions` | Original consumption and compensation cardinalities | Compensation physical representation and key/action unresolved |
+| `stock_transfer_shipments` | Parent of shipment items | Conceptual 1:N; physical keys/actions OPEN |
+| `stock_transfer_shipment_items` | Child of shipment; parent concept for receipt events | Receipt event record shape and movement relation unresolved |
+
+Absence from the A12.39 relationship list is not evidence that no relationship exists. It means this pass did not establish a source-backed relationship locator for that edge. Keep it OPEN rather than infer it.
+
+### 18.5 Physical key and referential-action disposition
+
+The following are deliberately **NOT ESTABLISHED** by the reviewed evidence and remain OPEN/TODO:
+
+- Exact primary-key columns and whether any entity uses composite PK.
+- Exact FK and composite-FK column tuples, referenced candidate keys and ordering.
+- Whether tenant key is physically repeated in every child record.
+- Exact nullable/optional FK behavior, including optional supplier and batch references.
+- ON DELETE / ON UPDATE actions (RESTRICT, CASCADE, SET NULL or other).
+- Deferrability, validation timing and handling of historical rows.
+- UNIQUE constraints needed to enforce 1:1 cardinality and prevent duplicate event links.
+- Physical allocation/receipt/compensation entity structures and their keys.
+- RLS policy, server-side validation, authorization and enforcement evidence.
+- Executed constraint, concurrency, idempotency and tenant-isolation tests.
+
+No dependency is closed by this matrix. No FIX decision is changed. No physical schema or implementation is approved. `inventory_cost_layer_movements` remains a candidate only; baseline remains 17 conceptual entities.
+
+### 18.6 Result and next sequence
+
+- Conceptual relationship inventory: **COMPLETE — PARTIAL**, limited to the explicit A12.39 relationship list.
+- Tenant-integrity requirements: **DOCUMENTED — CONCEPTUAL**; physical tenant key/FK enforcement OPEN.
+- Physical PK/FK/composite-FK tuples: **OPEN / NOT ESTABLISHED**.
+- Delete/update behavior: **OPEN / NOT ESTABLISHED**.
+- Unmapped entity relationships and event/allocation structures: **OPEN / REVIEW**.
+- Dependencies closed: **none**.
+- FIX decisions changed: **none**.
+- Next DOC-04 task: UNIQUE/CHECK/index matrix, retaining all unresolved key tuples and tenant enforcement gaps as explicit dependencies.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
