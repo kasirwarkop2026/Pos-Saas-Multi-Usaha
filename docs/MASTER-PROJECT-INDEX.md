@@ -370,3 +370,19 @@ Use the following locations for the current project checkpoint; earlier index se
 The current work order is: (1) control-plane reconciliation; (2) DOC-08/DOC-09/DOC-10 consistency; (3) A12.40 reassessment using only published `main` evidence; (4) authorization consistency; (5) security/traceability consistency; and (6) readiness/acceptance review. Do not repeat A12.38.3 source searches absent new evidence or a new explicit instruction.
 
 The DOC-08 and DOC-09 references above are commit records; no PR numbers are asserted. Their publication does not close unrelated dependencies, make either document canonical/final, or authorize Stage 6. Stage 5 blanket archive migration remains NOT AUTHORIZED; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
+
+
+## 16. Append-only DOC02-G03 locator navigation reconciliation — 19 November 2026
+
+This addendum clarifies the time-specific locator limitation retained in §12 against the later per-file recovery evidence recorded in §14 and the current source/control records.
+
+- The §12 statement that the direct RMD-69 v1.1 path remained OPEN is a historical Stage 2/3 source-index snapshot; it is superseded for the DOC02-G03 direct path and page/section locator criterion only.
+- **Current locator status: RECOVERED.** The exact Library path and M231-223 manifest identity, with verified pp. 1–3, §§1–8, are recorded in §14 and DOC-02 §12.
+- DOC-09 §§3E–3F preserve the current recovered status and its narrow scope. DOC-00 §§25.3 and 26 provide the current project-control reconciliation.
+- The recovery does not establish complete individual RMD-57–RMD-65 or RMD-67 claim locators, complete Stage 4.7.8 two-way backlinks, or GOV-OPEN-02 closure. The 231-row per-file content review remains incomplete; only the identified M231-223 item is recorded as content reviewed in this index.
+- **Reading rule:** retain §12 as the historical source-index snapshot; use §§14 and 16 together with DOC-02 §12, DOC-09 §3E–§3F and DOC-00 §25.3–§26 for the current DOC02-G03 locator status.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+
+This is a navigation clarification only. It does not create new source recovery, canonicality, approval, technical acceptance or implementation evidence. Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET.
+
+Controls remain: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.

@@ -636,3 +636,18 @@ DOC-09 §3F now records the temporal relationship explicitly: §3D remains histo
 This is a narrow status-navigation correction based on evidence already on `main`; it is not new primary-source recovery, approval, canonicalization, technical acceptance or implementation evidence. DOC-09 remains DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No database, application, backend, CI workflow, deployment or Production change is included.
+
+
+## 27. Append-only Master Project Index locator reconciliation — 19 November 2026
+
+A bounded read-only comparison of the current Master Project Index found that §12 retained a historical statement that the direct RMD-69 v1.1 locator was OPEN, while the later per-file review addendum in §14 records M231-223, the exact Library source path and verified pp. 1–3, §§1–8. DOC-02 §12, DOC-09 §§3E–3F and this control document's §§25.3/26 independently record the recovered locator and its scope.
+
+The new Master Project Index §16 explicitly identifies §12 as a historical snapshot and routes readers to the later recovered locator evidence. This correction applies only to DOC02-G03's direct source-path/page-section locator criterion. It does not close GOV-OPEN-02, complete the 231-row per-file review, recover other category claim locators, or establish complete Stage 4.7.8 backlinks.
+
+- DOC02-G03 direct locator: RECOVERED.
+- Dependencies newly closed: 0.
+- FIX decisions changed: 0.
+- Stage 4.7.8: PARTIAL — GATE NOT PASSED.
+- Stage 4.9: PARTIAL — ACCEPTANCE NOT MET.
+
+Controls remain: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No database, application, CI workflow, deployment or Production change is included.
