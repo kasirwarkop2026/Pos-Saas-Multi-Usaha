@@ -405,10 +405,10 @@ Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 
 
 ### 20.1 Review basis and relationship labels
 
-Reviewed current \`main\`:
-- DOC-05 \`docs/05-authorization/AUTHORIZATION_MASTER.md\` §14 (G01–G10 and residual authorization gaps).
-- DOC-06 \`docs/05-requirements-traceability/MASTER_TRACEABILITY.md\` §12 (TRC-OPEN-01–15) and §13.1 (REC-06 AC-06-01–12).
-- DOC-09 \`docs/07-decision-registers/MASTER_OPEN_REGISTER.md\` §3D (AUTH-OPEN-01–27).
+Reviewed current `main`:
+- DOC-05 `docs/05-authorization/AUTHORIZATION_MASTER.md` §14 (G01–G10 and residual authorization gaps).
+- DOC-06 `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` §12 (TRC-OPEN-01–15) and §13.1 (REC-06 AC-06-01–12).
+- DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §3D (AUTH-OPEN-01–27).
 
 Relationship labels:
 - **DIRECT SUBJECT OVERLAP** means the two entries address substantially the same subject; it does not make their IDs, closure criteria, owners, or evidence interchangeable.
@@ -446,4 +446,4 @@ Relationship labels:
 
 **Result:** traceability navigation improved for the explicitly compared DOC-05 and REC-06 subjects; overall authorization/traceability acceptance remains OPEN / PARTIAL. DOC-05 remains DRAFT / RECONSTRUCTED WORKING MASTER / NOT CANONICAL / NOT FINAL.
 
-Controls remain: READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; no SQL/DDL/DML, schema/migration, RLS/Auth, backend/API, source-code, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no SQL/DDL/DML, schema/migration, RLS/Auth, backend/API, source-code, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
