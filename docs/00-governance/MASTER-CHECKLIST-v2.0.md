@@ -1449,3 +1449,42 @@ This entry supersedes the interim PR-open statements in §40 that were accurate 
 - Next work package: **DOC-05 — Authorization Architecture Master bounded read-only audit**, following §34.4. Read current DOC-05 and only necessary controlling cross-references from `main`; do not repeat completed work.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this checkpoint.
+
+
+## 42. Append-only DOC-05 bounded audit and first-commit CI checkpoint — 19 November 2026
+
+### 42.1 Audit outcome and evidence
+
+The DOC-05 bounded read-only audit reviewed current-main DOC-05 §§1–20 and the controlling/necessary cross-references: Master Checklist v2.0 §§34.4–34.7 and §41; DOC-01 Product Blueprint; DOC-02 Category & Workflow Master; DOC-03 System Architecture; DOC-06 §§12–13.1; DOC-09 §3D AUTH-OPEN-01–27; DOC-10 CVS locator boundaries; and the authorization CVS crosswalk correction.
+
+Four metadata/publication-locator clarifications were identified and appended to DOC-05 §21:
+
+- **DOC05-AUD-F01:** Header Version 0.1.0 is historical initial-publication metadata; §18 records current working revision 0.1.1.
+- **DOC05-AUD-F02:** Header “Proposed GitHub path” is historical drafting metadata; the path is the active DOC-05 working reference on main.
+- **DOC05-AUD-F03:** The §18 “Current main blob SHA” is the PR #14 publication-checkpoint blob, not the current blob after later append-only sections. The pre-addendum audit-time main blob was 391d873c1b82ff717e7b2cde5237d87377ebe927.
+- **DOC05-AUD-F04:** Header checkpoint date 17 November 2026 is the original working-master checkpoint; later append-only updates are dated in §§18–20 and this audit in §21.
+
+No substantive authorization-design correction was identified. O-01–O-12, CR-01–CR-10 and Q-01–Q-06 remain conceptual FIX only. DOC-05 G01–G10, Scope O01–O10, SoD A01–A12, REC-06, DOC-09 AUTH-OPEN-01–27 and DOC-06 TRC-OPEN-01–15 / AC-06-01–12 retain their source-native statuses.
+
+### 42.2 First audit/correction commit and CI
+
+- PR: [#65 — docs(doc05): append bounded audit metadata clarifications](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/65).
+- Branch: docs/doc05-bounded-audit-metadata-reconciliation-2026-11-19.
+- First audit/correction commit: 7c5f8b61557c84d61b4c16813369c09cef361741.
+- Changed file: docs/05-authorization/AUTHORIZATION_MASTER.md.
+- Diff: 58 additions, 0 deletions; append-only.
+- Documentation CI #140: **SUCCESS** — Markdown lint, internal documentation links and documentation structure all passed.
+- POS SaaS CI #203: **SUCCESS** — application-change detection passed; ESLint, dependency security audit, TypeScript and Next.js build were skipped by the documentation-only guard. This is not application verification.
+- The separate Master Checklist update is this second commit, created only after the first audit/correction commit's applicable CI passed.
+
+### 42.3 Status impact and next controlled action
+
+- DOC-05 bounded audit: **COMPLETE — METADATA/PUBLICATION-LOCATOR CLARIFICATIONS RECORDED**.
+- Dependencies newly closed: **0**.
+- FIX decisions changed: **0**.
+- DOC-05 remains DRAFT / RECONSTRUCTED AUTHORIZATION WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- PR #65 remains **OPEN / NOT MERGED** at this checkpoint.
+- Re-run applicable CI on the combined two-commit PR, inspect the complete append-only diff, reviews and mergeability. Merge only after separate explicit user approval.
+- After merge and post-merge read-back, continue the DOC-05–DOC-06 authorization/requirements audit sequence under §34.4. Do not repeat the DOC-05 §20 REC-06 crosswalk.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this checkpoint.
