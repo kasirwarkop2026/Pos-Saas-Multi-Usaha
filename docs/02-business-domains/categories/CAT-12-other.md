@@ -39,6 +39,6 @@ The earlier statements above that the direct RMD-69 v1.1 locator was not recover
 
 **Current locator disposition:** RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY.
 
-Controlling source: \`/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx\` (manifest M231-223; zero-based index 222; 16 November 2026 SHA-256 manifest v1.0). Verified locators: p.1 §§1–2; p.2 §§2–5; p.3 §§6–8.
+Controlling source: `/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx` (manifest M231-223; zero-based index 222; 16 November 2026 SHA-256 manifest v1.0). Verified locators: p.1 §§1–2; p.2 §§2–5; p.3 §§6–8.
 
 This clarification changes no CAT-12 decision or technical status. Safe-mode function list, lifecycle, SLA/expiry, reviewer authority and other residual details remain OPEN; no specialist role/module/capability is enabled by classification. Schema, RLS, API/backend enforcement and implementation remain NOT VERIFIED / NOT AUTHORIZED as applicable.
