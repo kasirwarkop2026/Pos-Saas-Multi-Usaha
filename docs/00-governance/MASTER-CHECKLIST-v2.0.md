@@ -330,3 +330,40 @@ Outcome:
 | 5 | Physical dictionary acceptance review | NOT STARTED |
 
 Next action: derive the quantity/cost precision and conversion matrix from A12.37 decision sources and verified numeric-policy locators. Do not invent precision/scale, rounding mode, conversion defaults or tolerances. Keep `DB_PUSH_BLOCKED: ACTIVE`, Stage 5 blanket migration NOT AUTHORIZED and Stage 6 NOT AUTHORIZED.
+
+
+## 16. DOC-04 quantity / cost precision and conversion checkpoint — 18 November 2026
+
+### 16.1 Work result
+
+DOC-04 §20 adds a source-bounded quantity/cost precision and conversion matrix. It distinguishes conceptual numeric rules already FIX under A12.37 from physical and operational parameters that remain REVIEW/TODO/OPEN.
+
+Sources reviewed:
+- `Konsolidasi_ERD_POS_SaaS_Multi_Usaha_v3.0_Tahap_5.9.3_DRAFT_Audit_Integrasi_v4_A12.37_Numeric_Policy.docx`, Addendum C §§C.1–C.10, especially C.3–C.9.
+- `POS_SAAS_MIGRATION_MAPPING_BATCH_02_INVENTORY_COSTING_v0.1_2026-11-15.md`, §§3–5 and 7–8.
+- `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§1–4.
+- A12.38 v5 Physical Entity & Data Dictionary Audit, Appendix D.
+- DOC-04 §§3 and 16–19.
+
+Outcome:
+- Source-backed conceptual quantity/cost/FX/rounding rules: **DOCUMENTED — COMPLETE — PARTIAL**.
+- Per-entity numeric relevance: **17/17 reviewed conceptually**; no physical field/type approval implied.
+- Quantity base-unit canonicalization, high-internal-precision conversion, invalid-quantity rejection without silent rounding, total-cost authority, MWA/FIFO distinction, scoped LRM, FX snapshot and posted-history immutability: **DOCUMENTED from A12.37**.
+- Exact numeric type, precision/scale, maximum capacity, conversion factors/paths, rounding mode/boundaries and tolerances: **OPEN / NOT ESTABLISHED / REVIEW-TODO**.
+- N37-01–06, N37-09, N37-11, N37-13–15 carried forward with source-native status; cross-domain N37-07/08/10/12 not reclassified.
+- Dependencies closed: **none**. FIX decisions changed: **none**.
+- No schema, SQL, DDL, DML, migration, database, application code, CI workflow, Vercel, deployment or Production changes.
+
+### 16.2 Priority update
+
+| Priority | Work package | Status |
+|---:|---|---|
+| 1 | DOC-04 §18 relationship/tenant-integrity matrix | COMPLETE — PARTIAL |
+| 2 | DOC-04 §19 UNIQUE/CHECK/index candidate matrix | COMPLETE — PARTIAL |
+| 3 | DOC-04 §20 quantity/cost precision and conversion matrix | COMPLETE — PARTIAL |
+| 4 | Event/idempotency/atomicity/concurrency specification | NEXT |
+| 5 | Physical dictionary acceptance review | NOT STARTED |
+
+Next action: prepare the event/idempotency/atomicity/concurrency specification from controlling A04/A06/A09/A11/A12.17 and related primary sources. Preserve exact operation-key, lock order, retry, transaction boundary, compensation and failure semantics as OPEN where source evidence is incomplete. Do not infer implementation behavior or claim tests passed.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
