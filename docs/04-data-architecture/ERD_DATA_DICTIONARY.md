@@ -913,3 +913,84 @@ The reviewed sources do **not** establish:
 - No schema, SQL, DDL, DML, migration, database, application code, CI workflow, Vercel, deployment or Production changes.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 22. Physical Data Dictionary acceptance review — inventory & costing (18 November 2026)
+
+### 22.1 Review scope and acceptance standard
+
+This review assesses whether the current source package is sufficient to accept the physical data dictionary for the 17 historical Inventory & Costing entities. It does not create missing physical definitions and does not inspect or modify a live database.
+
+Controlling acceptance criteria:
+- Each final physical table must be listed exactly once and have a complete field inventory, PK/FK, unique/index/constraint evidence, tenant scope, lifecycle, delete behavior and source locator.
+- Relationships must state cardinality and optionality; M:N relationships require an evidenced bridge/join entity.
+- Cross-tenant relationships require evidenced tenant-safe composite FK or equivalent enforcement, plus RLS/server authorization evidence.
+- Ledger, snapshot and projection roles must be distinct and must not create double counting.
+- Conceptual scenarios are not executed-test evidence.
+
+Source locators reviewed:
+- A12.38 v5 Physical Entity & Data Dictionary Audit, Appendix D §§D.1–D.4 and D.11–D.14 (especially D.4, D.11, D.12 and D.13).
+- DOC-04 reconstructed working master v0.1, §§9–12, as carried into current DOC-04 §§3 and 16–21.
+- Batch 02 Inventory Costing Migration Mapping v0.1, §§3–5 and 7–8.
+- Update Audit A11–A12 and 17-table matrix v0.2, §§1–4.
+- DOC-04 §18 relationship/tenant-integrity matrix, §19 UNIQUE/CHECK/index candidate matrix, §20 numeric/conversion matrix and §21 event/idempotency/atomicity/concurrency matrix.
+
+A12.38 v5 Appendix D explicitly records A12.38.3 as 17 historical entities with conceptual relationships audited but physical field dictionary OPEN. Its D.11 register keeps A38-G01 (physical entity inventory), A38-G02 (fields/types/precision/nullability/default/PK/FK/composite FK), A38-G03 (unique/CHECK/index/delete-update) and A38-G04 (physical cost allocation bridge/FK/concurrency) as TODO. D.12–D.13 state the physical dictionary is NOT CLOSED.
+
+### 22.2 Acceptance result
+
+<badge color="warning">NOT ACCEPTED — PHYSICAL EVIDENCE INCOMPLETE</badge>
+
+- Conceptual entity inventory coverage: **17/17 reviewed** against the historical baseline.
+- Physical dictionary acceptance: **0/17 accepted** on the evidence reviewed in this package.
+- This 0/17 is an acceptance result, not a claim that no physical schema exists anywhere; no authoritative physical schema/specification was found in the reviewed sources that satisfies the acceptance criteria for these entities.
+- DOC-04 §9 is an evidence-bounded register of information to represent, not a final SQL column dictionary. It expressly warns not to infer generic `id`, `created_at`, `updated_at`, `deleted_at` or `status` fields for every entity.
+- Conceptual names in the 17-entity baseline are not by themselves proof of final physical table names.
+- No database introspection, SQL, migration, DDL/DML, RLS test, application test or Production verification was performed.
+
+### 22.3 Per-entity acceptance matrix
+
+| # | Historical conceptual entity | Source-supported information / invariants | Acceptance finding and required evidence |
+|---:|---|---|---|
+| 1 | `inventory_batches` | Physical batch/lot identity, production/expiry, status and optional supplier; FEFO selects physical batch. | **NOT ACCEPTED** — final fields, PK/FK, batch uniqueness, status domain, nullable behavior and delete/update rules not evidenced. |
+| 2 | `inventory_movements` | Immutable posted physical ledger; signed base-quantity delta; movement is quantity source of truth; source identity is conceptually registry-based (A01 Alternative B). | **NOT ACCEPTED** — complete fields, source registry physical structure/FK, tenant composite keys, reversal linkage, numeric definitions and indexes not evidenced. |
+| 3 | `inventory_balances` | Rebuildable projection; available = on-hand − reserved. | **NOT ACCEPTED** — exact grain/key including nullable variant semantics, fields, types, uniqueness and concurrency-safe projection implementation not evidenced. |
+| 4 | `inventory_batch_balances` | Batch-level projection must reconcile to parent product/variant/location balance. | **NOT ACCEPTED** — exact parent relation/key, nullable uniqueness, fields, reconciliation and repair evidence not established. |
+| 5 | `inventory_adjustments` | Header workflow; no stock effect before posting; posted history immutable and corrected through reversal. | **NOT ACCEPTED** — physical fields, state/approval representation, actor/source, FK and lifecycle/delete behavior not evidenced. |
+| 6 | `inventory_adjustment_items` | Input quantity, conversion snapshot and signed base delta; posted item produces movement. | **NOT ACCEPTED** — physical conversion snapshot shape/version, field/type/nullability, movement linkage and row constraints not established. |
+| 7 | `stock_counts` | Count scope, location, snapshot and cutoff context; post-snapshot movements must be considered. | **NOT ACCEPTED** — exact snapshot/watermark fields, lifecycle, partial posting and recount history not evidenced. |
+| 8 | `stock_count_items` | System snapshot, counted quantity and variance; NULL means not counted while zero is a valid count. | **NOT ACCEPTED** — exact fields, quantity precision/capacity, cutoff linkage, recount history and FK/constraints not established. |
+| 9 | `stock_transfers` | Transfer lifecycle and closure outcome are distinct; transit is virtual; closure requires valid dispositions and reconciliation. | **NOT ACCEPTED** — physical state/outcome fields, transition rules, authorization, tenant-safe origin/destination keys and delete behavior not evidenced. |
+| 10 | `stock_transfer_items` | Transfer quantity can split across shipments; dispatched/received totals are derived and must reconcile. | **NOT ACCEPTED** — exact fields, item identity, FK, quantity caps, nullable uniqueness and aggregate enforcement not established. |
+| 11 | `inventory_cost_exceptions` | Unknown HPP/cost remains NULL; exception does not directly mutate posted movement. | **NOT ACCEPTED** — exception code/status, source/layer references, resolved-cost representation and lifecycle fields not evidenced. |
+| 12 | `inventory_reservations` | Reservation does not reduce physical on-hand; release creates no movement; A02 Alternative A uses `source_type/source_id` on reservation header with strict server validation. | **NOT ACCEPTED** — physical source fields/validation, tenant scope, expiry/TTL, status lifecycle, PK/FK and indexes not evidenced. |
+| 13 | `inventory_reservation_items` | Active reserved = reserved − fulfilled − released; one product may allocate across multiple batches; fulfillment is atomic with physical stock. | **NOT ACCEPTED** — exact event/allocation structure, batch FK, field/type/caps, fulfillment history and concurrency enforcement not established. |
+| 14 | `inventory_cost_layers` | Cost-layer identity differs from physical batch and is preserved through transfer; total cost is authoritative; MWA pool is location-specific. | **NOT ACCEPTED** — layer source identity, transfer mapping, landed-cost correction fields, numeric capacity, FK/unique and lifecycle not evidenced. |
+| 15 | `inventory_cost_layer_consumptions` | One movement may consume multiple layers; A12.17 eligible allocation→original consumption is 1:1; original consumption may have partial compensations 1:N; aggregate compensation cannot exceed eligible quantity. | **NOT ACCEPTED** — exact allocation/consumption/compensation physical keys, FK, cap enforcement, idempotency, locking and field definitions not evidenced. |
+| 16 | `stock_transfer_shipments` | One shipment represents one physical dispatch; multiple shipments may belong to one transfer; dispatch/receipt/return/loss are distinct events. | **NOT ACCEPTED** — shipment sequence/identity, status/outcome fields, dispatch evidence, lifecycle and uniqueness not established. |
+| 17 | `stock_transfer_shipment_items` | Shipment item may have repeated/partial receipt events; cumulative receipt/return/loss must reconcile to dispatched quantity. | **NOT ACCEPTED** — A03 receipt-event/detail structure, event-to-movement FK, caps, idempotency and physical field inventory not evidenced. |
+
+### 22.4 Cross-entity acceptance gaps
+
+| Gap family | Current result | Required evidence before acceptance |
+|---|---|---|
+| Physical entity and field inventory | OPEN — A38-G01/G02 TODO | Authoritative schema/specification with each physical table and every field, type, precision/scale, nullability and default; provenance per field. |
+| PK/FK/composite FK and tenant scope | OPEN — DOC-04 §§18 and A12.38 D.11 | Exact key tuples, referenced keys, cardinality/optionality, tenant scope and verified enforcement evidence. |
+| UNIQUE/CHECK/index | OPEN — DOC-04 §19 | Exact physical keys/expressions/index definitions, nullable-variant semantics, delete/update actions and source approval. |
+| Inventory cost allocation bridge | OPEN — A38-G04 TODO | Approved physical representation and lifecycle for movement-to-layer allocation; do not count `inventory_cost_layer_movements` as an approved 18th historical entity. |
+| Numeric fields | OPEN — DOC-04 §20 | Exact physical numeric types, precision/scale, capacities and approved per-domain rounding/conversion boundaries. |
+| Events and lifecycle | OPEN — DOC-04 §21 | Approved receipt/return/investigation/resolution/compensation event structures and transition/closure enforcement. |
+| Idempotency/concurrency/atomicity | OPEN — DOC-04 §21 | Exact key/canonical payload, lock scope/order, transaction boundary, retry/failure recovery and evidence of executed tests. |
+| Delete/update and retention | OPEN | Per-entity delete/update behavior, immutability, retention and audit evidence. |
+| RLS/server authorization | NOT VERIFIED | Physical policies and server-side enforcement evidence plus executed negative/tenant-isolation tests. |
+
+### 22.5 Acceptance disposition and next action
+
+- Physical Data Dictionary for Inventory & Costing: **NOT ACCEPTED — OPEN**.
+- Conceptual 17-entity inventory and architecture matrices: **reviewed; not promoted to physical acceptance**.
+- Dependencies closed: **none**. FIX decisions changed: **none**.
+- The current sources are sufficient to identify the acceptance gaps but insufficient to fill the physical dictionary without inventing details.
+- Continue source recovery and locator reconciliation for authoritative physical schema/specification evidence. If the source is unavailable, keep the corresponding field/key/constraint OPEN/UNVERIFIED; do not stop unrelated documentation work.
+- No database/schema inspection or changes are authorized by this review. No SQL, DDL, DML, migration, RLS/Auth, backend, application code, CI workflow, deployment or Production changes.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
