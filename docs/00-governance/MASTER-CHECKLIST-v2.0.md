@@ -1186,3 +1186,40 @@ The next action is to perform the bounded DOC-00 audit against current `main`. D
 
 This program addendum is a navigation/work-order definition only. It does not amend source-native document status or acceptance authority. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. All prior PR, CI, explicit merge approval and post-merge read-back controls remain in force.
 
+
+
+## 35. Append-only DOC-01 Product Blueprint audit and locator correction — 19 November 2026
+
+### 35.1 Audit identity and scope
+
+- Work package: **DOC-01 — Product Blueprint Master read-only audit** under §34.4 sequence item 2, following the completed DOC-00 audit.
+- Owning file: `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md` (v0.1.0, DRAFT — SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER).
+- Bounded cross-checks: active Master Project Index, DOC-02 Category & Workflow Master, DOC-03 System Architecture Master, DOC-05 Authorization Master, DOC-06 Requirements & Traceability Master, DOC-09 Master Open Register, DOC-00 project control and relevant Library approval/erratum evidence.
+- Method: current-`main` read-only inspection; source authority, claim scope and status layers kept distinct. No historical source or archive DOCX was modified or uploaded.
+
+### 35.2 Finding and correction
+
+**DOC01-F01 — stale RMD-69 v1.1 direct-locator status.** DOC-01 §9 and DOC01-G03 in §10 stated that the direct source path/page locators remained unrecovered. Later controlling evidence had already recovered the exact Library path, manifest identity M231-223, and pp. 1–3, §§1–8, recorded in DOC-02 §12, DOC-09 §§3E–3F, Master Project Index §§14/16 and DOC-00 §§25.3–26/§27.
+
+DOC-01 §13 now records the append-only locator reconciliation. The earlier §9/§10 text remains as historical audit context; current DOC01-G03 disposition is **RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY**.
+
+This correction does not close CAT-12 safe-mode functions, lifecycle, SLA/expiry, reviewer authority, confidence/review thresholds, evidence standards, appeal/restriction authority, permission keys, schema, RLS, API/backend or implementation dependencies.
+
+### 35.3 Audit disposition and preserved findings
+
+- DOC-01 bounded audit: **COMPLETE — ONE EVIDENCE-SUPPORTED DOCUMENTATION CORRECTION RECORDED**.
+- Core product/tenant/category principles remain conceptual and source-aligned within the reviewed scope.
+- One Owner/one Business; Business-to-Outlets/Warehouses; platform/business role separation; and the 12-role baseline remain unchanged.
+- Education E-01–E-03 and Hotel H-01–H-03 remain conceptual FIX; E-04/H-04 remain approved decisions to preserve residual OPEN details.
+- CAT-12 remains temporary/fail-closed; CAT-13 Retail/Refill and Formulation/Manufacturing remain separate.
+- M01–M21 remains DRAFT/CANDIDATE; role eligibility, module eligibility, capability, scope and authorization remain distinct.
+- DOC01-G01, G02, G04–G10 remain at their owning-document statuses; no unrelated gap was promoted or closed.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+
+### 35.4 Governance and next routing
+
+This is a documentation/provenance correction only. DOC-01 remains DRAFT / RECONSTRUCTED WORKING MASTER / NOT CANONICAL / NOT FINAL unless its own acceptance authority later establishes otherwise. Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.8 remains 13/13 DRAFTED — NOT ACCEPTED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; A12.40 remains PARTIAL / OPEN; A12.41 remains NOT STARTED; implementation readiness remains NOT READY.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No database, schema, RLS/Auth, API/backend, application source, CI workflow, deployment, Supabase Preview/Staging or Production change is included.
+
+**Next work package:** DOC-02 read-only audit under §34.4, using current-`main` sources and avoiding repetition of completed DOC-00/DOC-01 work. Audit first; prepare a correction PR only if a new evidence-supported defect is found.
