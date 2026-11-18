@@ -408,3 +408,35 @@ Outcome:
 Next action: perform the physical dictionary acceptance review against the controlling source documents and exact GitHub DOC-04 entity inventory. Verify entity-by-entity field evidence, PK/FK/composite-FK tuples, nullability/defaults, UNIQUE/CHECK/index evidence, tenant scope, lifecycle, delete behavior and source locators. Do not fabricate missing physical fields or promote conceptual rules into physical acceptance; retain OPEN/UNVERIFIED gaps and do not modify database/schema.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 18. DOC-04 Physical Data Dictionary acceptance review — 18 November 2026
+
+### 18.1 Review result
+
+The physical dictionary acceptance review was performed against A12.38 v5 Appendix D §§D.1–D.4 and D.11–D.14, DOC-04 §§9 and 16–21, Batch 02 §§3–5 and 7–8, and the Update Audit A11–A12 v0.2 §§1–4.
+
+Outcome:
+- Historical conceptual entity inventory: **17/17 reviewed**.
+- Physical Data Dictionary acceptance: **NOT ACCEPTED — OPEN; 0/17 accepted** on the evidence reviewed. This is an acceptance result, not a claim that no physical schema exists elsewhere.
+- A12.38 explicitly leaves A38-G01 physical entity inventory, A38-G02 field/type/precision/nullability/default/PK/FK/composite-FK, A38-G03 unique/CHECK/index/delete-update, and A38-G04 physical cost allocation bridge/FK/concurrency as TODO.
+- DOC-04 §9 remains an evidence-bounded information register, not a final SQL column dictionary. Generic fields such as `id`, `created_at`, `updated_at`, `deleted_at` or `status` must not be inferred on every entity.
+- No authoritative physical schema/specification with complete field inventory, exact keys, constraints, tenant scope, lifecycle, delete behavior and source locators was established for acceptance.
+- Dependencies closed: **none**. FIX decisions changed: **none**.
+- No database introspection, SQL, DDL, DML, migration, RLS test, application test or Production verification was performed.
+
+DOC-04 §22 records the per-entity 17-row acceptance matrix and cross-entity evidence gaps. The result does not promote conceptual entity names or rules into physical table/column approval.
+
+### 18.2 Priority update
+
+| Priority | Work package | Status |
+|---:|---|---|
+| 1 | DOC-04 §18 relationship/tenant-integrity matrix | COMPLETE — PARTIAL |
+| 2 | DOC-04 §19 UNIQUE/CHECK/index candidate matrix | COMPLETE — PARTIAL |
+| 3 | DOC-04 §20 quantity/cost precision and conversion matrix | COMPLETE — PARTIAL |
+| 4 | DOC-04 §21 event/idempotency/atomicity/concurrency specification | COMPLETE — PARTIAL |
+| 5 | DOC-04 §22 Physical Data Dictionary acceptance review | COMPLETE — NOT ACCEPTED; physical evidence OPEN |
+
+Next action: continue targeted source recovery and locator reconciliation for authoritative physical schema/specification evidence. Keep all missing fields, key tuples, types, constraints, tenant enforcement, lifecycle and delete behavior OPEN/UNVERIFIED until evidence is found. Do not modify database/schema or infer physical definitions.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
