@@ -995,3 +995,60 @@ The DOC-08/DOC-09/DOC-10 crosswalk consistency slice is complete with open depen
 ### 32.5 Governance
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. No database/schema/RLS/Auth/API/backend/application/CI-workflow/Vercel/deployment/Supabase Preview/Staging/Production changes are included or authorized. This checkpoint records only the bounded documentation audit; PR review, CI validation, merge approval and post-merge read-back remain separate controls.
+
+
+## 33. Append-only A12.40 AC40-01–AC40-12 reassessment after PR #54 — 19 November 2026
+
+### 33.1 Review basis and scope
+
+A fresh read-only reassessment was performed against the current `main` evidence after the DOC-08/DOC-09/DOC-10 crosswalk checkpoint in §32. The review compared:
+- this checklist §§22, 29–32;
+- `docs/IMPLEMENTATION-READINESS.md` §§3–7;
+- `docs/MASTER-AUDIT-COVERAGE.md` §§2, 5, 6 and current REC-01–REC-08 dispositions;
+- `docs/MASTER-PROJECT-INDEX.md` current navigation and publication addenda;
+- `docs/00-governance/MASTER-PROJECT-CONTROL.md` §§25–27 and latest control-plane updates;
+- `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §§3B–3F and §§8–9;
+- `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md` §§2–4 and §10;
+- `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md` §§1–7;
+- DOC-05 `docs/05-authorization/AUTHORIZATION_MASTER.md` and DOC-06 `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` for the published REC-06 and authorization traceability boundaries.
+
+The reassessment considered the post-§22 documentation improvements, including the v2.0 navigation rebaseline and PRs #49–#54. It did not repeat Library/archive recovery or A12.38.3 searches, inspect or mutate a database, perform implementation, execute tests, inspect Production, or infer missing source approvals or physical-schema evidence.
+
+### 33.2 Criterion-by-criterion current disposition
+
+| Criterion | Current disposition | Evidence-supported change since §22 | Remaining acceptance gap |
+|---|---|---|---|
+| AC40-01 — Source inventory 5.9.1–5.9.8 | PARTIAL — unchanged | No complete new source-inventory coverage or finality evidence for 5.9.7–5.9.8 was identified in the reviewed main updates. | Full 5.9.1–5.9.8 coverage remains unproven; D40-203–D40-216 remain UNRECOVERED. |
+| AC40-02 — Master metadata/version consistency | PARTIAL — evidence improved, not closed | PR #45 and subsequent v2.0 rebaseline/checkpoints clarify active versus historical navigation and record selected publication states. | No exhaustive per-artifact metadata/version reconciliation across the complete master/source set; historical variants and remaining version/topology conflicts persist. |
+| AC40-03 — Entity inventory reconciliation | PARTIAL — unchanged | No new primary-source Purchasing 14→15 or Sales 20→18 entity crosswalk was established. DOC-04 remains a conceptual working master. | Purchasing and Sales crosswalks remain OPEN; physical entity/field acceptance remains 0/17 in the reviewed evidence. |
+| AC40-04 — Canonical decision index | PARTIAL — locator precision improved, not canonicalized | DOC-08 supplies direct CVS locators for CR-01–CR-10 and Q-01–Q-06; O-01–O-12 use CVS-016 as general context only. PR #54 verifies this bounded mapping against DOC-09/DOC-10. | No complete canonical index with normalized source, exact primary locator, approval and coverage for every decision. DOC-08/09/10 remain working documents, not canonical/final. |
+| AC40-05 — Approval provenance | OPEN / PARTIAL — unchanged | PR #54 explicitly preserves CVS-039 as context, not primary approval evidence, and does not promote any authorization dependency. | Approval provenance is not established for all decisions/items; CVS-019, GOV-OPEN-07, RMD-OPEN-01 and REC-OPEN-16 remain unresolved. |
+| AC40-06 — Supersession traceability | PARTIAL — bounded links improved, not closed | DOC-09 §§3E–3F and DOC-02/DOC-00/Index addenda clarify the narrow DOC02-G03 locator supersession; DOC-10 §10.2 and PR #54 preserve the scoped CVS crosswalk. | Complete claim-by-claim supersession, approval, exact replaced content and retained historical locator coverage is not established across the full source set. |
+| AC40-07 — Version/change index | PARTIAL — selected checkpoint lineage improved, not closed | PR/checkpoint records and the current v2.0 control-plane addenda improve selected publication and change navigation. | Complete version/change lineage across all artifacts, variants, approval events and per-file histories remains incomplete; RMD-56 canonical physical-file selection remains unresolved. |
+| AC40-08 — Standard status taxonomy | PARTIAL — current navigation clarified, not normalized globally | Checklist §10, DOC-10 status distinctions and DOC-09 dated addenda clarify current versus historical status for selected records. | Normalization is not demonstrated across every historical source/register row; legacy status values still require source-level reconciliation. |
+| AC40-09 — Full D40 finding register | OPEN — unchanged | No new individual D40-203–D40-216 primary finding register or direct primary locators were found in the reviewed main evidence. | Full individual D40 register and primary locators remain unavailable. No reconstruction or repeat source search is authorized by this reassessment. |
+| AC40-10 — Closure evidence sufficiency | PARTIAL — unchanged | DOC-10 §7 and current checklist controls continue to define source, locator, scope and approval boundaries; PR #54 did not create closure evidence. | Existing evidence still does not satisfy every closure rule for all A12.40 claims; physical, approval and runtime evidence gaps remain. |
+| AC40-11 — Unresolved blocker register | PARTIAL — cross-document routing improved, not closed | PRs #49–#54 add selected DOC-05/DOC-06, DOC-04/DOC-09, DOC-09 locator and DOC-08/DOC-09/DOC-10 navigation/crosswalk references. | Exhaustive two-way traceability of every blocker to source, criterion, owner/artifact and closure evidence is not established. |
+| AC40-12 — Historical integrity | PARTIAL — preservation controls reinforced, not closed | The v2.0 checklist and later addenda preserve selected dated checkpoints append-only and distinguish historical snapshots from current navigation. | Complete integrity/reconciliation evidence for all historical source versions, variants, snapshots and per-file lineage remains incomplete. |
+
+### 33.3 Overall A12.40 disposition
+
+- Criteria reassessed: **12/12**.
+- PASS: **0/12**.
+- PARTIAL: **10/12**.
+- OPEN / PARTIAL: **1/12** (AC40-05).
+- OPEN: **1/12** (AC40-09).
+- Overall: **A12.40 remains PARTIAL / OPEN — NOT ACCEPTED / NOT CLOSED**.
+- ERD-OPEN-20 remains PARTIAL / OPEN; ERD-OPEN-22 remains UNRECOVERED.
+- Documentation evidence and navigation improved for selected parts of AC40-02, AC40-04, AC40-06, AC40-07, AC40-08, AC40-11 and AC40-12. These improvements do not meet the full acceptance criteria.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+- A12.41 remains NOT STARTED. Do not begin its final readiness reassessment while A12.40 remains PARTIAL / OPEN. The six-versus-seven gate-definition discrepancy remains unresolved as recorded in §26.5 and the controlling readiness sources.
+- Implementation readiness remains **NOT READY**. No physical schema, tenant/RLS/server enforcement, executed test result, current Production verification or implementation approval is established.
+
+### 33.4 Next evidence-supported action
+
+A12.40 has been reassessed against the latest reviewed `main` documentation. The remaining gaps are not safely closable by another generic crosswalk or status rewrite. Do not repeat A12.38.3 searches or reconstruct D40-203–D40-216. Continue only with a specifically evidenced documentation correction if a new contradiction or missing locator is found on `main`; otherwise preserve the named blockers and await genuinely new primary evidence or an explicit document-control decision.
+
+### 33.5 Governance and impact
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema/RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes were performed or authorized. This reassessment changes no source-native dependency status and grants no implementation authority.
