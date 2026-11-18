@@ -651,3 +651,53 @@ The new Master Project Index §16 explicitly identifies §12 as a historical sna
 - Stage 4.9: PARTIAL — ACCEPTANCE NOT MET.
 
 Controls remain: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No database, application, CI workflow, deployment or Production change is included.
+
+
+
+## 28. Append-only current navigation reconciliation — Master Document Remediation (19 November 2026)
+
+This addendum reconciles the historical work-routing snapshot in §25.5 with the subsequently established Master Document Remediation Program in the active Master Checklist v2.0 §34. It supplements the earlier control-plane and locator reconciliations; it does not rewrite or delete any historical checkpoint.
+
+### 28.1 Current navigation authority
+
+The active navigation and work-order authority is exclusively:
+
+- `docs/00-governance/MASTER-CHECKLIST-v2.0.md` — active Master Checklist v2.0, including §34 Master Document Remediation Program.
+- §34 governs the DOC-00 through DOC-12 remediation sequence, audit method, evidence requirements, PR controls and checkpoint updates.
+- This DOC-00 remains the project-control document for governance, authority boundaries and control-plane context. It is not a second work checklist and does not supersede the active Master Checklist v2.0.
+
+### 28.2 Historical routing qualification
+
+DOC-00 §25.5 is retained as a historical routing snapshot dated 18 November 2026. Its sequence is not the current next-action instruction after establishment of Master Document Remediation in Master Checklist v2.0 §34 on 19 November 2026.
+
+For current work navigation, follow Master Checklist v2.0 §34. In particular, its initial work package is the DOC-00 read-only control-plane audit, followed by the dependency-aware sequence defined in §34.4. Do not restart or repeat completed work solely because an earlier snapshot lists it as a future action.
+
+### 28.3 DOC-00 audit disposition
+
+The initial bounded DOC-00 control-plane audit compared this document on `main` with the active Master Checklist v2.0, Master Project Index, Implementation Readiness and Master Audit Coverage.
+
+The audit identified one navigation defect: DOC-00 did not explicitly route readers from the historical §25.5 work sequence to the subsequently established active remediation program in Master Checklist v2.0 §34. This addendum resolves that navigation gap only.
+
+The audit did not establish grounds to:
+- change any FIX decision;
+- close any dependency;
+- promote any document to canonical, final or accepted status;
+- change Stage 4.7.8, Stage 4.9, A12.40, A12.41 or implementation-readiness status; or
+- authorize implementation or technical changes.
+
+### 28.4 Status and governance boundary
+
+- DOC-00 control-plane audit: **COMPLETE — INITIAL BOUNDED REVIEW**; navigation correction recorded by this addendum.
+- Master Checklist v2.0 remains the sole active navigation checklist.
+- Dependencies newly closed: **0**.
+- FIX decisions changed: **0**.
+- Stage 4.7.8: **PARTIAL — GATE NOT PASSED**.
+- Stage 4.8: **13/13 DRAFTED; NOT ACCEPTED**.
+- Stage 4.9: **PARTIAL — ACCEPTANCE NOT MET**.
+- A12.40: **PARTIAL / OPEN — NOT ACCEPTED / NOT CLOSED**.
+- A12.41: **NOT STARTED**.
+- Implementation readiness: **NOT READY**.
+- Stage 5 blanket migration: **NOT AUTHORIZED**.
+- Stage 6 implementation: **NOT AUTHORIZED**.
+
+This addendum is an append-only documentation navigation correction. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL, DDL, DML, database/schema mutation, migration, RLS, Auth, triggers, backend/API, application source-code, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are included or authorized.
