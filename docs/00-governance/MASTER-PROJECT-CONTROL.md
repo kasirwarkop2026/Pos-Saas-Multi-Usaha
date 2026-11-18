@@ -611,3 +611,28 @@ No dependency is closed merely by this routing update. Missing evidence remains 
 ### 25.6 Guardrails
 
 READ-ONLY • APPEND-ONLY. `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, schema, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging, or Production change is authorized. Stage 6 implementation remains NOT AUTHORIZED. This addendum authorizes no work beyond the documentation-only control updates in this PR.
+
+
+## 26. Append-only DOC-09 locator-status navigation reconciliation — 19 November 2026
+
+A targeted read-only review compared DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §§3D–3E with the related DOC-02 locator record and the active Master Checklist v2.0 §29.4.
+
+### 26.1 Finding and correction
+
+DOC-09 §3D's GOV-OPEN-06 row retained a dated statement that DOC02-G03's direct RMD-69 v1.1 locator was UNRECOVERED. DOC-09 §3E subsequently recovered that locator and expressly superseded the earlier locator status. The later recovery was valid, but the GOV-OPEN-06 row did not itself point readers to the superseding §3E record.
+
+DOC-09 §3F now records the temporal relationship explicitly: §3D remains historical; DOC02-G03's current locator status is RECOVERED under §3E; GOV-OPEN-06 remains CLOSED only for Hotel/Other claim supersession.
+
+### 26.2 Scope and status boundary
+
+- DOC02-G03 direct source path/page locator criterion: **RECOVERED** under DOC-09 §3E.
+- GOV-OPEN-06: **CLOSED — HOTEL/OTHER CLAIM SUPERSESSION ONLY**; closure scope unchanged.
+- RMD-OPEN-04 and XDOM-OPEN-09: remain OPEN for their technical/safe-mode details.
+- GOV-OPEN-02: remains PARTIAL; the 231-row per-file content review and broader claim-level backlink readiness are not closed.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+
+### 26.3 Governance and navigation
+
+This is a narrow status-navigation correction based on evidence already on `main`; it is not new primary-source recovery, approval, canonicalization, technical acceptance or implementation evidence. DOC-09 remains DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No database, application, backend, CI workflow, deployment or Production change is included.
