@@ -793,3 +793,81 @@ DOC-04 §25 now records a derived crosswalk. It distinguishes direct subject ove
 The cross-document navigation gap is corrected. DOC-04 remains a reconstructed working master and the Physical Data Dictionary remains NOT ACCEPTED. A38-G01–G04 and related ERD-OPEN dependencies remain at their source-native statuses. Continue with the next evidence-backed documentation discrepancy from current `main`; do not repeat unavailable source searches or infer physical design details.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED; no database/schema, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
+
+
+
+## 29. Append-only current navigation rebaseline after PR #50 — 19 November 2026
+
+### 29.1 Authority and supersession of stale navigation snapshots
+
+This section is the latest current-navigation checkpoint for this file. It supplements, and for current navigation supersedes, the historical drafting-time pointers in the header, §§1, 6, 7, 12 and 13, without deleting or rewriting them.
+
+- Master Checklist v2.0 is **ACTIVE — SINGLE NAVIGATION CHECKLIST** on `main`, activated after PR #35 and expressly confirmed by §23 / PR #45.
+- The header's `PROPOSED` label, §0's pre-activation condition, and the PR #34 / DOC-04 §17 next-work pointers are preserved as historical drafting snapshots only. They are not current instructions.
+- The priority table in §6 and the next-action text in §12 are also preserved as historical snapshots. Their former status labels must not be used to restart work already completed in later merged PRs or DOC-04 addenda.
+- Domain-specific sources and item-level registers remain controlling for their own subject matter. This rebaseline does not alter any source-native status.
+
+### 29.2 Verified main-branch work since the v2.0 baseline
+
+The following merged PRs and current-main document sections establish the later work sequence:
+
+| PR | Main-branch result | Current scope boundary |
+|---|---|---|
+| #36 | DOC-04 §18 tenant-safe relationship / integrity matrix | Conceptual relationships documented; physical PK/FK/composite-FK tuples and delete/update behavior remain OPEN / NOT ESTABLISHED |
+| #37 | DOC-04 §19 UNIQUE / CHECK / index candidate matrix | Candidate/invariant mapping documented; physical definitions and approvals remain OPEN |
+| #38 | DOC-04 §20 quantity / cost precision and conversion matrix | Conceptual rules recorded; unresolved precision, rounding, currency and conversion parameters remain OPEN / REVIEW / TODO |
+| #39 | DOC-04 §21 event, idempotency, atomicity and concurrency specification | Conceptual semantics consolidated; operation-key, lock, transaction, compensation and executed-test evidence remain OPEN / NOT VERIFIED |
+| #40 | DOC-04 §22 physical Data Dictionary acceptance review | Review completed; Physical Data Dictionary remains NOT ACCEPTED |
+| #41–#42 | DOC-04 §§23–24 physical-source recovery and candidate-authority assessment | Reviewed source scope did not recover authoritative field/key locator sets; A38-G01–G04 remain OPEN; do not repeat bounded A12.38.3 searches without new evidence |
+| #43–#45 | Control-plane reconciliation, A12.40 reassessment, and v1.0 closure / v2.0 activation | A12.40 remains PARTIAL / OPEN; v1.0 is historical; v2.0 is active |
+| #46–#47 | DOC-05 publication-status reconciliation and DOC-07 ↔ DOC-06 traceability crosswalk | Publication and derived traceability scopes recorded; authorization/security acceptance remains OPEN / PARTIAL |
+| #48 | Readiness acceptance reassessment | Implementation readiness remains NOT READY; A12.40/A12.41 and evidence gates remain open |
+| #49 | DOC-05 ↔ DOC-06 REC-06 traceability crosswalk | Derived navigation aid added; no source-native dependency closed |
+| #50 | DOC-04 GAP-04 ↔ DOC-09 ERD-OPEN crosswalk | Derived navigation aid added; no source-native dependency closed |
+
+PR #50 was squash-merged to `main` at `fb7c825ca676dc3e8eded0d7f33dd892b1b02035`. Post-merge read-back verified DOC-04 §25 and this checklist §28. The merge added documentation traceability only; it did not approve physical schema, close dependencies, change FIX decisions or establish implementation evidence.
+
+### 29.3 Reconciled work-package status
+
+The old §6 priority sequence is retained for history. For current navigation, use this reconciliation against current `main`:
+
+| Work package | Current document-review status | Underlying acceptance / dependency status |
+|---|---|---|
+| DOC-04 relationship and tenant-integrity matrix | COMPLETE — §18 published | Physical key tuples, referential actions and enforcement OPEN / NOT ESTABLISHED |
+| DOC-04 UNIQUE / CHECK / index matrix | COMPLETE — §19 published | Physical expressions, indexes and approvals OPEN / NOT ESTABLISHED |
+| DOC-04 precision / conversion matrix | COMPLETE — §20 published | Several numeric and conversion parameters remain OPEN / REVIEW / TODO |
+| DOC-04 event / idempotency / atomicity / concurrency specification | COMPLETE — §21 published | Technical design and executed tests NOT VERIFIED |
+| Physical Data Dictionary acceptance and recovery review | COMPLETE — §§22–24 published | NOT ACCEPTED; physical field/key locator recovery remains 0/17 in the reviewed source scope |
+| Blueprint / ERD / A12 source gaps and crosswalks | PARTIAL — crosswalk aids added in §§25 and 28 and PRs #43–50 | A12.18–A12.28, A12.31E, A12.36.1, A12.40, D40-203–216, Purchasing/Sales and other source-native dependencies remain open as recorded |
+| Authorization and security closure | PARTIAL — DOC-05/DOC-06 and DOC-07/DOC-06 derived crosswalks added | AUTH-OPEN, TRC-OPEN, REC and enforcement/test dependencies remain source-native OPEN / PARTIAL |
+| A12.40 closeout | Reassessment recorded in §26 and PR #44/#48 | PARTIAL / OPEN; 0/12 PASS; not accepted or closed |
+| A12.41 final readiness reassessment | NOT STARTED | Must wait for A12.40 exit criteria; six-versus-seven gate-definition discrepancy remains unresolved |
+| Stage 4.7.8 / Stage 4.9 acceptance | Reassessments and cross-reference aids recorded | PARTIAL — GATE NOT PASSED / ACCEPTANCE NOT MET |
+| Implementation scope and authorization | Not initiated | NOT AUTHORIZED; Stage 6 remains NOT AUTHORIZED |
+
+“COMPLETE” in the document-review column means only that the named documentation work package was added/reviewed. It does not close the underlying technical, provenance, acceptance, implementation, execution or approval dependency.
+
+### 29.4 Current next work routing
+
+The next work is **a targeted Stage 4.7.8 / Stage 4.9 claim-locator and cross-document navigation audit using only evidence already available on current `main`**. The audit must:
+
+1. Read the latest DOC-00–DOC-12 control/index material and the exact controlling documents relevant to each claim; do not assume that a register row proves file-content review.
+2. Identify specific missing or stale claim-level locators, backlinks, version/status conflicts or cross-reference routes that can be corrected from existing `main` evidence.
+3. Distinguish a navigation correction from primary-source recovery, source approval, canonicalization or acceptance.
+4. If no authoritative locator/evidence exists, preserve the item as OPEN / UNVERIFIED and record the limitation; do not fabricate or reconstruct it.
+5. Do not restart bounded A12.38.3 or equivalent physical-source searches without genuinely new source material.
+6. Do not begin A12.41 while A12.40 remains PARTIAL / OPEN.
+
+This is a routing instruction for a bounded documentation audit only. It does not change the sequence or acceptance criteria in the controlling sources and does not authorize broad archive migration or implementation.
+
+### 29.5 Governance and impact
+
+- PR #36–#50 publication work did not authorize database, schema, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
+- `DB_PUSH_BLOCKED: ACTIVE`.
+- Stage 5 blanket migration: **NOT AUTHORIZED**.
+- Stage 6 implementation: **NOT AUTHORIZED**.
+- Dependencies closed by this navigation rebaseline: **0**.
+- FIX decisions changed: **0**.
+- No physical schema, runtime enforcement, executed test or Production evidence is created or inferred.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
