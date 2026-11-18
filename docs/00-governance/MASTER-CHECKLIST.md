@@ -375,3 +375,16 @@ Control: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`
 - Dependencies closed by PR #31: none. FIX decisions changed: none. No database, application/backend, CI workflow, Vercel, deployment or Production changes.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 24. Append-only DOC-04 inventory physical-specification work package — 18 November 2026
+
+- Began the next implementation-blocking specification work package from DOC-04 and the Batch 02 Inventory Costing Mapping v0.1 source.
+- Added DOC-04 §16 as a 17-entity logical-information decomposition, ten cross-cutting physical-specification gates, and source-bounded conceptual acceptance criteria.
+- The addendum deliberately does not invent approved SQL column names, key tuples, composite-FK tuples, UNIQUE/CHECK expressions, index definitions, numeric precision/scale, enums, lock order or transaction boundaries.
+- The baseline remains 17 conceptual entities; `inventory_cost_layer_movements` remains a candidate only.
+- A12.18–A12.28 remain OPEN/UNVERIFIED; A12.31E OPEN; A12.36.1 UNVERIFIED/REVIEW; A12.40 PARTIAL/OPEN with D40-203–D40-216 UNRECOVERED; A12.41 NOT STARTED.
+- No dependency is closed by this work package. GAP-04-01–GAP-04-12 remain open/review until their own exit criteria are met.
+- Next sequence: complete source-linked logical attribute matrix, then tenant-safe PK/FK/composite-FK matrix, then UNIQUE/CHECK/index matrix. Authorization, tests and physical enforcement remain separate.
+- No FIX decision changed. No database, SQL/DDL/DML, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment or Production change.
+- Controls remain READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
