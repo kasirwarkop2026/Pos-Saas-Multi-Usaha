@@ -1297,3 +1297,42 @@ DOC-02 remains DRAFT / SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER / REVIEW REQU
 This is a documentation locator-consistency correction only. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change is included.
 
 **Next work package:** DOC-03 — System Architecture Master bounded read-only audit under §34.4. Use current-`main` owning sources, avoid repeating completed DOC-00–DOC-02 work, and prepare a correction PR only for a new evidence-supported defect.
+
+
+## 38. Append-only DOC-03 System Architecture Master audit and governance clarification — 19 November 2026
+
+### 38.1 Audit identity and bounded scope
+
+- Work package: **DOC-03 — System Architecture Master read-only audit**, under §34.4 sequence item 2, following the completed DOC-00, DOC-01 and DOC-02 packages.
+- Owning file: `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md`, v0.1.0, DRAFT — RECONSTRUCTED WORKING MASTER; REVIEW REQUIRED.
+- Source revision identified by DOC-03: archived DOC-03 v0.8 reconstructed working copy.
+- Bounded cross-checks: DOC-00 project control and active Master Checklist v2.0; DOC-01 Product Blueprint; DOC-02 Category & Workflow Master; DOC-04 ERD & Data Dictionary; DOC-05 Authorization Master; DOC-06 Requirements & Traceability; and the archived DOC-03 v0.8 revision/provenance record.
+- Method: current-`main` read-only review; conceptual architecture, source authority, repository publication state and project authorization scope kept distinct. No archive DOCX or source decision was modified.
+
+### 38.2 Findings and append-only corrections
+
+**DOC03-F01 — overbroad Stage 5 publication wording.** DOC-03 §14 stated that “Separate project-level Stage 5 authorization permits documentation-only migration to GitHub.” This could be interpreted as blanket Stage 5 migration authorization. The controlling DOC-00 §§23.3–23.5 and Master Checklist v2.0 §§34.7–34.8 expressly preserve **Stage 5 blanket GitHub/archive migration as NOT AUTHORIZED**, while allowing only individually scoped documentation packages under separate authorization and PR controls.
+
+DOC-03 §16.1 now records the controlling distinction. Historical source DOC-03 statements and the earlier §14 wording are retained as context; they must not be read as blanket authorization.
+
+**DOC03-F02 — stale proposed-path metadata.** DOC-03's cover labels its GitHub path as “Proposed,” although the exact file is already present on the repository's `main` branch at that path. DOC-03 §16.2 records the current repository location without rewriting historical cover metadata or promoting document acceptance status.
+
+### 38.3 Audit disposition and preserved architecture status
+
+- DOC-03 bounded audit: **COMPLETE — TWO EVIDENCE-SUPPORTED DOCUMENT-CONTROL CLARIFICATIONS RECORDED**.
+- The reviewed conceptual architecture and source-native A10/A11/A12 scopes are preserved.
+- Inventory/costing baseline remains unchanged: 17 historical conceptual entities; `inventory_cost_layer_movements` remains a candidate, not an approved eighteenth entity; MWA remains default per Business + Product/Variant + Inventory Location, with FIFO as alternative.
+- DOC-04 physical dictionary, keys/constraints, composite-FK/RLS/server enforcement remain OPEN / NOT VERIFIED.
+- DOC-05 authorization permission catalogue, scope resolver and enforcement remain OPEN / UNVERIFIED.
+- DOC-06 traceability/test evidence gaps remain at their owning-document statuses.
+- Integration/offline protocol, audit/security implementation, executed tests, Production security readiness and backup/DR remain OPEN / UNVERIFIED as stated in DOC-03.
+- No architecture decision, FIX status or technical dependency is promoted or closed.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+
+DOC-03 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.8 remains 13/13 DRAFTED — NOT ACCEPTED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; A12.40 remains PARTIAL / OPEN; A12.41 remains NOT STARTED; implementation readiness remains NOT READY.
+
+### 38.4 Governance and next routing
+
+The correction is documentation-only and append-only. `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change is included.
+
+**Next work package:** DOC-04 — ERD & Data Dictionary Master bounded read-only audit under §34.4. Continue from its existing §§16–25 and prior checkpoints; do not repeat completed matrices or source searches. Focus only on new evidence-supported inconsistencies or acceptance gaps.
