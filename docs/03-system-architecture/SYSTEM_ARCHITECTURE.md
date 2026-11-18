@@ -225,3 +225,35 @@ The source DOC-03 v0.8 includes historical revision records that state GitHub br
 This GitHub working master is a structured consolidation of DOC-03 System Architecture Master v0.8, archived at `/Arsip Proyek POS SaaS/Master Documents/DOC-03_System_Architecture_Master_v0.8_DRAFT.docx` (Library file ID `libfile_7db45d0c92d081918f0517ad4aad9b38`). The source document's revision history Sections 16–21 is represented by the consolidated source/decision clarifications above; no historical decision scope or status is changed. Claim-level locators not available in the source remain OPEN/UNVERIFIED. This Markdown rendering is not a verbatim transcription and does not replace the archived DOCX.
 
 **End of DOC-03 — DRAFT / REVIEW REQUIRED.**
+
+
+## 16. Append-only DOC-03 publication-scope and repository-location clarification — 19 November 2026
+
+### 16.1 DOC03-F01 — Stage 5 authorization wording
+
+The Stage 5 publication wording in §14 is clarified because the phrase “Separate project-level Stage 5 authorization permits documentation-only migration to GitHub” can be read as broad Stage 5 authority. That reading is not the current project-control position.
+
+The controlling project governance is DOC-00 `MASTER-PROJECT-CONTROL.md` §§23.3–23.5 and the active Master Checklist v2.0 §§34.7–34.8: **Stage 5 blanket GitHub/archive migration remains NOT AUTHORIZED**. A specifically named documentation package may proceed only through its own separately scoped authorization, one PR at a time, with the required review, CI, explicit merge approval and post-merge read-back. The individual documentation PRs completed for this project do not create blanket migration authority.
+
+This clarification supersedes any broader interpretation of the Stage 5 wording in §14. Historical source DOC-03 v0.8 revision statements remain historical context; they do not override current project-level package-specific controls.
+
+### 16.2 DOC03-F02 — current repository location
+
+The cover's “Proposed GitHub path” label is retained as historical publication metadata. The current working-master file is now present on GitHub `main` at:
+
+`docs/03-system-architecture/SYSTEM_ARCHITECTURE.md`
+
+This repository publication state does not make DOC-03 canonical, final or accepted. Its document status remains DRAFT — RECONSTRUCTED WORKING MASTER; REVIEW REQUIRED.
+
+### 16.3 Audit disposition and preserved architecture boundaries
+
+- DOC03-F01: **CLARIFIED BY APPEND-ONLY GOVERNANCE-SCOPE ADDENDUM**.
+- DOC03-F02: **CLARIFIED BY APPEND-ONLY REPOSITORY-LOCATION ADDENDUM**.
+- The reviewed conceptual architecture boundaries, A10/A11/A12 decision scopes, inventory/costing rules, 17-entity historical baseline and candidate status of `inventory_cost_layer_movements` are not changed.
+- Physical schema, tenant enforcement, RLS/server authorization, API/service contracts, integration/offline controls, executed tests, Production security and backup/DR remain OPEN / UNVERIFIED as stated in DOC-03 and their owning documents.
+- No source-native decision status, FIX decision, dependency closure or implementation status is changed.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+
+DOC-03 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.8 remains 13/13 DRAFTED — NOT ACCEPTED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; A12.40 remains PARTIAL / OPEN; A12.41 remains NOT STARTED; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED.
