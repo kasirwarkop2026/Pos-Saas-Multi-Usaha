@@ -1336,3 +1336,43 @@ DOC-03 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANO
 The correction is documentation-only and append-only. `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change is included.
 
 **Next work package:** DOC-04 — ERD & Data Dictionary Master bounded read-only audit under §34.4. Continue from its existing §§16–25 and prior checkpoints; do not repeat completed matrices or source searches. Focus only on new evidence-supported inconsistencies or acceptance gaps.
+
+
+## 39. Append-only navigation metadata reconciliation after PR #61 — 19 November 2026
+
+### 39.1 Controlling repository position
+
+This addendum clarifies stale navigation metadata retained in the document's original header and §1 snapshot. Those historical lines are not rewritten or deleted; they describe an earlier checkpoint and must not override the later verified checkpoint entries.
+
+The controlling current position is:
+
+- Active navigation authority: this **Master Checklist v2.0**, present on repository `main`; Master Checklist v1.0 remains HISTORICAL / SUPERSEDED / NOT ACTIVE FOR NAVIGATION.
+- Latest completed remediation checkpoint: **PR #61 — DOC-03 audit, append-only correction, merge and post-merge read-back COMPLETE**.
+- PR #61 merge commit: `40fec17cbbfd13a122ca79991d3cad91c5999c59`.
+- Controlling latest routing: **§38.4 — DOC-04 bounded read-only audit**, not the earlier DOC-04 PK/FK work item stated in the original header and §1 snapshot.
+- DOC-04 §§16–25 are completed bounded work packages and are not to be repeated absent new evidence, a material contradiction or explicit re-audit instruction.
+
+### 39.2 DOC-04 audit disposition
+
+A bounded read-only audit was performed against the current `main` versions of:
+
+- `docs/00-governance/MASTER-CHECKLIST-v2.0.md`;
+- `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`;
+- `docs/07-decision-registers/MASTER_OPEN_REGISTER.md`.
+
+The review checked DOC-04 §13 and the existing work packages §§16–25, including the DOC-04 ↔ DOC-09 ERD-OPEN crosswalk. No new evidence-supported DOC-04 correction was identified. No DOC-04 correction PR is warranted by this audit.
+
+The existing physical-specification, physical-source, tenant-enforcement, numeric precision, key/constraint, event/idempotency/concurrency and acceptance gaps remain at their owning-document statuses. This audit does not close any dependency, alter any FIX decision, accept the physical Data Dictionary, or promote implementation readiness.
+
+- DOC-04 bounded audit: **COMPLETE — NO NEW CORRECTION IDENTIFIED**.
+- Dependencies newly closed: **0**.
+- FIX decisions changed: **0**.
+- DOC-04 canonical/final/accepted status: **NOT PROMOTED**.
+
+### 39.3 Navigation and governance clarification
+
+For navigation, the original header's `PROPOSED` label, earlier checkpoint date/position, and original §1 “Latest verified position” / “Next work package” are retained as historical snapshot metadata. They are superseded for current navigation by the later append-only checkpoint entries, including §§36–38 and this §39 addendum. The checklist is the active navigation authority on `main` following its established merge and post-merge verification; this clarification does not change any owning-document authority.
+
+Next work package after this DOC-04 audit: **DOC-05 — Authorization Architecture Master bounded read-only audit**, following §34.4. Read the latest DOC-05 and only necessary controlling cross-references from `main`; do not repeat completed work. Prepare a documentation PR only if a specific new defect is supported by evidence.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this addendum.
