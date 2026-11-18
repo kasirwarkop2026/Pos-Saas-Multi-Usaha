@@ -417,3 +417,20 @@ This addendum reconciles the time-specific wording in the GOV-OPEN-06 row of §3
 **Current reading rule:** use §3E for the current DOC02-G03 locator status; retain the §3D row as a historical dated snapshot. Preserve all other GOV-OPEN-06 and DOC-02 dependency boundaries.
 
 Control remains: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 10. Append-only DOC-09 publication-path and current-main status clarification — 19 November 2026
+
+This clarification reconciles the header's historical proposed-path wording with the verified publication record. It does not change the DOC-09 decision/dependency register, its v0.2 revision identity, any source-native status, or its acceptance boundary.
+
+- **Historical header wording:** The header's “Proposed GitHub path” phrase records the pre-publication proposal context. It is not the current publication state and must not be read as meaning that DOC-09 is still unpublished or awaiting its initial publication authorization.
+- **Verified publication:** The DOC-09 working master was published at the exact path `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` by commit `dbda10a28e8320785ff45eb4fe224ef0213fb8ef` (“docs(doc-09): publish dependency register working master”). The commit adds this file to the repository; the exact path remains present on `main`.
+- **Audit-time locator:** At this clarification's audit-time read, the DOC-09 file blob on `main` was `3b2d9ff68435070e044fffebfdca7ec797e0f914`. This is a readback locator, not a permanent identifier; subsequent append-only updates will change the blob SHA.
+- **Scope of publication:** Publication establishes the maintained GitHub working reference for the DOC-09 v0.2 document only. It does not make DOC-09 canonical, final, accepted, or a primary decision authority. Its status remains **DRAFT v0.2 — CONSOLIDATED WORKING REGISTER; REVIEW REQUIRED / NOT CANONICAL / NOT FINAL**.
+- **Historical authorization boundary:** §8.7 records the narrow, separately authorized DOC-09-only publication exception. That exception was exercised by the publication commit above and is not a standing authorization for other document migrations, repository-wide archive migration, CI/workflow changes, application changes, Stage 6 implementation, or Production/database work.
+- **Dependency/status reconciliation:** The current DOC-09 content remains aligned within the reviewed boundaries with DOC-04 ERD-OPEN-01–27, DOC-05 AUTH-OPEN-01–27, DOC-06 TRC-OPEN-01–15 and test-evidence limitations, DOC-07 REC-OPEN-12–15 security-evidence boundaries, and DOC-10's scoped CVS/supersession rules. The §3D GOV-OPEN-06 locator snapshot is read with the later §3E–§3F clarification. No source-native dependency is closed or promoted by this publication-path clarification.
+- **Preservation rule:** Retain the original header and its historical wording unchanged. Use this addendum to interpret the current publication state; do not rewrite or delete the original publication proposal.
+
+**Disposition:** DOC-09 bounded audit identified one evidence-supported document-control clarification: historical proposed-path wording versus verified current-main publication. The correction is limited to publication metadata/navigation. Dependencies newly closed: **0**. FIX decisions changed: **0**. Decision/status promotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
