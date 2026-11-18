@@ -1488,3 +1488,37 @@ No substantive authorization-design correction was identified. O-01–O-12, CR-0
 - After merge and post-merge read-back, continue the DOC-05–DOC-06 authorization/requirements audit sequence under §34.4. Do not repeat the DOC-05 §20 REC-06 crosswalk.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this checkpoint.
+
+
+## 43. Append-only PR #65 merge and post-merge verification — 19 November 2026
+
+### 43.1 Merge outcome
+
+PR #65, **docs(doc05): append bounded audit metadata clarifications**, was merged into main after the combined two-commit PR passed its applicable CI checks and the append-only diff was reviewed.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/65
+- Audit/correction commit: 7c5f8b61557c84d61b4c16813369c09cef361741.
+- Separate Master Checklist checkpoint commit: 99c553ba398d76fb6cd792040318586d51daeb35.
+- Documentation CI #140: SUCCESS.
+- POS SaaS CI #203: SUCCESS; application-specific jobs were skipped by the documentation-only guard.
+- Documentation CI #141 on the combined PR: SUCCESS.
+- POS SaaS CI #204 on the combined PR: SUCCESS; application-specific jobs were skipped by the documentation-only guard.
+- Combined PR diff: 2 files, 97 additions, 0 deletions.
+- Merge commit: 340883b8b15fe22fb380dfbaf524b4e62417caf3.
+- Post-merge read-back from main: DOC-05 §21 present; Master Checklist §42 present.
+
+This entry supersedes the interim PR-open / not-merged status in §42, which remains preserved as the pre-merge checkpoint.
+
+### 43.2 Final DOC-05 audit status and next routing
+
+- DOC-05 bounded audit: **COMPLETE — MERGED & VERIFIED ON MAIN**.
+- DOC-05 §21: **MERGED / VERIFIED ON MAIN**.
+- Master Checklist §42: **MERGED / VERIFIED ON MAIN**.
+- DOC05-AUD-F01–F04: append-only metadata/publication-locator clarifications recorded; historical text retained.
+- Dependencies newly closed: **0**.
+- FIX decisions changed: **0**.
+- DOC-05 remains DRAFT / RECONSTRUCTED AUTHORIZATION WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- Authorization design gaps and source-native OPEN/PARTIAL/NOT VERIFIED statuses remain unchanged.
+- Next work package: DOC-06 Requirements & Traceability Master bounded read-only audit, following §34.4. Do not repeat DOC-05 §20 REC-06 crosswalk or completed prior DOC-06 packages without new evidence.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this checkpoint.
