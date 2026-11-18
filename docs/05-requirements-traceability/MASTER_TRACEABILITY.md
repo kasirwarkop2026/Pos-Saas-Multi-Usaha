@@ -557,3 +557,69 @@ END OF DOC-06 v0.2 — RECONCILED WORKING MASTER (REVISION 0.2.2)
 Status: DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL
 
 Next: Continue only with a separately authorized work package. No unresolved traceability or source-recovery dependency is closed by this publication.
+
+
+## 18. Append-only DOC-06 bounded audit — revision and publication-locator reconciliation (19 November 2026)
+
+### 18.1 Audit identity, scope and method
+
+- Owning document: DOC-06 — Requirements & Traceability Master.
+- Current main path: `docs/05-requirements-traceability/MASTER_TRACEABILITY.md`.
+- Audit base: repository `main` at `4ca94a75e34949dbc35f1e7c4ec4d75e10b470a5`.
+- Sections reviewed: DOC-06 §§1–17, including the category/workflow baseline, authorization and scope boundaries, test catalogue, TRC-OPEN-01–15, REC-06 / Audit 2.7, provenance and locator limitations, G10 acceptance baseline, governance and PR #16 post-merge closeout.
+- Bounded cross-checks: active Master Checklist v2.0 §§34.4–34.7 and §43; DOC-05 §§20–21; DOC-09 §3D AUTH-OPEN-01–27; DOC-01 Product Blueprint; DOC-02 Category & Workflow Master; DOC-03 System Architecture; DOC-04 ERD & Data Dictionary; and DOC-10 Conflict & Supersession Master.
+- Method: read-only current-main review. Historical publication snapshots, current working revision, repository path/blob identity, conceptual traceability, source-native dependencies and implementation/test evidence were treated as separate dimensions.
+
+### 18.2 DOC06-AUD-F01 — cover revision metadata is behind the current working revision
+
+The DOC-06 cover and document-control table identify Revision **0.2.1**, and the cover revision note describes the structural heading-numbering correction. The later publication closeout in §17 explicitly identifies the current working revision as **0.2.2**, states that 0.2.1 is the historical revision at the previous publication checkpoint, and closes with Revision 0.2.2.
+
+Disposition:
+- Treat the cover's Revision 0.2.1 and its revision note as retained historical publication metadata.
+- For current navigation, the latest working revision evidenced by §17 is **0.2.2**.
+- Do not rewrite the historical cover or infer a new substantive requirements revision.
+- This is a document-control clarification only; it does not alter requirement content, decision status or acceptance.
+
+### 18.3 DOC06-AUD-F02 — proposed-path label is historical after PR #16 publication
+
+The cover labels `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` as a “Proposed GitHub path”. Section 17 records the same path as the target used by PR #16, its merge commit and post-merge publication verification. The file is present on the current `main` branch at that path.
+
+Disposition:
+- The cover's “Proposed GitHub path” wording is retained as historical drafting metadata.
+- The path is the active DOC-06 working reference on `main`.
+- This clarification does not authorize any other document migration or blanket Stage 5 activity.
+
+### 18.4 DOC06-AUD-F03 — §17 publication blob SHA is not the current main blob
+
+DOC-06 §17 labels `caebfcf60f20f777e9a0545ecf79bf7d142fe1e9` as the “Current main blob SHA”. The current-main read of the same path during this audit returned blob SHA `35a34d19761526605c0e61ee26ea01637a06e9ff`. The latter is the audit-time current blob identity; the former remains the historical PR #16 publication-checkpoint locator.
+
+Disposition:
+- Preserve the §17 SHA as the historical publication-checkpoint value.
+- For the audit-time current-main file, use blob SHA `35a34d19761526605c0e61ee26ea01637a06e9ff`.
+- Do not rewrite §17's historical publication record or imply that a blob SHA alone establishes content acceptance.
+
+### 18.5 Substantive traceability and dependency disposition
+
+The bounded review found no evidence-supported correction to the substantive traceability baseline within the reviewed scope:
+
+- Category/workflow counts and the category-specific Education, Hotel, Pharmacy, Lainnya and Parfum boundaries remain as recorded in DOC-06 §5.
+- Workflow-to-module, capability/action-to-stable-key, role eligibility, scope, data/purpose, SoD/approval and server authorization relationships retain their existing NOT MAPPED / CANDIDATE / OPEN / PARTIAL / NOT VERIFIED boundaries.
+- REC-06 remains PARTIAL / OPEN / CANDIDATE; AC-06-01–12 retain their §13.1 statuses.
+- TRC-OPEN-01–15 remain open at their owning-document statuses. DOC-05 §20 is a derived navigation crosswalk only; DOC-09 §3D remains the controlling consolidated register for AUTH-OPEN-01–27.
+- The 133 Test ID inventory remains 65 conceptual-source IDs, 10 with limited historical evidence, and 58 UNRECOVERED. Executable implementation, runtime execution, PASS/FAIL, retained evidence and retest are not established.
+- G10.7 remains COMPLETE — PARTIAL / ACCEPTANCE NOT MET; the 1 PASS / 5 PARTIAL / 4 NOT MET aggregate is not promoted.
+- Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+No source-native dependency was closed, no FIX decision changed, and no approval or implementation status was inferred.
+
+### 18.6 Audit disposition and next routing
+
+- DOC-06 bounded read-only audit: **COMPLETE — THREE DOCUMENT-CONTROL / PUBLICATION-LOCATOR CLARIFICATIONS RECORDED**.
+- DOC06-AUD-F01–F03: recorded as historical-revision, active-path and blob-locator clarifications; historical publication text retained.
+- Dependencies newly closed: **0**.
+- FIX decisions changed: **0**.
+- DOC-06 remains Version 0.2 / working Revision 0.2.2; DRAFT / RECONCILED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- DOC-06 conceptual traceability acceptance, source recovery and test-evidence gaps remain open.
+- Next work package: **DOC-07 — Security & Evidence Master bounded read-only audit**, following Master Checklist v2.0 §34.4. Read current DOC-07 and only the necessary controlling cross-references; do not repeat completed DOC-06 work without new evidence.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this audit.

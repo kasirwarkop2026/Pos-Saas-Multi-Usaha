@@ -1522,3 +1522,39 @@ This entry supersedes the interim PR-open / not-merged status in §42, which rem
 - Next work package: DOC-06 Requirements & Traceability Master bounded read-only audit, following §34.4. Do not repeat DOC-05 §20 REC-06 crosswalk or completed prior DOC-06 packages without new evidence.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this checkpoint.
+
+
+## 44. Append-only DOC-06 bounded audit and first-commit CI checkpoint — 19 November 2026
+
+### 44.1 Audit outcome and evidence
+
+The DOC-06 bounded read-only audit reviewed current-main DOC-06 §§1–17 and the necessary cross-document controls identified in §34.4. Three document-control/publication-locator clarifications were recorded in DOC-06 §18:
+
+- **DOC06-AUD-F01 — working revision metadata:** the cover/document-control table still records Revision 0.2.1, while DOC-06 §17 explicitly identifies working Revision 0.2.2 and states that 0.2.1 is the previous historical revision. The cover is retained as historical metadata; current navigation follows §17.
+- **DOC06-AUD-F02 — path metadata:** the cover's “Proposed GitHub path” label is historical because PR #16 published and verified the file at that path on main. No other migration is authorized.
+- **DOC06-AUD-F03 — publication blob locator:** §17's caebfcf60f20f777e9a0545ecf79bf7d142fe1e9 is the PR #16 publication-checkpoint blob, not the current audit-time main blob. The current audit-time blob was 35a34d19761526605c0e61ee26ea01637a06e9ff.
+
+The bounded cross-check preserved the substantive baseline: REC-06 remains PARTIAL / OPEN / CANDIDATE; AC-06-01–12 retain their source-native statuses; TRC-OPEN-01–15 remain open; DOC-09 §3D controls AUTH-OPEN-01–27; the 133 Test ID inventory remains 65 conceptual-source IDs, 10 with limited historical evidence and 58 UNRECOVERED; G10.7 remains COMPLETE — PARTIAL / ACCEPTANCE NOT MET. No runtime test, PASS, RLS/server enforcement, or implementation evidence was inferred.
+
+### 44.2 DOC-06 audit/correction commit and first-commit CI
+
+- Owning file: docs/05-requirements-traceability/MASTER_TRACEABILITY.md, append-only §18.
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/67
+- Branch: docs/doc06-bounded-audit-metadata-reconciliation-2026-11-19.
+- Audit/correction commit: 68e08be5a13391eafd7671b927a5e0cd7aaa54de.
+- PR first-commit diff: 1 file, 66 additions, 0 deletions.
+- Documentation CI #145: **SUCCESS**.
+- POS SaaS CI #208: **SUCCESS** — application-change detection passed; application-specific jobs were skipped by the documentation-only guard. This is not application verification.
+- The separate Master Checklist checkpoint is this second commit, created only after the first audit/correction commit's applicable CI passed.
+
+### 44.3 Status impact and next controlled action
+
+- DOC-06 bounded audit: **COMPLETE — THREE DOCUMENT-CONTROL / PUBLICATION-LOCATOR CLARIFICATIONS RECORDED**.
+- Dependencies newly closed: **0**.
+- FIX decisions changed: **0**.
+- DOC-06 remains Version 0.2 / working Revision 0.2.2; DRAFT / RECONCILED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- Traceability, source recovery and test-evidence acceptance gaps remain open.
+- PR #67 remains **OPEN / NOT MERGED** at this checkpoint. Re-run applicable CI on the combined two-commit PR, inspect the full append-only diff, reviews, threads and mergeability. Merge only after separate explicit user approval.
+- After PR #67 is approved and merged, read back DOC-06 §18 and this §44 from main, record the merge commit and verified outcome, then route to **DOC-07 — Security & Evidence Master bounded read-only audit** under §34.4.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this checkpoint.
