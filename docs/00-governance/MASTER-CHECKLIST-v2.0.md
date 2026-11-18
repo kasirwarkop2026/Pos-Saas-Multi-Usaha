@@ -551,3 +551,58 @@ Focus the remaining work on correcting inconsistencies in the documentation alre
 ### 21.5 Operating controls
 
 READ-ONLY • APPEND-ONLY. `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, schema/migration/RLS/Auth changes, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging, or Production changes. Work proceeds one documentation PR at a time. Review exact diff and applicable CI; merge only after explicit user approval; verify every merged file on `main` before the next package.
+
+
+## 22. A12.40 AC40-01–AC40-12 reassessment against published main evidence — 18 November 2026
+
+### 22.1 Scope and method
+
+This reassessment follows §21.3 Order 3 and uses only documents currently published on GitHub `main`. It does not repeat Library/archive searches, reconstruct D40-203–D40-216, inspect a live database, or infer missing approvals, source locators, physical schema, implementation, test execution or Production state.
+
+Evidence reviewed:
+- `docs/IMPLEMENTATION-READINESS.md`, §§1–4 (AC40-01–AC40-12 scope and previously recorded status).
+- `docs/MASTER-AUDIT-COVERAGE.md`, §§2 and 5 (REC-01–REC-08 limitations and A12.40/A12.41 gate routing).
+- `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, §§22–24 (physical dictionary acceptance, 17-entity locator results, A38-G01–G04 and source-recovery boundary).
+- `docs/07-decision-registers/MASTER_OPEN_REGISTER.md`, §§3B and 8 (ERD-OPEN-20–27 and evidence/locator boundaries).
+- `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md`, §§2–6 (limited O/CR/Q CVS mapping and retained dependencies).
+- `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md`, §§2–7 and 10 (CVS-001–041, canonical status, narrow supersession and closure rules).
+- `docs/00-governance/MASTER-PROJECT-CONTROL.md`, §§24–25 and `docs/MASTER-PROJECT-INDEX.md`, current navigation and publication checkpoints.
+- This checklist §§3, 5, 8–10 and 21 (current stage, evidence, governance and no-further-source-search instruction).
+
+Status meanings in this reassessment: PARTIAL means relevant evidence exists but the criterion's full acceptance requirement is not established; OPEN means the required artifact/evidence is not established; PASS is reserved for complete satisfaction of the criterion. These are reassessment findings, not replacements of source-native statuses unless the controlling evidence supports the change.
+
+### 22.2 Criterion-by-criterion reassessment
+
+| Criterion | Scope from current readiness index | Reassessment | Evidence now available on main | Remaining acceptance gap |
+|---|---|---|---|---|
+| AC40-01 | Source inventory 5.9.1–5.9.8 | PARTIAL | Current audit coverage and DOC-04 source/locator sections identify reviewed source sets and boundaries. | Complete source coverage for the full 5.9.1–5.9.8 baseline is not demonstrated; 5.9.7–5.9.8 finality and D40-203–D40-216 remain unresolved/unrecovered. |
+| AC40-02 | Master metadata/version consistency | PARTIAL | DOC-00 §25, Checklist §21, Index §15 and DOC-10 §10 provide aligned current publication/checkpoint clarifications; DOC-06/DOC-07 and other masters preserve version/change records. | No complete, per-artifact metadata/version reconciliation across the entire master/source set is evidenced. Historical snapshots and remaining version/topology conflicts remain. |
+| AC40-03 | Entity inventory reconciliation | PARTIAL | DOC-04 §22–§24 records 17/17 historical conceptual inventory locators and separates conceptual from physical entity claims. | Purchasing 14→15 and Sales 20→18 crosswalks remain incomplete; physical entity names and physical dictionary acceptance remain 0/17 in the reviewed evidence. |
+| AC40-04 | Canonical decision index | PARTIAL | DOC-08 correction supplies direct CVS locators for CR-01–CR-10 and Q-01–Q-06; DOC-10 §§2–3/10 and DOC-09 provide scoped decision/conflict/dependency routing. | A complete canonical decision index with normalized per-decision source, exact locator, approval and coverage is not established; DOC-08/09/10 remain working documents, not canonical/final. |
+| AC40-05 | Approval provenance | OPEN / PARTIAL | DOC-08 identifies O/CR/Q primary source identities and limits what their addenda approve; DOC-10 §10.1 distinguishes RMD-56 approval provenance from physical-file selection. | Approval provenance is not established for all decisions/items. CVS-019, GOV-OPEN-07, RMD-OPEN-01 and REC-OPEN-16 remain unresolved; no universal AP-01 approval proof is present. |
+| AC40-06 | Supersession traceability | PARTIAL | DOC-10 records CVS-001–041 and narrow supersession rules; §10.2 adopts the corrected DOC-08 CVS mapping; DOC-09 §3E has a narrowly scoped supersession of §3D locator wording. | Complete claim-by-claim supersession links, source approval, exact replaced text/field and retained historical locator are not established for the entire source set. |
+| AC40-07 | Version/change index | PARTIAL | Current control-plane addenda and DOC-10 version/canonical-status register record multiple publication and change checkpoints. | Full version/change lineage across all source artifacts, variants, approval events and per-file history remains incomplete; RMD-56 variant selection remains unresolved. |
+| AC40-08 | Standard status taxonomy | PARTIAL | Checklist §10 defines status vocabulary and status dimensions; DOC-10 separates document review, decision, specification and implementation boundaries; DOC-08 preserves conceptual FIX versus technical OPEN. | Normalization is not demonstrated across every historical source/register row. Legacy statuses and dated snapshots still require source-level reconciliation. |
+| AC40-09 | Full D40 finding register | OPEN | Current DOC-04 and DOC-09 identify the D40-203–D40-216 gap and prohibit reconstruction by inference. | The complete individual D40 finding register and direct primary locators are not available on the reviewed main evidence. This criterion cannot pass. |
+| AC40-10 | Closure evidence sufficiency | PARTIAL | DOC-10 §7 defines closure requirements; Checklist §8–10 requires source, exact locator, scope and approval; DOC-04 §22 identifies physical acceptance evidence gaps. | Existing evidence does not satisfy every closure rule for all A12.40 claims. No missing approval, physical evidence or test result may be inferred. |
+| AC40-11 | Unresolved blocker register | PARTIAL | DOC-09 provides itemized ERD/AUTH/RMD/REC/XDOM dependencies; DOC-04 A38-G01–G04 and Checklist §5/§21 route key blockers. | Completeness and two-way traceability of every blocker to source, criterion, owner/artifact and closure evidence are not established. |
+| AC40-12 | Historical integrity | PARTIAL | Historical records are retained; DOC-10 defines append-only errata/supersession; DOC-00/Checklist/Index addenda preserve dated checkpoints without rewriting prior sections. | Complete integrity/reconciliation evidence for all historical source versions, variants, snapshots and per-file lineage is not established. |
+
+### 22.3 Overall A12.40 disposition
+
+- Reassessed criteria: **12/12**.
+- PASS: **0/12**.
+- PARTIAL: **10/12**.
+- OPEN / PARTIAL: **1/12** (AC40-05).
+- OPEN: **1/12** (AC40-09).
+- A12.40: **PARTIAL / OPEN — NOT ACCEPTED / NOT CLOSED**.
+- ERD-OPEN-20 remains PARTIAL / OPEN. ERD-OPEN-22 remains UNRECOVERED. No A12.40 dependency is closed by this reassessment.
+- The improved documentation routing and limited CVS/supersession links are evidence improvements only; they do not constitute full A12.40 acceptance.
+- A12.41 remains NOT STARTED. Its gate criteria must not be assessed as passed before A12.40 satisfies its controlling exit criteria.
+- Implementation readiness remains NOT READY. Physical schema, tenant enforcement, RLS/server authorization, executable tests and Production verification are not established by this documentation reassessment.
+
+### 22.4 Work-routing decision
+
+No further A12.38.3 or equivalent archive-source search is initiated. The next useful work is to address only specification/documentation gaps that can be resolved from already-published `main` evidence, while retaining AC40-01, AC40-03, AC40-05, AC40-09 and AC40-12 gaps as explicit blockers. Do not relabel any criterion PASS or close any dependency without its required primary evidence and approval.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no Supabase Preview/Staging; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
