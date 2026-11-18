@@ -1376,3 +1376,42 @@ For navigation, the original header's `PROPOSED` label, earlier checkpoint date/
 Next work package after this DOC-04 audit: **DOC-05 — Authorization Architecture Master bounded read-only audit**, following §34.4. Read the latest DOC-05 and only necessary controlling cross-references from `main`; do not repeat completed work. Prepare a documentation PR only if a specific new defect is supported by evidence.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this addendum.
+
+
+## 40. Append-only DOC-04 bounded audit and PR #63 CI checkpoint — 19 November 2026
+
+### 40.1 Audit result and owning-document update
+
+The bounded DOC-04 audit recorded in DOC-04 §26 was completed against current `main` after PR #62 merged. The audit covered DOC-04 §§1–15, Appendix A and §§16–25, with bounded cross-checks to DOC-03, DOC-09, DOC-10 and the Master Project Index. The completed matrices/source-recovery packages §§16–25 were not repeated.
+
+The audit identified:
+- DOC04-F01: historical next-work instructions in §§17.5, 18.6, 19.6, 20.7, 21.8, 22.5, 23.4 and 24.4 are superseded by later packages already present; historical wording was retained.
+- DOC04-F02: the original-body “End of DOC-04” marker precedes append-only §§16–25; its boundary meaning was clarified without rewriting it.
+- DOC04-F03: DOC-03 §11 references DOC-04 v0.2 while the current DOC-04 header and Master Project Index §18 identify v0.1.0/v0.1. This remains OPEN for DOC-03 owner-document reconciliation; DOC-03 was not changed in the DOC-04 package.
+
+No substantive data-model correction was identified. The 17-entity baseline, candidate-only status of `inventory_cost_layer_movements`, MWA/FIFO and FEFO/FIFO distinctions, GAP-04-01–16 and ERD-OPEN-01–27 statuses remain unchanged.
+
+### 40.2 DOC-04 correction commit and CI
+
+- Owning file: `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, append-only §26.
+- PR: [#63 — docs(doc04): append bounded audit and navigation reconciliation](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/63).
+- Branch: `docs/doc04-bounded-audit-navigation-reconciliation-2026-11-19`.
+- Audit/correction commit: `5955db0be4ccf68e2ecf4c9ce306b8527b10131c`.
+- Scope at first commit: 1 file, 70 additions, 0 deletions.
+- Documentation CI #135: **SUCCESS** — Markdown lint, internal documentation links and documentation structure all passed.
+- POS SaaS CI #198: **SUCCESS** — application-change detection passed; ESLint, dependency audit, TypeScript and Next.js build were SKIPPED by the docs-only guard and are not application verification.
+- Review state at this checkpoint: no submitted reviews and no inline review threads observed.
+- PR #63 remains **OPEN / NOT MERGED**; explicit merge approval is still required.
+
+### 40.3 Status impact and next controlled action
+
+- DOC-04 bounded audit: **COMPLETE — APPEND-ONLY NAVIGATION CLARIFICATIONS RECORDED**.
+- Dependencies newly closed: **0**.
+- FIX decisions changed: **0**.
+- Physical Data Dictionary: **NOT ACCEPTED**.
+- DOC-04 canonical/final status: **NOT PROMOTED**.
+- DOC04-F03 DOC-03 version-reference follow-up: **OPEN**.
+- The separate Master Checklist update is this second commit, created only after the DOC-04 audit/correction commit's CI passed. Re-run applicable CI against this second commit and review the combined PR diff before any merge consideration.
+- After PR #63 is explicitly approved and merged, read back DOC-04 §26 and this §40 from `main`, record the merge commit and verified outcome, then route to **DOC-05 bounded read-only audit** under §34.4 and §39.3.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No database/schema, SQL/DDL/DML, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this checkpoint.
