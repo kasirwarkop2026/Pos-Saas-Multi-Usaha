@@ -737,10 +737,10 @@ Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no Sup
 
 ### 27.1 Audit basis and finding
 
-A read-only review compared current \`main\` versions of:
-- DOC-05 \`docs/05-authorization/AUTHORIZATION_MASTER.md\` §14 (G01–G10).
-- DOC-06 \`docs/05-requirements-traceability/MASTER_TRACEABILITY.md\` §12 (TRC-OPEN-01–15) and §13.1 (REC-06 AC-06-01–12).
-- DOC-09 \`docs/07-decision-registers/MASTER_OPEN_REGISTER.md\` §3D (AUTH-OPEN-01–27).
+A read-only review compared current `main` versions of:
+- DOC-05 `docs/05-authorization/AUTHORIZATION_MASTER.md` §14 (G01–G10).
+- DOC-06 `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` §12 (TRC-OPEN-01–15) and §13.1 (REC-06 AC-06-01–12).
+- DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §3D (AUTH-OPEN-01–27).
 - This active Master Checklist v2.0.
 
 The review found that DOC-06 already links individual TRC-OPEN items to selected AUTH-OPEN dependencies, but there was no explicit comparison of the DOC-05 Authorization Audit gap families G01–G10 against REC-06 acceptance criteria AC-06-01–12. This is a navigation/traceability omission, not evidence that either source register is incomplete or that the criteria are equivalent.
@@ -767,6 +767,6 @@ The crosswalk explicitly preserves these distinctions:
 
 ### 27.4 Next work and governance
 
-Continue only with evidence-backed specification gaps available from current \`main\`. Do not reopen unavailable archive searches, change FIX decisions, or promote candidate mappings. Any further repository correction remains one narrowly scoped documentation PR at a time, followed by diff/CI review, explicit merge approval, and post-merge read-back.
+Continue only with evidence-backed specification gaps available from current `main`. Do not reopen unavailable archive searches, change FIX decisions, or promote candidate mappings. Any further repository correction remains one narrowly scoped documentation PR at a time, followed by diff/CI review, explicit merge approval, and post-merge read-back.
 
-Controls remain: READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED; no database, schema, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED; no database, schema, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
