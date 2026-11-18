@@ -651,3 +651,53 @@ This is a scope distinction for this DOC-07 crosswalk, not a statement that thes
 **Dependencies closed:** 0. **FIX decisions changed:** 0.
 
 The crosswalk is a documentation aid only. It does not authorize database/schema/RLS/Auth/API/backend/source-code/CI-workflow/Vercel/deployment/Production changes, nor does it establish implementation readiness. DB_PUSH_BLOCKED: ACTIVE; no Supabase Preview/Staging; Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED.
+
+
+
+# 28. Append-only DOC-07 bounded audit — revision, publication path and snapshot-locator reconciliation (19 November 2026)
+
+## 28.1 Audit identity, scope and method
+
+- Work package: DOC-07 — Security & Evidence Master bounded read-only audit under Master Checklist v2.0 §34.4 item 5.
+- Owning file: `docs/06-security-evidence/SECURITY_EVIDENCE.md`, current-main blob before this addendum: `9b6cd2e7a9115794b9cb9009ab04e32aaa31ce84`.
+- Reviewed: DOC-07 §§1–27, including evidence classification and claim-to-source locators (§§16–24), publication history (§§25–26), and the DOC-07 ↔ DOC-06 crosswalk (§27).
+- Bounded cross-checks: Master Checklist v2.0 §§25–26, §34.4–§34.8 and §45; DOC-05 §§17 and 21; DOC-06 §§12–13 and §18; DOC-09 §§3D, 3F and 3H.
+- Method: current-`main` read-only inspection. Historical evidence, publication metadata, conceptual controls, technical implementation, executed tests and Production verification were kept as separate dimensions. Previously completed DOC-07 §27 crosswalk work was not repeated.
+
+## 28.2 Findings and append-only clarifications
+
+### DOC07-AUD-F01 — cover revision metadata is stale and the latest declared revision boundary is incomplete
+
+The cover and opening version note still identify DOC-07 as v0.4 and describe v0.4 as the latest update appending §24. However, §25.6 records v0.5, and §26.3 explicitly identifies v0.6 as the current working revision. Section 27 was appended after §26 but does not add a subsequent version row or explicitly state whether it is included in v0.6.
+
+**Disposition:** retain the cover and earlier version records as historical snapshots. For current navigation, §26.3 is the latest explicit working-revision declaration: v0.6. Section 27 is a later append-only audit addendum; this audit does not infer or assign a v0.7 version. Any future version increment must be explicitly recorded by its own authorized version-control entry.
+
+### DOC07-AUD-F02 — proposed/unapproved GitHub path labels are superseded by verified publication
+
+The cover still labels `docs/06-security-evidence/SECURITY_EVIDENCE.md` as a “Proposed GitHub destination (not approved)”; §20 similarly describes the destination as a proposal. This is superseded by the actual publication record: PR #18 is CLOSED / MERGED (merge commit `7b49438447a761c1afb2b8f9eb5cc88b8fcf0d86`), and PR #47 post-merge verification records this exact path and current-main blob `9b6cd2e7a9115794b9cb9009ab04e32aaa31ce84` (Master Checklist v2.0 §26.1).
+
+**Disposition:** the proposed/unapproved labels are historical drafting metadata only. The exact path is the published DOC-07 working reference on `main`. This clarification does not authorize any broader Stage 5 migration or change DOC-07 acceptance/canonicality.
+
+### DOC07-AUD-F03 — §26.1 publication blob SHA is a dated PR #18 checkpoint, not the current audit-time blob
+
+DOC-07 §26.1 records blob SHA `1cccd2c0c5d0a4f6e043de6faed0ab7f861fb41d` as the “Current main blob SHA” in the 17 November PR #18 publication closeout. The later PR #47 post-merge verification records the DOC-07 main blob as `9b6cd2e7a9115794b9cb9009ab04e32aaa31ce84`, which is also the blob inspected for this audit.
+
+**Disposition:** retain the §26.1 SHA as the PR #18 closeout-time publication snapshot; do not treat it as the current blob locator. The later verified locator in Master Checklist v2.0 §26.1 and this audit's owning-file identity controls current navigation at this checkpoint.
+
+## 28.3 Security, evidence and dependency cross-check disposition
+
+- DOC-07 §24's E0–E5 taxonomy remains an internal project classification, not an external standard. Authority of record remains separate from technical evidence strength.
+- Available historical evidence remains bounded to the named source/snapshot and locators. Missing Batch 7/8/9 originals and the original consolidated finding register remain unrecovered; the audit does not invent original finding IDs, severities, owners or retest results.
+- DOC-07 SEC-OPEN-01–08, REC-OPEN-12–15 and EG-01–10 retain their existing statuses. DOC-09 §3F remains the controlling REC-OPEN register; REC-OPEN-12 is UNRECOVERED, REC-OPEN-13 NOT VERIFIED, REC-OPEN-14 UNVERIFIED / STALE SNAPSHOT, and REC-OPEN-15 NOT VERIFIED.
+- DOC-06 TRC-OPEN-01–15 retain their source-native statuses. DOC-07 §27 already provides the bounded DIRECT / RELATED / NO DIRECT COUNTERPART crosswalk; it is not repeated or expanded by this audit.
+- Historical Leaked Password Protection Disabled remains a WARN in the reported historical snapshot; current Auth configuration remains UNVERIFIED. No current Supabase/Auth configuration was inspected.
+- No security test execution, remediation, retest, penetration test, certification, RLS/server enforcement, current Production verification or residual-risk acceptance is established. A documentation CI result is not security-test evidence.
+
+## 28.4 Audit disposition and governance
+
+**DOC-07 bounded audit:** COMPLETE — THREE DOCUMENT-CONTROL / PUBLICATION-LOCATOR CLARIFICATIONS RECORDED.  
+**Substantive security design changes:** 0. **FIX decisions changed:** 0.  
+**Dependencies newly closed:** 0. **Findings newly REMEDIATED / RETESTED / CLOSED:** 0.  
+**DOC-07 status:** DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Latest explicitly declared working revision remains v0.6; no v0.7 is inferred.
+
+This addendum is documentation-control clarification only. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
