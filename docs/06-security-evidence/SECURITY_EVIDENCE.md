@@ -576,3 +576,78 @@ The merge records publication only. REC-08 remains PARTIAL. Original Batch 7, Ba
 PR #18 was a limited documentation publication package. It does not authorize blanket Stage 5 GitHub migration, Stage 6 implementation, SQL/DDL/DML, schema/migrations, RLS/Auth, triggers, API/backend, application source, CI workflow changes, Vercel/deployment, or Production changes. No Supabase Preview/Staging was used. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
 
 This section updates publication chronology only. It does not change historical security findings, source identities, severities, evidence classes, remediation/retest status, or readiness conclusions.
+
+
+# 27. ST5-11 — DOC-07 ↔ DOC-06 Security-to-Traceability Crosswalk (18 November 2026)
+
+**Disposition: DOCUMENTATION AUDIT COMPLETE — CROSSWALK PARTIAL WITH EXPLICIT LIMITATIONS.** This append-only section records the main-branch consistency review between DOC-07 and DOC-06. It does not change original finding identities, statuses, severities, approval scope, or technical readiness.
+
+## 27.1 Audit basis and conclusion
+
+Reviewed current main versions of:
+- docs/06-security-evidence/SECURITY_EVIDENCE.md (DOC-07, §§1–26).
+- docs/05-requirements-traceability/MASTER_TRACEABILITY.md (DOC-06, §§1–14 and its traceability gap register).
+- docs/07-decision-registers/MASTER_OPEN_REGISTER.md for existing AUTH/REC/XDOM dependency identities and boundaries.
+- docs/00-governance/MASTER-CHECKLIST-v2.0.md for active audit order and governance.
+
+Result: no material contradiction was identified in the conceptual security baseline, tenant/server authorization boundary, SoD/approval principles, data-purpose controls, or test-state vocabulary. Both masters distinguish conceptual design from technical implementation and distinguish DESIGNED from IMPLEMENTED, EXECUTED, PASSED, EVIDENCED, and RETESTED. This consistency result is not proof of complete claim-level traceability.
+
+## 27.2 Security dependency to DOC-06 traceability crosswalk
+
+Relationship labels:
+- **DIRECT** — the DOC-06 gap explicitly covers the same evidence/control subject.
+- **RELATED** — useful adjacent traceability, but scope is not identical and must not be treated as a one-to-one mapping.
+- **NO DIRECT COUNTERPART** — the reviewed DOC-06 register does not establish a matching security-specific gap.
+
+| DOC-07 dependency | DOC-06 relationship | Relationship | Boundary / disposition |
+|---|---|---|---|
+| SEC-OPEN-01 — original Batch 7/8/9 reports and consolidated finding register | TRC-OPEN-15 | DIRECT | Both retain REC provenance/security evidence recovery limitations. Missing originals remain UNRECOVERED; no finding IDs or severity may be synthesized. |
+| SEC-OPEN-02 — historical tenant/RLS/server-authorization remediation and retest proof | TRC-OPEN-07; TRC-OPEN-08 | DIRECT / RELATED | TRC-OPEN-07 covers server/API/RLS linkage; TRC-OPEN-08 covers executed test evidence. Neither proves remediation or retest has occurred. |
+| SEC-OPEN-03 — current Leaked Password Protection configuration | AUTH-OPEN-27; TRC-OPEN-07 | RELATED | DOC-06 records broad authorization enforcement gaps, not a direct current Auth configuration verification requirement. Current configuration remains UNVERIFIED. |
+| SEC-OPEN-04 — independent penetration test/certification and complete remediation/retest evidence | TRC-OPEN-08; TRC-OPEN-15 | RELATED | Test evidence and provenance are adjacent; DOC-06 does not itself establish a penetration-test/certification requirement or result. |
+| SEC-OPEN-05 — privileged platform route/backend lifecycle and audit coverage | TRC-OPEN-07; TRC-OPEN-06 | RELATED | Server authorization and approval/SoD are related dimensions; lifecycle/audit coverage is not a one-to-one match to either gap. |
+| SEC-OPEN-06 — CI security coverage and runtime negative tests | AUTH-OPEN-10; TRC-OPEN-08 | DIRECT | Negative-test traceability and test execution evidence are explicitly in scope. Test design does not establish execution or PASS. |
+| SEC-OPEN-07 — sensitive-data purpose, retention, masking and export controls | AUTH-OPEN-08; TRC-OPEN-05 | DIRECT | Field-level data/purpose traceability is the direct shared subject. No field allowlist or technical enforcement is thereby approved. |
+| SEC-OPEN-08 — Pharmacy, Education, Hotel and Lainnya controls | TRC-OPEN-09; TRC-OPEN-11; TRC-OPEN-12 | DIRECT / RELATED | Education/Hotel, Lainnya safe-mode, and Pharmacy credential/regulatory gaps are represented. Category-specific security acceptance and tests remain open. |
+
+## 27.3 Evidence-gap register crosswalk
+
+| DOC-07 evidence gap | DOC-06 relationship | Relationship | Boundary / disposition |
+|---|---|---|---|
+| EG-01–EG-04 — original Batch reports and consolidated finding register | TRC-OPEN-15 | DIRECT | REC provenance gap; all four source artifacts remain UNRECOVERED. |
+| EG-05 — raw repository/source snapshot and complete inspected locators | TRC-OPEN-07; TRC-OPEN-15 | RELATED | Technical source and provenance support are adjacent; no current source snapshot is asserted. |
+| EG-06 — raw Supabase schema, policy, grants and Security Advisor outputs | TRC-OPEN-07; TRC-OPEN-15 | RELATED | Server/RLS linkage and provenance are adjacent; no database or Supabase inspection was performed in this audit. |
+| EG-07 — CI logs and automated security-test artifacts | TRC-OPEN-08 | DIRECT | Execution evidence is the shared subject; historical workflow success is not substituted for security-test execution. |
+| EG-08 — current Production configuration verification | TRC-OPEN-07; TRC-OPEN-08 | RELATED | DOC-06 implementation/test evidence gaps are adjacent; no current Production verification was performed or authorized. |
+| EG-09–EG-10 — finding-linked remediation and post-remediation retest/acceptance | TRC-OPEN-08; TRC-OPEN-15 | RELATED | Test evidence and provenance are relevant, but DOC-06 does not independently establish remediation or closure. |
+
+## 27.4 DOC-06 gaps without a direct DOC-07 security counterpart
+
+The following DOC-06 gaps remain valid but are not forced into a DOC-07 security mapping because their primary scope is broader product/domain traceability or physical inventory/costing:
+- TRC-OPEN-01 — Workflow → M01–M21.
+- TRC-OPEN-02 — capability/action and stable permission keys.
+- TRC-OPEN-03 — role eligibility → module/capability.
+- TRC-OPEN-04 — scope per action/resource.
+- TRC-OPEN-06 — SoD/approval/threshold/approver (only adjacent to SEC-OPEN-05; not a direct equivalent).
+- TRC-OPEN-10 — Parfum RF/FM crosswalk.
+- TRC-OPEN-13 — inventory movement/costing.
+- TRC-OPEN-14 — ownership and Manager authority.
+
+This is a scope distinction for this DOC-07 crosswalk, not a statement that these DOC-06 gaps are resolved or unrelated to security in every possible context.
+
+## 27.5 Status and authority preservation
+
+- DOC-07 SEC-OPEN-01–08, REC-OPEN-12–15, and EG-01–10 retain their existing source-native statuses.
+- DOC-06 TRC-OPEN-01–15 retain their existing statuses and closure criteria.
+- DOC-09 remains the controlling register for AUTH/REC/XDOM dependency status; this crosswalk does not close or normalize them.
+- No REC08 observation, RMD-23 finding, EG gap, SEC-OPEN dependency, or TRC-OPEN dependency is merged into another namespace.
+- No finding is newly REMEDIATED, RETESTED, or CLOSED. No severity or priority is reduced.
+- No FIX decision is changed. No source locator, approval, implementation, runtime test, CI security result, or Production state is invented.
+
+## 27.6 Audit disposition and governance
+
+**DOC-07 ↔ DOC-06 consistency audit:** COMPLETE — PASS WITH OPEN TRACEABILITY DEPENDENCIES.  
+**Crosswalk completeness:** PARTIAL — direct, related, and unmatched scopes are explicitly distinguished.  
+**Dependencies closed:** 0. **FIX decisions changed:** 0.
+
+The crosswalk is a documentation aid only. It does not authorize database/schema/RLS/Auth/API/backend/source-code/CI-workflow/Vercel/deployment/Production changes, nor does it establish implementation readiness. DB_PUSH_BLOCKED: ACTIVE; no Supabase Preview/Staging; Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED.
