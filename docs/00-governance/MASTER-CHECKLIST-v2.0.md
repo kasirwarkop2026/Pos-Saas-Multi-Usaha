@@ -871,3 +871,42 @@ This is a routing instruction for a bounded documentation audit only. It does no
 - No physical schema, runtime enforcement, executed test or Production evidence is created or inferred.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 30. Append-only Stage 4.7.8 / Stage 4.9 claim-locator audit checkpoint — 19 November 2026
+
+### 30.1 Audit basis and finding
+
+A targeted read-only review of current `main` compared:
+- DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §§3D–3E;
+- DOC-02 `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` §12;
+- DOC-00 `docs/00-governance/MASTER-PROJECT-CONTROL.md` §25.3; and
+- this active Master Checklist, §29.4.
+
+The review identified one specific stale navigation statement: the GOV-OPEN-06 row in DOC-09 §3D still described DOC02-G03's RMD-69 v1.1 locator as UNRECOVERED, while the later DOC-09 §3E and DOC-02 §12 record that exact locator as RECOVERED. DOC-00 §25.3 already recognized §3E as the later locator update, but DOC-09's own GOV-OPEN-06 row lacked an explicit current-status pointer.
+
+### 30.2 Documentation correction prepared
+
+A narrow append-only correction package is prepared on branch `docs/stage478-doc09-locator-reconciliation-2026-11-19`:
+- DOC-09 §3F clarifies that §3D is a historical snapshot for the DOC02-G03 locator criterion; §3E controls the current RECOVERED locator status.
+- DOC-09 §3F preserves GOV-OPEN-06 as CLOSED only for Hotel/Other claim supersession and keeps RMD-OPEN-04 / XDOM-OPEN-09 technical details OPEN.
+- DOC-00 §26 records the finding, correction and scope boundary.
+- This §30 records the audit route and pending PR validation/merge state.
+
+This correction does not broaden GOV-OPEN-06, close GOV-OPEN-02, complete per-file content review, establish all claim-level backlinks, or satisfy Stage 4.7.8 / Stage 4.9 acceptance.
+
+### 30.3 Impact and remaining audit scope
+
+- DOC02-G03 direct RMD-69 v1.1 source path/page locator: **RECOVERED** under DOC-09 §3E and DOC-02 §12.
+- GOV-OPEN-06: **CLOSED — HOTEL/OTHER CLAIM SUPERSESSION ONLY**; unchanged.
+- GOV-OPEN-02: **PARTIAL**; unchanged.
+- RMD-OPEN-04 / XDOM-OPEN-09: **OPEN**; unchanged.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+- Stage 4.7.8: **PARTIAL — GATE NOT PASSED**.
+- Stage 4.9: **PARTIAL — ACCEPTANCE NOT MET**.
+
+This is one evidence-backed navigation correction, not a declaration that the broader DOC-00–DOC-12 claim-locator audit is complete. Continue the remaining audit only against current `main` evidence, one bounded package at a time; retain unsupported locators/backlinks as OPEN / UNVERIFIED.
+
+### 30.4 Governance
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. No database/schema/RLS/Auth/API/backend/application/CI-workflow/Vercel/deployment/Supabase Preview/Staging/Production changes are included or authorized. PR review, CI validation, explicit merge approval and post-merge read-back remain separate required controls.
