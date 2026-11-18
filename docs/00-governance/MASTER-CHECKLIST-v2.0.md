@@ -1697,3 +1697,40 @@ Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIV
 - Reconcile the DOC-12 DOC-08 version snapshot only within the later DOC-12 work package.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+
+## 49. DOC-09 bounded read-only audit and publication-path clarification — 19 November 2026
+
+### 49.1 Audit identity and scope
+
+- Work package: **DOC-09 — Master OPEN/REVIEW/TODO Register bounded read-only audit**, within §34.4 sequence item 6 (DOC-08–DOC-10 decision/open/conflict audit).
+- Owning document: `docs/07-decision-registers/MASTER_OPEN_REGISTER.md`, DRAFT v0.2 — CONSOLIDATED WORKING REGISTER; REVIEW REQUIRED. The exact current-main file was read at blob SHA `3b2d9ff68435070e044fffebfdca7ec797e0f914` before the append-only correction.
+- Reviewed DOC-09 sections: §§1–9; dependency families GOV-OPEN-01–08, BPL-OPEN-01–11, ERD-OPEN-01–27, AUTH-OPEN-01–27, RMD-OPEN-01–15, REC-OPEN-01–16, XDOM-OPEN-01–10, MIG-OPEN-01–02 and IMP-OPEN-01–08; append-only dispositions §§3C–3F; locator/source hierarchy §§8.1–8.7; ST5-11.67–ST5-11.70 audit trail.
+- Bounded cross-checks on current `main`: DOC-04 `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`; DOC-05 `docs/05-authorization/AUTHORIZATION_MASTER.md`; DOC-06 `docs/05-requirements-traceability/MASTER_TRACEABILITY.md`; DOC-07 `docs/06-security-evidence/SECURITY_EVIDENCE.md`; DOC-08 v1.5 Library working copy and the published ST5-11.40 correction; DOC-10 `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md`; DOC-12 `docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md`; DOC-00 `docs/00-governance/MASTER-PROJECT-CONTROL.md` §25; and this active checklist.
+- Previously completed ST5-11.67–ST5-11.70 locator/provenance work and the DOC-09 §3E–§3F DOC02-G03 locator recovery were not repeated; only their current reading rules and cross-document consistency were checked.
+
+### 49.2 Findings and disposition
+
+- **DOC09-AUD-F01 — Historical proposed-path wording remains in the header after publication.** The DOC-09 header still calls `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` a “Proposed GitHub path”. The exact file was already published on `main` by commit `dbda10a28e8320785ff45eb4fe224ef0213fb8ef`, which added the DOC-09 Markdown master. DOC-00 §25.1 independently records that publication commit and path. The wording is a pre-publication snapshot and could be misread as a pending/unapproved publication. A narrowly scoped append-only clarification was added as DOC-09 §10; the original header was preserved verbatim.
+- **DOC09-AUD-F02 — GOV-OPEN-06 historical locator wording is already reconciled.** The older §3D row's UNRECOVERED statement is explicitly superseded for the exact DOC02-G03 path/page locator by §§3E–3F. Current locator status is RECOVERED (M231-223, pp. 1–3, §§1–8), while GOV-OPEN-06 remains CLOSED only for Hotel/Other claim supersession and RMD-OPEN-04 / XDOM-OPEN-09 remain OPEN for technical safe-mode details. No additional correction is needed.
+- **DOC09-AUD-F03 — Dependency/status cross-document alignment.** Within the bounded reviewed scope, DOC-09's ERD-OPEN-01–27, AUTH-OPEN-01–27, REC-OPEN-12–15 and TRC/XDOM boundaries align with the owning-document statements in DOC-04, DOC-05, DOC-06 and DOC-07. DOC-08's conceptual FIX boundaries do not close DOC-09 dependencies; DOC-10 CVS entries remain conflict/navigation references and narrow supersession only. No source-native dependency status or closure criterion required correction in this audit.
+- **DOC09-AUD-F04 — Historical/append-only structure preserved.** The older Stage 4.9 “NOT STARTED” snapshot is explicitly qualified by DOC-09 §8.4 and does not override the active Master Checklist's current PARTIAL — ACCEPTANCE NOT MET status. The §3A/§3D rows and §8.7 authorization exception are retained as historical/source-native records; no flattening or deletion is warranted.
+- **DOC09-AUD-F05 — Publication does not imply acceptance.** The published path establishes the maintained DOC-09 v0.2 working reference only. DOC-09 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL; its dependency families and closure criteria remain active unless a separate evidence-backed closure addendum exists.
+
+### 49.3 Correction PR and CI
+
+- PR #72: `docs(doc-09): clarify published working-master path`.
+- First audit/correction commit: `52a05a99e5cb8c1d60c3efb5f289119ca16b871b`, appending DOC-09 §10 only.
+- First-commit diff: one file, 17 additions, 0 deletions; no other source or dependency table changed.
+- First-commit Documentation CI run `44374628447`: Markdown lint SUCCESS; documentation structure SUCCESS; internal documentation links SUCCESS.
+- POS SaaS workflow run `44374628260`: Detect application changes SUCCESS; ESLint, dependency security audit, TypeScript typecheck and Next.js production build SKIPPED by the documentation-only guard. Skipped jobs are not test passes.
+- PR #72 remains OPEN pending the separate Master Checklist checkpoint commit and combined-CI review. No merge has been performed or authorized by this checkpoint.
+
+### 49.4 Audit outcome and next controlled action
+
+- DOC-09 bounded read-only audit: **COMPLETE — ONE PUBLICATION-METADATA / NAVIGATION CLARIFICATION JUSTIFIED; NO DEPENDENCY-REGISTER CORRECTION JUSTIFIED**.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**. Decision/status promotions or demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
+- DOC-09 remains DRAFT v0.2 — CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Its exact path is a published current-main working reference; publication is not acceptance.
+- Next work package: **DOC-10 — Conflict & Supersession Master bounded read-only audit**, under §34.4 sequence item 6. Review only current-main DOC-10 and the necessary controlling DOC-08/DOC-09 sources; do not repeat completed DOC-09 locator batches or ST5-11.40 crosswalk correction.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
