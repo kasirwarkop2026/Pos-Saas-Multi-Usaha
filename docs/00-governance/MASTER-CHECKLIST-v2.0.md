@@ -770,3 +770,26 @@ The crosswalk explicitly preserves these distinctions:
 Continue only with evidence-backed specification gaps available from current `main`. Do not reopen unavailable archive searches, change FIX decisions, or promote candidate mappings. Any further repository correction remains one narrowly scoped documentation PR at a time, followed by diff/CI review, explicit merge approval, and post-merge read-back.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED; no database, schema, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
+
+## 28. Append-only DOC-04 GAP-04 ↔ DOC-09 ERD-OPEN crosswalk — 18 November 2026
+
+### 28.1 Audit finding and correction
+
+A read-only comparison of DOC-04 §13 and §§16–24 with DOC-09 §3C found overlapping Inventory & Costing physical-specification and provenance dependencies, but no explicit crosswalk between GAP-04-01–16 and ERD-OPEN-01–27.
+
+DOC-04 §25 now records a derived crosswalk. It distinguishes direct subject overlap, related dependencies and items without a dedicated counterpart. The crosswalk is a navigation aid, not a primary-source decision or replacement register.
+
+### 28.2 Scope and result
+
+- All 16 GAP-04 IDs were compared with all 27 ERD-OPEN IDs.
+- GAP-04-02 remains OPEN: §18 is a conceptual relationship/tenant-integrity matrix; physical PK/FK/composite-FK tuples and referential actions remain NOT ESTABLISHED.
+- GAP-04-09 has no dedicated ERD-OPEN counterpart; the broader ERD-OPEN-03/14/27 references are related only.
+- ERD-OPEN-01/02/04/17/23/24/25/26 remain independently tracked without a dedicated GAP-04 ID.
+- DOC-04 and DOC-09 source-native statuses are unchanged. Dependencies closed: **0**; FIX decisions changed: **0**.
+- No new physical schema, SQL identifier, key tuple, constraint, index, RLS/server enforcement, test or Production evidence was created or inferred.
+
+### 28.3 Current disposition and next action
+
+The cross-document navigation gap is corrected. DOC-04 remains a reconstructed working master and the Physical Data Dictionary remains NOT ACCEPTED. A38-G01–G04 and related ERD-OPEN dependencies remain at their source-native statuses. Continue with the next evidence-backed documentation discrepancy from current `main`; do not repeat unavailable source searches or infer physical design details.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED; no database/schema, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
