@@ -1263,3 +1263,37 @@ Post-merge verification: **PASS — 2/2 changed files read back from main**.
 Proceed to the bounded **DOC-02 — Category & Workflow Master read-only audit** under §34.4, using the exact current-`main` owning document and only necessary cross-document evidence. Do not repeat DOC-00 or DOC-01 audits. Prepare a correction PR only if a new, evidence-supported defect is established; otherwise record the bounded audit disposition without creating documentation churn.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 37. Append-only DOC-02 Category & Workflow Master audit and locator consistency correction — 19 November 2026
+
+### 37.1 Audit identity and bounded scope
+
+- Work package: **DOC-02 — Category & Workflow Master read-only audit**, under §34.4 sequence item 2, following completed DOC-00 and DOC-01 packages.
+- Owning document: \`docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md\`, v0.1.0, DRAFT — SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER; REVIEW REQUIRED.
+- Category detail reviewed: \`docs/02-business-domains/categories/CAT-12-other.md\`.
+- Required cross-checks: DOC-01 §13, DOC-02 §12, active DOC-00 control-plane references and relevant source/manifest locator evidence on the current project record.
+- Method: current-\`main\` read-only review; source locator, conceptual decision and technical implementation status kept separate. No archive DOCX was modified or uploaded.
+
+### 37.2 Finding and correction
+
+**DOC02-F01 — stale RMD-69 v1.1 locator status.** DOC-02 §9 and §10 DOC02-G03, plus the CAT-12 detail page's residual-details/source-locator statements, continued to say the direct RMD-69 v1.1 path and page locators were unrecovered. This contradicted DOC-02 §12 and DOC-01 §13, which already recorded the recovered source path, manifest identity M231-223 and page/section locators.
+
+Append-only reconciliation is recorded in DOC-02 §13 and the CAT-12 detail page addendum. The earlier statements remain historical context; current locator status is **RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY**.
+
+### 37.3 Audit disposition and preserved status
+
+- DOC-02 bounded audit: **COMPLETE — ONE EVIDENCE-SUPPORTED DOCUMENTATION CONSISTENCY CORRECTION RECORDED**.
+- DOC02-F01: corrected by append-only locator-status clarification; no source-native decision was changed.
+- DOC02-G03 locator criterion: RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY.
+- DOC02-G01, G02 and G04–G10 remain at their existing statuses; no blanket status promotion.
+- CAT-12 remains a temporary classification/exception path and fail-closed conceptual baseline. Safe-mode function list, lifecycle, SLA/expiry, reviewer authority, confidence/review thresholds, evidence standards, appeal/restriction authority and technical authorization remain OPEN / NOT APPROVED as applicable.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+
+DOC-02 remains DRAFT / SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.8 remains 13/13 DRAFTED — NOT ACCEPTED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; A12.40 remains PARTIAL / OPEN; A12.41 remains NOT STARTED; implementation readiness remains NOT READY.
+
+### 37.4 Governance and next routing
+
+This is a documentation locator-consistency correction only. READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change is included.
+
+**Next work package:** DOC-03 — System Architecture Master bounded read-only audit under §34.4. Use current-\`main\` owning sources, avoid repeating completed DOC-00–DOC-02 work, and prepare a correction PR only for a new evidence-supported defect.
