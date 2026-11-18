@@ -295,3 +295,38 @@ Outcome:
 | 5 | Physical dictionary acceptance review | NOT STARTED |
 
 Next action: build the UNIQUE/CHECK/index matrix from source-backed invariants and approval scope. Do not infer index definitions, nullable-variant strategy, or constraint expressions. Keep `DB_PUSH_BLOCKED: ACTIVE`, Stage 5 blanket migration NOT AUTHORIZED and Stage 6 NOT AUTHORIZED.
+
+
+## 15. DOC-04 UNIQUE/CHECK/index candidate matrix checkpoint — 18 November 2026
+
+### 15.1 Work result
+
+DOC-04 §19 adds a source-bounded candidate matrix for UNIQUE, CHECK, and index families across all 17 conceptual inventory/costing entities, plus aggregate invariants and evidence still required before physical design can be accepted.
+
+Sources reviewed:
+- DOC-04 reconstructed working master v0.1, §§3, 8–10.
+- Update Audit A11–A12 and 17-table matrix v0.2 (15 Nov 2026), §§1–4.
+- Batch 02 Inventory Costing Migration Mapping v0.1 (15 Nov 2026), §§3–5 and 7.
+- A12.38 v5 Physical Entity & Data Dictionary Audit, Appendix D.
+- A12.39 conceptual relationship/constraint specification, as cross-referenced in DOC-04 §§8 and 18.
+
+Outcome:
+- Candidate invariant/constraint family inventory: **COMPLETE — PARTIAL**.
+- Per-entity conceptual coverage: **17/17 reviewed**.
+- Concrete physical UNIQUE keys, CHECK expressions, index definitions, predicates/order, and nullable-variant semantics: **OPEN / NOT ESTABLISHED**.
+- A09 idempotency standard, A07 batch reconciliation, A06 concurrency/locking, A11 lifecycle/closure enforcement: **REVIEW / OPEN**.
+- Aggregate invariants are explicitly separated from row-level CHECK candidates.
+- Dependencies closed: **none**. FIX decisions changed: **none**.
+- No implementation/database/schema/SQL/CI/deployment/Production change.
+
+### 15.2 Priority update
+
+| Priority | Work package | Status |
+|---:|---|---|
+| 1 | DOC-04 §18 relationship/tenant-integrity matrix | COMPLETE — PARTIAL |
+| 2 | DOC-04 §19 UNIQUE/CHECK/index candidate matrix | COMPLETE — PARTIAL |
+| 3 | Quantity/cost precision and conversion matrix (A12.37) | NEXT |
+| 4 | Event/idempotency/atomicity/concurrency specification | NOT STARTED |
+| 5 | Physical dictionary acceptance review | NOT STARTED |
+
+Next action: derive the quantity/cost precision and conversion matrix from A12.37 decision sources and verified numeric-policy locators. Do not invent precision/scale, rounding mode, conversion defaults or tolerances. Keep `DB_PUSH_BLOCKED: ACTIVE`, Stage 5 blanket migration NOT AUTHORIZED and Stage 6 NOT AUTHORIZED.
