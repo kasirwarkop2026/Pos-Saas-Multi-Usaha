@@ -1052,3 +1052,137 @@ A12.40 has been reassessed against the latest reviewed `main` documentation. The
 ### 33.5 Governance and impact
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema/RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes were performed or authorized. This reassessment changes no source-native dependency status and grants no implementation authority.
+
+## 34. Master Document Remediation Program — 19 November 2026
+
+### 34.1 Purpose and authority
+
+Master Document Remediation is the controlled, evidence-based program for auditing and correcting the master documentation set DOC-00 through DOC-12. Its purpose is to improve document accuracy, completeness, internal consistency, source traceability and acceptance readiness so the documentation can serve as a dependable basis for a separately authorized POS SaaS Multi-Usaha v3.0 implementation.
+
+This program is governed and navigated exclusively through this active Master Checklist v2.0. It is not a second master checklist, does not replace the owning DOCs, and does not supersede their source-native decisions, statuses, acceptance criteria or authority.
+
+This section establishes the program and its work method. It does not declare any DOC accepted, canonical, final, complete or implementation-ready. It does not itself close dependencies or change FIX decisions.
+
+### 34.2 Relationship to the existing project stages
+
+Master Document Remediation is an execution program within the current documentation audit/correction mode. It does not erase, restart, rename or automatically complete any prior stage or checkpoint.
+
+The current recorded states remain unchanged unless their own acceptance criteria are met with evidence:
+- Stage 4.7.8: PARTIAL — GATE NOT PASSED.
+- Stage 4.8: 13/13 DRAFTED; drafting is not acceptance.
+- Stage 4.9: PARTIAL — ACCEPTANCE NOT MET.
+- A12.40: PARTIAL / OPEN — NOT ACCEPTED / NOT CLOSED.
+- A12.41: NOT STARTED; its dependency and gate rules remain controlling.
+- Implementation Readiness: NOT READY.
+- Stage 5 blanket migration: NOT AUTHORIZED.
+- Stage 6 implementation: NOT AUTHORIZED.
+
+This program may produce narrowly scoped documentation corrections and evidence-backed checkpoint updates. It cannot bypass an upstream dependency or promote a stage merely to accelerate implementation.
+
+### 34.3 Scope — master document set
+
+The program covers the following documents, while each remains authoritative for its own subject:
+
+| Document | Remediation focus |
+|---|---|
+| DOC-00 — Document Control & Source of Truth | Governance, document authority, versioning, source-of-truth rules, navigation and control consistency |
+| DOC-01 — Product Blueprint Master | Product scope, capabilities, business rules, terminology and traceability to approved decisions |
+| DOC-02 — Category & Workflow Master | Category coverage, workflows, cross-domain consistency, actors, actions and source locators |
+| DOC-03 — System Architecture Master | Component boundaries, architecture flows, integrations, operational assumptions and consistency with requirements |
+| DOC-04 — ERD & Data Dictionary Master | Logical/physical distinction, entity and relationship specifications, keys, constraints, precision, events and physical-source acceptance |
+| DOC-05 — Authorization Architecture Master | Roles, permissions, scope, SoD, approval provenance and authorization boundaries |
+| DOC-06 — Requirements & Traceability Master | Requirement identifiers, source-to-claim traceability, acceptance criteria and evidence links |
+| DOC-07 — Security & Evidence Master | Threat/control mapping, security requirements, evidence provenance and verification boundaries |
+| DOC-08 — Master FIX Decision Register | Decision authority, exact scope, source locators, approval and status integrity |
+| DOC-09 — Master OPEN/REVIEW/TODO Register | Open-item ownership, source, impact, dependencies, closure criteria and current status |
+| DOC-10 — Conflict & Supersession Master | Conflict identity, controlling source, supersession chain, retained history and resolution evidence |
+| DOC-11 — Project Roadmap & Release Gates | Stage dependencies, entry/exit criteria, approvals, release sequencing and readiness gates |
+| DOC-12 — Master Archive & Document Index | Artifact identity, version/path/index integrity, historical lineage and navigation |
+
+The table defines review scope only. It does not certify that the current versions are available, canonical, complete or accepted. Exact repository paths, versions and status must be read from current `main` and the owning document before each work package.
+
+### 34.4 Work sequence and dependency-aware prioritization
+
+The initial sequence is:
+
+1. **DOC-00 control-plane audit** — verify document control, active/historical navigation, authority hierarchy, version/status declarations, source-of-truth rules and cross-document control references. Record supported findings before proposing corrections.
+2. **DOC-01–DOC-03 product/workflow/architecture audit** — examine alignment of product scope, category/workflow definitions, architecture boundaries and source traceability.
+3. **DOC-04 data architecture audit** — continue from its controlling sections and existing checkpoints; do not repeat completed matrices. Distinguish conceptual specification from physical schema evidence and preserve all unresolved physical-source gaps.
+4. **DOC-05–DOC-06 authorization/requirements audit** — examine role/action/scope/SoD traceability, approval provenance, requirements coverage and acceptance criteria.
+5. **DOC-07 security/evidence audit** — verify control-to-requirement mapping, evidence source/locator, test status and Production-verification boundaries.
+6. **DOC-08–DOC-10 decision/open/conflict audit** — verify decision authority, open-item status and closure criteria, conflict/supersession history, and two-way references without generic duplicate crosswalks.
+7. **DOC-11–DOC-12 roadmap/archive audit** — verify release gates, stage dependencies, artifact/version identity, historical integrity and navigation.
+8. **Cross-document acceptance and readiness reconciliation** — only after the relevant owning-document corrections and dependencies have evidence; assess Stage 4.7.8, Stage 4.9, A12.40, A12.41 and implementation readiness against their controlling criteria.
+
+This is a default routing order, not permission to repeat completed work or to ignore dependencies. A later document may be audited earlier only when a concrete dependency, source-backed finding or efficient bounded scope justifies it. The first work package is a read-only DOC-00 audit; no DOC-00 correction is presumed before findings are established.
+
+### 34.5 Audit and remediation method
+
+For each document/work package:
+
+1. Read the latest active Master Checklist v2.0 and the exact current-`main` owning document, plus only the cross-document sources needed for the bounded question.
+2. Record document identity, version/status, exact path, sections reviewed and the controlling source for each material claim.
+3. Build a finding-level record containing: finding ID; affected document/section; issue type; observed statement; evidence and exact locator; impact/dependency; proposed action; owner/source authority; acceptance or closure criterion; and disposition.
+4. Classify each statement as source-backed fact, approved FIX decision, interpretation, candidate proposal, historical snapshot or unresolved claim.
+5. Separate true defects from historical snapshots, deliberate status distinctions, source-native authority and already reconciled addenda. Do not rewrite historical content merely because it is old.
+6. Correct only a demonstrated contradiction, missing required locator, unsupported statement, incomplete acceptance detail or other specifically evidenced defect. Preserve unsupported items as OPEN / REVIEW / TODO / UNVERIFIED / UNRECOVERED according to their owning source.
+7. Use append-only changes where the project governance requires them. Do not silently delete, rewrite or flatten historical evidence.
+8. Prepare one narrowly scoped documentation PR at a time. Inspect complete diff, changed files, additions/deletions, links, Markdown lint, documentation structure, CI results and review threads.
+9. Merge only after separate explicit user approval for that PR. After merge, read back the exact changed files from `main` and record the merge commit and verified outcome in this checklist.
+10. Update this checklist append-only with the work performed, evidence, status impact, dependencies newly closed (if any), FIX decisions changed (if any), and next evidence-supported action.
+
+A broad audit may result in no correction/PR when the current evidence is already consistent or does not support a safe correction. Do not create documentation churn to make progress appear faster.
+
+### 34.6 Status, acceptance and closure rules
+
+Use the status vocabulary and scope distinctions in §10 and the owning document. Every finding and work package must state whether its status concerns document review, specification, decision, implementation, execution, verification or approval.
+
+- Audit/review completion does not mean document acceptance.
+- A document correction does not automatically close the underlying dependency.
+- A cross-reference is not primary evidence or approval provenance.
+- A conceptual specification is not a physical database definition or proof of enforcement.
+- A planned test is not an executed test; a skipped CI job is not a passed test.
+- A dependency closes only when its own controlling closure criteria, required evidence, exact locator, scope and approval are satisfied.
+- A document becomes canonical/final/accepted only through its own defined authority and acceptance process.
+- No readiness gate is passed by counting documents or PRs; assess the actual criteria and evidence.
+
+### 34.7 PR and repository operating controls
+
+- One PR at a time.
+- Documentation-only scope unless separately and explicitly authorized otherwise.
+- Review the current `main` base and latest file/blob state before editing.
+- No archive DOCX uploads to GitHub; use repository-native Markdown for approved documentation work.
+- Review the full diff and applicable documentation CI before requesting merge.
+- A PR being green or mergeable does not itself authorize merge.
+- Obtain explicit user approval before merge, then perform post-merge read-back.
+- Record PR number, branch, head/base, changed paths, diff statistics, CI disposition, merge commit and post-merge verification where available.
+- Do not create a PR when no evidence-backed correction is justified.
+
+### 34.8 Governance boundaries
+
+All existing project governance remains in force:
+- READ-ONLY • APPEND-ONLY for audit/specification work.
+- `DB_PUSH_BLOCKED: ACTIVE`.
+- No SQL, DDL, DML, database/schema mutation, migration, RLS, Auth, triggers, backend/API, application source-code, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes without separate explicit authorization for the exact scope.
+- Stage 5 blanket GitHub/archive migration remains NOT AUTHORIZED. Individually scoped documentation PRs remain subject to the existing approval and review controls.
+- Stage 6 implementation remains NOT AUTHORIZED.
+- No fixed architecture decision is reopened without a specific evidence-based reason and the required authority.
+- No missing primary source, approval, schema definition, test result or Production evidence may be inferred, reconstructed or invented.
+
+### 34.9 Initial checkpoint and next action
+
+- Program: **ESTABLISHED — INITIAL WORK NOT YET AUDITED**.
+- Navigation authority: this Master Checklist v2.0 only.
+- Scope: DOC-00 through DOC-12, with the sequence and dependency rules in §34.4.
+- First work package: **DOC-00 read-only control-plane audit**.
+- First package exit: a source-backed finding register and a recommendation to correct, retain as-is, or leave each item OPEN; any correction must be separately scoped and supported.
+- Dependencies newly closed by establishing this program: **0**.
+- FIX decisions changed: **0**.
+- Stage 4.7.8, Stage 4.9, A12.40, A12.41 and implementation-readiness statuses: **unchanged**.
+
+The next action is to perform the bounded DOC-00 audit against current `main`. Do not create a correction PR until that audit identifies a specific, evidence-supported defect.
+
+### 34.10 Checkpoint governance
+
+This program addendum is a navigation/work-order definition only. It does not amend source-native document status or acceptance authority. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. All prior PR, CI, explicit merge approval and post-merge read-back controls remain in force.
+
