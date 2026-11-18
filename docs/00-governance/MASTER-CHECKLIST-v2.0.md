@@ -512,3 +512,42 @@ Status: expanded source recovery **COMPLETE — PARTIAL** for the reviewed Libra
 Next action: obtain the original A12.38.3 entity-level physical specification or an explicitly approved schema artifact from its authoritative source location. Verify owner/approval, version, scope, date, supersession and direct entity/field/key locators before updating any physical claim. Do not infer schema details or inspect/modify the database.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+
+## 21. Append-only work-routing correction — source recovery boundary and dependency closure (18 November 2026)
+
+### 21.1 Source-recovery disposition
+
+The bounded source recovery recorded in §§19–20 is COMPLETE — PARTIAL for the inspected source set. The reviewed evidence confirms 17/17 historical conceptual entities, but 0/17 authoritative physical entity names/field locators/PK/FK/composite-FK/UNIQUE/CHECK/index/delete-update/allocation/concurrency locators. A38-G01–G04 remain OPEN/TODO; the physical Data Dictionary remains NOT ACCEPTED; dependencies closed: none; FIX decisions changed: none.
+
+The earlier next-action wording in §§19.2 and 20.2 requesting another A12.38.3 source search is retained as a historical checkpoint, but is superseded for current work routing by this §21. No further A12.38.3 or equivalent archive-source search is planned under the present instruction. This does not convert missing physical evidence into a pass, close A38-G01–G04, or authorize database introspection or implementation.
+
+### 21.2 Current objective
+
+Focus the remaining work on correcting inconsistencies in the documentation already published on GitHub `main`, resolving specification-level dependencies where the existing evidence is sufficient, and identifying exactly what remains a release/implementation blocker. Do not reopen completed/frozen stages or repeat source recovery without new evidence or an explicit new instruction.
+
+### 21.3 Ordered next work
+
+| Order | Work package | Required outcome | Closure rule |
+|---:|---|---|---|
+| 1 | Control-plane reconciliation | DOC-00, this checklist and Master Project Index point to the same current checkpoint and preserve historical snapshots | Close only after the three append-only addenda are merged and read-back verified |
+| 2 | DOC-08 / DOC-09 / DOC-10 consistency | Reconcile IDs, statuses, cross-references, CVS mapping scope, conflicts and supersession | No inferred approvals; DOC-10 remains its own workstream |
+| 3 | A12.40 reassessment | Assess AC40-01–AC40-12 against published `main` evidence only | Record each criterion as PASS/PARTIAL/OPEN with exact evidence; do not claim acceptance unless all required criteria are satisfied |
+| 4 | Authorization consistency | Check DOC-05, DOC-08, DOC-09 and DOC-06 cross-document alignment | Conceptual FIX remains conceptual; technical enforcement and permission mapping remain open unless directly evidenced |
+| 5 | Security and traceability consistency | Check DOC-07, DOC-06 and dependency links without repeating unavailable-source searches | Missing REC-08 evidence and unexecuted tests remain explicit gaps |
+| 6 | Readiness/acceptance review | Reassess Stage 4.7.8, Stage 4.9 and implementation blockers | No stage is marked complete based on document drafting or navigation corrections alone |
+
+### 21.4 Current package status snapshot
+
+- DOC-08 focused ST5-11.40 correction: published at commit `5e7ed43691084c689afb835b66af5f805553886c`; DOC-08 remains NOT CANONICAL / NOT FINAL / ACCEPTANCE NOT MET.
+- DOC-09 v0.2 working master: published at commit `dbda10a28e8320785ff45eb4fe224ef0213fb8ef`; remains DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED.
+- DOC-10: separate consistency/supersession workstream; no completion or publication is asserted here.
+- A12.40: reassessment against current `main` evidence is the next bounded technical-specification audit; AC40-01–AC40-12 are not closed by this checklist addendum.
+- DOC-04 physical Data Dictionary: NOT ACCEPTED; A38-G01–G04 OPEN/TODO; 0/17 physical locators recovered in the reviewed source set.
+- Stage 4.7.8: PARTIAL — GATE NOT PASSED. Stage 4.9: PARTIAL — ACCEPTANCE NOT MET.
+- Stage 5 blanket archive migration: NOT AUTHORIZED. Stage 6 implementation: NOT AUTHORIZED.
+
+### 21.5 Operating controls
+
+READ-ONLY • APPEND-ONLY. `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, schema/migration/RLS/Auth changes, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging, or Production changes. Work proceeds one documentation PR at a time. Review exact diff and applicable CI; merge only after explicit user approval; verify every merged file on `main` before the next package.

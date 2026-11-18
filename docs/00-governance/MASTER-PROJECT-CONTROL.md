@@ -569,3 +569,45 @@ The statements in §23.3 and §23.5 that DOC-11/DOC-12 publication was not autho
 The next project work is limited to resolving documentation/specification dependencies that block implementation readiness, using the current Master Checklist and Master Open Register. This is preparation only; it does not authorize implementation, database, backend, application, CI workflow, Vercel, deployment or Production changes.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+
+## 25. Append-only control-plane reconciliation — DOC-08/DOC-09 and current work routing (18 November 2026)
+
+This addendum records package-specific publication evidence that post-dates the historical authorization snapshots in §§23.3–23.5 and supplements the DOC-11/DOC-12 reconciliation in §24. It does not rewrite those snapshots or grant blanket Stage 5 authority.
+
+### 25.1 Verified package records
+
+| Package | Verified GitHub evidence | Current status and boundary |
+|---|---|---|
+| DOC-08 focused correction | Commit `5e7ed43691084c689afb835b66af5f805553886c`; `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md` | Published focused correction only. DOC-08 remains NOT CANONICAL / NOT FINAL / ACCEPTANCE NOT MET. |
+| DOC-09 working master | Commit `dbda10a28e8320785ff45eb4fe224ef0213fb8ef`; `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` | DOC-09 v0.2 remains DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED. |
+
+These records identify commits, not PR numbers. No PR number is asserted by this addendum.
+
+### 25.2 DOC-08 correction scope
+
+The ST5-11.40 correction controls only the prospective CVS crosswalk mapping within its stated scope: O-01–O-12 use CVS-016 as general context; CR-01–CR-10 use CVS-015 as direct; Q-01–Q-06 use CVS-014 as direct; CVS-017 and CVS-039 remain limited context. This correction does not establish a complete authorization matrix, technical permission mapping, enforcement, test evidence, or implementation approval. It closes no dependency and does not promote conceptual FIX decisions beyond their recorded scope.
+
+### 25.3 DOC-09 status and locator qualification
+
+DOC-09 v0.2 is a consolidated working register and remains subject to review. Its later §3E locator update for DOC02-G03 records direct RMD-69 locator recovery and supersedes the earlier §3D UNRECOVERED statement only for the file-path and page/section locator criteria expressly addressed there. It does not close unrelated DOC-09 dependencies or imply complete claim-level backlink readiness.
+
+### 25.4 Historical authorization snapshots and DOC-10 boundary
+
+The NOT AUTHORIZED statements in §§23.3 and 23.5 are retained as historical snapshots. The later commits above evidence package-specific publication/correction only; they do not authorize blanket Stage 5 archive migration. DOC-10 remains a separate consistency/supersession workstream and is not declared published, complete, canonical, or accepted by this addendum. DOC-11/DOC-12 status remains as recorded in §24.
+
+### 25.5 Current work routing
+
+The current objective is documentation/specification dependency closure and readiness assessment, not further archive source hunting. The next bounded work sequence is:
+1. Reconcile control-document navigation and historical checkpoint wording through this addendum and the corresponding checklist/index addenda.
+2. Audit DOC-08, DOC-09 and DOC-10 cross-document consistency, preserving each document's current draft/acceptance status.
+3. Reassess A12.40 criteria AC40-01–AC40-12 using only evidence already published on `main`; do not repeat A12.38.3 source searches.
+4. Continue authorization, security, requirements/traceability and cross-document readiness checks against current published evidence.
+5. Reassess Stage 4.7.8 and Stage 4.9 acceptance only when their stated evidence criteria are met.
+
+No dependency is closed merely by this routing update. Missing evidence remains OPEN / PARTIAL / UNVERIFIED / UNRECOVERED as recorded by its owning register.
+
+### 25.6 Guardrails
+
+READ-ONLY • APPEND-ONLY. `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, schema, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging, or Production change is authorized. Stage 6 implementation remains NOT AUTHORIZED. This addendum authorizes no work beyond the documentation-only control updates in this PR.
