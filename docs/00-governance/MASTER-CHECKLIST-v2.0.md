@@ -1223,3 +1223,43 @@ This is a documentation/provenance correction only. DOC-01 remains DRAFT / RECON
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No database, schema, RLS/Auth, API/backend, application source, CI workflow, deployment, Supabase Preview/Staging or Production change is included.
 
 **Next work package:** DOC-02 read-only audit under §34.4, using current-`main` sources and avoiding repetition of completed DOC-00/DOC-01 work. Audit first; prepare a correction PR only if a new evidence-supported defect is found.
+
+
+
+## 36. PR #58 merge and post-merge verification — 19 November 2026
+
+### 36.1 Merge record
+
+- Pull request: [#58 — docs(audit): reconcile DOC-01 RMD-69 source locator](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/58).
+- Scope: append-only DOC-01 §13 locator reconciliation and this checklist's §35 DOC-01 audit checkpoint.
+- Reviewed change set: 2 documentation files; 60 additions; 0 deletions.
+- Validation before merge: Documentation CI #124 SUCCESS; POS SaaS CI #187 SUCCESS. The POS SaaS workflow's docs-only path does not constitute application build/test execution.
+- Review state at merge check: no submitted reviews and no inline review threads; PR reported mergeable.
+- Merge authorization: explicit conditional user authorization after all checks were verified.
+- Merge method: squash.
+- Merge commit: `3346b63b42bce53f45c992c85a53432493dab32a`.
+- GitHub merge result: **SUCCESS**.
+
+### 36.2 Post-merge read-back
+
+Both changed files were fetched from `main` after merge:
+
+1. `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md` — §13 exists and contains the current DOC01-G03 disposition: **RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY**. Verified main blob SHA: `b39a0a34628cdefe9c17fa373f188637f0bfd091`.
+2. `docs/00-governance/MASTER-CHECKLIST-v2.0.md` — §35 exists with the DOC-01 audit result and next routing to DOC-02. Verified main blob SHA at read-back: `8e848b5d096d32d48ffb372712f070f7df7488c3`.
+
+Post-merge verification: **PASS — 2/2 changed files read back from main**.
+
+### 36.3 Status and governance impact
+
+- DOC-01 audit/correction checkpoint remains as recorded in §35; DOC-01 remains DRAFT / RECONSTRUCTED WORKING MASTER / NOT CANONICAL / NOT FINAL.
+- Dependencies newly closed by PR #58: **0**.
+- FIX decisions changed: **0**.
+- No stage, acceptance, readiness or implementation status is promoted by this merge.
+- `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED.
+- No database, schema, RLS/Auth, API/backend, application source, CI workflow, deployment, Preview/Staging or Production change was made.
+
+### 36.4 Next routing
+
+Proceed to the bounded **DOC-02 — Category & Workflow Master read-only audit** under §34.4, using the exact current-`main` owning document and only necessary cross-document evidence. Do not repeat DOC-00 or DOC-01 audits. Prepare a correction PR only if a new, evidence-supported defect is established; otherwise record the bounded audit disposition without creating documentation churn.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
