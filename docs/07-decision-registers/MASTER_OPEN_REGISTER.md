@@ -401,3 +401,19 @@ The locator statement in §3D that DOC02-G03's direct RMD-69 v1.1 locator remain
 - **Decision boundary:** R69-D01–D12 remain FIX at conceptual level only. Safe-mode function list, lifecycle, SLA/expiry, reviewer authority, thresholds, evidence standards and technical enforcement remain OPEN. No module, role, capability, permission, schema, RLS, API or implementation approval is implied.
 - **GOV-OPEN-06 remains CLOSED only for Hotel/Other documentation-claim supersession.** This locator recovery does not broaden that closure or close RMD-OPEN-04 / XDOM-OPEN-09 technical details.
 - **GOV-OPEN-02 remains PARTIAL.** The separate per-file review supplement records M231-223; the original 231-row baseline is not rewritten, and all remaining unassessed rows require evidence-backed review.
+
+
+## 3F. Append-only GOV-OPEN-06 locator-status clarification — 19 November 2026
+
+This addendum reconciles the time-specific wording in the GOV-OPEN-06 row of §3D with the later direct-source recovery recorded in §3E. It does not rewrite the historical §3D table.
+
+- The §3D phrase stating that the DOC02-G03 direct RMD-69 v1.1 locator “remains UNRECOVERED separately” is a historical status snapshot and is superseded for that locator criterion only by §3E.
+- **Current DOC02-G03 locator status:** RECOVERED — direct Library path and page/section locators, as recorded in §3E. The recovered source is M231-223; verified locators are pp. 1–3, §§1–8.
+- **GOV-OPEN-06 disposition remains CLOSED — HOTEL/OTHER CLAIM SUPERSESSION ONLY.** Its closure scope is unchanged; DOC02-G03 locator recovery does not broaden the GOV-OPEN-06 closure.
+- **RMD-OPEN-04 and XDOM-OPEN-09 remain OPEN** for the safe-mode function list, lifecycle, SLA/expiry, reviewer authority, thresholds, evidence standards and technical details recorded by their owning sources.
+- DOC02-G03 recovery does not close GOV-OPEN-02, complete the 231-row per-file content review, establish complete claim-level backlinks, approve canonicality, or authorize implementation.
+- No dependency is newly closed by this clarification; no FIX decision changes.
+
+**Current reading rule:** use §3E for the current DOC02-G03 locator status; retain the §3D row as a historical dated snapshot. Preserve all other GOV-OPEN-06 and DOC-02 dependency boundaries.
+
+Control remains: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
