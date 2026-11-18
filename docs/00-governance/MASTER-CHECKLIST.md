@@ -419,3 +419,29 @@ Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 
 - No dependency is closed and no FIX decision or implementation authorization is changed by preparing v2.0.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 27. Append-only historical closure notice — v1.0 superseded by active v2.0 (18 November 2026)
+
+**AUTHORITATIVE STATUS: HISTORICAL / SUPERSEDED / NOT ACTIVE FOR NAVIGATION.**
+
+This v1.0 Master Checklist is formally closed as an active project-navigation and continuation-control document. It is retained only as historical checkpoint evidence. It must not be used to select the current checkpoint, next task, work sequence, or project status when the active v2.0 checklist is available.
+
+The sole active navigation checklist is:
+
+- `docs/00-governance/MASTER-CHECKLIST-v2.0.md`
+- Activation record: §14.1 of v2.0, following PR #35 merge and post-merge read-back verification.
+- Current work-routing authority: the latest append-only sections of v2.0, including §21 and subsequent checkpoint addenda.
+
+The following v1.0 statements are superseded for current navigation only: the header's PROPOSED/active-after-merge wording; §0's mandatory continuation instructions; the former next-work pointers in §§1–26; and §26's condition that v2.0 had not yet activated. Those statements are preserved as historical drafting/checkpoint snapshots and must not be interpreted as current instructions.
+
+Operating rules from this point:
+1. Read v2.0 from GitHub `main` first for project checkpoint and next work package.
+2. Read the relevant current domain documents from `main` for subject-specific authority.
+3. Focus on auditing and correcting documents already published on `main`; do not restart completed historical stages or repeat unavailable source-recovery work absent new evidence or an explicit request.
+4. Preserve this v1.0 file unchanged except for append-only historical closure notes. Do not delete, rename, or rewrite its prior sections.
+5. Keep all unresolved statuses and governance restrictions; this closure does not close dependencies, change FIX decisions, or authorize implementation.
+
+**Disposition:** v1.0 CLOSED — HISTORICAL RECORD ONLY. v2.0 ACTIVE — SINGLE NAVIGATION CHECKLIST.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
