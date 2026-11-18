@@ -1903,3 +1903,51 @@ The next useful task is a bounded **DOC-03 owner-document audit and version-refe
 After DOC-03, return to the highest-priority evidence-backed blockers in the existing sequence: Purchasing 14→15 and Sales 20→18 source-backed crosswalks if their primary sources are already published; otherwise retain them OPEN and identify the exact missing evidence. A12.40/A12.41 must not be promoted without their controlling source/acceptance evidence. No gate is passed by this reconciliation.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+
+## 54. DOC-03 owner-document version-reference reconciliation — 19 November 2026
+
+### 54.1 Audit scope and evidence
+
+- Work package: bounded DOC-03 owner-document follow-up to the completed DOC-03 audit in §38, specifically the DOC04-F03 issue routed by DOC-04 §26.4–§26.6.
+- DOC-03: `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md`, current-main pre-correction blob `4a475621d5ccde910814e51496b9cf3eaa587aae`; reviewed §11, surrounding source/decision boundaries, §§14–16 and all current DOC-04 version references.
+- DOC-04: `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, current-main blob `cec539002f97d3c473002ea26d09073bd545cae6`; header identifies Version 0.1.0, §15 records initial v0.1, and §26.4 explicitly states that no DOC-04 v0.2 master publication or approved promotion was established.
+- Master Project Index: `docs/MASTER-PROJECT-INDEX.md` §18 records PR #11 as publishing DOC-04 v0.1 at the current DOC-04 path.
+- Publication evidence: DOC-04 PR #11 is CLOSED/MERGED at `27caef4e83f73e17c19c023ad775c42b16a7a22b`; DOC-03 PR #10 is CLOSED/MERGED at `479e743460e23380c96883231f1721935dc335e9`.
+- DOC-04's separate references to “Update Audit A11–A12 and 17-table matrix v0.2” were checked to distinguish that source artifact from the DOC-04 master version.
+
+The prior DOC-03 conceptual architecture audit and its Stage 5/publication clarifications in §38 were not repeated. This follow-up is limited to the unresolved version-reference issue.
+
+### 54.2 Finding and correction
+
+- **DOC03-VRF-01 — DOC-03 §11 labels the DOC-04 working master as v0.2.** Current DOC-04 identifies itself as Version 0.1.0; the Master Project Index §18 identifies its publication as v0.1; PR #11 confirms the exact published artifact. No DOC-04 v0.2 master publication or approved version promotion was established.
+- The “v0.2” references within DOC-04 to the separate Update Audit A11–A12 / 17-table matrix are not DOC-04 master revision evidence and must not be conflated with the DOC-04 working-master version.
+- DOC-03 §17 adds an append-only clarification: the intended reference in the §11 evidence-family row is DOC-04 v0.1.0 (published/indexed as v0.1). The historical §11 text is preserved; no source history is rewritten.
+
+### 54.3 Correction PR and first-commit CI
+
+- PR #77: `docs(doc-03): reconcile DOC-04 version reference`.
+- URL: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/77
+- Branch: `docs/doc03-doc04-version-reference-reconciliation-2026-11-19`.
+- First audit/correction commit: `e9b0f8e3d32e51aa5614f7846de94e9b827d037e`; DOC-03 §17 only.
+- First-commit diff: 1 file, 31 additions, 0 deletions.
+- Documentation CI run `44378097689`: Markdown lint SUCCESS; documentation structure SUCCESS; internal documentation links SUCCESS.
+- POS SaaS CI run `44378097607`: Detect application changes SUCCESS; ESLint, dependency security audit, TypeScript typecheck and Next.js production build SKIPPED by documentation-only guard. Skipped application jobs are not test passes.
+- First-commit branch read-back verified DOC-03 §17 at blob `fac5af5ac7d9090289d75ac683ca624da99377da`.
+- The separate Master Checklist checkpoint is the second commit in PR #77. Combined PR diff, CI, reviews/threads and mergeability must be rechecked after that commit. Merge remains subject to separate explicit user approval.
+
+### 54.4 Audit outcome and status boundaries
+
+- DOC-03 owner-document version-reference reconciliation: **COMPLETE — ONE EVIDENCE-SUPPORTED DOCUMENT-CONTROL CLARIFICATION JUSTIFIED**.
+- DOC04-F03: **RESOLVED FOR DOC-03 VERSION-REFERENCE CLARIFICATION ONLY**.
+- DOC-03 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- DOC-04 remains Version 0.1.0 / v0.1 published working master / DRAFT / NOT CANONICAL / NOT FINAL.
+- Dependencies newly closed beyond the narrow document-reference issue: **0**. FIX decisions changed: **0**. Technical/source-native status promotions or demotions: **0**.
+- Physical Data Dictionary remains NOT ACCEPTED; A12.40 remains PARTIAL/OPEN; A12.41 remains NOT STARTED/NOT VERIFIED; Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; Implementation Readiness remains NOT READY.
+- No physical schema, authorization enforcement, implementation, test execution, security remediation/retest or Production evidence is created or inferred.
+
+### 54.5 Next controlled action
+
+After PR #77 is reviewed, explicitly approved, merged and post-merge verified, continue the next evidence-backed current-main blocker from §53.4: assess whether already-published primary sources support the Purchasing 14→15 and Sales 20→18 entity crosswalks. If the primary source or exact entity locators are not present, retain each crosswalk OPEN and record the precise missing evidence. Do not restart completed DOC-04 physical-source recovery, DOC-08–DOC-12 audits, or the A12.40 reassessment absent new evidence.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
