@@ -664,3 +664,123 @@ No index names, key columns, partial predicates, expressions, included columns o
 - Next DOC-04 work package: quantity/cost precision and conversion matrix, grounded in A12.37; preserve unknown numeric precision/scale, rounding and conversion rules as OPEN unless source locators establish them.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 20. Quantity / cost precision and conversion matrix — A12.37 (18 November 2026)
+
+### 20.1 Scope and evidence boundary
+
+This section records the source-backed conceptual numeric rules relevant to the 17-entity inventory/costing baseline and separates them from physical or operational parameters that remain unresolved. It is a documentation matrix, not a physical data dictionary, executable numeric specification, migration, or approval to implement.
+
+Reviewed sources:
+- `Konsolidasi_ERD_POS_SaaS_Multi_Usaha_v3.0_Tahap_5.9.3_DRAFT_Audit_Integrasi_v4_A12.37_Numeric_Policy.docx`, Addendum C §§C.1–C.10 (13 November 2026), especially C.3–C.9.
+- `POS_SAAS_MIGRATION_MAPPING_BATCH_02_INVENTORY_COSTING_v0.1_2026-11-15.md`, §§3–5 and 7–8.
+- `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§1–4.
+- A12.38 v5 Physical Entity & Data Dictionary Audit, Appendix D, which retains physical numeric types, precision/scale and maximum capacity as TODO.
+- DOC-04 §§3, 16–19, including the 17-entity baseline and prior physical-specification gaps.
+
+A12.37 is **CLOSED — CONCEPTUAL NUMERIC POLICY BASELINE** only. Physical numeric types, precision/scale, capacity, field definitions, conversion parameters, rounding implementation boundaries, constraints, concurrency/atomicity/idempotency enforcement and execution of the 60 conceptual scenarios remain OPEN / UNVERIFIED. No source reviewed here authorizes choosing arbitrary decimal digits, database types or operational defaults.
+
+### 20.2 Source-backed conceptual numeric rules
+
+| ID | Area | Established conceptual rule | Evidence locator | Physical / operational disposition |
+|---|---|---|---|---|
+| NUM-01 | Quantity and base unit | Product base unit is the canonical stock reference. Quantity precision follows the product base unit. Discrete units may require integers; measurable units may accept fractions according to operational precision. | A12.37 Addendum C §C.3, policy 1 | Per-product/base-unit precision configuration, numeric type, scale and capacity remain REVIEW/TODO. |
+| NUM-02 | Unit conversion | Conversion factors use high internal precision. Invalid quantities are rejected; they must not be silently rounded. Quantity is reconciled in base units. | A12.37 Addendum C §§C.3 and C.8 | Exact factor values, factor precision, allowed conversion graph, validation tolerances and conversion rounding boundary are OPEN. |
+| NUM-03 | Cost and cost layers | Total cost is the source of truth for a cost layer. Unit cost is derived from total cost / quantity at high internal precision. Consumption cost is calculated at high internal precision and residuals are reconciled deterministically. | A12.37 Addendum C §C.3, policy 2 | Numeric type, precision/scale, maximum capacity, division behavior and exact rounding stage are OPEN. |
+| NUM-04 | MWA / FIFO | MWA is default; FIFO is alternative. MWA pool is Business + Product/Variant + Inventory Location. Different locations are not combined. FIFO consumes eligible layers in FIFO order. | A12.37 Addendum C §C.4; A12.37.10.1 | Physical pool keys, eligible-layer ordering fields, tie handling outside LRM, arithmetic implementation and concurrency remain OPEN. |
+| NUM-05 | Transfers and costing | Internal transfer carries source cost to destination; it is not FIFO consumption and does not create new purchase cost. After receipt, destination MWA is recalculated from destination-location quantity and total cost. | A12.37 Addendum C §C.4 | Exact transfer value precision, posting arithmetic and rounding boundary remain OPEN. |
+| NUM-06 | Landed cost | Direct allocation is preferred when a cost is specifically identifiable. Shared cost uses a relevant, verifiable basis (examples include weight, volume, goods/customs value or quantity). If no suitable basis is verifiable, hold for REVIEW; do not invent a basis. Total allocation must equal source cost. | A12.37 Addendum C §C.5 | Cost classification, operational basis selection, allocation parameters and enforcement remain REVIEW/TODO. |
+| NUM-07 | Largest Remainder Method | LRM applies to proportional allocation when its scope is suitable. Residual goes first to the largest fractional remainder; ties use stable domain-specific business identity, then unique record ID. The identity must remain stable/immutable after posting. | A12.37 Addendum C §§C.3, C.5 and C.7 | Domain-specific stable keys and physical identifiers remain TODO. LRM is not a universal rule for quantity conversion, FX determination or every numeric operation. |
+| NUM-08 | Currency and FX | Source currency and functional/accounting currency remain distinct and traceable. Applied FX source, rate type, determination timestamp, actual rate and applied value are traceable; the applied rate is snapshotted on the transaction. FX differences are distinct from rounding differences. | A12.37 Addendum C §§C.3, C.6 and C.8 | Currency precision parameters, provider, rate-type policy, cut-off, fallback and FX journal policy remain REVIEW/TODO. |
+| NUM-09 | Sales / discount / tax | Calculation order and rounding boundaries must be explicit. Item and transaction discounts are traceable; tax basis follows applicable tax rules, not a universal assumption. Item, discount, tax and transaction totals reconcile. | A12.37 Addendum C §C.3, policy 3 | Tax policy parameters, currency/price precision and exact rounding stages remain REVIEW. |
+| NUM-10 | Rounding account | A dedicated rounding account is used only for rounding differences that genuinely require accounting adjustment. Internal allocation residuals should be resolved within the allocation where possible; FX differences remain separate. | A12.37 Addendum C §C.3, policy 6 | Account mapping, materiality and journal policy remain REVIEW/TODO. |
+| NUM-11 | Bank matching tolerance | Tolerance determines whether a matching variance is accepted; it does not alter source bank-statement or internal transaction values. Accounting adjustments are separate events/journals. | A12.37 Addendum C §C.3, policy 5 | Tolerance values and policy parameters remain REVIEW. |
+| NUM-12 | Posted history | Posted values and applied FX snapshots are not overwritten by later reference/configuration changes. Corrections use traceable reversal, compensation or adjustment records. | A12.37 Addendum C §§C.4–C.6; Batch 02 §§3–5 | Physical immutability enforcement, audit fields and correction implementation remain unverified. |
+
+### 20.3 Conversion and numeric lifecycle matrix
+
+| Lifecycle / subject | Rule supported by sources | Remaining question |
+|---|---|---|
+| Product/base-unit setup | Base unit is canonical; precision is configured in relation to the product/base unit. | Who may configure it, permitted effective dates/versions, and the exact precision values are not established here. |
+| Unit conversion | Use high internal precision for conversion factors; reject invalid quantity; never silently round; reconcile stock in base unit. | Exact factor source, reciprocal consistency, conversion-chain policy, validation bounds and rounding boundary are OPEN. |
+| Adjustment item | The conceptual item retains input quantity, conversion snapshot and signed base-quantity delta. | Exact physical fields, scale, snapshot structure and conversion-version reference are OPEN. |
+| Stock count | NULL means not counted; zero is a valid counted result. Variance is compared with expected quantity and post-snapshot movements must be considered. | Final count cutoff/watermark, recount history and numeric capacity are OPEN. |
+| Inventory balance | Available quantity = on-hand − reserved; quantities are reconciled in base units. | Projection precision, atomic update and reconciliation tolerance are OPEN. |
+| Cost layer | Total cost is authoritative; unit cost is derived at high internal precision. Unknown cost remains NULL, not zero. | Cost-layer precision, NULL constraints, maximum values and division/rounding policy are OPEN. |
+| FIFO consumption / compensation | Consumption cannot exceed eligible remaining layer quantity; partial compensation is allowed within the eligible original quantity and is traceable. | Physical numeric enforcement, lock/recheck boundary and overflow handling are OPEN. |
+| MWA | Pool is location-specific; consumption valuation must equal the MWA valuation for that location; layer allocations support traceability/reconciliation and must not over-consume. | Exact numeric algorithm, rounding boundary, residual handling and concurrency-safe implementation are OPEN. |
+| Transfer | Source cost travels with the internal transfer; destination MWA recalculates in the destination pool. | Exact transfer quantity/value representation and rounding point are OPEN. |
+| Landed-cost allocation | Direct or relevant verifiable shared basis; total allocated cost equals source total; posted corrections create new adjustment records. | Basis parameters, eligible cost classification and exact LRM execution details are OPEN. |
+| FX | Applied rate and source/time are transaction snapshots; later reference-rate changes do not rewrite posted transaction. | Currency scale, rate precision, provider/fallback and journal mapping are OPEN. |
+
+### 20.4 Per-entity numeric relevance and gap matrix
+
+This matrix identifies only source-supported numeric relevance; it does not approve physical columns or types.
+
+| Entity | Numeric / conversion relevance | Evidence / unresolved disposition |
+|---|---|---|
+| `inventory_batches` | Batch quantity and physical-batch identity; FEFO eligibility | Base-unit quantity precision applies conceptually; physical scale and batch quantity fields OPEN. |
+| `inventory_movements` | Signed base-quantity delta; immutable physical ledger | Base-unit reconciliation FIX conceptually; numeric type/scale and conversion provenance OPEN. |
+| `inventory_balances` | On-hand, reserved and available projection | Available = on-hand − reserved; projection precision and concurrency OPEN. |
+| `inventory_batch_balances` | Quantity projection by physical batch | Reconciliation to parent balance; precision and allocation grain OPEN. |
+| `inventory_adjustments` | Posted adjustment totals and correction history | No numeric physical specification established. |
+| `inventory_adjustment_items` | Input quantity, conversion snapshot, signed base delta | Conversion snapshot is source-supported; physical structure/scale OPEN. |
+| `stock_counts` | Snapshot/cutoff quantities | Post-snapshot movements must be accounted for; cutoff/watermark and precision OPEN. |
+| `stock_count_items` | Counted, expected and variance quantities | NULL versus zero semantics FIX; numeric capacity/scale and cutoff OPEN. |
+| `stock_transfers` | Transfer-level requested/dispatched/received reconciliation | Aggregate quantities reconcile; physical numeric fields and tolerance OPEN. |
+| `stock_transfer_items` | Requested and derived dispatched/received quantities | Split shipment and quantity caps are conceptual; numeric enforcement OPEN. |
+| `inventory_cost_exceptions` | Unknown/resolved cost | Unknown cost remains NULL, not zero; cost precision and resolution impact OPEN. |
+| `inventory_reservations` | Reserved, fulfilled and released quantity lifecycle | Active reserved = reserved − fulfilled − released; precision and atomic update OPEN. |
+| `inventory_reservation_items` | Requested/reserved/fulfilled/released quantities and batch allocations | Quantity caps and multi-batch allocation are conceptual; scale/concurrency OPEN. |
+| `inventory_cost_layers` | Original/remaining quantity and total/unit cost | Total cost source of truth; unit cost derived at high precision; physical numeric definitions OPEN. |
+| `inventory_cost_layer_consumptions` | Consumed quantity, cost snapshot and compensation | No over-consumption; compensation cap; physical precision and locking OPEN. |
+| `stock_transfer_shipments` | Dispatch and receipt quantity reconciliation | Partial/repeated receipt allowed; physical numeric fields and caps OPEN. |
+| `stock_transfer_shipment_items` | Dispatched, received, returned and loss quantities | Cumulative dispositions reconcile to dispatch; numeric enforcement OPEN. |
+
+### 20.5 Explicit non-decisions — do not infer
+
+The reviewed A12.37 sources do **not** establish:
+- A universal decimal precision/scale (for example, a fixed number of decimal places) for quantity, unit cost, total cost, price, tax, currency or FX.
+- A database numeric type, maximum digits, maximum magnitude or overflow strategy.
+- A single rounding mode (such as half-up, half-even, floor or ceiling) for all domains.
+- The exact point at which rounding occurs for every conversion, cost, sales, tax, currency, FX or journal calculation.
+- Exact unit-conversion factors, allowed conversion paths, reciprocal rules or default tolerances.
+- A universal tolerance value for quantity, cost, bank matching or reconciliation.
+- Physical column names, SQL expressions, constraints, indexes or implementation algorithms.
+- Evidence that the 60 conceptual scenarios have been executed or passed.
+
+LRM and its deterministic tie-breaker are scoped to suitable proportional allocation only; they must not be generalized to all arithmetic.
+
+### 20.6 N37 finding status carry-forward
+
+| Finding | Subject | Status to preserve |
+|---|---|---|
+| N37-01 | Quantity/base-unit precision and conversion | FIX conceptual; per-product/base-unit precision is configuration; physical type/scale REVIEW/TODO |
+| N37-02 | Unit cost and cost-layer precision | FIX conceptual; physical type/scale and capacity TODO |
+| N37-03 | FIFO/MWA rounding and residual costing | FIX conceptual; physical key/domain and technical implementation TODO |
+| N37-04 | Landed-cost allocation residual | FIX basis policy; cost classification/operational parameters REVIEW; enforcement TODO |
+| N37-05 | Price/discount/tax rounding sequence | FIX principle; tax policy and rounding settings REVIEW |
+| N37-06 | Currency precision and accounting boundary | FIX principle; currency precision parameters and FX policy REVIEW |
+| N37-09 | Bank matching tolerance/residual | FIX that tolerance does not alter source values; tolerance value REVIEW |
+| N37-11 | FX source/rate/residual/journal | FIX traceability/snapshot principles; provider, cut-off, fallback and journal policy REVIEW/TODO |
+| N37-13 | Deterministic residual allocation | FIX LRM and tie-breaker principle; domain-specific stable key TODO |
+| N37-14 | Zero/negative/extreme/overflow tests | Conceptual scenarios only; no execution evidence |
+| N37-15 | Concurrency/atomicity numeric processing | Conceptual scenarios only; no execution evidence |
+
+N37-07, N37-08, N37-10 and N37-12 are cross-domain payment/settlement/AP-AR/journal test findings, not inventory-only numeric specifications. Their scenario status remains as recorded in A12.37; this DOC-04 section does not claim those tests passed or close those findings.
+
+### 20.7 Result and next sequence
+
+- Source-backed conceptual numeric rules: **DOCUMENTED — COMPLETE — PARTIAL** for the scope above.
+- Base-unit canonicalization, high-internal-precision conversion, rejection of invalid quantity without silent rounding, total-cost authority, MWA/FIFO distinction, LRM scope, FX snapshot and posted-history immutability: **DOCUMENTED from A12.37**.
+- Exact physical precision/scale/type/capacity: **OPEN / NOT ESTABLISHED**.
+- Exact conversion-factor governance and validation parameters: **OPEN / NOT ESTABLISHED**.
+- Universal rounding mode and per-domain rounding boundary: **OPEN / NOT ESTABLISHED**.
+- Currency precision, FX provider/rate policy, tax settings, bank tolerance and rounding-account parameters: **REVIEW / TODO**.
+- Physical enforcement and execution of conceptual scenarios: **NOT VERIFIED**.
+- Dependencies closed: **none**. FIX decisions changed: **none**.
+- No schema, SQL, DDL, DML, migration, database, application code, CI workflow, Vercel, deployment or Production changes.
+- Next DOC-04 work package remains event/idempotency/atomicity/concurrency specification, preserving unresolved numeric/locking/transaction semantics as OPEN.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
