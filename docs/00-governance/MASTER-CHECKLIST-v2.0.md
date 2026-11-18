@@ -950,3 +950,48 @@ This is one index-navigation correction, not completion of the broader DOC-00–
 ### 31.5 Governance
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. No database/schema/RLS/Auth/API/backend/application/CI-workflow/Vercel/deployment/Supabase Preview/Staging/Production changes are included or authorized. PR review, CI validation, explicit merge approval and post-merge read-back remain separate required controls.
+
+
+## 32. Append-only DOC-08 / DOC-09 / DOC-10 authorization crosswalk consistency audit — 19 November 2026
+
+### 32.1 Bounded audit scope
+
+A read-only consistency comparison was completed against the current `main` copies of:
+- DOC-08 focused correction: `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md`, §§1–7;
+- DOC-09: `docs/07-decision-registers/MASTER_OPEN_REGISTER.md`, authorization dependencies AUTH-OPEN-01–27, RMD-OPEN-06/12/13, XDOM-OPEN-01–06/10, and current status/locator addenda §§8.1–8.7 and §§3D–3F;
+- DOC-10: `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md`, CVS-014–CVS-017, CVS-039, canonical-status table §4, and current-status clarification §10.2–§10.3.
+
+This is a focused O/CR/Q authorization CVS crosswalk audit, not a complete review or acceptance of all content in DOC-08, DOC-09 or DOC-10.
+
+### 32.2 Consistency result
+
+**PASS WITH OPEN DEPENDENCIES — no contradictory CVS assignment was found within the reviewed scope.**
+
+The prospective crosswalk in DOC-08 agrees with DOC-10 §10.2 and the CVS register entries:
+- O-01–O-12 → CVS-016 as general context only; not direct approval evidence.
+- CR-01–CR-10 → CVS-015 as direct conflict locator; CVS-016 remains general context only.
+- Q-01–Q-06 → CVS-014 as direct conflict locator; CVS-016 remains general context only.
+- CVS-017 remains Education/Hotel-specific, not a general CR/Q locator.
+- CVS-039 remains REC-05/REC-06 authorization/workflow evidence context, not primary approval evidence for O/CR/Q.
+
+The DOC-08 dependency references were checked against DOC-09's current register entries. AUTH-OPEN-01–27, RMD-OPEN-06/12/13 and XDOM-OPEN-01–06/10 are present in the owning register. Their original statuses and closure criteria remain controlling; the crosswalk does not promote or close them.
+
+DOC-09's dated status addenda remain the current temporal reading layer where earlier body rows are historical. DOC-10's CVS entries and §10.2 remain aligned with the DOC-08 prospective correction. No further correction to DOC-08, DOC-09 or DOC-10 was justified by this bounded comparison.
+
+### 32.3 Status and authority boundaries
+
+- DOC-08: remains NOT CANONICAL / NOT FINAL / ACCEPTANCE NOT MET.
+- DOC-09: remains DRAFT v0.2 / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- DOC-10: remains DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- O/CR/Q decisions remain conceptual FIX only within their explicit source scope.
+- Stable permission keys, final permission matrix, grants, scope resolver, SoD, field allowlists, server/API/RLS enforcement and executed negative tests remain OPEN / NOT VERIFIED as recorded by their owning sources.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**.
+- No DOC-08, DOC-09 or DOC-10 status is promoted by this audit.
+
+### 32.4 Next route
+
+The DOC-08/DOC-09/DOC-10 crosswalk consistency slice is complete with open dependencies preserved. Continue the next work-order item from the current project navigation: reassess A12.40 criteria AC40-01–AC40-12 using only evidence already published on `main`. Do not repeat A12.38.3 source searches. Do not begin A12.41 while A12.40 remains PARTIAL / OPEN.
+
+### 32.5 Governance
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. No database/schema/RLS/Auth/API/backend/application/CI-workflow/Vercel/deployment/Supabase Preview/Staging/Production changes are included or authorized. This checkpoint records only the bounded documentation audit; PR review, CI validation, merge approval and post-merge read-back remain separate controls.
