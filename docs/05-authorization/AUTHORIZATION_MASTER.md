@@ -383,3 +383,17 @@ The publication workflow items DOC05-08 (editorial consistency/link review), DOC
 The following remain OPEN, PARTIAL, or unverified: REC-06; G01–G10; Scope O01–O10; SoD A01–A12; permission-key definitions; category/module/action mapping; scope resolver; field-level data classification; technical enforcement; and negative acceptance test execution. No implementation, runtime enforcement, or test PASS is established by PR #14.
 
 This package-specific publication does not authorize the full Stage 5 GitHub migration, Stage 6 implementation, database changes, or Production changes. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
+
+
+## 19. Append-only publication-status reconciliation — DOC-05 (18 November 2026)
+
+This addendum reconciles the publication workflow status recorded in §17 with the verified post-merge publication record in §18. It does not revise the underlying authorization design or acceptance scope.
+
+1. DOC-05 publication package PR #14 is **COMPLETE — MERGED & VERIFIED** on `main` as recorded in §18. The publication tasks DOC05-08 (editorial consistency/link review), DOC05-09 (documentation CI and substantive diff review), DOC05-10 (explicit user merge approval), and DOC05-11 (merge and post-merge verification) are complete for that publication package.
+2. The `IN PROGRESS` / `PENDING` values in §17 for DOC05-08 through DOC05-11 are retained as the pre-merge checklist snapshot. They are superseded for current publication-status navigation by this §19 and the verified §18 record; they are not current pending tasks.
+3. The sentence in §1 stating that DOC-05 is still proposed on a PR branch is likewise a historical pre-publication statement. The current GitHub working reference is the file published at the path recorded in §18. The document remains a reconstructed working master, not a canonical/final authorization specification.
+4. Publication completion does **not** close G01–G10, Scope O01–O10, SoD A01–A12, REC-06, AUTH-OPEN-01–27, or the related DOC-06 traceability gaps. It does not approve stable permission keys, grants, module/action mappings, scope resolver, field allowlists, technical enforcement, test execution, or Production readiness.
+
+**Current disposition:** DOC-05 publication = COMPLETE — MERGED & VERIFIED (PR #14); document/design status = DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL; technical authorization dependencies remain OPEN/PARTIAL/NOT VERIFIED as individually registered.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
