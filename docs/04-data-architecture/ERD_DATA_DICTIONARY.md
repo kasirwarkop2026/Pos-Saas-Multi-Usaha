@@ -1123,3 +1123,65 @@ The values above describe locator recovery in the reviewed source set; they are 
 - Until then, retain all physical fields, types, keys, constraints, tenant enforcement, lifecycle and delete behavior as OPEN / UNVERIFIED.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+## 25. DOC-04 GAP-04 ↔ DOC-09 ERD-OPEN dependency crosswalk — 18 November 2026
+
+### 25.1 Audit basis and finding
+
+A read-only comparison reviewed:
+- DOC-04 §13 (GAP-04-01–GAP-04-16), together with DOC-04 §§16–24.
+- DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §3C (ERD-OPEN-01–ERD-OPEN-27).
+- Master Checklist v2.0 §§3, 5–8, 21–27.
+
+The two registers describe overlapping Inventory & Costing physical-specification, provenance and readiness gaps, but use different identifiers and scopes. The reviewed documents did not provide an explicit GAP-04-to-ERD-OPEN crosswalk. This addendum supplies a derived navigation aid only.
+
+### 25.2 Relationship labels and GAP-04 crosswalk
+
+- **DIRECT SUBJECT OVERLAP**: the register entries address substantially the same unresolved subject; IDs, closure criteria, owners and evidence remain distinct.
+- **RELATED**: one entry is a broader dependency, prerequisite or adjacent technical concern; it does not satisfy the other entry.
+- **NO DEDICATED COUNTERPART**: no ERD-OPEN item was found that specifically represents the GAP-04 subject, beyond a broad umbrella dependency.
+
+| DOC-04 gap | DOC-09 ERD-OPEN reference(s) | Relationship | Scope boundary |
+|---|---|---|---|
+| GAP-04-01 — 17-entity field dictionary: names, types, precision, nullability and defaults | ERD-OPEN-03 | DIRECT SUBJECT OVERLAP | ERD-OPEN-03 is the umbrella physical-specification gap. DOC-04 §§17, 22–24 show logical information and source recovery, not approved physical fields. |
+| GAP-04-02 — PK/FK/composite FK and tenant enforcement | ERD-OPEN-03; ERD-OPEN-06 | DIRECT SUBJECT OVERLAP / RELATED | ERD-OPEN-03 covers physical keys and tenant keys; ERD-OPEN-06 narrows to A02 polymorphic-source validation and tenant integrity. Neither establishes actual key tuples or enforcement. |
+| GAP-04-03 — UNIQUE/CHECK/index/delete-update strategy | ERD-OPEN-03; ERD-OPEN-05–06; ERD-OPEN-09–13; ERD-OPEN-15 | DIRECT SUBJECT OVERLAP / RELATED | ERD-OPEN-03 is the broad constraint/index dependency. The others cover specific source, lifecycle, concurrency and idempotency cases; they do not approve concrete expressions, indexes or referential actions. |
+| GAP-04-04 — nullable-variant uniqueness and projection concurrency | ERD-OPEN-10; ERD-OPEN-11; ERD-OPEN-27 | RELATED | These cover concurrency, balance reconciliation and costing context. No dedicated ERD-OPEN item specifies nullable-variant uniqueness semantics. |
+| GAP-04-05 — A01 movement source identity registry physical structure | ERD-OPEN-05 | DIRECT SUBJECT OVERLAP | A01 source registry structure, FK, lifecycle, validation and uniqueness remain technical TODO. |
+| GAP-04-06 — A02 reservation source validation/TTL physical model | ERD-OPEN-06 | DIRECT SUBJECT OVERLAP | Source type/ID validation, tenant integrity, constraints and tests remain open; A02 must not be conflated with A01. |
+| GAP-04-07 — cost-layer transfer identity and landed-cost correction mapping | ERD-OPEN-08; ERD-OPEN-12; ERD-OPEN-27 | DIRECT SUBJECT OVERLAP / RELATED | ERD-OPEN-08 addresses transfer identity continuity; ERD-OPEN-12 addresses landed-cost correction; ERD-OPEN-27 is the broader physical costing dependency. |
+| GAP-04-08 — shipment receipt/return/loss event chain physical structure | ERD-OPEN-07; ERD-OPEN-14; ERD-OPEN-15 | DIRECT SUBJECT OVERLAP | Partial receipt, return/cost-layer reversal and transfer/shipment lifecycle are related event-chain scopes; physical event records, keys and enforcement remain unapproved. |
+| GAP-04-09 — allocation/consumption/compensation FK, caps and enforcement | ERD-OPEN-03; ERD-OPEN-14; ERD-OPEN-27 | RELATED; NO DEDICATED COUNTERPART | The reviewed ERD-OPEN register has no dedicated allocation/compensation dependency ID. The broad physical-schema, reversal and costing entries are adjacent only; A12.17 conceptual cardinality does not establish physical bridge/FK/cap enforcement. |
+| GAP-04-10 — locking, deadlock retry, concurrency and atomicity tests | ERD-OPEN-10; ERD-OPEN-11; ERD-OPEN-13; ERD-OPEN-27 | DIRECT SUBJECT OVERLAP / RELATED | ERD-OPEN-10 directly addresses FIFO/reservation concurrency; the others cover projection, replay and costing dependencies. No execution evidence is implied. |
+| GAP-04-11 — idempotency key, payload retention and duplicate handling | ERD-OPEN-13; ERD-OPEN-05–06 | DIRECT SUBJECT OVERLAP / RELATED | ERD-OPEN-13 directly addresses A09 idempotency. A01/A02 source identity validation is related, not a substitute for the idempotency contract. |
+| GAP-04-12 — tenant composite FK, RLS and server enforcement evidence | ERD-OPEN-03; ERD-OPEN-06 | DIRECT SUBJECT OVERLAP / RELATED | ERD-OPEN-03 covers physical tenant keys; ERD-OPEN-06 covers A02 tenant integrity. Neither is evidence of deployed RLS/server enforcement or executed tenant-isolation tests. |
+| GAP-04-13 — A12.18–A12.28 individual provenance | ERD-OPEN-16 | DIRECT SUBJECT OVERLAP | The missing primary source/decision locators remain UNRECOVERED / UNVERIFIED; do not reconstruct their contents. |
+| GAP-04-14 — A12.31E and A12.36.1 approval/provenance | ERD-OPEN-18; ERD-OPEN-19 | DIRECT SUBJECT OVERLAP | The two source-specific statuses and closure requirements remain distinct and unchanged. |
+| GAP-04-15 — A12.40 D40-203–D40-216 | ERD-OPEN-20; ERD-OPEN-22 | DIRECT SUBJECT OVERLAP | ERD-OPEN-20 tracks A12.40 acceptance; ERD-OPEN-22 tracks unrecovered D40 findings. Neither is closed by this crosswalk. |
+| GAP-04-16 — A12.41 final readiness reassessment | ERD-OPEN-21 | DIRECT SUBJECT OVERLAP | A12.41 remains NOT STARTED / NOT VERIFIED. The six-versus-seven gate discrepancy remains unresolved under Master Checklist §26.5; this crosswalk does not decide the gate count. |
+
+### 25.3 ERD-OPEN entries without a dedicated GAP-04 counterpart
+
+The following DOC-09 entries have no dedicated GAP-04 ID in DOC-04 §13; they must remain independently tracked:
+- **ERD-OPEN-01 and ERD-OPEN-02** — canonical ERD/working-reference document-control status.
+- **ERD-OPEN-04** — candidate status of `inventory_cost_layer_movements`; no 18th entity is approved.
+- **ERD-OPEN-17** — A12.31–A12.36 partial/open decision set, broader than GAP-04-14.
+- **ERD-OPEN-23** — D40-244/D40-253 replacement-decision provenance.
+- **ERD-OPEN-24 and ERD-OPEN-25** — Purchasing 14→15 and Sales 20→18 entity crosswalks.
+- **ERD-OPEN-26** — A12 Decision Register canonicality and consolidated-document metadata mismatch.
+
+Conversely, GAP-04-04 and GAP-04-09 retain specific detail not represented by a dedicated ERD-OPEN ID. Do not assume that the umbrella ERD-OPEN-03 or a related item fully captures those closure requirements.
+
+### 25.4 Status, authority and closure preservation
+
+- DOC-04 GAP-04-01–GAP-04-16 retain every status in §13.
+- DOC-09 ERD-OPEN-01–ERD-OPEN-27 retain their source-native statuses in §3C.
+- This crosswalk does not merge IDs, replace either register, create a primary source, establish a physical key tuple, approve a constraint/index/referential action, or prove RLS/server enforcement.
+- Dependencies closed: **0**. FIX decisions changed: **0**.
+- Physical Data Dictionary remains **NOT ACCEPTED**; physical schema and implementation readiness remain **NOT VERIFIED / NOT READY**.
+
+### 25.5 Next work and governance
+
+Continue only with a specific evidence-backed discrepancy or newly available authoritative source. Do not repeat the bounded A12.38.3/source searches already recorded in §§23–24. Do not infer schema, approval, enforcement, test execution or Production state from this derived crosswalk.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no SQL/DDL/DML, database introspection, schema/migration, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
