@@ -910,3 +910,43 @@ This is one evidence-backed navigation correction, not a declaration that the br
 ### 30.4 Governance
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. No database/schema/RLS/Auth/API/backend/application/CI-workflow/Vercel/deployment/Supabase Preview/Staging/Production changes are included or authorized. PR review, CI validation, explicit merge approval and post-merge read-back remain separate required controls.
+
+
+## 31. Append-only Stage 4.7.8 / Stage 4.9 Master Project Index locator audit checkpoint — 19 November 2026
+
+### 31.1 Audit scope and evidence
+
+Following §30, a bounded read-only comparison reviewed the current main copies of:
+- docs/MASTER-PROJECT-INDEX.md §§12, 14 and 15;
+- docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md §§9–12;
+- docs/07-decision-registers/MASTER_OPEN_REGISTER.md §§3D–3F; and
+- docs/00-governance/MASTER-PROJECT-CONTROL.md §§25.3 and 26.
+
+### 31.2 Finding
+
+The Master Project Index §12 retained a historical locator limitation stating that the direct RMD-69 v1.1 path remained OPEN. The later §14 per-file review addendum identifies baseline row M231-223, the exact Library path, and verified pp. 1–3, §§1–8. DOC-02 §12 and DOC-09 §§3E–3F also record the recovery. DOC-00 §§25.3 and 26 already route to the later recovery.
+
+The substantive locator recovery was therefore already evidenced; the remaining issue was the Master Project Index's missing explicit historical/current reading rule. DOC-02 §10's earlier UNRECOVERED statement is expressly superseded for this locator criterion by DOC-02 §12; DOC-09 §3D is similarly reconciled by §§3E–3F.
+
+### 31.3 Narrow correction prepared
+
+A documentation-only append-only correction is prepared on branch docs/stage478-index-rmd69-locator-reconciliation-2026-11-19:
+- Master Project Index §16 identifies §12 as a historical snapshot and directs readers to the current recovered locator evidence in §§14/16 and the controlling cross-document records.
+- DOC-00 §27 records the finding and scope boundary.
+- This §31 records the bounded audit checkpoint and pending PR validation/merge state.
+
+### 31.4 Impact and remaining status
+
+- DOC02-G03 direct RMD-69 v1.1 source path/page-section locator: RECOVERED.
+- GOV-OPEN-02: PARTIAL; unchanged.
+- GOV-OPEN-06: CLOSED — HOTEL/OTHER CLAIM SUPERSESSION ONLY; unchanged.
+- RMD-OPEN-04 / XDOM-OPEN-09: OPEN; unchanged.
+- Dependencies newly closed: 0. FIX decisions changed: 0.
+- Stage 4.7.8: PARTIAL — GATE NOT PASSED.
+- Stage 4.9: PARTIAL — ACCEPTANCE NOT MET.
+
+This is one index-navigation correction, not completion of the broader DOC-00–DOC-12 claim-locator audit. Continue one bounded evidence-backed package at a time. Retain unsupported claim locators/backlinks as OPEN / UNVERIFIED. Do not repeat bounded A12.38.3 or equivalent physical-source searches without new evidence.
+
+### 31.5 Governance
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. No database/schema/RLS/Auth/API/backend/application/CI-workflow/Vercel/deployment/Supabase Preview/Staging/Production changes are included or authorized. PR review, CI validation, explicit merge approval and post-merge read-back remain separate required controls.
