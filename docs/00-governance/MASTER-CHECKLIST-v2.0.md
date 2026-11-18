@@ -635,3 +635,14 @@ Continue the authorization consistency audit across DOC-05, DOC-08, DOC-09 and D
 ### 23.4 Governance boundary
 
 This navigation correction closes only the legacy checklist's active-navigation role. It closes no domain dependency and changes no FIX decision. `DB_PUSH_BLOCKED: ACTIVE`; no SQL/DDL/DML, database/schema/migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED.
+
+
+## 24. Append-only DOC-05 publication-status reconciliation — 18 November 2026
+
+- Authorization consistency audit across DOC-05, DOC-08, DOC-09 and DOC-06 found the conceptual FIX boundaries and prospective CVS mapping aligned: O-01–O-12 use CVS-016 as general context only; CR-01–CR-10 use CVS-015 directly; Q-01–Q-06 use CVS-014 directly. CVS-017 and CVS-039 remain contextual only. DOC-08 does not close DOC-09 dependencies.
+- DOC-09 AUTH-OPEN-01–27 remain individually OPEN/PARTIAL/TODO/NOT VERIFIED as recorded; DOC-06 TRC-OPEN-01–15 remain open. Their dependency links reviewed in this package are consistent with the stated technical gaps. No dependency is closed and no FIX decision is changed.
+- One publication-status inconsistency was identified in DOC-05: §17 retained pre-merge PENDING/IN PROGRESS publication checklist values and §1 retained a pre-publication PR-branch statement, while §18 already records PR #14 as merged and verified. An append-only clarification is prepared in DOC-05 §19 to preserve the historical snapshot while making the current publication status unambiguous.
+- DOC-05 remains a reconstructed working master, DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. This publication-status correction does not close AUTH-OPEN, SoD, scope, REC-06, or technical enforcement/test dependencies.
+- Next action: review the focused DOC-05 §19 + this checklist addendum PR, verify documentation CI and exact diff, then obtain explicit merge approval before merging.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no database/schema, RLS/Auth, backend/API, application, CI workflow, Vercel, deployment or Production changes; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
