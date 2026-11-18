@@ -1185,3 +1185,73 @@ Conversely, GAP-04-04 and GAP-04-09 retain specific detail not represented by a 
 Continue only with a specific evidence-backed discrepancy or newly available authoritative source. Do not repeat the bounded A12.38.3/source searches already recorded in §§23–24. Do not infer schema, approval, enforcement, test execution or Production state from this derived crosswalk.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no SQL/DDL/DML, database introspection, schema/migration, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 26. Append-only DOC-04 bounded audit and navigation reconciliation — 19 November 2026
+
+### 26.1 Audit identity, scope and evidence
+
+- Work package: **DOC-04 — ERD & Data Dictionary Master bounded read-only audit**, continuing after the already completed technical/source work packages in §§16–25.
+- Owning file: `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, current header Version **0.1.0**, status **RECONSTRUCTED WORKING MASTER — DRAFT / REVIEW REQUIRED — NOT CANONICAL / NOT FINAL**.
+- Audit base: repository `main` at `da046720e6454ab7e3a693ad88bcddd7e014755e` (PR #62 merge).
+- Sections reviewed: DOC-04 §§1–15, Appendix A, and §§16–25. The technical matrices and source-recovery work in §§16–25 were inspected for consistency and were not recreated.
+- Bounded cross-checks: Master Checklist v2.0 §39; DOC-03 §11 and §11.1; DOC-09 §3C and §25; DOC-10 CVS-026 and CVS-032; Master Project Index §§17–18.
+- Method: current-`main` read-only inspection. Historical snapshots, current document metadata, conceptual decisions, physical specification, provenance and implementation evidence were kept as separate status dimensions.
+
+### 26.2 DOC04-F01 — stale next-work instructions retained as historical snapshots
+
+The following next-work statements accurately described the sequence when their respective sections were first written, but are superseded by later completed DOC-04 packages already present in this same file:
+
+| Earlier section | Historical next-work statement | Later package now present |
+|---|---|---|
+| §17.5 | PK/FK/composite-FK tenant-integrity matrix | §18 |
+| §18.6 | UNIQUE/CHECK/index matrix | §19 |
+| §19.6 | Quantity/cost precision and conversion matrix | §20 |
+| §20.7 | Event/idempotency/atomicity/concurrency specification | §21 |
+| §21.8 | Physical Data Dictionary acceptance review | §22 |
+| §22.5 | Continue physical-source recovery and locator reconciliation | §§23–24 |
+| §23.4 | Recover original A12.38.3 field-level physical specification | §24 records the expanded source-recovery assessment; the original source remains unrecovered |
+| §24.4 | Reconcile a newly obtained authoritative physical source if one becomes available | Still conditional; no such source was recovered by this audit |
+
+These statements are not deleted or rewritten because they are historical checkpoint records. For current DOC-04 navigation, the completed sequence is §§16–25. Do not restart those matrices or source searches without new authoritative evidence, a material contradiction, or explicit re-audit instruction. The remaining physical-source and implementation gaps retain their source-native statuses.
+
+### 26.3 DOC04-F02 — original-body end marker precedes later appendices
+
+Appendix A contains the phrase “End of DOC-04” before the later append-only packages §§16–25. In the current assembled file this phrase can be mistaken for the end of the whole document.
+
+The phrase is retained as part of the original reconstructed body/history. For navigation, it marks the end of the original body snapshot and **does not** terminate the current assembled DOC-04 file; the later numbered sections are valid append-only continuations. No historical text is removed or rewritten.
+
+### 26.4 DOC04-F03 — external DOC-03 version-reference discrepancy (not corrected in this DOC-04 package)
+
+DOC-03 §11 lists “DOC-04 v0.2” as its evidence-family reference. The current DOC-04 header identifies this file as Version **0.1.0**, and Master Project Index §18 records the PR #11 publication as DOC-04 **v0.1**. The reviewed current-main sources do not establish a DOC-04 v0.2 publication or an approved version promotion.
+
+Disposition:
+- Preserve DOC-04's current header/version **0.1.0**; do not silently promote it to v0.2.
+- Record the mismatch as an external cross-document reference issue owned by the DOC-03 audit/correction scope.
+- Do not edit DOC-03 from this DOC-04 work package.
+- DOC-03's version reference remains **OPEN for owner-document reconciliation**; no DOC-04 source authority or decision status changes.
+
+### 26.5 Cross-document consistency and preserved technical disposition
+
+The bounded cross-check found no evidence-supported change to the substantive DOC-04 conceptual baseline or the DOC-04 §13 ↔ DOC-09 §3C/§25 dependency mapping.
+
+- The 17 historical conceptual entities remain the baseline; `inventory_cost_layer_movements` remains a candidate, not an approved eighteenth entity.
+- MWA remains default per Business + Product/Variant + Inventory Location; FIFO remains the alternative. FEFO selects physical batches; FIFO consumes cost layers.
+- A12.38 remains closed only for conceptual audit/gap-register scope; physical Data Dictionary remains OPEN / NOT ACCEPTED.
+- A12.39 remains closed only for conceptual relationship/constraint specification; physical key, constraint and enforcement verification remains OPEN / UNVERIFIED.
+- GAP-04-01–GAP-04-16 and ERD-OPEN-01–ERD-OPEN-27 retain their owning-document statuses. The crosswalk remains a navigation aid, not a closure or replacement of either register.
+- A12.18–A12.28 remain OPEN/UNVERIFIED; A12.31E remains OPEN; A12.36.1 remains UNVERIFIED/REVIEW; A12.40 remains PARTIAL/OPEN with D40-203–D40-216 UNRECOVERED; A12.41 remains NOT STARTED.
+- No physical field, PK/FK tuple, composite-FK tuple, UNIQUE/CHECK/index definition, numeric precision/scale, lifecycle enforcement, RLS/server authorization, test execution or Production state is inferred or newly verified.
+
+### 26.6 Audit disposition and next routing
+
+- DOC-04 bounded read-only audit: **COMPLETE — APPEND-ONLY NAVIGATION CLARIFICATIONS RECORDED; NO SUBSTANTIVE DATA-MODEL CORRECTION IDENTIFIED**.
+- DOC-04-F01/F02: historical navigation/boundary clarifications recorded in this addendum; historical wording preserved.
+- DOC-04-F03: external DOC-03 version-reference discrepancy recorded; owner-document follow-up remains OPEN.
+- Dependencies newly closed: **0**.
+- FIX decisions changed: **0**.
+- Physical Data Dictionary acceptance: **NOT ACCEPTED**.
+- DOC-04 canonical/final status: **NOT PROMOTED**.
+- Next work package: **DOC-05 — Authorization Architecture Master bounded read-only audit**, following active Master Checklist v2.0 §39. Read the current DOC-05 and only necessary controlling cross-references from `main`; do not repeat completed work. Route DOC04-F03 to the DOC-03 owner audit when that document is next in the approved remediation sequence.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this addendum.
