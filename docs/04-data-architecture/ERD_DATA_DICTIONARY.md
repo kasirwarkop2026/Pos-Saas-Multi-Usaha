@@ -1068,3 +1068,58 @@ Additional boundaries:
 - Next action: recover the missing original A12.38.3 entity-level physical specification or an explicitly approved schema artifact from its authoritative source location. Once available, reconcile each locator and field/key claim against the 17 rows before considering any acceptance update. Until then, preserve all physical details as OPEN / UNVERIFIED.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 24. Expanded physical-source recovery and candidate-authority assessment — 18 November 2026
+
+### 24.1 Additional historical source examined
+
+Following §23, the search was widened to earlier consolidation and provenance records, plus title-focused Library searches for Inventory & Costing schema, migration SQL, ERD and physical data dictionary artifacts.
+
+Additional source directly opened:
+- `Konsolidasi ERD POS SaaS Multi-Usaha v3.0 Tahap 5.9.3 — v8.6 P0 Expanded Search Record.docx`, pages 1–6 and Appendix H pages 70–74.
+  - Pages 1–3 describe the 17 Inventory & Costing entities and their conceptual responsibilities.
+  - Page 1 states that field definitions, data types, constraints and relationships not approved remain REVIEW/TODO, and that the document is not database implementation evidence, migration SQL or test results.
+  - Pages 4–6 retain conceptual integration issues A01–A12 and expressly list the final field dictionary, types, nullability/defaults, FK/composite FK, ON DELETE/ON UPDATE, unique constraints, indexes, receipt event model, FIFO transfer model, polymorphic source references, concurrency and idempotency as not yet approved.
+  - Appendix H.3–H.6 records provenance coverage and places physical schema/data dictionary, keys, constraints, delete behavior and enforcement evidence in the technical-evidence backlog (P2). It requires inspectable evidence and warns that conceptual evidence does not replace technical evidence.
+  - Appendix H.1 says that a source not found in the inspectable Library/conversation scope remains not found only within that audit scope; absence of a search result is not proof the source never existed.
+- `Konsolidasi ERD ... v9.5.8 Field Level Profiles — Businesses Specification.docx` was also checked as a possible profile-style precedent. Its title and scope concern Businesses, not the 17 Inventory & Costing entities; it cannot be repurposed as Inventory field authority.
+- Existing A12.38 v5 Appendix D remains the direct source for the physical-dictionary gap classification and the historical 17-entity conceptual baseline.
+
+Search coverage was also widened with title-focused queries for Inventory Costing schema/migration SQL, A12.38.3 physical data dictionary, PostgreSQL ERD/schema, and batch/cost-layer field dictionary. No separately titled authoritative Inventory & Costing physical schema, approved DDL/migration, or entity-level physical dictionary was returned in the reviewed Library results.
+
+### 24.2 Candidate source classification
+
+| Candidate | What it supports | What it does not support | Authority for physical dictionary |
+|---|---|---|---|
+| A12.38 v5 Appendix D | Audit scope, conceptual entity count, physical gaps and evidence rules | Final physical names/fields/keys/types/constraints | NOT AUTHORITY |
+| v8.6 Expanded Search Record, pp. 1–6 | 17 conceptual entity responsibilities, conceptual FIX/REVIEW boundaries and unresolved technical issues | Approved field dictionary or implementation evidence | NOT AUTHORITY |
+| v8.6 Appendix H, pp. 70–74 | Historical source-search/provenance limits and P2 technical-evidence backlog | Physical schema closure or test results | NOT AUTHORITY |
+| v9.5.8 Businesses Field-Level Profiles | A field-profile work pattern for a different domain | Inventory & Costing entity fields | NOT APPLICABLE |
+| Batch 02 Inventory Costing mapping | Source mapping and conceptual decisions | Physical ERD, approved DDL or schema | NOT AUTHORITY |
+| DOC-04 reconstructed working master | Consolidated working reference and claim/gap crosswalk | Canonical or final physical schema | NOT AUTHORITY |
+
+### 24.3 Effect on the 17-entity matrix and gap register
+
+This expanded pass adds source locators for the conceptual model and confirms why the 17 rows must remain split between conceptual and physical evidence. It does not recover any new authoritative physical field/key locator.
+
+- Conceptual entity responsibility support: v8.6 pp. 1–3; historical entity inventory remains 17/17.
+- Physical entity names confirmed against schema: 0/17.
+- Physical field/type/precision/nullability/default locators: 0/17.
+- Physical PK/FK/composite FK locators: 0/17.
+- Physical UNIQUE/CHECK/index/delete-update locators: 0/17.
+- Physical allocation bridge/FK/concurrency enforcement locator: 0/17.
+- A38-G01–G04 remain OPEN/TODO; no dependency is closed and no FIX decision changes.
+
+The values above describe locator recovery in the reviewed source set; they are not claims that a database schema does not exist. No database was inspected.
+
+### 24.4 Result and next action
+
+- Expanded source recovery: **COMPLETE — PARTIAL** for the reviewed Library source set.
+- New authoritative physical schema evidence: **NONE RECOVERED**.
+- DOC-04 §23 remains the 17-row locator matrix; §24 adds the broader source-authority assessment without changing its statuses.
+- Physical Data Dictionary remains **NOT ACCEPTED**. The next meaningful closure action still depends on obtaining the original A12.38.3 field-level physical specification or an explicitly approved schema artifact from its authoritative source location.
+- Once obtained, verify its owner/approval, version, scope, date, supersession, and direct locator for each entity/field/key before promoting any claim. If it is an implementation artifact, its presence alone does not prove runtime enforcement or tests.
+- Until then, retain all physical fields, types, keys, constraints, tenant enforcement, lifecycle and delete behavior as OPEN / UNVERIFIED.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
