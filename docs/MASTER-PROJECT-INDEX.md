@@ -352,3 +352,21 @@ For current Stage 5 package status and authorization, use DOC-00 `MASTER-PROJECT
 | `DOCUMENT-STATUS-REVIEW-ADDENDUM-001.csv` | M231-223 | `/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx` | pp. 1–3, §§1–8; direct source and page/section locator review | CONTENT REVIEWED; R69-D01–D12 FIX conceptual; technical details OPEN |
 
 The review addendum supplements, and does not rewrite, `DOCUMENT-STATUS-REGISTER-231.csv`. The original manifest metadata and its transcribed SHA-256 value remain unchanged. This is one assessed file only; it does not imply the other 230 files have been content-reviewed or that GOV-OPEN-02 is closed.
+
+
+
+## 15. Append-only current navigation reconciliation — 18 November 2026
+
+Use the following locations for the current project checkpoint; earlier index sections remain historical snapshots and are not deleted or rewritten.
+
+| Current subject | Controlling location / evidence | Status boundary |
+|---|---|---|
+| Project control and current routing | `docs/00-governance/MASTER-PROJECT-CONTROL.md` §§24–25 | Current navigation and scope reconciliation; does not grant blanket migration or implementation authority |
+| Master checklist and next work | `docs/00-governance/MASTER-CHECKLIST-v2.0.md` §§20–21 | Source recovery is complete-partial for the inspected set; no further A12.38.3 source search; focus on documentation/specification dependency closure |
+| DOC-08 focused authorization CVS correction | Commit `5e7ed43691084c689afb835b66af5f805553886c`; `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md` | Focused correction only; DOC-08 remains NOT CANONICAL / NOT FINAL / ACCEPTANCE NOT MET |
+| DOC-09 consolidated OPEN register | Commit `dbda10a28e8320785ff45eb4fe224ef0213fb8ef`; `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` | v0.2 DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED |
+| DOC-10 conflict/supersession | DOC-10 workstream and its source-native records | Separate consistency workstream; no completion or publication is implied here |
+
+The current work order is: (1) control-plane reconciliation; (2) DOC-08/DOC-09/DOC-10 consistency; (3) A12.40 reassessment using only published `main` evidence; (4) authorization consistency; (5) security/traceability consistency; and (6) readiness/acceptance review. Do not repeat A12.38.3 source searches absent new evidence or a new explicit instruction.
+
+The DOC-08 and DOC-09 references above are commit records; no PR numbers are asserted. Their publication does not close unrelated dependencies, make either document canonical/final, or authorize Stage 6. Stage 5 blanket archive migration remains NOT AUTHORIZED; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 remains NOT AUTHORIZED.
