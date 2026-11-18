@@ -257,3 +257,34 @@ This repository publication state does not make DOC-03 canonical, final or accep
 DOC-03 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.8 remains 13/13 DRAFTED — NOT ACCEPTED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; A12.40 remains PARTIAL / OPEN; A12.41 remains NOT STARTED; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED.
+
+
+## 17. Append-only DOC-04 version-reference reconciliation — 19 November 2026
+
+### 17.1 Finding and evidence
+
+The DOC-03 §11 evidence-family table identifies “DOC-04 v0.2” as the working reference for the ERD, inventory entity baseline, costing and physical dictionary boundary. The owning DOC-04 currently published on `main` identifies itself as Version **0.1.0** in its header and as the initial v0.1 reconstructed working master in §15. The Master Project Index §18 independently records PR #11 as publishing DOC-04 v0.1. The PR #11 merge record identifies the published path as `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` and merge commit `27caef4e83f73e17c19c023ad775c42b16a7a22b`.
+
+The DOC-04 v0.2 references elsewhere in DOC-04 are references to the separate source artifact “Update Audit A11–A12 and 17-table matrix v0.2” (15 November 2026), not a DOC-04 master revision. The two version identities must not be conflated.
+
+Within the reviewed current-main publication and version records, no DOC-04 v0.2 master publication or approved promotion from v0.1.0 was established. DOC-04 §26.4 independently recorded this exact mismatch as DOC04-F03 and routed it to the DOC-03 owner-document scope.
+
+### 17.2 Correction and interpretation
+
+For the DOC-03 §11 evidence-family row, the intended working-master reference is **DOC-04 v0.1.0 (published/indexed as v0.1)**, not DOC-04 v0.2.
+
+This addendum clarifies the version reference without rewriting the historical §11 table. Read the existing “DOC-04 v0.2” label in §11 as a version-label error for the DOC-04 working master; it is not evidence of a missing DOC-04 v0.2 publication, a version promotion, or a new source authority. The separately named Update Audit v0.2 source references within DOC-04 remain unchanged.
+
+### 17.3 Scope and disposition
+
+- DOC04-F03: **RESOLVED FOR DOC-03 VERSION-REFERENCE CLARIFICATION ONLY**, by this owner-document addendum.
+- DOC-04 current version: **0.1.0**; published working-master label: **v0.1**; no v0.2 master publication or promotion established.
+- DOC-03 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- DOC-04 remains RECONSTRUCTED WORKING MASTER / DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- Physical Data Dictionary acceptance remains NOT ACCEPTED; A12.40 remains PARTIAL / OPEN; A12.41 remains NOT STARTED / NOT VERIFIED.
+- Dependencies newly closed beyond the narrowly scoped DOC04-F03 document-reference issue: **0**. FIX decisions changed: **0**. Technical/source-native dependency statuses changed: **0**.
+- No architecture boundary, conceptual decision, physical schema, authorization, implementation, test, security or Production status is changed.
+
+This is a document-control clarification only. It does not retroactively change the source DOC-03 v0.8 archive or DOC-04 v0.1.0 working master, and does not promote either document to canonical/final status.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED.
