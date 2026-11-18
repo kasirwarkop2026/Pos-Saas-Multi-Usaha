@@ -316,3 +316,18 @@ This addendum supersedes only stale current-status statements in earlier DOC-11 
 - Stage 5 blanket migration remains NOT AUTHORIZED. Stage 6 implementation remains NOT AUTHORIZED. `DB_PUSH_BLOCKED: ACTIVE` remains in force.
 
 **Next direction:** prioritize implementation-blocking specification gaps and source dependencies; do not repeat completed publication work or treat these working masters as canonical/final. Any further repository publication remains subject to a narrowly scoped package, one PR at a time, applicable checks and separate merge approval.
+
+
+## 15. Append-only DOC-08–DOC-10 publication-scope clarification — 19 November 2026
+
+This addendum clarifies the grouped package statement in §4 so that publication of a focused correction is not mistaken for publication of an entire reconstructed master. It does not change the roadmap, any source-native decision, dependency status, gate result, document acceptance status, or authorization boundary.
+
+- **DOC-08:** The published artifact is the focused ST5-11.40 Authorization CVS Crosswalk Correction at `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md`, merged through PR #20 at `5e7ed43691084c689afb835b66af5f805553886c`. The full reconstructed DOC-08 v1.5 Master FIX Register is **not published** at its proposed master path. DOC-08 remains NOT CANONICAL / NOT FINAL / ACCEPTANCE NOT MET.
+- **DOC-09:** The separately published v0.2 consolidated working register is `docs/07-decision-registers/MASTER_OPEN_REGISTER.md`, published through PR #21 at `dbda10a28e8320785ff45eb4fe224ef0213fb8ef`. It remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- **DOC-10:** The separately published v0.2 consolidated working register is `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md`, published through PR #22 at `90ee6d773474adc4e4368248f1c8b05fe142b4b0`. Its §11 publication/scope clarification was merged through PR #73 at `148941c0262a49688ebbb77c9979185a3540e51c`. DOC-10 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- **DOC-11:** This v0.3 roadmap working master is published at `docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md` through PR #29 at `61926b56dc4dde6939b61b5fe20a60dd2c9c21d4`. Its publication does not make it canonical/final or satisfy Stage 4.9.
+- **DOC-12:** Its separate working-master publication is recorded in DOC-00 §24 and DOC-12 §15. It remains DRAFT / REVIEW REQUIRED; publication and the 231-row manifest transcription comparison do not constitute per-file content review.
+
+The grouped DOC-08–DOC-10 row in §4 is therefore a package-level summary only. Read each package according to the exact artifact and scope above; do not infer that the full DOC-08 v1.5 master was migrated or published.
+
+This clarification does not authorize blanket Stage 5 archive migration, any additional document publication, Stage 6 implementation, database/schema changes, application/backend work, CI workflow changes, deployment or Production changes. `DB_PUSH_BLOCKED: ACTIVE` remains in force. Dependencies newly closed: **0**. FIX decisions changed: **0**. Gate/status promotions or demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
