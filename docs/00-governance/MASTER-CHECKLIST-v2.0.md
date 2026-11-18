@@ -1661,3 +1661,39 @@ Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIV
 - Any next documentation correction must follow §34.5–§34.7: evidence-backed finding, one PR at a time, two-commit audit/checkpoint sequence, CI and full-diff review, and separate explicit merge approval.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+
+## 48. DOC-08 bounded read-only audit — 19 November 2026
+
+### 48.1 Audit identity and scope
+
+- Work package: **DOC-08 — Master FIX Decision Register bounded read-only audit**, routed under §34.4 item 6.
+- Reviewed Library source identity: DOC-08 v0.2 source-aligned draft; DOC-08 v1.5 reconstructed working master; and the later DOC-08 v1.5 ST5-11.40 working copy containing append-only §§43–44. The v1.5 working copy is the latest inspected DOC-08 working artifact for this bounded audit. The v0.2 cover/version wording is historical and is clarified by DOC-08 §40.3; do not treat it as the current revision.
+- Bounded DOC-08 scope reviewed: §§1–14 and the existing targeted audit/correction records §§19–21, 25, 28, 32–44, with emphasis on A01/A03/A04–A11, A12 supersession boundaries, O/CR/Q, DOC-09 dependencies, DOC-10 CVS mapping, publication/version control and acceptance blockers. Completed locator exercises were not repeated.
+- Current-main cross-checks: DOC-04 docs/04-data-architecture/ERD_DATA_DICTIONARY.md; DOC-05 docs/05-authorization/AUTHORIZATION_MASTER.md; DOC-09 docs/07-decision-registers/MASTER_OPEN_REGISTER.md; DOC-10 docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md; DOC-12 docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md; docs/DECISION-REGISTER.md; and DOC-00 docs/00-governance/MASTER-PROJECT-CONTROL.md §25.
+
+### 48.2 Findings and cross-document disposition
+
+- **DOC08-AUD-F01 — A01 historical status row:** DOC-08 §4 retains the earlier Alternative B “FIX baseline” row as historical text. DOC-08 §§40.1–40.3 explicitly make **A01 — REVIEW** the controlling current treatment. Current DOC-04 and DOC-09 retain the physical source-registry/FK/lifecycle/validation work as open under ERD-OPEN-05. Do not use the historical §4 row to promote A01 or treat A12.30F-03 as an A01 approval.
+- **DOC08-AUD-F02 — A03 boundary:** DOC-08 §§32–35 preserve A03 as REVIEW/OPEN. A11-F05 supports the conceptual repeated/partial-receipt requirement only; it is not a standalone A03 technical specification. DOC-09 ERD-OPEN-07 remains active. No final receipt-event model, cardinality, movement linkage or implementation is inferred.
+- **DOC08-AUD-F03 — A04–A09 provenance and technical gaps:** DOC-08 §36 identifies A12.15 as the documented conceptual locator for A04. For A05–A09, §36 records working-consolidation locators but no standalone primary approval addendum located per decision ID; §41 retains these provenance gaps as acceptance blockers. DOC-09 ERD-OPEN-08–13 continue to retain the corresponding technical REVIEW/TODO items. Preserve the distinction between the recorded scoped baseline wording and missing primary approval/technical evidence; do not close any dependency or infer implementation.
+- **DOC08-AUD-F04 — A10/A11 and A12 scope:** DOC-08 and current DOC-09 remain aligned: A10 is CLOSED only at architecture-baseline scope while ERD-OPEN-14 remains; A11 is FIX at architecture/business-rule scope while ERD-OPEN-15 remains. A12.17 supersedes A12.16 only for the stated allocation-to-consumption cardinality; A12.30F-01–04 are four scoped conceptual decisions and do not close parent A12.30; A12.29 and A12.37–A12.39 remain limited to their stated conceptual scopes. A12.18–A12.28 and D40-203–D40-216 remain UNRECOVERED/UNVERIFIED as recorded by DOC-09 and DOC-10 CVS-035.
+- **DOC08-AUD-F05 — O/CR/Q crosswalk:** DOC-08 §43 and the separately published docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md agree on the prospective mapping: CVS-014 → Q-01–Q-06; CVS-015 → CR-01–CR-10; CVS-016 → general permission-catalogue/matrix context only; CVS-017 → Education/Hotel-specific; CVS-039 → REC-05/REC-06 context only. DOC-09 AUTH-OPEN-01–27 remain active; the correction does not approve stable permission keys, grants, a complete matrix, scope resolver, SoD enforcement, tests or Production readiness.
+- **DOC08-AUD-F06 — RMD/REC locator completeness:** DOC-08 retains the conceptual RMD/REC decision boundaries but does not establish exhaustive per-decision page/paragraph locators for all RMD-55–69 and O/CR/Q rows. REC-08 primary Batch 7/8/9 reports and a complete finding register remain unrecovered. These are existing acceptance/provenance limitations, not grounds to promote or demote FIX decisions.
+- **DOC08-AUD-F07 — DOC-12 version snapshot:** The DOC-12 embedded master-artifact snapshot still lists DOC-08 v0.2 and does not reflect the later Library v1.5 working master. The snapshot is dated and remains historical; route this index/version reconciliation to the DOC-12 work package. Do not rewrite DOC-12 during the DOC-08 audit.
+
+### 48.3 Publication, status and audit outcome
+
+- GitHub main contains the separately scoped DOC-08 ST5-11.40 correction at docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md. The full DOC-08 v1.5 master is not published at its proposed docs/07-decision-registers/MASTER_FIX_REGISTER.md path. docs/DECISION-REGISTER.md is explicitly a source-mapped summary, not a replacement for the detailed decision register.
+- DOC-00 §25.1–§25.2 confirms that only the focused DOC-08 correction was published and that DOC-08 remains NOT CANONICAL / NOT FINAL / ACCEPTANCE NOT MET. DOC-08 §§40.3 and 43.5 likewise preserve the full-master publication boundary. No full DOC-08 publication PR is created or implied by this audit.
+- DOC-08 bounded audit outcome: **PASS WITH OPEN PROVENANCE / ACCEPTANCE DEPENDENCIES**. No evidence-backed correction to DOC-08 itself is justified by this bounded review; retain its existing append-only history and explicit limitations.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**. Decision statuses promoted/demoted: **0**. Canonical/final/accepted status: **NOT PROMOTED**. No primary source was reconstructed, no implementation/test/Production evidence was inferred, and no technical system was changed.
+- DOC-08 remains a reconstructed working master, DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL / PARTIAL — ACCEPTANCE NOT MET. The historical v0.2 cover label is not treated as the current revision; v1.5 remains the latest explicit working revision inspected.
+
+### 48.4 Next controlled action
+
+- DOC-08 bounded audit: **COMPLETE — NO DOC-08 CORRECTION PR JUSTIFIED**.
+- Continue with **DOC-09 — Master OPEN/REVIEW/TODO Register bounded read-only audit**, within the DOC-08–DOC-10 sequence in §34.4. Do not repeat DOC-08 §§32–44 or the completed ST5-11.40 CVS correction without new evidence.
+- Reconcile the DOC-12 DOC-08 version snapshot only within the later DOC-12 work package.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
