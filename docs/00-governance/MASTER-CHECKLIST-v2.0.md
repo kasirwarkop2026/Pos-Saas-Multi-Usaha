@@ -254,3 +254,44 @@ After activation, v1.0 remains preserved as historical checkpoint evidence. Do n
 
 **READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`**  
 **Stage 5 blanket migration: NOT AUTHORIZED • Stage 6 implementation: NOT AUTHORIZED**
+
+
+## 14. Post-merge activation and DOC-04 relationship-matrix checkpoint — 18 November 2026
+
+### 14.1 v2.0 activation record
+
+The activation conditions in §13 were satisfied by PR #35:
+- PR #35, `docs(governance): introduce focused Master Checklist v2.0`, merged to `main` at merge commit `aa997b2068337b4601cdf28c89526e56326fa0ce`.
+- The v2.0 checklist was read back from `main`; blob SHA at activation: `e03d44570c2eb8aa7c24599f2dba2317b325c0e8`.
+- The historical v1 checklist transition notice was also read back from `main`.
+- Accordingly, v2.0 is **ACTIVE — SINGLE NAVIGATION CHECKLIST**. The header's original `PROPOSED` status and the earlier activation wording are preserved as the drafting-time snapshot; this §14 is the append-only status update. v1.0 remains historical evidence only and is not the active navigation source.
+
+### 14.2 DOC-04 relationship-integrity work result
+
+This work package adds DOC-04 §18, a source-bounded conceptual relationship, tenant-scope and entity-coverage matrix for the 17-entity inventory/costing baseline.
+
+Reviewed evidence:
+- DOC-04 §8 and §10 from `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` on `main` (pre-change blob `2eebbd469772d941c4a3981036695ebf6e4135fb`).
+- `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§1–8, especially A11 F01–F10 and the 17-entity matrix.
+- `POS_SAAS_MIGRATION_MAPPING_BATCH_02_INVENTORY_COSTING_v0.1_2026-11-15.md`, §§3–5 and 7–8.
+- DOC-04 §8 records the A12.39 conceptual relationships; A12.39 does not establish physical enforcement.
+
+Outcome:
+- Conceptual relationship inventory: **COMPLETE — PARTIAL**, only for relationships explicitly listed in A12.39.
+- Tenant-scope requirements: **DOCUMENTED — CONCEPTUAL**.
+- Physical PK/FK/composite-FK tuples, exact referenced keys, nullable behavior, delete/update actions, indexes, RLS/server enforcement and executable tests: **OPEN / NOT ESTABLISHED / NOT VERIFIED**.
+- Several entities and event/allocation relationships have no explicit A12.39 edge locator; these are listed as OPEN rather than inferred.
+- Dependencies closed: **none**. FIX decisions changed: **none**.
+- No database, SQL, DDL, DML, migration, application code, CI workflow, Vercel, deployment or Production changes.
+
+### 14.3 Updated priority position
+
+| Priority | Work package | Status after this checkpoint |
+|---:|---|---|
+| 1 | DOC-04 conceptual relationship/tenant-integrity matrix | COMPLETE — PARTIAL; physical key tuples and enforcement OPEN |
+| 2 | DOC-04 UNIQUE/CHECK/index matrix | NEXT |
+| 3 | Quantity/cost precision and conversion rules | NOT STARTED |
+| 4 | Event/idempotency/atomicity/concurrency specification | NOT STARTED |
+| 5 | Physical dictionary acceptance review | NOT STARTED |
+
+Next action: build the UNIQUE/CHECK/index matrix from source-backed invariants and approval scope. Do not infer index definitions, nullable-variant strategy, or constraint expressions. Keep `DB_PUSH_BLOCKED: ACTIVE`, Stage 5 blanket migration NOT AUTHORIZED and Stage 6 NOT AUTHORIZED.
