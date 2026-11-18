@@ -566,3 +566,101 @@ No dependency is closed by this matrix. No FIX decision is changed. No physical 
 - Next DOC-04 task: UNIQUE/CHECK/index matrix, retaining all unresolved key tuples and tenant enforcement gaps as explicit dependencies.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 19. UNIQUE / CHECK / index candidate matrix — inventory & costing (18 November 2026)
+
+### 19.1 Scope and evidence boundary
+
+This section advances the next work item in Master Checklist v2.0 §14.3 and DOC-04 §§9–10, §18. It organizes source-backed invariants and the physical gaps that a future specification must resolve across the 17-entity baseline.
+
+Reviewed sources:
+- DOC-04 reconstructed working master v0.1, §§3, 8–10 (17 entity responsibilities, conceptual invariants and explicit physical gaps).
+- `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§1–4 (A11/A12 status; physical UNIQUE/CHECK/index remain REVIEW/TODO).
+- `POS_SAAS_MIGRATION_MAPPING_BATCH_02_INVENTORY_COSTING_v0.1_2026-11-15.md`, §§3–5 and 7 (entity baseline, formulas, A01–A12 open technical findings).
+- A12.38 v5 Physical Entity & Data Dictionary Audit, Appendix D (physical field/key/index/delete/enforcement details may only be approved with authoritative schema/specification evidence; conceptual scenarios are not database tests).
+- A12.39 conceptual relationship/constraint specification, as cross-referenced in DOC-04 §8 and §18.
+
+**This is a candidate and gap register, not an approved physical constraint/index design.** It does not prescribe SQL expressions, physical column names, data types, nullability, index method/order, partial-index predicates, included columns, collation, deferrability, or migration operations. “Candidate” means a design question to resolve, not an instruction to implement. No index is declared required unless an authoritative source establishes its exact key and semantics.
+
+### 19.2 Constraint family disposition
+
+| Family | Conceptual requirement / evidence | Physical disposition |
+|---|---|---|
+| UNIQUE — entity identity | Identity uniqueness is needed where the domain requires a unique batch, source event, allocation/consumption, or projection grain. DOC-04 §3 and A12.38 D; A09 remains REVIEW. | Exact unique key, scope, null semantics and duplicate policy OPEN. |
+| UNIQUE — idempotency | A09 requires a stable idempotency standard across client, server, source document and movement to prevent duplicate posting. Batch 02 §4 A09. | Key composition, namespace, retention/replay window and conflict response OPEN. No specific column tuple approved. |
+| UNIQUE — nullable variant/projection grain | `inventory_balances` and `inventory_batch_balances` have nullable-variant / nullable-key uniqueness gaps. DOC-04 §3; Batch 02 §4. | NULL equivalence and uniqueness strategy OPEN; do not assume ordinary UNIQUE semantics or invent a partial-index predicate. |
+| UNIQUE — allocation/consumption cardinality | A12.17 Alternative 1 FIX: eligible negative allocation maps to exactly one original consumption; non-consumption allocation maps to zero; original consumption may have multiple partial compensations. | Exact allocation record structure and unique key OPEN; no assumption that an unapproved bridge table exists. |
+| CHECK — quantity non-negativity / caps | Quantity invariants include active reservation = reserved − fulfilled − released; available = on-hand − reserved; remaining layer quantity cannot be over-consumed; transfer/shipment/receipt dispositions must reconcile. | Per-record vs aggregate enforcement, bounds, rounding and permitted negative values by event type OPEN. |
+| CHECK — mutually consistent states | A11 F01–F03 and F07–F09 distinguish process status, closure outcome, shipment status and event-derived summaries. | Enum values, legal transition matrix and CHECK scope OPEN; event/aggregate rules cannot be reduced to a guessed row-level CHECK. |
+| CHECK — source and location validity | Transfer source and destination are different and belong to same Business; A01 movement source and A02 reservation source remain distinct. | Physical representation and server validation strategy OPEN. |
+| CHECK — cost and NULL semantics | Unknown cost remains NULL, not zero; posted cost snapshots are not silently rewritten. Batch 02 §§3–5; A12.37. | Precision/scale, currency, nullable rules and valid cost bounds OPEN. |
+| INDEX — operational lookup | Indexes may be needed for tenant-scoped operational lookups, lifecycle/event retrieval, reconciliation and audit. A12.38 Appendix D and A12 A12 row identify index matrix as TODO. | Query inventory, predicates, sort order, selectivity and measured workload not provided; no concrete index approved. |
+| INDEX — ledger/projection reconciliation | Movement ledger is source of truth; balances and batch balances are rebuildable projections; transfer summaries derive from posted events. Batch 02 §3 and §4. | Reconciliation access paths and projection grain OPEN; avoid indexing a guessed schema. |
+| INDEX — FIFO / FEFO selection | FEFO chooses physical batches; FIFO selects cost layers; MWA pool is scoped by Business + Product/Variant + Inventory Location. | Exact ordering fields, tie-breaker, tenant key and query plans OPEN. |
+| INDEX — audit/event lineage | Dispatch, receipt, return, loss and compensation are distinct auditable events; repeated/partial receipts are allowed. A11 F04–F08; A10 B. | Event identity, lineage key and retention/query requirements OPEN. |
+
+### 19.3 Per-entity candidate and gap matrix (17 entities)
+
+| Entity | Source-backed invariant to preserve | UNIQUE / CHECK candidate questions (not approved definitions) | Index candidate workload (not approved definitions) | Status |
+|---|---|---|---|---|
+| `inventory_batches` | Physical batch identity is distinct from cost layer; FEFO selects eligible physical batch; expired/blocked stock is unavailable for normal transactions (Batch 02 §4). | What source/product/location identity makes a batch unique? Which status/expiry combinations are valid? | Tenant/product/location batch selection ordered by FEFO; expiry/status filtering. | REVIEW — exact keys, status domain and index OPEN |
+| `inventory_movements` | Immutable posted ledger; signed base-quantity delta; source of truth; corrections via reversal/compensating movement (Batch 02 §§3–4). | A09 idempotency uniqueness across client/server/source document/movement; valid event-specific sign and quantity rules. | Tenant/location/product/time ledger retrieval; source-document lineage; reconciliation and reversal lookup. | REVIEW — A09 key standard and physical fields OPEN |
+| `inventory_balances` | Rebuildable projection; available = on-hand − reserved; grain includes product/variant/location (Batch 02 §§3–4). | Projection-grain uniqueness, especially nullable variant behavior; available quantity consistency. | Tenant/product/variant/location balance lookup and rebuild/reconciliation. | REVIEW — nullable unique strategy and concurrency OPEN |
+| `inventory_batch_balances` | Batch projection reconciles to parent product/location balance; separate from parent balance (DOC-04 §3; Batch 02 §4). | Batch/location projection grain uniqueness and nullable-key semantics; consistency with batch identity. | Tenant/location/product/batch lookup and parent-vs-batch reconciliation. | REVIEW — unique grain and allocation/concurrency OPEN |
+| `inventory_adjustments` | No stock change before posting; posted adjustment immutable; correction by reversal (DOC-04 §3). | Source/document identity and posting idempotency; allowed process/outcome combinations. | Tenant/status/time review queue; document-to-posting audit lookup. | REVIEW — workflow/status and idempotency details OPEN |
+| `inventory_adjustment_items` | Posted item produces movement; quantity conversion snapshot and signed base delta retained (DOC-04 §3). | Item identity within adjustment; zero/rounding and valid signed quantity rules; movement generation duplicate protection. | Parent adjustment detail retrieval; item-to-movement reconciliation. | REVIEW — zero/rounding and unique rules OPEN |
+| `stock_counts` | Snapshot differs from count start; post-snapshot movements must be accounted for; recount must not overwrite history (DOC-04 §3; A05). | Count scope/identity and snapshot/cutoff consistency; legal status/outcome transitions. | Tenant/location/status/snapshot review; cutoff and recount history retrieval. | REVIEW — A05 cutoff/watermark and partial posting OPEN |
+| `stock_count_items` | NULL means not counted; zero is a valid counted result; variance = counted − expected; expected accounts for movements after snapshot (DOC-04 §3; Batch 02 §3). | Distinguish NULL from zero; one item per approved count scope grain; recount/version uniqueness and variance consistency. | Parent count/item lookup; snapshot-to-movement reconciliation; recount history. | REVIEW — final grain, recount history and constraints OPEN |
+| `stock_transfers` | Same Business; source location differs from destination; virtual transit; transfer closure only after valid dispositions/reconciliation (A11 F01–F09; Batch 02 §4). | Transfer identity; source ≠ destination; status separated from closure outcome; legal status transitions. | Tenant/status/source/destination/time operational queue; open transfer and reconciliation lookups. | REVIEW — workflow, authorization and closure constraints OPEN |
+| `stock_transfer_items` | One transfer item may split across shipments; dispatched/received totals are derived; quantities must reconcile (A11 F05–F08; Batch 02 §4). | Item identity within transfer; dispatched/received/disposition caps relative to requested quantity; no duplicate posting. | Transfer-to-item retrieval; remaining/unshipped quantity and reconciliation. | REVIEW — nullable unique keys, caps and FK context OPEN |
+| `inventory_cost_exceptions` | Unknown HPP/cost remains NULL; exception does not directly mutate posted movement (DOC-04 §3; Batch 02 §4). | Exception identity/source and status/resolution consistency; NULL cost must not be coerced to zero. | Unresolved exception queue; source movement/layer trace and resolution audit. | REVIEW — exception code/status and resolved-cost impact OPEN |
+| `inventory_reservations` | Reservation does not change physical stock; release creates no movement; fulfillment reduces stock and reservation atomically; source uses A02 Alternative A (Batch 02 §§3–5). | Reservation source identity/idempotency; expiry/status validity; source_type/source_id validation. | Tenant/source/status/expiry queue; reservation lifecycle and fulfillment lookup. | REVIEW — source validation and TTL OPEN |
+| `inventory_reservation_items` | Active reserved = reserved − fulfilled − released; one product may allocate across multiple physical batches (DOC-04 §3; Batch 02 §4). | Quantity non-negativity and caps; allocation identity; prevent fulfilled + released exceeding reserved; multi-batch allocations supported. | Reservation item to batch allocation; available/reserved quantity lookup by tenant/location/product. | REVIEW — event history, allocation grain and concurrency OPEN |
+| `inventory_cost_layers` | FIFO layer identity differs from physical batch; unknown cost is not zero; identity retained through transfer (DOC-04 §3; Batch 02 §§3–4). | Layer source identity uniqueness; remaining quantity cannot be negative; distinguish unknown cost NULL from zero. | FIFO eligible-layer retrieval by tenant/product/location and source lineage; transfer/reconciliation. | REVIEW — source uniqueness, transfer and landed-cost correction OPEN |
+| `inventory_cost_layer_consumptions` | One movement may consume multiple layers; consumption immutable; cannot exceed remaining layer; A12.17 cardinality and compensation cap apply (Batch 02 §4; Update Audit §3). | Eligible allocation 1:1 original consumption; non-consumption allocation 1:0; total partial compensation ≤ eligible original quantity; idempotency. | Movement-to-consumption, layer consumption history and compensation lineage. | REVIEW — allocation record shape, key, caps and locking OPEN |
+| `stock_transfer_shipments` | One shipment = one physical dispatch; separate physical shipments require separate shipment records; shipment status differs from transfer process status (A11 F03, F06). | Shipment identity/sequence within transfer; status transitions; one physical dispatch per shipment. | Transfer shipment listing by tenant/status; dispatch and lifecycle audit. | REVIEW — status, sequence, cancellation and dispatch evidence OPEN |
+| `stock_transfer_shipment_items` | Repeated/partial receipt allowed; one shipment item may have multiple receipt events; receipt/return/loss dispositions reconcile (A11 F04–F09). | Shipment-item identity; cumulative receipt/return/loss caps against dispatched quantity; prevent duplicate receipt posting while allowing repeated partial events. | Shipment-item event history; pending receipt, reconciliation and investigation lookup. | REVIEW — receipt event structure, caps and idempotency OPEN |
+
+### 19.4 Candidate aggregate invariants requiring explicit enforcement design
+
+These are conceptual invariants to preserve; they are **not** directly implementable as ordinary row-level CHECK constraints without a separately approved transaction/aggregate enforcement design.
+
+| ID | Invariant | Evidence | Unresolved enforcement question |
+|---|---|---|---|
+| AGG-01 | `quantity_available = quantity_on_hand - quantity_reserved` | Batch 02 §3 | Projection derivation, consistency checks and concurrency/atomic update design. |
+| AGG-02 | `active_reserved = reserved - fulfilled - released` | Batch 02 §3; DOC-04 §3 | Event history, non-negative bounds and atomic fulfillment/release enforcement. |
+| AGG-03 | `remaining_layer_quantity = received_quantity - valid_consumption_quantity` | Batch 02 §3 | Layer allocation and transfer semantics; avoid double-counting movements and consumption. |
+| AGG-04 | Aggregate partial compensation must not exceed eligible original consumption quantity | A12.17 Alternative 1 FIX; Update Audit §3 | Cross-record cap enforcement, lock scope and idempotent posting. |
+| AGG-05 | Shipment-item receipts/returns/loss dispositions must reconcile to dispatched quantity before transfer closure | A11 F04–F09; Batch 02 §4 | Event model, investigation hold, closure gate and concurrency. |
+| AGG-06 | Batch balances must reconcile to parent product/variant/location balances for batch-tracked products | A07 REVIEW; Batch 02 §4 | Reconciliation grain, timing, discrepancy handling and repair audit. |
+| AGG-07 | MWA pool is scoped by Business + Product/Variant + Inventory Location; no cross-location pooling | A12.37.10.1 FIX; Batch 02 §3 | Physical pool key and concurrency-safe update strategy. |
+
+### 19.5 Index selection evidence still required
+
+Before any physical index can be specified, obtain or approve:
+- Authoritative physical field/key dictionary and PK/FK/composite-FK tuples for all 17 entities.
+- Actual query patterns, filters, joins, sort orders, pagination and tenant-scoping behavior for operational, reconciliation and audit workloads.
+- Required uniqueness semantics for nullable variant keys and source/idempotency identities.
+- FEFO/FIFO deterministic ordering fields and tie-breaker decision; do not assume an ordering field.
+- Expected row volumes, write frequency, retention and update patterns to assess index cost.
+- Evidence for receipt-event, allocation and compensation record structures; do not infer new entities.
+- Explicit decision on which candidate constraints are row-local CHECK, UNIQUE, FK, server/transaction validation, or derived projection invariant.
+
+No index names, key columns, partial predicates, expressions, included columns or sort directions are specified in this section.
+
+### 19.6 Result and next sequence
+
+- Candidate constraint/invariant inventory: **COMPLETE — PARTIAL**, based on available conceptual sources.
+- Per-entity coverage: **17/17 entities reviewed at conceptual level**; this does not mean physical design accepted.
+- Concrete physical UNIQUE definitions: **OPEN / NOT ESTABLISHED**.
+- Concrete physical CHECK expressions: **OPEN / NOT ESTABLISHED**.
+- Concrete physical index definitions: **OPEN / NOT ESTABLISHED**.
+- A09 idempotency standard: **REVIEW / OPEN**.
+- Nullable variant uniqueness: **REVIEW / OPEN**.
+- A12 aggregate constraints, concurrency and atomicity: **REVIEW / OPEN**.
+- Dependencies closed: **none**. FIX decisions changed: **none**.
+- No schema, SQL, DDL, DML, migration, database, application, CI workflow, Vercel, deployment or Production changes.
+- Next DOC-04 work package: quantity/cost precision and conversion matrix, grounded in A12.37; preserve unknown numeric precision/scale, rounding and conversion rules as OPEN unless source locators establish them.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
