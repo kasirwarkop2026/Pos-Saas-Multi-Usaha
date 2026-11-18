@@ -367,3 +367,93 @@ The following are carried forward from the source decisions as conceptual accept
 | 18 November 2026 | Inventory physical-specification decomposition | Added 17-entity logical information worklist, ten cross-cutting gates and source-bounded acceptance criteria; no FIX/status/authorization changed |
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 17. Source-linked logical attribute matrix — inventory & costing (18 November 2026)
+
+### 17.1 Purpose, interpretation and evidence boundary
+
+This matrix advances the first work item in §16.5: identify the logical information each of the 17 historical conceptual entities must represent, and link that information to the source evidence available in the current working set.
+
+**This is a logical-information matrix, not an approved physical field dictionary.** The labels below are descriptive information groups, not proposed SQL identifiers. They do not establish column names, key tuples, data types, nullability, defaults, enum values, precision/scale, indexes, or constraints. Where the source only establishes an entity responsibility or invariant, the matrix records that limited level and leaves physical decomposition OPEN.
+
+Evidence hierarchy applied:
+1. DOC-04 §§3–12 and §16 (current GitHub working master; derived consolidation).
+2. `POS_SAAS_MIGRATION_MAPPING_BATCH_02_INVENTORY_COSTING_v0.1_2026-11-15.md`, §§2–5 and 7 (supporting mapping, DRAFT).
+3. `Konsolidasi_ERD_POS_SaaS_Multi_Usaha_v3.0_Tahap_5.9.3_DRAFT_Audit_Integrasi_v5_A12.38_Physical_Dictionary_Audit.docx`, especially pp. 1–6, 11–13 and 19–21 (A12.38 physical dictionary audit; field/constraint details not approved).
+4. `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§3–8 (latest located status reconciliation for the 17-entity set).
+5. A11 F01–F10, A12.02 Alternative A, A12.17 Alternative 1, A12.30F A01 Alternative B, A12.37.10.1, A12.38 and A12.39 only within the specific scope described in DOC-04 §§5–12.
+
+A12.18–A12.28 remain OPEN/UNVERIFIED. A12.31E remains OPEN; A12.36.1 remains UNVERIFIED/REVIEW; A12.40 remains PARTIAL/OPEN with D40-203–D40-216 UNRECOVERED; A12.41 remains NOT STARTED. No decision content is reconstructed from those missing sources.
+
+### 17.2 Matrix for the 17 historical conceptual entities
+
+| # | Conceptual entity | Logical information groups supported by available sources | Source / locator basis | Attribute-level status and unresolved items |
+|---:|---|---|---|---|
+| 1 | `inventory_batches` | Tenant/business context; product/variant association; physical batch/lot identity; production/expiry information; batch state; optional supplier association; product-configured batch-tracking applicability. | DOC-04 §3 row 1, §§4 and 9; Batch 02 §§3–4; A12.38 pp. 2–3. | Responsibility and FEFO principle FIX conceptually. Exact batch identity composition, supplier relation, production/expiry nullability, status vocabulary, uniqueness and blocked/expired transition fields REVIEW/OPEN. No physical attribute names approved. |
+| 2 | `inventory_movements` | Tenant/business context; movement source/event identity; source document context; event time; product/variant; source/destination inventory location; optional physical batch; signed base-quantity delta; posting/immutability and reversal/compensation lineage; costing/layer-allocation context; idempotency context. | DOC-04 §§3–5, 9–10 and 12 (SC-02); Batch 02 §§3–5; A12.38 pp. 2–4, 11–12; A12.30F A01 Alternative B as cited by the source set. | Ledger/source-of-truth, signed base delta, posted immutability and correction by reversal/compensation FIX conceptually. Central source/event registry is conceptual only. Exact source registry shape, actor/time fields, reversal links, location/batch references, idempotency key, FK and posting fields REVIEW/TODO. Do not conflate A01 movement registry with A02 reservation source fields. |
+| 3 | `inventory_balances` | Tenant/business context; product/variant; inventory location; projected on-hand quantity; projected reserved quantity; derived available quantity; rebuild/reconciliation provenance. | DOC-04 §§3–4, 9–10; Batch 02 §§3–4; A12.38 pp. 2–4. | Rebuildable projection and available = on-hand − reserved FIX conceptually. Nullable-variant uniqueness, exact projection grain/key, concurrency, rebuild metadata and reconciliation controls REVIEW. Balance is not an independent source of truth. |
+| 4 | `inventory_batch_balances` | Tenant/business context; parent product/variant/location balance context; physical batch association; projected batch on-hand/reserved/available quantities as supported by parent balance rules; reconciliation relationship to parent balance. | DOC-04 §§3–4, 9–10; Batch 02 §§3–4; A12.38 pp. 2–4. | Separate rebuildable batch projection and reconciliation to parent balance FIX conceptually. Exact quantity breakdown, reservation allocation grain, nullable unique key, FK tuple, concurrency and rebuild controls REVIEW. |
+| 5 | `inventory_adjustments` | Tenant/business context; adjustment document identity; affected inventory location and scope; lifecycle/review/approval/posting context; reason/exception context; posting/reversal relationship. | DOC-04 §§3–4, 9–10; Batch 02 §§3–4; A12.38 pp. 2–3, 4 and 6. | No stock effect before posting; posted history immutable; correction by reversal FIX conceptually. Header status, checked stage, approval threshold/actor, reason taxonomy, posting identity and reversal linkage REVIEW/TODO. |
+| 6 | `inventory_adjustment_items` | Parent adjustment context; product/variant; optional batch; entered quantity and unit context; conversion snapshot; signed base-quantity delta; resulting posted movement linkage. | DOC-04 §§3–4, 9–10; Batch 02 §§3–4; A12.38 pp. 2–3. | Posted item generates movement; signed base quantity and correction through new records FIX conceptually. Unit/conversion snapshot structure, zero handling, rounding, duplicate-line policy, movement cardinality and FK/unique constraints REVIEW. |
+| 7 | `stock_counts` | Tenant/business context; stock-count session identity; inventory location; count scope; lifecycle/status; blind-count mode; snapshot/cutoff context; assigned counter/actor context; posting/reconciliation context. | DOC-04 §§3, 8–10; Batch 02 §§3–4; A12.38 pp. 2–4. | Snapshot differs from session start; movements after snapshot must be accounted for FIX conceptually. Cutoff/watermark, scope representation, partial posting, recount lifecycle, actor evidence and finalization constraints REVIEW. |
+| 8 | `stock_count_items` | Parent stock-count context; product/variant; optional batch; snapshot expected quantity; physical counted quantity; variance; count-completion state; movement/recount reconciliation context. | DOC-04 §§3, 8–10; Batch 02 §§3–4; A12.38 pp. 2–4. | NULL means not counted; zero is a valid count; variance = counted − expected, with expected quantity adjusted for movements after snapshot FIX conceptually. Recount history, multiple counters, cutoff semantics, nullability, precision and uniqueness REVIEW. |
+| 9 | `stock_transfers` | Tenant/business context; transfer identity; source and destination storage locations; virtual transit location context; process status; closure outcome; approval/investigation context; shipment and disposition summary context. | DOC-04 §§3, 7–10; Batch 02 §§3–5; A11 F01, F02, F08, F09; A12.38 pp. 2–3. | Same-tenant transfer, source differs from destination, virtual transit, lifecycle and separate closure outcome FIX at architecture/business-rule level. Physical location references, status enum/transitions, approval/authorization, investigation linkage, closure proof and cancellation semantics REVIEW. |
+| 10 | `stock_transfer_items` | Parent transfer context; product/variant; requested quantity in base/unit context; shipment allocation/split context; dispatched/received/returned/lost disposition aggregates or projections. | DOC-04 §§3, 7–10; Batch 02 §§3–5; A11 F05/F07/F08; A12.38 pp. 2–3. | Item can be split across shipments; summaries derive from shipment/events FIX conceptually. Exact requested/dispatched/received quantity groups, unit conversion snapshot, caps, nullable uniqueness, shipment-item linkage and FK REVIEW. |
+| 11 | `inventory_cost_exceptions` | Tenant/business context; affected product/variant/location and cost context; exception identity/category; unknown-cost condition; investigation/resolution status; correction provenance without rewriting posted movement. | DOC-04 §§3, 6, 9–10; Batch 02 §§3–4; A12.38 pp. 2–3. | Unknown HPP remains NULL; exception does not mutate posted ledger directly FIX conceptually. Exception code taxonomy, status, resolved-cost impact, actor/time, relation to source movement/layer and correction chain REVIEW. |
+| 12 | `inventory_reservations` | Tenant/business context; reservation identity; source document context represented conceptually by source type and source ID; expiry/TTL; reservation lifecycle; originating request/idempotency context. | DOC-04 §§3, 5, 9–10; Batch 02 §§3–5; A12.02 Alternative A as cited by DOC-04; A12.38 pp. 2–3. | Reservation reduces available, not physical on-hand; release creates no movement; source_type/source_id belongs on header under Alternative A with strict server validation FIX conceptually. Exact type vocabulary, source validation, TTL semantics, cancellation/expiry states, uniqueness, idempotency and FK strategy REVIEW. |
+| 13 | `inventory_reservation_items` | Parent reservation context; product/variant/location; requested/reserved/fulfilled/released quantity groups; optional batch allocations; fulfillment/release event history; active reserved quantity calculation. | DOC-04 §§3, 5, 9–10; Batch 02 §§3–5; A12.38 pp. 2–4. | Active reserved = reserved − fulfilled − released; allocation may span multiple batches; fulfillment and physical stock update atomic FIX conceptually. Exact event/history model, allocation rows, quantity caps, partial fulfillment, concurrency/locking, batch FK and idempotency REVIEW. |
+| 14 | `inventory_cost_layers` | Tenant/business context; product/variant and inventory-location costing pool; originating receipt/source identity; cost-layer identity; received/base quantity; remaining quantity; unit/total cost context; transfer/transit identity continuity; landed-cost correction lineage. | DOC-04 §§3, 6, 8–10; Batch 02 §§3–5; A12.37.10.1; A12.38 pp. 2–4, 11–12. | Batch differs from cost layer; FIFO consumes layers; MWA pool is Business + Product/Variant + Inventory Location; transfer preserves layer identity; unknown cost NULL FIX conceptually. Exact identity tuple, received/remaining quantity representation, cost precision, source uniqueness, landed-cost correction and transit/location mapping REVIEW. |
+| 15 | `inventory_cost_layer_consumptions` | Tenant/business context; consumed cost-layer identity; originating movement/allocation context; original consumption quantity/cost; eligible negative allocation reference; partial compensation lineage; idempotency context. | DOC-04 §§3, 6, 8–10 and 12 (SC-08); Batch 02 §§3–5; A12.17 Alternative 1; A12.38 pp. 11–12. | Eligible negative allocation→one original consumption; non-consumption allocation→zero consumption; original consumption→multiple partial compensations; aggregate compensation cannot exceed eligible original quantity; posted records immutable FIX at conceptual/cardinality level. Exact FK, quantity/cost math, compensation source link, over-consumption guard, locking, idempotency, NULL cost and tests TODO. |
+| 16 | `stock_transfer_shipments` | Tenant/business context; parent transfer identity; physical shipment identity/sequence; dispatch event context; transit state; repeated/partial receipt lifecycle; cancellation/return/loss disposition evidence. | DOC-04 §§3, 7–10; Batch 02 §§3–5; A11 F03–F06; A12.38 pp. 2–3. | One record represents one physical shipment; one transfer may have many shipments; partial/repeated receipt; dispatch/receipt/return/loss are separate auditable events FIX conceptually. Shipment sequence/identity, event model, status transition, receipt relations, cancellation evidence, lock/idempotency and proof retention REVIEW. |
+| 17 | `stock_transfer_shipment_items` | Tenant/business context; parent shipment and transfer-item context; product/variant; optional physical batch; dispatched/base quantity; repeated/partial receipt quantity/event context; return/loss/confirmed disposition; inventory movement and cost-layer reconciliation links; conversion snapshot. | DOC-04 §§3, 7–10; Batch 02 §§3–5; A11 F04/F05/F07/F08; A12.38 pp. 2–3. | Shipment detail ties to transfer item; base quantity and conversion snapshot; receipt may repeat/partial; disposition through receipt/return/confirmed loss; movement/layer reconciliation FIX conceptually. Event/detail cardinality, movement one-to-many relation, caps, batch/cost-layer links, reconciliation, constraints and idempotency REVIEW. |
+
+### 17.3 Cross-entity logical information groups
+
+| Cross-entity concern | Logical information that must be represented | Evidence-bounded rule | Remaining physical decision |
+|---|---|---|---|
+| Tenant ownership | Business context on every tenant-owned entity and tenant-consistent parent/child references | Tenant isolation is a design requirement; related records preserve business context | Exact PK/FK/composite-FK tuples and server/RLS enforcement remain OPEN |
+| Product identity | Product and optional variant context where an entity is product-specific | Inventory balance and MWA grain includes Business + Product/Variant + Inventory Location | Nullable-variant identity and uniqueness strategy OPEN |
+| Location identity | Inventory location, source/destination location, and virtual transit context where applicable | MWA pool is location-scoped; transfers use virtual transit | Location key tuples and transit representation OPEN |
+| Physical batch | Optional batch identity and batch-specific quantities where physical batch tracking applies | FEFO selects physical batch; batch identity differs from cost-layer identity | Batch key, expiry/status fields, batch allocation constraints OPEN |
+| Quantity | Entered quantity, base quantity, signed delta, reserved/fulfilled/released/dispatched/received/returned/lost quantities as relevant | Decimal/NUMERIC, not floating point; NULL and zero retain distinct meanings where specified | Precision/scale, conversion rounding, sign convention details and CHECK expressions OPEN |
+| Cost | Cost layer, unit/total cost, remaining quantity, unknown-cost state and compensation | Unknown HPP/cost remains NULL, not zero; MWA/FIFO scopes remain fixed | Currency model, precision/scale, landed cost and cost math OPEN |
+| Event/source identity | Source document, event kind, posting/dispatch/receipt/reversal lineage, actor/time and retry identity where required | Posted records immutable; corrections by reversal/compensation; idempotency principle | Registry and FK design, event schema, idempotency key/retention OPEN |
+| Projection/reconciliation | On-hand/reserved/available, batch balance, transfer summary, stock-count variance and cost-layer remaining quantity | Projection is rebuildable and derived from ledger/events | Rebuild strategy, watermarks, concurrency and reconciliation tests OPEN |
+| Lifecycle/approval | Header/item/shipment state, posting, approval, investigation, closure and disposition | A11 FIX only at architecture/business-rule scope | Exact technical enums, transitions, authorization and audit retention OPEN |
+
+### 17.4 Attribute acceptance and unresolved-field protocol
+
+Each logical group in §17.2 must be decomposed in a later physical dictionary review using these columns, without presuming values:
+- logical attribute / business meaning;
+- applicable entity and scope;
+- source locator and exact decision scope;
+- evidence class (primary decision, audit, derived mapping, working master);
+- conceptual status;
+- technical specification status;
+- implementation/evidence status;
+- proposed physical representation (only when a controlling source supports it);
+- unresolved questions and closure evidence.
+
+The following remain explicitly **NOT ESTABLISHED** unless a controlling source is recovered:
+- exact SQL column names and whether generic audit fields exist on every entity;
+- PKs, FK tuples and composite tenant FK tuples;
+- nullability/defaults and final enum/check vocabularies;
+- decimal precision/scale, currency representation and conversion rounding;
+- exact unique keys/indexes, including nullable-variant strategy;
+- movement source registry physical structure and reservation source validation mechanism;
+- event model, idempotency keys/retention, lock order, atomic transaction boundaries and retry behavior;
+- physical RLS/server authorization, test execution and enforcement evidence.
+
+### 17.5 Result and next sequence
+
+- Logical-information mapping: **COMPLETE — PARTIAL**, for all 17 conceptual entities using the sources and locators listed above.
+- Approved physical field dictionary: **NOT COMPLETE**.
+- Exact physical attribute names/types/nullability/defaults: **OPEN / REVIEW / TODO**.
+- PK/FK/composite-FK tenant-integrity matrix: **NOT STARTED**; next work item.
+- UNIQUE/CHECK/index matrix: **NOT STARTED**.
+- Dependencies closed by this matrix: **none**.
+- FIX decisions changed: **none**.
+- `inventory_cost_layer_movements` remains candidate only; baseline remains 17 entities.
+- Source gaps and readiness statuses remain unchanged.
+
