@@ -447,3 +447,61 @@ Relationship labels:
 **Result:** traceability navigation improved for the explicitly compared DOC-05 and REC-06 subjects; overall authorization/traceability acceptance remains OPEN / PARTIAL. DOC-05 remains DRAFT / RECONSTRUCTED WORKING MASTER / NOT CANONICAL / NOT FINAL.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no SQL/DDL/DML, schema/migration, RLS/Auth, backend/API, source-code, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 21. Append-only DOC-05 bounded audit — metadata and publication-locator reconciliation (19 November 2026)
+
+### 21.1 Audit identity and scope
+
+- Owning document: DOC-05 — Authorization Master.
+- Current main path: docs/05-authorization/AUTHORIZATION_MASTER.md.
+- Audit basis: current DOC-05 §§1–20; active Master Checklist v2.0 §§34.4–34.7 and §41; DOC-01 Product Blueprint; DOC-02 Category & Workflow Master; DOC-03 System Architecture; DOC-06 Requirements & Traceability §§12–13.1; DOC-09 AUTH-OPEN register; DOC-10 Conflict & Version Register; and the authorization CVS crosswalk correction.
+- Mode: bounded read-only audit followed by append-only clarification. No primary authorization decision or technical implementation evidence was created.
+
+### 21.2 DOC05-AUD-F01 — Version header versus current working revision
+
+**Observation:** The document header at the beginning of DOC-05 still states Version 0.1.0. DOC-05 §18 (publication closeout) identifies Version 0.1.1 as the working revision and explicitly says the previously published v0.1.0 metadata is retained as historical publication metadata.
+
+**Disposition:** The header value is the historical initial-publication metadata, not the current working-revision identifier. The current working revision remains **0.1.1**, as recorded in §18. The top-of-file v0.1.0 field is not silently rewritten; this addendum makes the distinction explicit. Future document-control work may update the header only through a separately reviewed, append-only-compatible change.
+
+### 21.3 DOC05-AUD-F02 — “Proposed GitHub path” header label
+
+**Observation:** The header calls docs/05-authorization/AUTHORIZATION_MASTER.md the “Proposed GitHub path”, while §18 records PR #14 as merged and verified at that exact path, and §19 confirms that the path is the current GitHub working reference.
+
+**Disposition:** The word “Proposed” is historical drafting metadata from the pre-publication snapshot. The path itself is the active DOC-05 working-reference path on main. This clarification does not promote DOC-05 to canonical/final status.
+
+### 21.4 DOC05-AUD-F03 — PR #14 blob SHA label is historical, not current
+
+**Observation:** DOC-05 §18 labels 01b07610c069adc17d53959e1b3f5aeb99d05a60 as the “Current main blob SHA”. Subsequent append-only DOC-05 §§19–20 changed the file after the PR #14 publication checkpoint. The current pre-addendum main blob read during this audit was 391d873c1b82ff717e7b2cde5237d87377ebe927.
+
+**Disposition:** The SHA in §18 is retained as the blob identifier recorded at the PR #14 publication checkpoint; it is not the current blob SHA. The pre-addendum SHA above is an audit-time locator only and will change when a later append-only amendment is merged. No historical SHA or publication record is replaced.
+
+### 21.5 DOC05-AUD-F04 — Checkpoint-date scope
+
+**Observation:** The header checkpoint date is 17 November 2026, while append-only publication and traceability updates in §§18–20 are dated 17–18 November 2026.
+
+**Disposition:** The header date identifies the original working-master checkpoint, not the latest append-only revision date. The latest recorded addendum before this audit is §20 (18 November 2026); this audit is recorded as §21 (19 November 2026). Historical dates are preserved.
+
+### 21.6 Authorization design and dependency disposition
+
+The bounded cross-check found no evidence-supported reason to change the substantive authorization design or source-native dependency status:
+
+- O-01–O-12 remain FIX only at their approved conceptual platform-authorization scope; residual parameters remain OPEN.
+- CR-01–CR-10 and Q-01–Q-06 remain FIX only at their approved conceptual cross-category scope.
+- The 12 Business standard-role baseline and separation of Owner/platform roles remain unchanged.
+- Candidate action taxonomy, module/category mappings, scope matrix, D0–D4 field mapping and SoD/approval matrix remain PROPOSED/CANDIDATE or OPEN as recorded.
+- DOC-05 G01–G10, Scope O01–O10, SoD A01–A12 and REC-06 retain their existing statuses.
+- DOC-09 AUTH-OPEN-01–27 and DOC-06 TRC-OPEN-01–15 / REC-06 AC-06-01–12 retain their source-native statuses and closure criteria.
+- Negative acceptance scenarios remain designed candidates; no test execution or PASS is inferred.
+- Stable permission keys/grants, scope resolver, field allowlists, RLS/API/server enforcement, runtime evidence and Production readiness remain OPEN / PARTIAL / NOT VERIFIED as applicable.
+
+Dependencies newly closed: **0**. FIX decisions changed: **0**. Authorization design promoted to canonical/final: **NO**. Implementation or database authorization: **NOT GRANTED**.
+
+### 21.7 Audit disposition and next routing
+
+- DOC-05 bounded read-only audit: **COMPLETE — METADATA/PUBLICATION-LOCATOR CLARIFICATIONS RECORDED; NO SUBSTANTIVE AUTHORIZATION-DESIGN CORRECTION IDENTIFIED**.
+- DOC05-AUD-F01–F04: clarified append-only; historical header, publication and locator records retained.
+- DOC-05 remains DRAFT / RECONSTRUCTED AUTHORIZATION WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- Next work package: continue the DOC-05–DOC-06 authorization/requirements audit sequence under Master Checklist v2.0 §34.4, with DOC-06 bounded audit and no repetition of completed REC-06 crosswalk work in DOC-05 §20.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket GitHub/archive migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this addendum.
