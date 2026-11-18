@@ -440,3 +440,40 @@ DOC-04 §22 records the per-entity 17-row acceptance matrix and cross-entity evi
 Next action: continue targeted source recovery and locator reconciliation for authoritative physical schema/specification evidence. Keep all missing fields, key tuples, types, constraints, tenant enforcement, lifecycle and delete behavior OPEN/UNVERIFIED until evidence is found. Do not modify database/schema or infer physical definitions.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 19. DOC-04 physical source recovery and locator reconciliation checkpoint — 18 November 2026
+
+### 19.1 Work result
+
+DOC-04 §23 records a bounded Library source-recovery and per-entity locator reconciliation pass following §18. Sources reviewed:
+- A12.38 v5 Physical Entity & Data Dictionary Audit, Appendix D §§D.1–D.4 and D.11–D.14.
+- Reconstructed DOC-04 working master v0.1, §§2–3, 9, 12–13 and Appendix A.
+- Batch 02 Inventory Costing Migration Mapping v0.1, §§1–5 and 7–8.
+- Update Audit A11–A12 and 17-table matrix v0.2, §§1–4.
+- Current DOC-04 §§3, 9, 16–22 and this checklist §§7–9, 18.
+
+Findings:
+- Historical conceptual entity names and their A12.38 v5 Appendix D §D.4 locator: **17/17 confirmed**.
+- Authoritative physical field/key locators: **0/17 recovered** in the bounded source set reviewed.
+- A12.38 v5 D.1 requires authoritative schema/specification evidence for physical names, fields, keys, types, nullability/defaults, constraints/indexes, delete behavior and enforcement.
+- A12.38 v5 D.11 still records A38-G01–G04 as TODO; D.12–D.13 keep the physical dictionary NOT CLOSED.
+- The reconstructed DOC-04 is NOT CANONICAL / NOT FINAL; Batch 02 is a DRAFT mapping; Update Audit v0.2 is not physical implementation evidence.
+- The separate `inventory_cost_layer_movements` bridge remains a candidate, not an approved 18th historical entity.
+- No database introspection, SQL/DDL/DML, migration, RLS/Auth test, application test, concurrency test or Production verification was performed.
+
+Status: source recovery and locator reconciliation **COMPLETE — PARTIAL** for the reviewed source set. Physical Data Dictionary remains **NOT ACCEPTED**; A38-G01–G04 remain OPEN; dependencies closed: **none**; FIX decisions changed: **none**.
+
+### 19.2 Priority update
+
+| Priority | Work package | Status |
+|---:|---|---|
+| 1 | DOC-04 §§18–19 relationship/tenant-integrity and UNIQUE/CHECK/index matrices | COMPLETE — PARTIAL |
+| 2 | DOC-04 §20 quantity/cost precision and conversion matrix | COMPLETE — PARTIAL |
+| 3 | DOC-04 §21 event/idempotency/atomicity/concurrency specification | COMPLETE — PARTIAL |
+| 4 | DOC-04 §22 physical dictionary acceptance review | COMPLETE — NOT ACCEPTED |
+| 5 | DOC-04 §23 physical source recovery and locator reconciliation | COMPLETE — PARTIAL; 0/17 physical locators recovered |
+
+Next action: recover the missing original A12.38.3 entity-level physical specification or an explicitly approved schema artifact from its authoritative source location. Reconcile each field/key claim against the 17 entity rows only when the source is available. Until then, retain all physical details as OPEN / UNVERIFIED; do not infer columns, keys, types, constraints, tenant enforcement, lifecycle or delete behavior.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
