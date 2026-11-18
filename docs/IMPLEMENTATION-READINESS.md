@@ -73,3 +73,52 @@ Implementation may be considered only after:
 Permitted now: document indexing, evidence mapping, source/version reconciliation, decision-register maintenance, and read-only review.
 
 Not permitted by this readiness document: implementation, database mutation, security-policy changes, application-code changes, CI/deployment changes, or Production operations.
+
+
+## 7. Append-only current reassessment — 18 November 2026
+
+This section supplements the dated status snapshots in §§1–4. It does not delete or rewrite those earlier records. For A12.40 criterion statuses, the latest criterion-by-criterion reassessment in the active Master Checklist v2.0 §22 is the current review result.
+
+### 7.1 Current A12.40 reassessment
+
+| Criterion | Current reassessment | Remaining acceptance gap |
+|---|---|---|
+| AC40-01 | PARTIAL | Complete source coverage for 5.9.1–5.9.8 is not demonstrated; 5.9.7–5.9.8 finality and D40-203–D40-216 remain unresolved/unrecovered. |
+| AC40-02 | PARTIAL | No complete per-artifact metadata/version reconciliation across the full master/source set. |
+| AC40-03 | PARTIAL | Purchasing 14→15 and Sales 20→18 crosswalks remain incomplete; physical entity/field acceptance remains 0/17 in the reviewed evidence. |
+| AC40-04 | PARTIAL | A complete canonical decision index with normalized source, exact locator, approval and coverage is not established. |
+| AC40-05 | OPEN / PARTIAL | Approval provenance is not established for all decisions; CVS-019, GOV-OPEN-07, RMD-OPEN-01 and REC-OPEN-16 remain unresolved. |
+| AC40-06 | PARTIAL | Complete claim-by-claim supersession links, approval and retained historical locators are not established. |
+| AC40-07 | PARTIAL | Full version/change lineage across source artifacts, variants and approval events remains incomplete. |
+| AC40-08 | PARTIAL | Status normalization is not demonstrated across every historical source/register row. |
+| AC40-09 | OPEN | Complete individual D40-203–D40-216 finding register and direct primary locators are not available on reviewed `main` evidence. |
+| AC40-10 | PARTIAL | Existing evidence does not satisfy every closure rule for all A12.40 claims. |
+| AC40-11 | PARTIAL | Completeness and two-way traceability of every blocker to source, criterion, owner/artifact and closure evidence are not established. |
+| AC40-12 | PARTIAL | Complete integrity/reconciliation evidence for all historical source versions, variants, snapshots and per-file lineage is not established. |
+
+**Overall A12.40:** 0/12 PASS; 10/12 PARTIAL; 1/12 OPEN/PARTIAL; 1/12 OPEN. A12.40 remains PARTIAL / OPEN — NOT ACCEPTED / NOT CLOSED. ERD-OPEN-20 remains PARTIAL / OPEN; ERD-OPEN-22 remains UNRECOVERED. No dependency is closed by this reassessment.
+
+### 7.2 Stage 4.7.8, Stage 4.9 and physical schema
+
+- Stage 4.7.8 remains PARTIAL — GATE NOT PASSED. Register-level routing is not proof of complete primary-source backlinks or locator acceptance. P99-01 remains OPEN until source-side backlinks or explicitly approved written exceptions are implemented and verified.
+- Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET. The 13/13 drafted master documents do not establish canonical/final acceptance or complete cross-document traceability.
+- Physical Data Dictionary remains NOT ACCEPTED. The reviewed evidence identifies 17/17 historical conceptual entities but 0/17 authoritative physical entity names, field/type/precision/nullability/default locators, PK/FK/composite-FK locators, UNIQUE/CHECK/index/delete-update locators, or allocation/concurrency enforcement locators.
+- Purchasing 14→15 and Sales 20→18 entity crosswalks remain OPEN.
+
+### 7.3 A12.41 gate-count discrepancy
+
+The current published documents do not agree on the A12.41 gate count:
+- This document's historical §4 refers to GATE-01 through GATE-06.
+- DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §3C records A12.41 GATE-01 through GATE-07 as FAIL / NOT VERIFIED.
+- DOC-11's high-level project gates G1–G6 are not assumed to be identical to A12.41 gate IDs.
+- This review did not establish a controlling primary A12.41 definition on `main` that resolves the discrepancy. The gate count and definitions remain OPEN / UNVERIFIED. Do not infer, remove or add a gate based on the conflicting references.
+
+### 7.4 Current readiness decision
+
+**Overall implementation readiness: NOT READY.**
+
+The documentation review does not establish approved physical schema, tenant/RLS/server enforcement, executable test execution/results, security remediation/retest, or current Production verification. A12.40 is not accepted; A12.41 is not started. Stage 4.7.8 has not passed and Stage 4.9 acceptance is not met.
+
+No dependencies are closed and no FIX decisions are changed by this reassessment. This addendum is documentation-only and does not authorize implementation or any technical mutation.
+
+Controls remain: `DB_PUSH_BLOCKED: ACTIVE`; audit-first and read-only; no SQL/DDL/DML, schema/migration, RLS/Auth, API/backend, source-code, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
