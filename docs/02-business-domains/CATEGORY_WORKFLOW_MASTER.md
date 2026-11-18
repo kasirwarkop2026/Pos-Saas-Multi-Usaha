@@ -156,13 +156,13 @@ This locator recovery does not close the CAT-12 technical gaps. Safe-mode functi
 
 ### 13.1 Finding DOC02-F01
 
-A bounded current-\`main\` audit identified stale locator-status statements in this document: the RMD-69 v1.1 row in §9 still says the direct file locator was not recovered, and §10 DOC02-G03 still labels the locator UNRECOVERED. Those statements conflict with the later, controlling recovery already recorded in §12. The same stale statements also appear in the CAT-12 detail page's residual-details and source-locator sections.
+A bounded current-`main` audit identified stale locator-status statements in this document: the RMD-69 v1.1 row in §9 still says the direct file locator was not recovered, and §10 DOC02-G03 still labels the locator UNRECOVERED. Those statements conflict with the later, controlling recovery already recorded in §12. The same stale statements also appear in the CAT-12 detail page's residual-details and source-locator sections.
 
 ### 13.2 Current locator disposition
 
 For locator readiness only, the controlling disposition is **RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY**. The recovered source is:
 
-\`/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx\`
+`/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx`
 
 Manifest identity: M231-223, zero-based index 222, 16 November 2026 SHA-256 manifest v1.0. Verified locators: p.1 §§1–2; p.2 §§2–5; p.3 §§6–8. See §12 for the original recovery record and locator scope.
 
@@ -179,4 +179,4 @@ This §13 addendum supersedes only the stale current-status wording identified i
 
 DOC-02 remains DRAFT — SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER; REVIEW REQUIRED; NOT CANONICAL / NOT FINAL. This correction does not establish technical authorization or implementation readiness.
 
-READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`.
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
