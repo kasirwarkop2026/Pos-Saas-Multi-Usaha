@@ -606,3 +606,32 @@ Status meanings in this reassessment: PARTIAL means relevant evidence exists but
 No further A12.38.3 or equivalent archive-source search is initiated. The next useful work is to address only specification/documentation gaps that can be resolved from already-published `main` evidence, while retaining AC40-01, AC40-03, AC40-05, AC40-09 and AC40-12 gaps as explicit blockers. Do not relabel any criterion PASS or close any dependency without its required primary evidence and approval.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no Supabase Preview/Staging; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 23. Legacy Master Checklist v1.0 closure and current audit operating mode — 18 November 2026
+
+### 23.1 Legacy checklist closure
+
+The prior `docs/00-governance/MASTER-CHECKLIST.md` (v1.0) is formally designated **CLOSED — HISTORICAL / SUPERSEDED / NOT ACTIVE FOR NAVIGATION**. It is retained as an immutable historical record apart from append-only closure notices. Its former PROPOSED status, mandatory continuation wording, and next-work pointers are drafting-time snapshots and must not be followed as current instructions.
+
+The sole active navigation and checkpoint source is `docs/00-governance/MASTER-CHECKLIST-v2.0.md`, activated by PR #35 and recorded in §14.1. The latest append-only checkpoint in this v2.0 file controls current navigation.
+
+### 23.2 Current operating mode
+
+The project is now in **MAIN-BRANCH DOCUMENTATION AUDIT & CORRECTION MODE**. Work is limited to auditing, reconciling and correcting documentation already published on GitHub `main`, using the existing evidence. Do not restart completed/frozen historical stages, repeat unavailable archive-source searches, or treat a reconstructed working master as canonical/final.
+
+For each package:
+1. Read this active checklist and the exact controlling documents from `main`.
+2. Identify stale instructions, conflicting statuses, broken cross-references, missing acceptance details and evidence-bounded specification gaps.
+3. Separate corrections supportable from current `main` evidence from items that must remain OPEN/PARTIAL/UNVERIFIED.
+4. Prepare one narrowly scoped documentation PR at a time; inspect the complete diff and applicable documentation CI.
+5. Obtain explicit merge approval, merge, then read back the exact changed files from `main` before proceeding.
+6. Append the outcome and next evidence-supported work package to this checklist.
+
+### 23.3 Next work package
+
+Continue the authorization consistency audit across DOC-05, DOC-08, DOC-09 and DOC-06, as routed by §21.3 Order 4. Check claim-level alignment of conceptual FIX decisions, CVS locators, AUTH-OPEN dependencies, category/workflow mappings, scope/data/purpose, approval/SoD, server authorization and test traceability. Correct only contradictions or omissions supported by the current `main` evidence. Do not close technical authorization dependencies or assert implementation/test PASS without the required evidence.
+
+### 23.4 Governance boundary
+
+This navigation correction closes only the legacy checklist's active-navigation role. It closes no domain dependency and changes no FIX decision. `DB_PUSH_BLOCKED: ACTIVE`; no SQL/DDL/DML, database/schema/migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED.
