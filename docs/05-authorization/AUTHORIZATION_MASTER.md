@@ -397,3 +397,53 @@ This addendum reconciles the publication workflow status recorded in §17 with t
 **Current disposition:** DOC-05 publication = COMPLETE — MERGED & VERIFIED (PR #14); document/design status = DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL; technical authorization dependencies remain OPEN/PARTIAL/NOT VERIFIED as individually registered.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 20. Authorization audit-to-REC-06 acceptance crosswalk — 18 November 2026
+
+**Disposition: DERIVED TRACEABILITY AID — PARTIAL; NO DEPENDENCY CLOSED.** This addendum compares the DOC-05 Authorization Audit gap families G01–G10 with the REC-06 acceptance criteria recorded in DOC-06 §13.1. It is a navigation crosswalk derived from the wording and scope of the two published working masters; it is not a primary-source decision, an approved one-to-one mapping, or a change to either register.
+
+### 20.1 Review basis and relationship labels
+
+Reviewed current `main`:
+- DOC-05 `docs/05-authorization/AUTHORIZATION_MASTER.md` §14 (G01–G10 and residual authorization gaps).
+- DOC-06 `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` §12 (TRC-OPEN-01–15) and §13.1 (REC-06 AC-06-01–12).
+- DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §3D (AUTH-OPEN-01–27).
+
+Relationship labels:
+- **DIRECT SUBJECT OVERLAP** means the two entries address substantially the same subject; it does not make their IDs, closure criteria, owners, or evidence interchangeable.
+- **RELATED** means one entry is a prerequisite, adjacent concern, or partial evidence relationship, but its scope is not identical.
+- **NO DIRECT COUNTERPART** means the reviewed REC-06 criteria do not state a corresponding acceptance criterion for that DOC-05 gap.
+
+### 20.2 G01–G10 to REC-06 crosswalk
+
+| DOC-05 gap | REC-06 criterion(s) | Relationship | Scope boundary |
+|---|---|---|---|
+| G01 — canonical M01–M21 module catalogue and definitions | AC-06-03 Workflow → M-ID; AC-06-10 provenance per row | RELATED | A canonical module catalogue is prerequisite context for workflow-to-module mapping, but is not itself the workflow mapping or row-level provenance acceptance. |
+| G02 — exact category × module mapping | AC-06-03 Workflow → M-ID; AC-06-10 provenance per row | RELATED | Category-to-module and workflow-to-M-ID are adjacent mapping layers; neither substitutes for the other. |
+| G03 — shared foundation vs operational-module boundary | No direct AC-06 counterpart | NO DIRECT COUNTERPART | REC-06's submodule and workflow criteria do not expressly accept the shared-foundation/operational-module boundary. |
+| G04 — submodule/workflow decomposition and workflow-to-object/action mapping | AC-06-01 Resource/object per workflow; AC-06-02 Submodule decomposition; AC-06-04 Action/object/lifecycle state | DIRECT SUBJECT OVERLAP | The criteria cover related decomposition and workflow-level resource/action mapping, but do not establish that every G04 sub-item is satisfied. |
+| G05 — capability/action vocabulary and per-workflow mapping | AC-06-04 Action/object/lifecycle state | DIRECT SUBJECT OVERLAP | Shared action/object/lifecycle subject only; stable permission keys and approved grants remain separate OPEN items. |
+| G06 — scope resolver, hierarchy, assignment binding, parent/child rules and negative cases | AC-06-06 Object/geographic scope | DIRECT SUBJECT OVERLAP | REC-06's scope criterion does not by itself establish resolver behavior, assignment lifecycle, inheritance, expiry/revocation, or tests. |
+| G07 — SoD/approval, risk tier, threshold, approver eligibility and dual-control mapping | AC-06-08 SoD/approval | DIRECT SUBJECT OVERLAP | Shared SoD/approval subject; detailed thresholds, independence, approver eligibility and technical lifecycle remain open. |
+| G08 — D0–D4 field-level classification, purpose, masking, export and retention | AC-06-07 Data classification/purpose | DIRECT SUBJECT OVERLAP | Shared data-classification/purpose subject; complete field inventory, jurisdiction, masking, export and retention acceptance is not established. |
+| G09 — credential/compliance/jurisdiction evidence and exact gates | No direct AC-06 counterpart; TRC-OPEN-12 is a limited Pharmacy-specific related reference | RELATED / NO GENERAL COUNTERPART | TRC-OPEN-12 covers Pharmacy credential/regulatory evidence only; it is not a general acceptance mapping for every regulated category or G09 requirement. |
+| G10 — negative-test mapping, traceability and execution evidence | AC-06-09 Negative tests; AC-06-10 Provenance per row | DIRECT SUBJECT OVERLAP / RELATED | AC-06-09 covers negative-test design/traceability; AC-06-10 is supporting provenance. Neither proves implementation, execution, PASS, retained runtime artifacts, or CI enforcement. |
+
+### 20.3 REC-06 criteria without a direct G01–G10 counterpart
+
+- **AC-06-05 Role/function → standard role:** no direct G01–G10 counterpart is established by this crosswalk. DOC-05's role baseline and DOC-06 TRC-OPEN-03 remain the relevant adjacent references; this does not close role-eligibility mapping.
+- **AC-06-11 Conceptual consistency with FIX:** a REC-06 consistency criterion, not a G01–G10 authorization gap or evidence of implementation.
+- **AC-06-12 New approval decisions:** recorded as NOT PRESENT in DOC-06; no new approval is inferred or created by this crosswalk.
+
+### 20.4 Status and authority preservation
+
+- DOC-05 G01–G10 retain their §14 statuses; DOC-05 residual O-01–O-12, Scope O01–O10, SoD A01–A12 and REC-06 retain their existing statuses.
+- DOC-06 AC-06-01–12 and TRC-OPEN-01–15 retain their existing statuses and closure criteria.
+- DOC-09 remains the controlling consolidated register for AUTH-OPEN-01–27 and related dependency statuses.
+- This derived crosswalk does not create primary locators, approvals, stable permission keys, module assignments, scope rules, field allowlists, test results, or technical enforcement evidence.
+- Dependencies closed: **0**. FIX decisions changed: **0**. No item is promoted to PASS, APPROVED, IMPLEMENTED, EXECUTED, or VERIFIED.
+
+**Result:** traceability navigation improved for the explicitly compared DOC-05 and REC-06 subjects; overall authorization/traceability acceptance remains OPEN / PARTIAL. DOC-05 remains DRAFT / RECONSTRUCTED WORKING MASTER / NOT CANONICAL / NOT FINAL.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no SQL/DDL/DML, schema/migration, RLS/Auth, backend/API, source-code, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.

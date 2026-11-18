@@ -731,3 +731,42 @@ A source-level inconsistency remains and must not be silently reconciled:
 - Do not repeat A12.38.3 or equivalent archive-source searches. Do not infer physical schema, approval, enforcement, test execution, remediation, retest or Production state.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no Supabase Preview/Staging; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 27. Append-only DOC-05 ↔ DOC-06 authorization/REC-06 traceability crosswalk — 18 November 2026
+
+### 27.1 Audit basis and finding
+
+A read-only review compared current `main` versions of:
+- DOC-05 `docs/05-authorization/AUTHORIZATION_MASTER.md` §14 (G01–G10).
+- DOC-06 `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` §12 (TRC-OPEN-01–15) and §13.1 (REC-06 AC-06-01–12).
+- DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §3D (AUTH-OPEN-01–27).
+- This active Master Checklist v2.0.
+
+The review found that DOC-06 already links individual TRC-OPEN items to selected AUTH-OPEN dependencies, but there was no explicit comparison of the DOC-05 Authorization Audit gap families G01–G10 against REC-06 acceptance criteria AC-06-01–12. This is a navigation/traceability omission, not evidence that either source register is incomplete or that the criteria are equivalent.
+
+### 27.2 Correction recorded
+
+DOC-05 §20 now provides an append-only, derived crosswalk with three relationship classes: DIRECT SUBJECT OVERLAP, RELATED, and NO DIRECT COUNTERPART. It records the scope limits for each relationship and identifies REC-06 criteria that have no direct G01–G10 counterpart.
+
+The crosswalk explicitly preserves these distinctions:
+- Category × module mapping is not the same as workflow → M-ID mapping.
+- Scope, SoD, data-purpose and negative-test subject overlap does not close their detailed acceptance criteria.
+- Pharmacy-specific TRC-OPEN-12 is not a general G09 regulatory-eligibility crosswalk.
+- Test design/provenance is not implementation, execution, PASS, CI enforcement or retained runtime evidence.
+- AC-06-11 conceptual FIX consistency and AC-06-12 new approval decisions are not G01–G10 gap closures.
+
+### 27.3 Audit disposition and impact
+
+- DOC-05 G01–G10 and related authorization gaps: statuses unchanged.
+- DOC-06 AC-06-01–12 and TRC-OPEN-01–15: statuses and closure criteria unchanged.
+- DOC-09 AUTH-OPEN-01–27: statuses unchanged.
+- Dependencies closed: **0**. FIX decisions changed: **0**.
+- No primary source, approval, permission key, module assignment, scope rule, field allowlist, test result, implementation or Production evidence was created or inferred.
+- Audit disposition: **COMPLETE — DERIVED TRACEABILITY AID ADDED; ACCEPTANCE REMAINS OPEN / PARTIAL**.
+
+### 27.4 Next work and governance
+
+Continue only with evidence-backed specification gaps available from current `main`. Do not reopen unavailable archive searches, change FIX decisions, or promote candidate mappings. Any further repository correction remains one narrowly scoped documentation PR at a time, followed by diff/CI review, explicit merge approval, and post-merge read-back.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED; no database, schema, RLS/Auth, backend/API, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
