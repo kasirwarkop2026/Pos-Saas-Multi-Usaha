@@ -609,3 +609,62 @@ This dated addendum records a later, narrowly scoped user authorization to publi
 - **Workflow boundary:** this addendum records the approved destination and the DOC-11 prerequisite. DOC-12 PR review, CI, merge approval and post-merge read-back are separate steps. Merge requires explicit user approval after final diff and CI review.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket archive migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED. No database, application, backend, CI workflow, Vercel, deployment or Production changes are included.
+
+
+## 16. Append-only source-ID, publication and current-status reconciliation — 19 November 2026
+
+This addendum corrects a source-ID range ambiguity in the historical DOC-12 index and clarifies the current publication/version and status reading rules. It preserves the 231-row manifest, all prior DOC-12 sections and historical snapshots. It does not authorize archive mutation or change source-native decisions.
+
+### 16.1 Stage 4.7.6 source-ID correction
+
+The Stage 4.7.6 Root & Additional Artifacts Source Mapping v0.1, §§2.1–2.2 and §6, is the controlling mapping for the root and post-manifest additional-artifact IDs. Its exact allocation is:
+
+| Artifact group | Correct source IDs | Manifest relationship | Count |
+|---|---|---|---:|
+| Root files included in the 231-row baseline | ROOT-001–ROOT-003 | Included in manifest as three ROOT records | 3 |
+| Root files outside the 231-row baseline | ROOT-004–ROOT-005 | Manifest file and post-manifest integrity report; neither is one of the 231 listed source paths | 2 |
+| Stage 2.1–2.7 and Stage 3.1–3.6 Audit artifacts | ADD-001–ADD-013 | Thirteen post-manifest Audit artifacts | 13 |
+| Total post-manifest additions in Stage 4.7.6 scope | ROOT-004, ROOT-005 and ADD-001–ADD-013 | Two root artifacts plus thirteen Audit artifacts | **15** |
+
+Accordingly, the ranges in DOC-12 §4 and §7 that describe **ADD-001–ADD-015** or **ADD-014–ADD-015** are historical transcription/labeling errors. The source mapping does not define ADD-014 or ADD-015. The correct set is ROOT-001–ROOT-005 and ADD-001–ADD-013, with exactly 15 post-manifest additions consisting of ROOT-004/ROOT-005 plus ADD-001–ADD-013. The three later Stage 4.7.3–4.7.5 mapping outputs remain separate and are not part of those 15 additions.
+
+This correction is an identifier clarification only. It does not change the 231 manifest IDs, rename any file, change any source status, or imply content review of the 15 additional artifacts.
+
+### 16.2 Manifest transcription verification
+
+A bounded field-by-field comparison was performed between the 231 data rows in Appendix A and the exact Library source CSV `03_MANIFEST_SHA256_231_FILE_POS_SAAS_v1.0_2026-11-16.csv`.
+
+- Source CSV data rows: **231**; Appendix A data rows: **231**.
+- Compared fields in source order: index/derived M231 ID, folder, filename, size_bytes, manifest SHA-256 value and exact Library path.
+- Row/field mismatches: **0**.
+- Unique exact Library paths: **231**; duplicate paths: **0**.
+- Blank manifest SHA-256 values: **0**.
+- One repeated SHA-256 value occurs on two separately named/path entries, source CSV indexes 115 and 116 (DOC-12 M231-116 and M231-117). This agrees with the Stage 4.7.6 integrity report's one byte-identical pair / 230 unique hash result. Both entries remain distinct historical artifacts and must be preserved.
+
+This is a transcription comparison against the supplied manifest, not a new hash computation, rehash of the 231 files, byte-level verification of the source files, or content review. The 231-row manifest remains the historical integrity baseline for its stated snapshot.
+
+### 16.3 Current publication, version and historical cover reading rule
+
+DOC-12 §15 records the later approved and completed package-specific publication at `docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md`, merged through PR #30 at `38197d2e833be6007744218278f1b9cb44027af0`. Therefore:
+
+- The cover's “Proposed GitHub path (not approved): `docs/00-governance/DOCUMENT_INDEX.md`” is the preserved pre-publication proposal, not the current destination. The current published working-master path is the path stated in §15.
+- The cover's DRAFT v0.2 status is the historical base-artifact status. The latest Library source artifact verified for this document is DOC-12 v0.6 DRAFT at `/Arsip Proyek POS SaaS/Master Documents/DOC-12_Master_Archive_Document_Index_v0.6_DRAFT.docx`; the repository Markdown is a published working-master transcription with append-only addenda through this §16.
+- DOC-12 §§6 and 10 retain their Stage 4.8/version and Stage 4.9 “NOT STARTED” snapshot language as historical base text. Later DOC-12 addenda, DOC-00 control records and the active Master Checklist v2.0 govern current navigation and status. The current Stage 4.9 disposition remains **PARTIAL — ACCEPTANCE NOT MET**, not NOT STARTED.
+- The older Master Project Index §15 statement that DOC-10 is not declared published is a dated navigation snapshot. Current DOC-10 publication and its later clarification are recorded in DOC-10 §11 and active Master Checklist §50; the Master Checklist v2.0 remains the sole active work-order authority.
+
+No historical cover, table, snapshot or prior addendum is deleted or silently rewritten.
+
+### 16.4 Current inventory and content-review boundary
+
+- The 249-path count in DOC-12 §2 and Stage 4.7.6 is a dated inventory snapshot, not a claim about the current Library count and not a replacement manifest.
+- The 231-row comparison establishes transcription fidelity only. It does not close GOV-OPEN-02 or certify the source contents.
+- The current Master Project Index §14/§16 and DOC-00 §§25.3, 26 and 27 record the narrow M231-223 / DOC02-G03 direct locator recovery. Only that identified source is recorded as content reviewed in this index; the other 230 manifest entries are not promoted to CONTENT REVIEWED by this audit.
+- Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; GOV-OPEN-02 remains PARTIAL. DOC-12 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+
+### 16.5 Audit outcome and governance
+
+DOC-12 bounded read-only audit: **COMPLETE — ONE SOURCE-ID CORRECTION AND ONE PUBLICATION/VERSION READING CLARIFICATION JUSTIFIED; MANIFEST TRANSCRIPTION MATCHES 231/231 ROWS**.
+
+Dependencies newly closed: **0**. FIX decisions changed: **0**. Source-native status promotions/demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.

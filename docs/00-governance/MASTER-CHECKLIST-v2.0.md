@@ -1815,3 +1815,46 @@ Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIV
 - Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; A12.40 remains PARTIAL/OPEN; A12.41 remains NOT STARTED / NOT VERIFIED; Implementation Readiness remains NOT READY.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+
+## 52. DOC-12 bounded read-only archive/index audit and source-ID correction — 19 November 2026
+
+### 52.1 Audit identity and scope
+
+- Work package: **DOC-12 — Master Archive & Document Index bounded read-only audit**, under §34.4 sequence item 7 (DOC-11–DOC-12 roadmap/archive audit).
+- Owning document: docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md, repository-native transcription of DOC-12 v0.6 DRAFT. Current-main blob before correction: 556e2f29436271d29d2433e6bf0bf1cd52758f68; 612 lines before this audit addendum.
+- Current Library source artifact verified: DOC-12_Master_Archive_Document_Index_v0.6_DRAFT.docx, path /Arsip Proyek POS SaaS/Master Documents/DOC-12_Master_Archive_Document_Index_v0.6_DRAFT.docx, observed size 68,277 bytes. DOC-12 remains DRAFT / REVIEW REQUIRED.
+- Reviewed DOC-12 §§1–11, Appendix A M231-001–M231-231, DOC-12 v0.3 correction addendum, v0.4 current master-document snapshot, v0.5/v0.6 Library verification addenda and §15 GitHub publication/cross-reference addendum.
+- Bounded controlling cross-checks: exact source CSV 03_MANIFEST_SHA256_231_FILE_POS_SAAS_v1.0_2026-11-16.csv; Stage 4.7.6 Root & Additional Artifacts Source Mapping v0.1 §§2.1–2.2 and §§3–6; Stage 4.7.8 bidirectional traceability audit §2; current Master Project Index §§14–16; DOC-00 §§24–28; DOC-11 §§14–15; active Master Checklist v2.0 §§34 and 49–51; Implementation Readiness §§1–7; and current Library listing of the Master Documents folder.
+- The prior Stage 4.7.6 source mapping, 231-file manifest integrity/path audits and DOC02-G03 locator recovery were not repeated. Their exact existing records were used only to validate DOC-12 identifiers, historical boundaries and current navigation.
+
+### 52.2 Findings and disposition
+
+- **DOC12-AUD-F01 — Incorrect post-manifest source-ID range in DOC-12 §§4 and 7.** DOC-12 describes ROOT-001–ROOT-005 and ADD-001–ADD-015, and has a row labelled ADD-014–ADD-015. The controlling Stage 4.7.6 mapping defines ROOT-001–ROOT-005 and ADD-001–ADD-013 only. Exactly 15 post-manifest additions are ROOT-004/ROOT-005 plus ADD-001–ADD-013; ROOT-001–ROOT-003 are already included in the 231-row manifest. ADD-014 and ADD-015 are not defined by that mapping. DOC-12 §16 now records the correct source-ID allocation without rewriting the historical tables.
+- **DOC12-AUD-F02 — Manifest transcription comparison.** The exact Library CSV contains 231 data rows. Appendix A contains 231 rows. All six compared fields in source order (derived M231 ID/index, folder, filename, size_bytes, manifest SHA-256 value and exact Library path) match: **231/231 rows; 0 field mismatches**. There are 231 unique exact paths and no duplicate paths; no manifest SHA-256 values are blank. One SHA-256 value occurs on two distinct paths (source CSV indexes 115 and 116; DOC-12 M231-116 and M231-117), consistent with the Stage 4.7.6 report of one byte-identical pair and 230 unique hashes. Both entries remain preserved.
+- **DOC12-AUD-F03 — Integrity/content-review boundary.** The 231-row comparison verifies transcription against the supplied manifest only. It is not a new SHA-256 computation, byte-level re-verification of the 231 source files, or content review. The manifest remains the historical integrity baseline for its stated snapshot. Only M231-223 / DOC02-G03 has the separately recorded narrow content/locator review; the other 230 entries are not promoted to CONTENT REVIEWED. GOV-OPEN-02 remains PARTIAL.
+- **DOC12-AUD-F04 — Historical cover path/version and current publication.** The DOC-12 v0.2 cover's “Proposed GitHub path (not approved)” is a pre-publication snapshot. DOC-12 §15 records the approved current repository path docs/09-archive-index/MASTER-ARCHIVE-DOCUMENT-INDEX.md, PR #30 and merge commit 38197d2e833be6007744218278f1b9cb44027af0. The latest verified Library source is DOC-12 v0.6 DRAFT. DOC-12 §16 clarifies the historical cover and version reading rule while preserving all prior content.
+- **DOC12-AUD-F05 — Historical stage/version statements.** DOC-12 §6 is a Stage 4.8 version snapshot and §10's Stage 4.9 “NOT STARTED” wording is a historical base statement. Later DOC-12 v0.3–v0.6 addenda and the active Master Checklist supersede those statements for current navigation. Current Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; DOC-12 publication does not mean content acceptance.
+- **DOC12-AUD-F06 — Cross-document historical navigation.** Master Project Index §15 is a dated 18 November snapshot that describes DOC-10 as a separate workstream without publication. Current DOC-10 publication/clarification is evidenced by DOC-10 §11 and active Checklist §50. Preserve the old Index snapshot; the active Master Checklist v2.0 remains the sole work-order authority. No separate Master Project Index edit is included in this DOC-12 package.
+- **DOC12-AUD-F07 — Inventory and acceptance boundaries.** The 249-path total in DOC-12 §2 / Stage 4.7.6 is a dated snapshot, not a current Library count or replacement manifest. The 15 historical additions and three later Stage 4.7.3–4.7.5 mapping outputs remain distinct. Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET. DOC-12 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+
+### 52.3 Correction PR and first-commit CI
+
+- PR #75: docs(doc-12): correct additional artifact source IDs.
+- Branch: docs/doc12-source-id-and-publication-clarification-2026-11-19.
+- First audit/correction commit: 34e7c7cca782bd343a4357253a40e858702bbc0c, appending DOC-12 §16 only.
+- First-commit diff: one file, 59 additions, 0 deletions.
+- Documentation CI run 44376708056: Markdown lint SUCCESS; documentation structure SUCCESS; internal documentation links SUCCESS.
+- POS SaaS CI run 44376708166: Detect application changes SUCCESS; ESLint, dependency security audit, TypeScript typecheck and Next.js production build SKIPPED by the documentation-only guard. Skipped application jobs are not test passes.
+- First-commit branch read-back verified DOC-12 §16 at blob 5b67aad8200de88feb1d0a9f489601f54ab20a76.
+- This separate Master Checklist checkpoint is the second commit in PR #75. Combined CI, full diff, reviews/threads and mergeability must be rechecked after this commit. PR #75 requires separate explicit user approval before merge.
+
+### 52.4 Audit outcome and next controlled action
+
+- DOC-12 bounded read-only audit: **COMPLETE — ONE SOURCE-ID CORRECTION AND ONE PUBLICATION/VERSION READING CLARIFICATION JUSTIFIED; MANIFEST TRANSCRIPTION MATCHES 231/231 ROWS**.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**. Source-native status promotions/demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
+- DOC-12 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Publication does not certify the 231 source contents or close GOV-OPEN-02.
+- DOC-08–DOC-11 bounded audits are complete and recorded in §§48–51. The next work package under §34.4 is **cross-document acceptance and readiness reconciliation**, but it must not restart completed audits. Use current main, owning-source acceptance criteria and the remaining explicit dependencies; prioritize only evidence-backed specification/readiness blockers. Reassess Stage 4.7.8, Stage 4.9, A12.40, A12.41 and Implementation Readiness without promoting any status absent its required evidence and authority.
+- Current controlling statuses remain: Stage 4.7.8 PARTIAL — GATE NOT PASSED; Stage 4.9 PARTIAL — ACCEPTANCE NOT MET; A12.40 PARTIAL/OPEN — NOT ACCEPTED / NOT CLOSED; A12.41 NOT STARTED / NOT VERIFIED; Implementation Readiness NOT READY.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
