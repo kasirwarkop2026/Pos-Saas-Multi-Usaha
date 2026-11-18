@@ -994,3 +994,77 @@ A12.38 v5 Appendix D explicitly records A12.38.3 as 17 historical entities with 
 - No database/schema inspection or changes are authorized by this review. No SQL, DDL, DML, migration, RLS/Auth, backend, application code, CI workflow, deployment or Production changes.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 23. Physical source recovery and per-entity locator reconciliation — 18 November 2026
+
+### 23.1 Scope and method
+
+This append-only pass follows §22.5. It searched the available Library for the original A12.38.3 Inventory & Costing field-level workpaper, entity-specific physical field profiles, schema/DDL artifacts, and evidence for A38-G01–A38-G04. Candidate documents were opened and checked against their stated authority and evidence boundaries.
+
+Sources directly reviewed:
+- `Konsolidasi_ERD_POS_SaaS_Multi_Usaha_v3.0_Tahap_5.9.3_DRAFT_Audit_Integrasi_v5_A12.38_Physical_Dictionary_Audit.docx`, Appendix D §§D.1–D.4 and D.11–D.14.
+- `DOC-04_ERD_DATA_DICTIONARY_RECONSTRUCTED_WORKING_MASTER_v0.1_2026-11-17.docx`, §§2–3, 9, 12–13 and Appendix A.
+- `POS_SAAS_MIGRATION_MAPPING_BATCH_02_INVENTORY_COSTING_v0.1_2026-11-15.md`, §§1–5 and 7–8.
+- `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§1–4.
+- Current DOC-04 §§3, 9, 16–22 and Master Checklist v2.0 §§7–9, 18.
+
+Authority assessment:
+- A12.38 v5 Appendix D is an audit result and gap register. D.1 expressly says physical names, fields, keys, types, nullability, defaults, constraints, indexes, delete behavior and enforcement require authoritative schema/specification evidence.
+- D.4 verifies the historical 17-entity conceptual inventory; it does not establish physical table names or field definitions.
+- D.11 leaves A38-G01 through A38-G04 as TODO; D.12–D.13 keep the physical dictionary NOT CLOSED.
+- The reconstructed DOC-04 is explicitly NOT CANONICAL / NOT FINAL. Its attribute labels are logical information groups, not SQL columns.
+- Batch 02 is a DRAFT migration mapping, not a physical ERD/data dictionary or migration approval. The Update Audit v0.2 is a documentation/status audit, not implementation evidence.
+- No standalone authoritative physical schema, DDL, approved field-level dictionary, or separately recoverable detailed A12.38.3 field workpaper was established from the reviewed Library sources. This is a bounded search result, not proof that no such artifact exists elsewhere.
+
+### 23.2 Per-entity source locator and physical evidence matrix
+
+The common locator below confirms only that each name belongs to the historical conceptual baseline: A12.38 v5 Appendix D §D.4. It does not confirm the physical table name. No entity-specific authoritative physical field/key locator was recovered in this pass.
+
+| # | Historical conceptual entity | Verified locator | Physical field/key locator | Disposition |
+|---:|---|---|---|---|
+| 1 | `inventory_batches` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 2 | `inventory_movements` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 3 | `inventory_balances` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 4 | `inventory_batch_balances` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 5 | `inventory_adjustments` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 6 | `inventory_adjustment_items` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 7 | `stock_counts` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 8 | `stock_count_items` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 9 | `stock_transfers` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 10 | `stock_transfer_items` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 11 | `inventory_cost_exceptions` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 12 | `inventory_reservations` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 13 | `inventory_reservation_items` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 14 | `inventory_cost_layers` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 15 | `inventory_cost_layer_consumptions` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 16 | `stock_transfer_shipments` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+| 17 | `stock_transfer_shipment_items` | A12.38 v5, App. D §D.4 | NOT RECOVERED | OPEN / UNVERIFIED |
+
+**Coverage result:** historical conceptual names 17/17 locator-confirmed; authoritative physical field/key locators 0/17 recovered in this pass. These are separate measures and must not be conflated.
+
+### 23.3 Cross-entity gap disposition
+
+| Gap | Evidence result | Current disposition |
+|---|---|---|
+| A38-G01 — physical entity inventory and exact physical table names | D.4 lists historical conceptual entities only; physical inventory remains TODO in D.11 | OPEN |
+| A38-G02 — fields, types, precision, nullability, defaults, PK/FK/composite FK | No authoritative per-entity field/key specification recovered | OPEN |
+| A38-G03 — UNIQUE/CHECK/index/delete-update behavior | DOC-04 §§19 and 22 are candidate/evidence-gap matrices; A12.38 D.11 remains TODO | OPEN |
+| A38-G04 — physical cost-allocation bridge, FK and concurrency | A12.17 cardinality is conceptual; physical bridge and enforcement evidence not recovered | OPEN |
+
+Additional boundaries:
+- `inventory_cost_layer_movements` remains a separate bridge candidate, not an approved 18th historical entity.
+- Do not infer generic `id`, timestamps, `status`, tenant keys, or any other column on an entity without its authoritative locator.
+- Do not convert logical labels in DOC-04 §17 or candidate constraints in §19 into physical schema definitions.
+- No database introspection, SQL/DDL/DML, migration, RLS/Auth test, application test, concurrency test or Production verification was performed.
+
+### 23.4 Result and next action
+
+- Source recovery and locator reconciliation: **COMPLETE — PARTIAL** for the bounded Library/source set reviewed.
+- Historical conceptual entity locator coverage: **17/17**.
+- Physical dictionary field/key locator recovery: **0/17**.
+- A38-G01–G04: **OPEN**; dependencies closed: **none**; FIX decisions changed: **none**.
+- Physical Data Dictionary acceptance remains **NOT ACCEPTED**. DOC-04 remains a reconstructed working master, NOT CANONICAL / NOT FINAL.
+- Next action: recover the missing original A12.38.3 entity-level physical specification or an explicitly approved schema artifact from its authoritative source location. Once available, reconcile each locator and field/key claim against the 17 rows before considering any acceptance update. Until then, preserve all physical details as OPEN / UNVERIFIED.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
