@@ -1270,10 +1270,10 @@ READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
 ### 37.1 Audit identity and bounded scope
 
 - Work package: **DOC-02 — Category & Workflow Master read-only audit**, under §34.4 sequence item 2, following completed DOC-00 and DOC-01 packages.
-- Owning document: \`docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md\`, v0.1.0, DRAFT — SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER; REVIEW REQUIRED.
-- Category detail reviewed: \`docs/02-business-domains/categories/CAT-12-other.md\`.
+- Owning document: `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md`, v0.1.0, DRAFT — SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER; REVIEW REQUIRED.
+- Category detail reviewed: `docs/02-business-domains/categories/CAT-12-other.md`.
 - Required cross-checks: DOC-01 §13, DOC-02 §12, active DOC-00 control-plane references and relevant source/manifest locator evidence on the current project record.
-- Method: current-\`main\` read-only review; source locator, conceptual decision and technical implementation status kept separate. No archive DOCX was modified or uploaded.
+- Method: current-`main` read-only review; source locator, conceptual decision and technical implementation status kept separate. No archive DOCX was modified or uploaded.
 
 ### 37.2 Finding and correction
 
@@ -1294,6 +1294,6 @@ DOC-02 remains DRAFT / SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER / REVIEW REQU
 
 ### 37.4 Governance and next routing
 
-This is a documentation locator-consistency correction only. READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change is included.
+This is a documentation locator-consistency correction only. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change is included.
 
-**Next work package:** DOC-03 — System Architecture Master bounded read-only audit under §34.4. Use current-\`main\` owning sources, avoid repeating completed DOC-00–DOC-02 work, and prepare a correction PR only for a new evidence-supported defect.
+**Next work package:** DOC-03 — System Architecture Master bounded read-only audit under §34.4. Use current-`main` owning sources, avoid repeating completed DOC-00–DOC-02 work, and prepare a correction PR only for a new evidence-supported defect.
