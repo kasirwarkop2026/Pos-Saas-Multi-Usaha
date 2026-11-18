@@ -202,3 +202,26 @@ Documentation migration only. `DB_PUSH_BLOCKED: ACTIVE`. Stage 6 implementation 
 ---
 
 **Provenance note:** This document is a reconstructed, source-aligned working master prepared from the accessible primary sources and audit evidence listed above. It is not a verbatim recovery of an earlier writing-block draft. Its status remains DRAFT until reviewed and merged; the gaps in §10 remain visible after publication.
+
+
+## 13. Append-only direct RMD-69 v1.1 locator reconciliation — 19 November 2026
+
+The earlier statements in §9 and §10 / DOC01-G03 that the direct RMD-69 v1.1 source path and page/section locators were not recovered are historical snapshots from the DOC-01 reconstruction pass. Later evidence on the active project records supersedes those statements for the direct-locator criterion only.
+
+**Recovered controlling conceptual addendum:**
+
+- Exact Library path: `/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx`.
+- Manifest identity: **M231-223**, zero-based index **222**, 16 November 2026 SHA-256 manifest v1.0.
+- Verified locator: **pp. 1–3, §§1–8**.
+- Page scope: p. 1 §§1–2 (approval basis and R69-D01–D07); p. 2 §§2–5 (R69-D08–D12, WF-01–WF-14 baseline and guardrails); p. 3 §§6–8 (residual OPEN details, implementation gate and conceptual status).
+- Current repository navigation corroboration: DOC-02 §12; DOC-09 §§3E–3F; Master Project Index §§14 and 16; DOC-00 §§25.3–26 and §27.
+
+**DOC01-G03 current status:** **RECOVERED — DIRECT SOURCE PATH AND PAGE/SECTION LOCATOR ONLY.** The earlier §9/§10 wording is retained as historical record and must be read with this later addendum.
+
+This recovery does not close CAT-12 technical or operational dependencies. Safe-mode function list, lifecycle transitions, SLA/expiry, reviewer authority, confidence/review thresholds, evidence standards, appeal/restriction authority, permission keys, schema, RLS, API/backend enforcement and implementation remain OPEN / NOT APPROVED / NOT VERIFIED as applicable. CAT-12 remains a temporary classification/exception path and fail-closed conceptual baseline, not a permissive operational category.
+
+- Dependencies newly closed: **0**.
+- FIX decisions changed: **0**.
+- No canonical/final/accepted status or implementation authorization is created.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation remains NOT AUTHORIZED.
