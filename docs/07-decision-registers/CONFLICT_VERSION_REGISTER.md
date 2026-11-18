@@ -172,3 +172,30 @@ This correction does not close DOC-09 authorization dependencies, finalize the c
 This Markdown file publishes DOC-10 v0.2 as a working master with the explicit append-only clarification above. It does not upload the DOCX archive, select canonical sources, close any CVS/DOC-09 dependency, change FIX decisions, or authorize any other document migration. This is the scoped DOC-10 publication destination only.
 
 **Status remains:** DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+
+
+## 11. Append-only DOC-10 publication-path and DOC-08 scope clarification — 19 November 2026
+
+This addendum reconciles historical cover wording and clarifies the exact scope of the separately published DOC-08 correction. It does not alter CVS-001–CVS-041, any primary decision, source-native dependency status, or the acceptance boundary of DOC-08/DOC-09/DOC-10.
+
+### 11.1 DOC-10 path: historical proposal versus verified publication
+
+- **Historical cover wording:** The cover's “Proposed GitHub path” identifies the pre-publication target. It is not the current publication status and must not be read as indicating that DOC-10 remains unpublished.
+- **Verified publication:** DOC-10 v0.2 was published at `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md` by PR #22, merged with commit `90ee6d773474adc4e4368248f1c8b05fe142b4b0`. The merge commit adds this exact Markdown path to the repository; the file remains present on `main`.
+- **Audit-time locator:** The DOC-10 blob read from `main` for this audit was `9ca3f0d3dd2e0997c3c4aa0c7b4cf98a323b5414`. This is a readback locator only; subsequent append-only updates may change the blob SHA.
+- **Status boundary:** Publication establishes the maintained DOC-10 v0.2 working reference only. It does not make DOC-10 canonical, final, accepted, or a primary decision authority. Its status remains **DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL**.
+- **Preservation:** Retain the original cover wording as historical pre-publication metadata. This addendum supplies the current publication reading; no original cover text or CVS row is rewritten or deleted.
+
+### 11.2 DOC-08 publication exception: focused correction only, not the full master
+
+DOC-10 §10.3 states that DOC-08 and DOC-09 publications were separately scoped exceptions to the Stage 5 blanket-migration restriction. Read the DOC-08 part of that statement narrowly:
+
+- The separately published DOC-08 artifact is the focused ST5-11.40 authorization CVS crosswalk correction at `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md`, merged through PR #20 (merge commit `5e7ed43691084c689afb835b66af5f805553886c`).
+- The full reconstructed DOC-08 v1.5 master is **not published** at its proposed path `docs/07-decision-registers/MASTER_FIX_REGISTER.md`. The active Master Checklist v2.0 §48.3 and DOC-00 §25.1–§25.2 explicitly preserve this distinction.
+- The focused correction supplies only the prospective CVS mapping for O/CR/Q within its explicit scope. It is not the full DOC-08 master, does not replace it, and does not imply its publication, canonicality, finality or acceptance.
+- DOC-09's separate v0.2 working-master publication is at `docs/07-decision-registers/MASTER_OPEN_REGISTER.md`; its DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL status remains unchanged.
+- Neither focused correction nor working-master publication authorizes blanket Stage 5 archive migration, any other document publication, or Stage 6 implementation.
+
+**Disposition:** Two document-control clarifications are warranted: (1) the DOC-10 cover's proposed-path wording is historical after verified PR #22 publication; and (2) the DOC-08 reference in §10.3 must be understood as the focused ST5-11.40 correction only, not publication of the full DOC-08 v1.5 master. No CVS entry or source-native dependency requires status correction from this bounded audit. Dependencies newly closed: **0**. FIX decisions changed: **0**. Decision/status promotions or demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.

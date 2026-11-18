@@ -1734,3 +1734,41 @@ Controls remain unchanged: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE
 - Next work package: **DOC-10 — Conflict & Supersession Master bounded read-only audit**, under §34.4 sequence item 6. Review only current-main DOC-10 and the necessary controlling DOC-08/DOC-09 sources; do not repeat completed DOC-09 locator batches or ST5-11.40 crosswalk correction.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+
+## 50. DOC-10 bounded read-only audit and publication/scope clarification — 19 November 2026
+
+### 50.1 Audit identity and scope
+
+- Work package: **DOC-10 — Conflict & Supersession Master bounded read-only audit**, within §34.4 sequence item 6 (DOC-08–DOC-10 decision/open/conflict audit).
+- Owning document: `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md`, DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. The exact current-main file was read at blob SHA `9ca3f0d3dd2e0997c3c4aa0c7b4cf98a323b5414` before the append-only correction.
+- Reviewed DOC-10 §§1–10, including CVS-001–041, control summary, canonical-status table, non-inference rules, resolution/closure requirements, historical Stage 3.4/Stage 4.8/Stage 5 wording and §10 append-only publication/current-status clarification.
+- Bounded current-main cross-checks: DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` §§1–9 and §§3C–3F/§8; DOC-08 focused correction `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md` §§1–7; active Master Checklist v2.0 §§32–34 and §48.3; DOC-00 `docs/00-governance/MASTER-PROJECT-CONTROL.md` §§25 and 28; and GitHub publication/merge records for PRs #20 and #22.
+- The previously completed DOC-08/DOC-09/DOC-10 O/CR/Q CVS crosswalk audit in §32 and A12.40 reassessment in §33 were not repeated. Their current boundaries were used only to verify the DOC-10 claims under review.
+
+### 50.2 Findings and disposition
+
+- **DOC10-AUD-F01 — Historical proposed-path wording after verified DOC-10 publication.** The cover still labels `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md` as a “Proposed GitHub path”, while DOC-10 §10.4 says this Markdown file publishes DOC-10 v0.2 and GitHub history confirms PR #22 merged with commit `90ee6d773474adc4e4368248f1c8b05fe142b4b0`. The exact path is present on current `main`. The cover phrase is therefore a pre-publication snapshot and can be misread as an unpublished target. DOC-10 §11.1 clarifies the current publication state while preserving the original cover text.
+- **DOC10-AUD-F02 — DOC-08 publication exception requires precise scope.** DOC-10 §10.3 refers to “DOC-08 and DOC-09 publications” as separately scoped exceptions. The verified evidence establishes only the focused DOC-08 ST5-11.40 correction at `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md`, merged via PR #20 (commit `5e7ed43691084c689afb835b66af5f805553886c`). Active Master Checklist §48.3 and DOC-00 §25.1–§25.2 explicitly state that the full reconstructed DOC-08 v1.5 master is not published at its proposed path. DOC-10 §11.2 now makes this distinction explicit: the exception is for the focused correction only, not the full DOC-08 master. DOC-09's separate v0.2 working-master publication remains at its own path.
+- **DOC10-AUD-F03 — CVS-014/015/016/017/039 crosswalk consistency.** DOC-10 §10.2 agrees with the separately merged DOC-08 ST5-11.40 correction and the bounded consistency audit in §32: CVS-014 directly locates Q-01–Q-06; CVS-015 directly locates CR-01–CR-10; CVS-016 is general context only; CVS-017 is Education/Hotel-specific; CVS-039 is REC-05/REC-06 evidence context, not primary O/CR/Q approval evidence. No new correction or status change is justified.
+- **DOC10-AUD-F04 — Conflict and canonical-status boundaries remain consistent within reviewed scope.** CVS-019 remains unresolved for RMD-56 physical-file selection; CVS-028 remains A12.40 PARTIAL/OPEN; CVS-029 remains A12.41 FAIL/NOT VERIFIED and NOT STARTED; CVS-033/034 Purchasing 15/14 and Sales 20/18 crosswalks remain OPEN; CVS-035 A12.18–A12.28 and D40-203–D40-216 remain UNRECOVERED/UNVERIFIED; CVS-040/041 remain historical security evidence, not current Production verification. These boundaries agree with the DOC-09 owning register and active Checklist §33. No conflict can be closed or canonical source selected by this audit.
+- **DOC10-AUD-F05 — Historical wording and narrow supersession rules.** DOC-10 §§8–9 are explicitly historical; §10 supplies the later current-status layer. Its RMD-56 approval-versus-canonical-selection distinction and limited DOC-08 CVS mappings remain consistent with DOC-09 §§3C–3F/§8 and the focused DOC-08 correction. No historical row or source needs rewriting.
+
+### 50.3 Correction PR and CI
+
+- PR #73: `docs(doc-10): clarify publication and DOC-08 scope`.
+- First audit/correction commit: `c21ca5f09b996dd92084cee6ec2371e234f6fc1a`, appending DOC-10 §11 only.
+- First-commit diff: one file, 27 additions, 0 deletions.
+- First-commit Documentation CI run `44375224070`: Markdown lint SUCCESS; documentation structure SUCCESS; internal documentation links SUCCESS.
+- POS SaaS workflow run `44375224084`: Detect application changes SUCCESS; ESLint, dependency security audit, TypeScript typecheck and Next.js production build SKIPPED by the documentation-only guard. Skipped jobs are not test passes.
+- The separate Master Checklist checkpoint is the second commit in PR #73. The combined PR must be rechecked for complete diff, CI and mergeability. PR #73 remains subject to separate explicit user merge approval.
+
+### 50.4 Audit outcome and next controlled action
+
+- DOC-10 bounded read-only audit: **COMPLETE — TWO DOCUMENT-CONTROL / SCOPE CLARIFICATIONS JUSTIFIED; NO CVS/DEPENDENCY STATUS CORRECTION JUSTIFIED**.
+- Dependencies newly closed: **0**. FIX decisions changed: **0**. CVS status changes: **0**. Decision/status promotions or demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
+- DOC-10 remains DRAFT / CONSOLIDATED WORKING REGISTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Its exact Markdown path is a published current-main working reference; publication is not acceptance.
+- The full DOC-08 v1.5 master remains unpublished; only its focused ST5-11.40 correction is published. DOC-09 v0.2 remains a separately published working register.
+- Next work package: **DOC-11 — Project Roadmap & Release Gates bounded read-only audit**, under §34.4 sequence item 7. Review the exact current-main DOC-11 path and necessary controlling gate sources. Do not repeat the DOC-08–DOC-10 crosswalk or A12.40 reassessment; preserve Stage 4.7.8 PARTIAL, Stage 4.9 PARTIAL, A12.40 PARTIAL/OPEN and A12.41 NOT STARTED unless new controlling evidence supports a change.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
