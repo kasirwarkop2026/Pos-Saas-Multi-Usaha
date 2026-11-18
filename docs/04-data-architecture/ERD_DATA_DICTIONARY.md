@@ -784,3 +784,132 @@ N37-07, N37-08, N37-10 and N37-12 are cross-domain payment/settlement/AP-AR/jour
 - Next DOC-04 work package remains event/idempotency/atomicity/concurrency specification, preserving unresolved numeric/locking/transaction semantics as OPEN.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 21. Event, idempotency, atomicity and concurrency specification — A04/A06/A09/A11/A12.17 (18 November 2026)
+
+### 21.1 Scope and evidence boundary
+
+This section consolidates source-backed conceptual event, posting, idempotency, compensation and concurrency rules for inventory/costing. It is not a final event schema, operation-key specification, transaction design, lock-order specification, physical dictionary, executable test result or implementation approval.
+
+Reviewed sources:
+- `Konsolidasi_Keputusan_A11_Transfer_Shipment_Lifecycle_v1.0.docx`, §§1–11, especially §§2, 6–9.
+- `Konsolidasi_Keputusan_FIX_POS_SaaS_v3_A12.1-A12.16_v1.0.docx`, §§5–7, especially §§5.1–5.3 and 6.
+- `Konsolidasi_Keputusan_FIX_POS_SaaS_v3_A12.1-A12.30F_v1.1.docx`, A12.17 addendum, §2.
+- `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§2–4.
+- `POS_SAAS_AUDIT_2_3_ERD_A01_A12_v0.1_2026-11-16.md`, §§5 and 5.1.
+- `DOC-08_Master_FIX_Decision_Register_v1.4.docx`, §36.2 (A04–A09 locator reconciliation), including explicit gaps for standalone A06/A09 approval locators.
+- DOC-04 §§3, 16–20 and the 17-entity inventory/costing baseline.
+
+Evidence authority caveat:
+- A04's documented decision lineage is traced to A12.15 in the A12.1–A12.16 decision consolidation, §§5–6. The bridge remains conceptual; `inventory_cost_layer_movements` is not an approved historical 18th entity.
+- A06 and A09 principles are explicitly restated in A11 v1.0 §7 and retained by A11-F10. DOC-08 v1.4 §36.2 nevertheless records that standalone primary approval addenda for A06 and A09 were not recovered. Therefore, this section records the restated baseline and keeps technical detail OPEN; it does not claim those missing standalone locators have been recovered.
+- A12.17 Alternative 1 is an explicit FIX addendum and supersedes A12.16 only for allocation–consumption cardinality.
+
+### 21.2 Event and ledger model — established conceptual rules
+
+| Event / operation | Source-backed conceptual behavior | Ledger / costing effect | Remaining technical boundary |
+|---|---|---|---|
+| Dispatch | Dispatch is a separately auditable event; one shipment represents one physical dispatch. | Reduces source-location stock and increases virtual transit stock. Transfer does not create a new cost layer or FIFO consumption. | Event record shape, shipment sequence, source-to-transit posting details, idempotency identity and atomic transaction scope OPEN. |
+| Receipt | Receipt is separately auditable; repeated/partial receipt is allowed. Each posted receipt detail represents one disposition and one physical location and produces exactly one inventory movement. | Moves only the physically accepted quantity from transit to the destination/disposition location. A movement may be allocated across multiple cost layers. | A03 receipt-event/detail model, relation to shipment item, field mapping, receipt ordering and uniqueness enforcement OPEN. |
+| Return | Return is a separate auditable event. Each posted return detail represents one physical source and one physical destination and produces exactly one movement. A return after receipt references its originating receipt detail. | Physical stock changes through a return movement; previous dispatch/receipt records are not deleted. | Return event schema, source linkage, eligibility/caps, idempotency and correction linkage OPEN. |
+| Loss investigation | Investigation and resolution are separate records/events. Unconfirmed loss remains unresolved and blocks closure. | No final loss disposition is inferred while investigation remains open. | Investigation/resolution field model, authorization and evidence requirements OPEN. |
+| Loss resolution | Resolution references the relevant investigation, shipment item and quantity; movement correction references the resolution. A quantity cannot be resolved more than once. | Loss is recognized only after valid decision and correction are posted. | Exact resolution types, physical key/constraints, transaction boundary and evidence-retention policy OPEN. |
+| Reservation | Reservation reduces available quantity, not physical on-hand. Release does not create an inventory movement. | Reservation state and physical stock must remain consistent; fulfillment updates reservation and physical stock atomically. | Reservation event/history representation, TTL, allocation grain and atomic posting design OPEN. |
+| Fulfillment / consumption | Partial fulfillment is represented by separate posted movement, allocation and consumption records. One movement may consume multiple eligible layers. | Actual stock reduction may create FIFO consumption; internal transfer, dispatch, receipt, quarantine movement and reservation are not FIFO consumption. | Exact posting command/event model, cost snapshot fields, transaction boundary and locking scope OPEN. |
+| Compensation / reversal | Original posted consumption and compensation are immutable. Corrections create new reversal/compensating records; original history is not overwritten. | Compensation references the original consumption. Physical return stock requires a separate physical movement; compensation alone does not add physical stock. | Compensation event structure, correction-of-compensation chain, keys and enforcement OPEN. |
+| Adjustment / correction | Posted records are not edited/deleted directly; correction is traceable through reversal, compensation or adjustment. | Ledger remains the source of truth; projections can be rebuilt/reconciled. | Approval, event identity, correction scope and atomic projection update OPEN. |
+
+### 21.3 Allocation–consumption cardinality — A12.17 Alternative 1 FIX
+
+| Relationship | FIX conceptual rule | Not yet established |
+|---|---|---|
+| Movement → layer allocation | One movement may have multiple layer allocations (1:N). | Physical bridge representation, FK and entity/table approval. |
+| Cost layer → allocation | One cost layer may participate in multiple allocations (1:N). | Exact physical keys and lifecycle. |
+| Eligible negative allocation → original consumption | Exactly one original consumption per eligible negative allocation (1:1). | Physical UNIQUE/FK/CHECK and idempotency enforcement. |
+| Non-consumption allocation → consumption | No original consumption (1:0). | Technical discriminator and enforcement. |
+| Original consumption → compensation | One original consumption may receive multiple partial compensations (1:N). | Cross-record aggregate cap, lock scope and atomic revalidation. |
+| Compensation → original consumption | Each compensation refers to exactly one original consumption (N:1). | Exact FK and tenant-safe relation. |
+
+Additional FIX rules:
+- Total valid partial compensation must not exceed eligible original consumption quantity.
+- Partial fulfillment creates separate posted movement, allocation and consumption records.
+- Posted original consumption and compensation are immutable; correction uses a new reversal/compensating record.
+- A12.16 remains historical and superseded for this cardinality scope only.
+
+### 21.4 Idempotency contract — A09 baseline, technical detail OPEN
+
+The A11 v1.0 §7 restatement establishes the following conceptual behavior:
+
+| Situation | Required conceptual outcome | Status |
+|---|---|---|
+| A posting request is repeated with the same operation key and same payload | Return the previously stored result; do not duplicate posting effects. | FIX baseline as restated in A11 §7 |
+| Same operation key is reused with a different payload | Treat as a conflict; do not silently reuse or overwrite the prior result. | FIX baseline as restated in A11 §7 |
+| Operation claim and posting effects | Claim and effects must be atomic. | FIX baseline as restated in A11 §7 |
+| Retry after uncertain response | Must not create a second movement, receipt, reservation, layer consumption or compensation. | Required effect inferred from idempotency purpose; exact retry/recovery behavior OPEN |
+| Operation identity and payload comparison | Operation key and canonical payload must be well-defined and stable. | OPEN — exact key scope, canonicalization and payload fields not finalized |
+| Retention and expiry | Operation key retention must support duplicate protection for its defined lifecycle. | OPEN — duration, expiry and replay policy not established |
+| Concurrent same-key requests | Must not both create posting effects. | OPEN — atomic claim mechanism, uniqueness, wait/replay/conflict behavior and tests not specified |
+
+Do not invent a universal operation-key tuple such as client/server/source document/movement; DOC-04 §19 and DOC-08 §36.2 retain the standard key and canonical payload as OPEN. Do not infer an A01 registry physical name or conflate A01 movement source identity registry with A02 reservation `source_type/source_id` validation.
+
+### 21.5 Concurrency, atomicity and failure handling
+
+| Control | Source-backed requirement | Open specification / evidence |
+|---|---|---|
+| Deterministic locking | A06 baseline requires deterministic locking. | Lock target set, lock order, granularity, isolation level and deadlock graph OPEN. |
+| Revalidation after lock | Re-check eligibility/remaining quantities after acquiring the relevant locks. | Exact predicates, retry conditions and revalidation sequence OPEN. |
+| Atomic commit | Posting effects must commit atomically; A06 requires atomic commit. A09 requires operation claim and posting effects to be atomic. | Exact transaction boundary and complete write-set per operation OPEN. |
+| Full rollback | A06 baseline requires full rollback on failure. | Error classification, rollback/recovery behavior and external side-effect handling OPEN. |
+| Compensation cap | Recalculate eligible remaining original consumption and prevent aggregate compensation above the eligible original quantity. | Cross-record locking scope, concurrent partial-return behavior and enforcement OPEN. |
+| Reservation / fulfillment | Fulfillment updates reservation and physical stock atomically. | Lock ordering across reservation, balance, batch and layer resources OPEN. |
+| Projection consistency | Ledger and balance/projection effects must remain consistent; projections are rebuildable and not independent truth. | Projection update strategy, retry/rebuild interaction and reconciliation evidence OPEN. |
+| Transfer closure | Closure requires valid disposition/reconciliation for all dispatched quantity, no unexplained transit, no unresolved investigation, no over-receipt/return, consistent batch/layer reconciliation and no unfinished posting/idempotency conflict. | Closure transaction/guard, concurrent receipt vs closure, authorization and recovery semantics OPEN. |
+
+**No lock order, timeout, retry count/backoff, transaction isolation, deadlock resolution algorithm, event ordering key, outbox pattern, exactly-once transport guarantee or distributed transaction design is approved by the reviewed sources.** These must remain OPEN until supported by an authoritative decision/specification.
+
+### 21.6 Cross-operation consistency checks
+
+| Check ID | Invariant to preserve | Source basis | Technical disposition |
+|---|---|---|---|
+| EVT-01 | Posted dispatch/receipt/return/loss-resolution events are separately traceable; posted movement remains immutable. | A11-F04/F07; A11 §§6–7 | Event schema, immutable enforcement and audit evidence OPEN. |
+| EVT-02 | Repeated partial receipt is allowed; one shipment item may have multiple receipt events. | A11-F05; A12.10 receipt Alternative B | A03 event model and event-to-movement mapping OPEN. |
+| EVT-03 | One shipment represents one physical dispatch; separate physical dispatches use separate shipment records. | A11-F06 | Shipment identity/sequence enforcement OPEN. |
+| EVT-04 | Shipment item quantities reconcile per shipment/item/batch/cost layer; discrepancies across shipments cannot offset one another. | A11 §§6 and 8 | Aggregate reconciliation and transaction guards OPEN. |
+| EVT-05 | A return after receipt references the originating receipt detail; a physical return produces its own movement. | A12.10 return Alternative B | Physical FK and duplicate-resolution guard OPEN. |
+| EVT-06 | Loss investigation and resolution are separate; unresolved investigation blocks transfer closure. | A12.11 loss Alternative B; A11-F09 | Authorization, evidence, resolution idempotency and closure enforcement OPEN. |
+| EVT-07 | Eligible negative allocation has exactly one original consumption; compensation may be partial/repeated but aggregate cannot exceed eligible original quantity. | A12.17 Alternative 1 FIX | Cross-record cap, FK, locking and tests OPEN. |
+| EVT-08 | Transfer preserves cost-layer identity through dispatch/transit/receipt/quarantine/return; transfer itself is not FIFO consumption. | A12.15; A11 §7 | Bridge representation and physical mapping OPEN; no 18th historical entity approval. |
+| EVT-09 | Reservation release creates no movement; fulfillment updates reservation and physical stock atomically. | Batch 02 §§3–5; DOC-04 §3 | Event history, atomic transaction and concurrency enforcement OPEN. |
+| EVT-10 | A repeated operation with same key/payload replays prior result; same key/different payload conflicts; claim/effects atomic. | A11 §7 A09 restatement | Canonical payload, key scope, retention, atomic claim and concurrency tests OPEN. |
+| EVT-11 | Status and quantity summaries derive from posted events and inventory ledger, not an independent stock truth. | A11-F07 | Projection refresh/rebuild and reconciliation implementation OPEN. |
+| EVT-12 | Transfer closure waits for all valid dispositions and reconciliation; unresolved investigation and unfinished posting/idempotency conflict block closure. | A11-F08/F09; A11 §8 | Closure guard, lock coordination and exception authorization OPEN. |
+
+### 21.7 Explicit non-decisions — do not infer
+
+The reviewed sources do **not** establish:
+- Final event names, event table names, event payload schema, physical columns or event versioning.
+- A final receipt-event/detail schema; A03 remains OPEN for repeated receipt event structure.
+- A final physical representation for `inventory_cost_layer_movements`; it remains a candidate conceptual bridge, not an approved historical 18th entity.
+- A universal operation-key tuple, canonical payload serialization, hash algorithm, key retention period, replay window or conflict response format.
+- Exact lock order, lock granularity, isolation level, timeout, retry count/backoff or deadlock resolution policy.
+- Exact transaction boundary/write-set for each operation, or how external side effects are coordinated.
+- A finalized compensation event schema, physical aggregate constraint or implementation-level enforcement.
+- Executed concurrency, atomicity, idempotency, failure-injection or database tests. Conceptual rules/scenarios are not test evidence.
+
+### 21.8 Result and next sequence
+
+- Source-backed event and lifecycle principles: **DOCUMENTED — COMPLETE — PARTIAL** for A11/A12.10/A12.11 scope.
+- A12.17 allocation–consumption cardinality: **DOCUMENTED — FIX conceptual**.
+- A06 deterministic locking, post-lock revalidation, atomic commit and full rollback: **DOCUMENTED as baseline principles; technical design OPEN**.
+- A09 same-key/same-payload replay, same-key/different-payload conflict and atomic claim/effects: **DOCUMENTED as A11 §7 restatement; technical design OPEN**.
+- Standalone primary approval locators for A06/A09: **NOT RECOVERED per DOC-08 v1.4 §36.2**; do not claim locator recovery.
+- A03 repeated-receipt event model: **OPEN**.
+- Operation-key schema/canonicalization/retention/conflict implementation: **OPEN**.
+- Lock order/isolation/timeout/retry/transaction boundary/failure recovery: **OPEN**.
+- Compensation aggregate enforcement and closure concurrency: **OPEN**.
+- Executed tests: **NOT VERIFIED**.
+- Dependencies closed: **none**. FIX decisions changed: **none**.
+- No schema, SQL, DDL, DML, migration, database, application code, CI workflow, Vercel, deployment or Production changes.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.

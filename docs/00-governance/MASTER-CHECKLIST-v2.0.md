@@ -367,3 +367,44 @@ Outcome:
 Next action: prepare the event/idempotency/atomicity/concurrency specification from controlling A04/A06/A09/A11/A12.17 and related primary sources. Preserve exact operation-key, lock order, retry, transaction boundary, compensation and failure semantics as OPEN where source evidence is incomplete. Do not infer implementation behavior or claim tests passed.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 17. DOC-04 event / idempotency / atomicity / concurrency checkpoint — 18 November 2026
+
+### 17.1 Work result
+
+DOC-04 §21 adds a source-bounded event, idempotency, atomicity and concurrency specification for inventory/costing. It preserves conceptual decisions separately from technical details and implementation evidence.
+
+Sources reviewed:
+- `Konsolidasi_Keputusan_A11_Transfer_Shipment_Lifecycle_v1.0.docx`, §§1–11, especially §§2 and 6–9.
+- `Konsolidasi_Keputusan_FIX_POS_SaaS_v3_A12.1-A12.16_v1.0.docx`, §§5–7, especially §§5.1–5.3 and 6.
+- `Konsolidasi_Keputusan_FIX_POS_SaaS_v3_A12.1-A12.30F_v1.1.docx`, A12.17 addendum §2.
+- `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§2–4.
+- `POS_SAAS_AUDIT_2_3_ERD_A01_A12_v0.1_2026-11-16.md`, §§5 and 5.1.
+- `DOC-08_Master_FIX_Decision_Register_v1.4.docx`, §36.2, A04–A09 locator reconciliation.
+- DOC-04 §§3 and 16–20.
+
+Outcome:
+- A11/A12 event lifecycle principles: **DOCUMENTED — COMPLETE — PARTIAL** for the explicitly sourced scope.
+- A12.17 allocation–consumption cardinality: **DOCUMENTED — FIX conceptual**.
+- A06 deterministic locking, post-lock revalidation, atomic commit and full rollback: **DOCUMENTED as baseline principles; technical design OPEN**.
+- A09 same-key/same-payload replay, same-key/different-payload conflict and atomic claim/effects: **DOCUMENTED as A11 §7 restatement; technical design OPEN**.
+- DOC-08 v1.4 §36.2 says standalone primary approval locators for A06/A09 were not recovered; this checkpoint does not claim locator recovery.
+- A03 repeated-receipt event model, operation-key/canonical-payload/retention, lock order/isolation/timeout/retry, transaction boundaries, failure recovery, compensation enforcement and closure concurrency: **OPEN**.
+- Executed database/concurrency/atomicity/idempotency tests: **NOT VERIFIED**.
+- Dependencies closed: **none**. FIX decisions changed: **none**.
+- No schema, SQL, DDL, DML, migration, database, application code, CI workflow, Vercel, deployment or Production changes.
+
+### 17.2 Priority update
+
+| Priority | Work package | Status |
+|---:|---|---|
+| 1 | DOC-04 §18 relationship/tenant-integrity matrix | COMPLETE — PARTIAL |
+| 2 | DOC-04 §19 UNIQUE/CHECK/index candidate matrix | COMPLETE — PARTIAL |
+| 3 | DOC-04 §20 quantity/cost precision and conversion matrix | COMPLETE — PARTIAL |
+| 4 | DOC-04 §21 event/idempotency/atomicity/concurrency specification | COMPLETE — PARTIAL |
+| 5 | Physical dictionary acceptance review | NEXT |
+
+Next action: perform the physical dictionary acceptance review against the controlling source documents and exact GitHub DOC-04 entity inventory. Verify entity-by-entity field evidence, PK/FK/composite-FK tuples, nullability/defaults, UNIQUE/CHECK/index evidence, tenant scope, lifecycle, delete behavior and source locators. Do not fabricate missing physical fields or promote conceptual rules into physical acceptance; retain OPEN/UNVERIFIED gaps and do not modify database/schema.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
