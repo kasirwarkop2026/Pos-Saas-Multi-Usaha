@@ -407,3 +407,15 @@ Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 
 - Files changed on the proposed branch: DOC-04 and this Master Checklist only; append-only additions, no historical content deletion or rewrite. No database, SQL/DDL/DML, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment or Production change.
 - Controls remain READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
 
+
+
+## 26. Append-only transition notice — proposed Master Checklist v2.0 (18 November 2026)
+
+- A separate focused navigation checklist has been prepared at `docs/00-governance/MASTER-CHECKLIST-v2.0.md`.
+- The proposed v2.0 consolidates the latest evidenced position after PR #34 and prioritizes unresolved implementation blockers, beginning with DOC-04's tenant-safe PK/FK/composite-FK matrix.
+- This notice does **not** activate v2.0. The new file remains PROPOSED until its PR is reviewed, approved, merged and read back from `main`.
+- If and when v2.0 is activated, it supersedes this v1.0 file for active navigation only. This file and all its prior sections remain preserved as historical evidence; no prior entry is deleted or rewritten.
+- Until that activation condition is met, this v1.0 file remains the current main-branch navigation reference.
+- No dependency is closed and no FIX decision or implementation authorization is changed by preparing v2.0.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
