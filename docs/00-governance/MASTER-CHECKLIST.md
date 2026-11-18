@@ -388,3 +388,22 @@ Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 
 - Next sequence: complete source-linked logical attribute matrix, then tenant-safe PK/FK/composite-FK matrix, then UNIQUE/CHECK/index matrix. Authorization, tests and physical enforcement remain separate.
 - No FIX decision changed. No database, SQL/DDL/DML, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment or Production change.
 - Controls remain READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 25. Append-only source-linked logical attribute matrix — DOC-04 (18 November 2026)
+
+- Re-read the authoritative Master Checklist from GitHub `main` and followed the latest DOC-04 §16.5 sequence recorded in §24. The earlier GOV-OPEN header/§9 text is retained as a historical navigation snapshot; §24 is the later dated direction for the inventory physical-specification work package.
+- Re-read DOC-04 from `main` (pre-update blob SHA `094fd41f82799be17dc65f29321bd872adac3502`) and retained its current 17-entity baseline, §16 decomposition, and all source-gap statuses.
+- Inspected the supporting Library sources:
+  - `POS_SAAS_MIGRATION_MAPPING_BATCH_02_INVENTORY_COSTING_v0.1_2026-11-15.md`, §§2–5 and 7;
+  - `Konsolidasi_ERD_POS_SaaS_Multi_Usaha_v3.0_Tahap_5.9.3_DRAFT_Audit_Integrasi_v5_A12.38_Physical_Dictionary_Audit.docx`, pp. 1–6, 11–13 and 19–21;
+  - `Update_Audit_Keputusan_A11_A12_dan_Matriks_17_Tabel_POS_SaaS_v0.2_2026-11-15.docx`, §§3–8.
+- Added DOC-04 §17 with a source-linked logical-information matrix covering all 17 historical conceptual entities, cross-entity information groups, evidence-bounded attribute acceptance protocol, and explicit unresolved physical questions.
+- Descriptive labels in the matrix are logical information groups, not approved SQL column names. No unsupported field name, type, nullability, default, enum, key tuple, constraint, index, precision/scale, lock order or transaction boundary was promoted to FIX.
+- The matrix preserves conceptual rules for ledger immutability, rebuildable balances, batch/cost-layer distinction, FEFO/FIFO, MWA pool by Business + Product/Variant + Inventory Location, reservation/fulfillment, stock count, transfers, cost layers and compensation cardinality.
+- Source gaps remain unchanged: A12.18–A12.28 OPEN/UNVERIFIED; A12.31E OPEN; A12.36.1 UNVERIFIED/REVIEW; A12.40 PARTIAL/OPEN with D40-203–D40-216 UNRECOVERED; A12.41 NOT STARTED.
+- Dependencies closed: **none**. GAP-04-01 remains OPEN because a physical field dictionary is not approved; GAP-04-02 and GAP-04-03 remain OPEN; other GAP-04 items retain their recorded status. No FIX decision changed.
+- Next sequence: tenant-safe PK/FK/composite-FK matrix, then UNIQUE/CHECK/index matrix. No implementation/database authorization is implied.
+- Files changed on the proposed branch: DOC-04 and this Master Checklist only; append-only additions, no historical content deletion or rewrite. No database, SQL/DDL/DML, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment or Production change.
+- Controls remain READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
