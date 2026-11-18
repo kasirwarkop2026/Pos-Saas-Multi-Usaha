@@ -477,3 +477,38 @@ Status: source recovery and locator reconciliation **COMPLETE — PARTIAL** for 
 Next action: recover the missing original A12.38.3 entity-level physical specification or an explicitly approved schema artifact from its authoritative source location. Reconcile each field/key claim against the 17 entity rows only when the source is available. Until then, retain all physical details as OPEN / UNVERIFIED; do not infer columns, keys, types, constraints, tenant enforcement, lifecycle or delete behavior.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
+
+
+## 20. Expanded DOC-04 physical-source recovery checkpoint — 18 November 2026
+
+### 20.1 Additional source review
+
+DOC-04 §24 records an expanded search following §19, including:
+- v8.6 P0 Expanded Search Record, pp. 1–6 and Appendix H pp. 70–74.
+- v9.5.8 Businesses Field-Level Profiles Specification (checked for scope; not Inventory & Costing authority).
+- A12.38 v5 Appendix D, Batch 02 mapping, reconstructed DOC-04, and title-focused Library searches for Inventory Costing schema, migration SQL, ERD and physical field dictionary.
+
+Key results:
+- v8.6 pp. 1–3 provide conceptual responsibilities for the 17 historical entities, not approved physical field definitions.
+- v8.6 pp. 1 and 6 expressly retain unapproved fields/types/constraints/relationships as REVIEW/TODO and list the physical field dictionary, types, nullability/defaults, FK/composite FK, ON DELETE/ON UPDATE, unique constraints and indexes as not approved.
+- v8.6 Appendix H.3–H.6 places physical schema/data dictionary and enforcement evidence in the technical-evidence backlog (P2); conceptual evidence does not replace technical evidence.
+- v9.5.8 concerns Businesses, not Inventory & Costing; it is not applicable as field authority.
+- Title-focused Library searches did not return a separately titled authoritative Inventory & Costing schema, approved DDL/migration, or entity-level physical dictionary.
+- A12.38 v5 Appendix D remains the controlling audit record for the physical gap classification. Search absence is bounded to the inspected Library scope and is not proof that a source never existed.
+
+### 20.2 Updated recovery result
+
+| Evidence class | Recovery result |
+|---|---:|
+| Historical conceptual entity inventory | 17/17 |
+| Physical entity names verified against authoritative schema | 0/17 |
+| Physical field/type/precision/nullability/default locators | 0/17 |
+| Physical PK/FK/composite FK locators | 0/17 |
+| Physical UNIQUE/CHECK/index/delete-update locators | 0/17 |
+| Physical allocation bridge/FK/concurrency enforcement locator | 0/17 |
+
+Status: expanded source recovery **COMPLETE — PARTIAL** for the reviewed Library source set. No new authoritative physical schema evidence recovered. A38-G01–G04 remain OPEN/TODO; dependencies closed: **none**; FIX decisions changed: **none**. Physical Data Dictionary remains **NOT ACCEPTED**.
+
+Next action: obtain the original A12.38.3 entity-level physical specification or an explicitly approved schema artifact from its authoritative source location. Verify owner/approval, version, scope, date, supersession and direct entity/field/key locators before updating any physical claim. Do not infer schema details or inspect/modify the database.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 NOT AUTHORIZED.
