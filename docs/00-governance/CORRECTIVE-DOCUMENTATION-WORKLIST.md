@@ -665,3 +665,44 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remai
 The 0/17 status in DOC-04 §28.2 counts **entities with a complete accepted field-level classification inventory**, not physical fields/columns. DOC-04 §31 now clarifies that 17/17 proposed conceptual attribute sets are enumerated, 0/17 entities have a fully accepted field-level classification, and physical field-to-column mapping remains OPEN without a verified completion count. This supersedes the shorthand in §15.11.1 that described the 0/17 figure as a physical-field-mapping count.
 
 No physical dependency is closed. DOC-04 §29 remains a conceptual proposal, not an accepted physical dictionary. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+### 15.15 PR #87 post-merge verification and CW-10 routing checkpoint (19 November 2026)
+
+**PR #87 — MERGED AND READ BACK FROM MAIN.**
+
+- PR: #87 — docs: add CW-09 row-level traceability index.
+- Merge commit: `412086f57985d77c87fe3cf56aa2f47c35c375c7`.
+- Pre-merge head: `09d5c0d3a832a1c91598785e17c5713c6d9ffca7`.
+- Base/main parent: `632e649ef9f2f64d881c1358470d90bf4cebdca7`.
+- Final PR diff: 8 documentation paths, 1,537 additions, 0 deletions.
+- Documentation CI #218: SUCCESS (Markdown lint, documentation structure, internal links all successful).
+- POS SaaS CI #281: SUCCESS. Application-specific TypeScript, ESLint, build and dependency-audit jobs were SKIPPED because no application files changed; skipped is not an application test pass.
+- Merge state: MERGED. Post-merge readback of all eight changed files from `main`: VERIFIED. Worklist SHA on main: `05e5dd6cb9a1a33ebac66c9608ec140b4eeb8fb1`.
+- No database, Supabase, application source, CI workflow, Vercel, deployment or Production change was part of the PR.
+
+#### 15.15.1 CW-09 disposition after merge
+
+CW-09's project-authored logical design and cross-document reconciliation addenda are published. G02 is resolved by project design for canonical M01–M21 and the stated Education/Hotel category profiles; G04 is resolved at logical workflow-ownership level for the 30 Education/Hotel workflows. CW-09 remains **PARTIAL** because physical field mapping, exact role grants, technical authorization implementation and execution evidence are not established. All 24 CW09-SEC tests remain DESIGN / NOT EXECUTED.
+
+#### 15.15.2 Next bounded work item — CW-10
+
+Proceed to CW-10, DOC-06 ↔ DOC-07 requirements-to-security-control-to-test-evidence mapping, without reopening CW-09's completed logical design decisions. The bounded crosswalk must distinguish direct workflow tests, related tests, reusable cross-cutting controls, explicit no-dedicated-test gaps and actual execution evidence. A test ID or semantic evidence family is not an executed artifact.
+
+The CW-10 working crosswalk is recorded append-only in DOC-06 §23 and DOC-07 §36 on the next single documentation PR. Its initial disposition is PARTIAL until coverage gaps are explicitly accepted or repaired and execution/evidence gates are met. CW-09 remains PARTIAL under its own criteria.
+
+Governance remains READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 and Stage 6 remain NOT AUTHORIZED. One PR at a time; no database, source application, backend, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
+
+
+### 15.16 CW-10 coverage-count reconciliation (19 November 2026)
+
+The first CW-10 crosswalk draft contained an incorrect aggregate workflow reference count in DOC-07 §36.2. A row-by-row recount and classification clarification were appended:
+
+- 16/30 workflows have at least one direct test scenario reference.
+- 8/30 workflows have related-only references; these are not dedicated coverage.
+- 6/30 workflows have no dedicated or related workflow-specific scenario reference.
+- EDU-WF-08 and EDU-WF-11, plus the listed related Hotel workflows, are explicitly not counted as direct coverage.
+- Cross-cutting tenant/scope/purpose/membership/entitlement tests are not counted as workflow-specific tests.
+
+DOC-06 §23.7 and DOC-07 §37 now contain the controlling classification and corrected count. All test IDs remain DESIGN / NOT EXECUTED. CW-10 remains PARTIAL; no dependency closure or security PASS is claimed.
+

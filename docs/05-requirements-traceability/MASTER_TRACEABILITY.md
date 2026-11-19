@@ -1074,3 +1074,121 @@ DOC-06 §21 is the project-authored normative logical design baseline and supers
 No dependency is closed merely by this reconciliation. CW-09 remains subject to its documented acceptance criteria and the distinction between logical design completion and technical/evidence completion.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 23. CW-10 — Requirements-to-security-control-to-test-evidence crosswalk (19 November 2026)
+
+**Disposition: DOCUMENTATION CROSSWALK RECORDED — PARTIAL; NO TEST EXECUTION OR SECURITY ACCEPTANCE CLAIMED.** This section connects the 30 logical Education/Hotel workflow requirements and 17 conceptual inventory/warehouse entities to their security-control anchors, stable CW09-SEC design IDs, and current evidence state. It supplements DOC-07 §§27 and 29–36; it does not replace source-native dependency registers or close CW-09 technical/evidence gaps.
+
+### 23.1 Crosswalk semantics
+
+- **Direct test link** means the stable negative-test scenario explicitly exercises the workflow/resource risk.
+- **Cross-cutting test link** means a reusable tenant, scope, purpose, membership, entitlement, privilege, D4-secret or event/idempotency control applies across the workflow/entity; it is not a dedicated workflow test.
+- **No dedicated test ID** means the current 24-test register does not contain a workflow/entity-specific scenario. This is an explicit coverage gap, not implicit coverage.
+- Security-control anchors refer to DOC-05 §§22–27 and DOC-07 §29. Candidate keys/policy tuples remain design vocabulary only.
+- All CW09-SEC-01–24 remain DESIGN / NOT EXECUTED. Evidence state is therefore **NOT GENERATED / NOT VERIFIED** for every linked scenario. A documented evidence family is not an actual event record or test artifact.
+
+### 23.2 Education workflow crosswalk — CAT-10
+
+| Requirement / workflow | Primary owner | Security-control anchors | Direct test IDs | Evidence state |
+|---|---|---|---|---|
+| EDU-WF-01 Program & Course Catalog | M13 | publication lifecycle, conditional M02 catalog/price boundary, tenant and module entitlement | No dedicated test ID | DESIGN ONLY; coverage gap |
+| EDU-WF-02 Intake & Admission | M13 | applicant/guardian relationship, consent, admission decision, financial handoff and purpose limitation | No dedicated test ID | DESIGN ONLY; coverage gap |
+| EDU-WF-03 Student / Participant Record | M04 | minimum-necessary identity fields, verified guardian relationship, restricted export and purpose | CW09-SEC-01, CW09-SEC-21 | DESIGN ONLY; not executed |
+| EDU-WF-04 Enrollment & Class Allocation | M13 | enrollment state, class/capacity assignment, site/session scope and finance handoff | No dedicated test ID | DESIGN ONLY; coverage gap |
+| EDU-WF-05 Schedule & Resource Planning | M13 | schedule/resource assignment, capacity boundary, conflict review and assignment scope | No dedicated test ID | DESIGN ONLY; coverage gap |
+| EDU-WF-06 Instructor / Trainer Management | M17 | workforce identity, credential evidence separation, assignment and restricted staff data | No dedicated test ID | DESIGN ONLY; coverage gap |
+| EDU-WF-07 Class Delivery & Attendance | M13 | attendance correction lifecycle, author/reviewer separation and assigned session scope | CW09-SEC-02 | DESIGN ONLY; not executed |
+| EDU-WF-08 Learning Material & Asset | M06 | inventory/material custody, stock adjustment, warehouse scope and idempotent movement | CW09-SEC-14, CW09-SEC-16 | DESIGN ONLY; indirect inventory scenarios |
+| EDU-WF-09 Assessment & Examination | M13 | grade author/moderator/finalizer separation, restricted learner result and publication lifecycle | CW09-SEC-03 | DESIGN ONLY; not executed |
+| EDU-WF-10 Fee, Invoice & Payment | M16 | payment/refund/write-off/settlement separation, financial approval and idempotency | CW09-SEC-04 | DESIGN ONLY; not executed |
+| EDU-WF-11 Guardian / Sponsor / Corporate Account | M04 | verified relationship, payer/learner separation, consent and minimum-necessary disclosure | CW09-SEC-01, CW09-SEC-21 | DESIGN ONLY; partial scenario overlap |
+| EDU-WF-12 Completion / Graduation / Certificate | M13 | completion eligibility, independent review, signatory/publish authority and revocation trace | No dedicated test ID | DESIGN ONLY; coverage gap |
+| EDU-WF-13 Complaint / Safeguarding / Incident | M18 | restricted case assignment, D3 access/export, purpose and independent review | CW09-SEC-05 | DESIGN ONLY; not executed |
+| EDU-WF-14 Reporting / Audit / Retention | M18 | field allowlist, report/export purpose, source-domain ownership and retention governance | CW09-SEC-12 | DESIGN ONLY; not executed |
+
+### 23.3 Hotel workflow crosswalk — CAT-11
+
+| Requirement / workflow | Primary owner | Security-control anchors | Direct test IDs | Evidence state |
+|---|---|---|---|---|
+| HTL-WF-01 Property / Building / Unit Master | M12 | property/site boundary, room state, maintenance and inspection handoff | CW09-SEC-13 | DESIGN ONLY; not executed |
+| HTL-WF-02 Room Type / Rate Plan / Restrictions | M02 | rate author/approver separation, rate override and publish lifecycle | CW09-SEC-09 | DESIGN ONLY; not executed |
+| HTL-WF-03 Availability / Reservation | M05 | reservation ownership, property availability, relationship and booking/payment boundary | CW09-SEC-11 (related only) | DESIGN ONLY; no dedicated reservation lifecycle test |
+| HTL-WF-04 Booking Lifecycle | M05 | booking create/modify/cancel/no-show state, guest relationship, financial side-effect separation | CW09-SEC-11 (related only) | DESIGN ONLY; no dedicated booking lifecycle test |
+| HTL-WF-05 Guest Profile / Identity | M04 | minimum-necessary identity fields, verified guest relationship, purpose and restricted export | CW09-SEC-06, CW09-SEC-11 | DESIGN ONLY; not executed |
+| HTL-WF-06 Pre-arrival / Check-in | M12 | guest verification, room assignment, deposit boundary and property scope | CW09-SEC-06, CW09-SEC-13 (related) | DESIGN ONLY; no dedicated check-in test |
+| HTL-WF-07 Stay / In-house Operations | M12 | property/room scope, guest relationship, service assignment and stay lifecycle | CW09-SEC-13 | DESIGN ONLY; partial lifecycle coverage |
+| HTL-WF-08 Housekeeping / Room Readiness | M12 | task assignment, room scope, no implied folio access and independent readiness inspection | CW09-SEC-07 | DESIGN ONLY; not executed |
+| HTL-WF-09 Maintenance / Out-of-order | M20 | safety hold, independent release, inspection and return-to-service lifecycle | CW09-SEC-08 | DESIGN ONLY; not executed |
+| HTL-WF-10 POS / Guest Charges / Folio | M16 | folio read/adjustment, charge posting, refund and settlement SoD | CW09-SEC-07, CW09-SEC-10 | DESIGN ONLY; not executed |
+| HTL-WF-11 Checkout / Invoice / Payment | M16 | payment/refund/settlement separation, financial approval and checkout state | CW09-SEC-04, CW09-SEC-10 | DESIGN ONLY; partial scenario overlap |
+| HTL-WF-12 Group / Corporate / Agency Booking | M05 | group relationship, guest identity isolation and booking scope | CW09-SEC-11 | DESIGN ONLY; not executed |
+| HTL-WF-13 Guest Service / Complaint | M12 | guest relationship, restricted complaint/incident evidence and purpose-limited disclosure | CW09-SEC-05, CW09-SEC-21 (related) | DESIGN ONLY; no dedicated guest-service test |
+| HTL-WF-14 Staff Shift / Cash Control | M17 | staff assignment, cash/settlement SoD, financial export and review | CW09-SEC-04, CW09-SEC-12 (related) | DESIGN ONLY; no dedicated shift/cash test |
+| HTL-WF-15 Reporting / Audit / Data Retention | M18 | field allowlist, export purpose, source-domain ownership and retention governance | CW09-SEC-12 | DESIGN ONLY; not executed |
+| HTL-WF-16 Channel / External Integration | M21 | platform/business namespace, D4 secret protection, connector sync, event replay/idempotency | CW09-SEC-19, CW09-SEC-20, CW09-SEC-24 | DESIGN ONLY; not executed |
+
+### 23.4 Cross-cutting controls
+
+The following stable tests are reusable control scenarios and must not be counted as dedicated workflow coverage unless the relevant test case explicitly names that workflow/resource in its preconditions and assertions:
+
+| Test ID | Control family | Applies to | Evidence state |
+|---|---|---|---|
+| CW09-SEC-17 | business/tenant isolation | all business-owned workflows and inventory entities | DESIGN / NOT EXECUTED |
+| CW09-SEC-18 | outlet/property/warehouse/assignment scope | workflows and entities with scoped resources | DESIGN / NOT EXECUTED |
+| CW09-SEC-21 | purpose limitation | sensitive identity, financial, case and report access | DESIGN / NOT EXECUTED |
+| CW09-SEC-22 | membership/assignment revocation | all protected workflow and resource actions | DESIGN / NOT EXECUTED |
+| CW09-SEC-23 | conditional module entitlement | all conditional category modules and their resources | DESIGN / NOT EXECUTED |
+| CW09-SEC-19 | platform versus Business principal boundary | platform access-grant actions only; not a general Business workflow test | DESIGN / NOT EXECUTED |
+| CW09-SEC-20 | D4 secret-value denial | protected connector-secret paths; rotation reference remains distinct | DESIGN / NOT EXECUTED |
+| CW09-SEC-24 | event ordering/idempotency | inventory, transfer, payment and integration side-effect paths | DESIGN / NOT EXECUTED |
+
+### 23.5 Inventory/warehouse entity crosswalk
+
+| Conceptual entity | Primary owner | Direct test IDs | Coverage interpretation |
+|---|---|---|---|
+| inventory_batches | M06 | No dedicated test ID | tenant/scope/entitlement cross-cutting only |
+| inventory_movements | M06 | CW09-SEC-16, CW09-SEC-24 | reservation fulfillment, movement idempotency and event ordering |
+| inventory_balances | M06 | No dedicated test ID | tenant/scope/entitlement cross-cutting only |
+| inventory_batch_balances | M06 | No dedicated test ID | tenant/scope/entitlement cross-cutting only |
+| inventory_adjustments | M06 | CW09-SEC-14 | adjustment approval and SoD |
+| inventory_adjustment_items | M06 | CW09-SEC-14 | adjustment item integrity under parent approval |
+| stock_counts | M06 | CW09-SEC-14 | count/variance approval separation |
+| stock_count_items | M06 | CW09-SEC-14 | count item evidence under parent count lifecycle |
+| stock_transfers | M07 | CW09-SEC-15, CW09-SEC-24 | custody close/reconciliation and event ordering |
+| stock_transfer_items | M07 | CW09-SEC-15, CW09-SEC-24 | shipment/transfer quantity reconciliation |
+| inventory_cost_exceptions | M06 | No dedicated test ID | tenant/scope cross-cutting; costing exception-specific test gap |
+| inventory_reservations | M06 | CW09-SEC-16, CW09-SEC-24 | duplicate fulfillment and idempotent reservation effects |
+| inventory_reservation_items | M06 | CW09-SEC-16, CW09-SEC-24 | allocation/fulfillment item replay and single-effect control |
+| inventory_cost_layers | M06 | No dedicated test ID | tenant/scope cross-cutting; cost-layer integrity test gap |
+| inventory_cost_layer_consumptions | M06 | CW09-SEC-16, CW09-SEC-24 | consumption lineage and duplicate side-effect boundary; costing-specific assertions remain absent |
+| stock_transfer_shipments | M07 | CW09-SEC-15, CW09-SEC-24 | shipment reconciliation, custody and event ordering |
+| stock_transfer_shipment_items | M07 | CW09-SEC-15, CW09-SEC-24 | item-level receipt/reconciliation and duplicate-effect boundary |
+
+### 23.6 Acceptance gaps and status
+
+The crosswalk makes coverage limits explicit:
+
+1. The 30 workflow rows are logically connected to controls and the existing test register, but several workflows have no dedicated negative-test ID. Related or cross-cutting IDs are not promoted to direct coverage.
+2. Inventory coverage is strongest for adjustment/count, transfer/shipment and reservation/movement lifecycle. Batch/balance and costing exception/layer-specific negative scenarios remain absent.
+3. All 24 test IDs are design specifications. No test code, execution, environment, actual result, retained artifact, independent review or retest is evidenced by this crosswalk.
+4. DOC-07 §27's historical SEC-OPEN/EG/TRC gap crosswalk remains a separate provenance/dependency view. This §23 does not supersede or close those historical source-native gaps.
+5. Candidate permission keys and policy tuples remain subject to full actor/function, membership, module entitlement, scope, state, data/purpose, SoD/approver and owning-domain execution review.
+
+**Disposition:** CW-10 cross-document mapping is **PARTIAL — design crosswalk recorded; dedicated-test coverage gaps and execution evidence remain OPEN/NOT EXECUTED**. No dependency is closed by this section. CW-09 remains PARTIAL under its own acceptance criteria.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+### 23.7 Coverage classification precision note
+
+For avoidance of ambiguity in §§23.2–23.3:
+
+- EDU-WF-08's CW09-SEC-14/16 links are **RELATED inventory-level scenarios**, not dedicated Education learning-material workflow tests.
+- EDU-WF-11's CW09-SEC-01/21 links are **RELATED student/guest relationship and purpose scenarios**, not dedicated sponsor/corporate-account workflow tests.
+- HTL-WF-03 and HTL-WF-04's CW09-SEC-11 links are **RELATED group-booking/guest-relationship coverage**, not dedicated reservation/booking lifecycle tests.
+- HTL-WF-06's CW09-SEC-06/13 and HTL-WF-07's CW09-SEC-13 links are **RELATED identity/property-scope coverage**, not dedicated check-in or full stay-lifecycle tests.
+- HTL-WF-13's CW09-SEC-05/21 and HTL-WF-14's CW09-SEC-04/12 links are **RELATED restricted-case/purpose and finance/report controls**, not dedicated guest-service or staff-shift/cash-control tests.
+
+Accordingly, the current 30-workflow register contains **16 workflows with at least one direct scenario reference, 8 with related-only references, and 6 with no dedicated or related workflow-specific scenario**. The direct/related distinction must be preserved when calculating coverage; a cross-cutting test alone does not count as a dedicated workflow test. All linked scenarios remain DESIGN / NOT EXECUTED.
+

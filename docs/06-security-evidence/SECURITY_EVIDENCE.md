@@ -917,3 +917,54 @@ DOC-05 §27 now records the additional candidate exact-action keys used by DOC-0
 **Disposition:** candidate-key reference alignment is documented for CW09-SEC-01–24. All 24 tests remain DESIGN / NOT EXECUTED. Exact grants and technical enforcement remain OPEN / NOT AUTHORIZED.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 36. CW-10 — DOC-06 requirements to security control and test evidence crosswalk (19 November 2026)
+
+**Disposition: CROSS-DOCUMENT DESIGN CROSSWALK RECORDED — PARTIAL; NO EXECUTION EVIDENCE OR SECURITY ACCEPTANCE CLAIMED.**
+
+DOC-06 §23 is the controlling row-level crosswalk for:
+- 30 Education/Hotel workflow requirements → primary domain owner → security-control anchors → direct or related CW09-SEC test IDs → evidence state;
+- 17 conceptual inventory/warehouse entities → primary owner → direct test IDs or explicit no-dedicated-test gap; and
+- reusable cross-cutting tenant, scope, purpose, membership, module-entitlement, platform-principal, D4-secret and idempotency controls.
+
+### 36.1 Interpretation rules
+
+1. A DIRECT test link is a scenario that explicitly exercises the workflow/resource. A RELATED link is adjacent risk coverage and does not satisfy dedicated coverage.
+2. Cross-cutting tests SEC-17/18/21/22/23 are reusable invariants. They do not automatically create 30 workflow-specific tests or 17 entity-specific tests.
+3. SEC-19 is a platform namespace/access-grant scenario, SEC-20 is a prohibited D4 secret-read scenario, and SEC-24 is an event/idempotency scenario. They apply only to their stated attack surfaces.
+4. A row with “No dedicated test ID” is a coverage gap, not an implicit pass or inherited coverage.
+5. The historical §27 SEC-OPEN/EG/TRC provenance crosswalk remains separate. DOC-06 §23 does not rewrite its source-native statuses or claim those dependencies closed.
+6. All 24 CW09-SEC IDs remain DESIGN / NOT EXECUTED. Evidence families in §30–32 and §23 are semantic requirements, not physical event names, execution logs or retained artifacts.
+
+### 36.2 Coverage disposition
+
+- Workflow design mapping: 30/30 rows recorded.
+- Workflow rows with at least one direct/related test reference: 23/30; the remaining rows have no dedicated test ID or only explicitly related/cross-cutting coverage as distinguished in DOC-06 §23.
+- Inventory conceptual entity mapping: 17/17 rows recorded; direct test coverage is concentrated in adjustment/count, transfer/shipment and reservation/movement scenarios. Batch/balance and costing exception/layer-specific tests remain gaps.
+- Cross-cutting control references: 8 stable IDs recorded in DOC-06 §23.4; none is counted as a dedicated test for every workflow.
+- Execution evidence: 0/24 tests executed or independently verified by this documentation work.
+
+### 36.3 Acceptance boundary
+
+CW-10 remains PARTIAL until every applicable requirement has a reviewed control mapping and adequate dedicated test design or an explicit accepted rationale for no test, and actual evidence requirements are satisfied where execution is required. The crosswalk is design-only. It does not close REC-08, SEC-OPEN-01–08, REC-OPEN-12–15, TRC-OPEN items, physical field mapping or any implementation dependency.
+
+No test PASS, production verification, remediation, retest, RLS/API enforcement or implementation readiness is claimed. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 37. Append-only coverage-count correction — CW-10 workflow direct versus related references (19 November 2026)
+
+This section corrects the arithmetic and classification wording in §36.2 without deleting the original checkpoint.
+
+Recounting the 30 workflow rows in DOC-06 §23.2–23.3 using the explicit classification in DOC-06 §23.7 yields:
+
+- **16/30** workflows have at least one direct scenario reference.
+- **8/30** workflows have related-only scenario references; these do not satisfy dedicated workflow coverage.
+- **6/30** workflows have no dedicated or related workflow-specific scenario reference.
+- The inventory/warehouse entity count remains 17/17 mapped, with direct test coverage concentrated in adjustment/count, transfer/shipment and reservation/movement paths. Batch/balance and costing exception/layer-specific scenarios remain gaps.
+- Cross-cutting SEC-17/18/21/22/23 remain reusable control tests and are not counted as direct workflow-specific tests.
+
+The prior §36.2 figure of 23/30 was an incorrect aggregate count. It is superseded by the 16 direct / 8 related-only / 6 uncovered breakdown above. This is a documentation count correction only; it does not change any test ID, execute a test, create evidence, close a dependency or claim security acceptance.
+
+All 24 CW09-SEC IDs remain DESIGN / NOT EXECUTED. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
