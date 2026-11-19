@@ -817,3 +817,50 @@ The prior historical references to Master Checklist v2.0 and earlier work sequen
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
 
 **Next bounded task:** CW-02 — audit DOC-01 terminology and references against the controlling FIX register and current cross-document anchors. Verify current-main first; do not recreate already-completed design work.
+
+
+### 15.20 CW-02 — DOC-01 product terminology and FIX-reference alignment (19 November 2026)
+
+**Audit scope:** DOC-01 Product Blueprint against DOC-08 v0.1 `DOC08-FIX-001`–`DOC08-FIX-017`, DOC-02 category/domain baseline, DOC-05 role/principal namespace and authorization boundaries, and DOC-06 §21 logical domain ownership. Current `main` was checked before drafting; this correction is append-only.
+
+#### 15.20.1 Current-main findings
+
+| Finding | Current-main observation | Disposition |
+|---|---|---|
+| CW02-F01 — Platform role namespace incomplete in DOC-01 | DOC-01 §4 separated Platform Super Admin from Business roles but did not explicitly name both `SUPER_ADMIN` and `PLATFORM_ADMIN`. DOC-08 FIX-013 and DOC-05 §§4.1, 23.1 define both as platform roles. | Append explicit namespace alignment; do not imply any grant. |
+| CW02-F02 — Principal/relationship classifications absent from DOC-01 | DOC-08 FIX-014 and DOC-05 §23.1 define Mitra/Pekerja, Mitra Fisik and Pelanggan as principal/relationship classifications, not extra standard Business roles. DOC-01 did not carry that distinction. | Append exact classification and assignment/relationship boundaries. |
+| CW02-F03 — Existing 12-role baseline | DOC-01 §4 list matches DOC-08 FIX-012 and DOC-05 §4.2 exactly. Owner is already outside the 12. | VERIFIED — no rewrite required. |
+| CW02-F04 — Tenant and inventory/costing decisions | DOC-01 §§2–3 and §7 align with FIX-001–011 at conceptual/logical scope and preserve physical/enforcement limitations. | VERIFIED — no change required. |
+| CW02-F05 — M01–M21 and CAT-10/CAT-11 profiles | DOC-01 §14.1 matches DOC-08 FIX-015–017 and DOC-02 §14 / DOC-06 §21. | VERIFIED — no change required. |
+| CW02-F06 — Historical G02/G04 wording | DOC-01 §6 retains the earlier OPEN snapshot; DOC-01 §15 explicitly supersedes it only for the scoped logical decisions. DOC-02 §15 and DOC-05 §26 corroborate the same scope. | PRESERVE historical text; clarify the controlling anchors in the new addendum. |
+| CW02-F07 — Authorization and entitlement separation | DOC-01 §§6, 14.3–14.4 and §15 preserve the distinction between category, role, entitlement, permission and enforcement. | VERIFIED — no change required. |
+
+#### 15.20.2 Append-only correction published in the PR
+
+DOC-01 §16 now records:
+
+1. `SUPER_ADMIN` and `PLATFORM_ADMIN` as platform roles, separate from the 12 Business roles; Owner remains outside the 12.
+2. Mitra/Pekerja, Mitra Fisik and Pelanggan as actor/principal or relationship classifications, not extra Business roles, memberships or grants.
+3. The explicit assignment, relationship, scope and fail-closed boundaries for those classifications.
+4. Cross-references to DOC-08 FIX-012–017, DOC-05 §§4.1–4.2 / §23.1 / §§22.2–22.4, DOC-02 §14–15 and DOC-06 §21.
+5. Preservation of historical G02/G04 wording with its later, narrowly scoped logical disposition.
+
+No earlier DOC-01 section was rewritten or deleted.
+
+#### 15.20.3 Acceptance and limitations
+
+**Disposition:** CW-02 is **PASS / CLOSED at product-level terminology and FIX-reference alignment scope**, subject to PR review, applicable CI, explicit merge approval and post-merge readback.
+
+Verified: the 12-role list, Owner boundary, tenant/business model, inventory/costing principles, M01–M21 names, CAT-10/CAT-11 profiles and G02/G04 logical dispositions are consistent at their stated scopes.
+
+Not closed by CW-02: DOC-01 source-provenance/claim-locator gaps in §10; RMD-56 canonical variant selection; detailed authorization/permission grants; physical schema; RLS/API/backend enforcement; test execution; and implementation readiness. DOC-01 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED.
+
+#### 15.20.4 Changed paths and governance
+
+- `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md` — append-only §16 role-namespace and principal-classification alignment.
+- This Worklist — append-only CW-02 audit, correction and bounded acceptance record.
+- No DOC-02, DOC-05, DOC-06, DOC-08 or source-native decision file was changed.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+**Next bounded task:** CW-03 — audit DOC-02 category/workflow references against DOC-05 authorization and DOC-06 traceability, preserving already-completed CW-09 logical ownership decisions and the CW-10 security evidence crosswalk.
