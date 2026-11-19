@@ -973,3 +973,18 @@ A bounded token comparison of DOC-07 §31 against DOC-05 §§23–27 found 43 di
 **Disposition:** cross-document authorization-design consistency PASS for the bounded vocabulary, precedence and traceability review. DOC-05 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL; no grants or implementation are authorized.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 33. CW-07 evidence ownership and authorization-to-evidence handoff (20 November 2026)
+
+This section supplements §§22–32 and defines the logical accountability boundary for evidence referenced by DOC-07. It does not approve physical audit schemas, event names, evidence storage or retention durations.
+
+1. **Source-domain business fact:** the M01–M21 owning domain is authoritative for its business event, object state and immutable source lineage. A projection, analytics report, external connector or test runner cannot replace that source.
+2. **Authorization decision:** the authorization enforcement point records the exact principal, Business, key/action, target resource owner, scope, conditions, purpose, SoD/approval result, decision/reason and correlation reference. This decision evidence is distinct from the business event.
+3. **Platform S0 evidence:** platform access-grant approval/application events belong to the platform control plane under S0; they are not Business M-domain events and do not imply tenant-data access.
+4. **Test execution evidence:** the controlled test runner records test ID, requirement/control reference, source commit/build, environment, fixture identity, attempted action, expected/actual result, timestamps, run identifier and artifact integrity reference. It does not authoritatively change the business object.
+5. **Independent review:** a reviewer distinct from the test author/executor verifies the artifact, expected result, source owner, scope, integrity and disposition. Review sign-off is not inferred from CI success or scenario design.
+6. **Evidence status:** DESIGN / NOT EXECUTED means only that the scenario is specified; NOT GENERATED / NOT VERIFIED means no retained execution artifact has been accepted. SKIPPED CI jobs are not executed tests or security passes.
+7. **Retention and legal hold:** DOC-07 may define the evidence contract and retention trigger; actual retention duration, legal basis, storage, access and deletion policy remain OPEN until separately approved.
+
+**Disposition:** DOC-05 authorization-decision ownership and DOC-07 evidence ownership are distinct but linked. No grants, event schema, storage, retention duration or technical audit control is approved.
