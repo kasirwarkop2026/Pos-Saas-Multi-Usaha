@@ -258,3 +258,42 @@ This section reconciles the historical status wording in §6 with DOC-06 §21. I
 - No role grant, module entitlement, physical schema, RLS/API/backend enforcement, test execution, or implementation readiness is implied.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 16. Append-only role-namespace and principal-classification alignment — 19 November 2026
+
+This section aligns DOC-01's product-level role vocabulary with the controlling project FIX register and the later authorization baseline. It supplements §§4 and 14 without rewriting their historical text.
+
+### 16.1 Platform and Business role namespaces
+
+- The 12 standard Business roles listed in §4 remain the complete standard Business-role baseline.
+- Owner remains outside those 12 standard Business roles and derives authority through the approved ownership path.
+- `SUPER_ADMIN` and `PLATFORM_ADMIN` are platform roles, not Business roles. Their platform namespace does not create routine access to tenant Business data.
+- The platform/Business separation is a principal boundary, not an automatic permission or access grant.
+
+**Controlling anchors:** DOC-08 `DOC08-FIX-012` and `DOC08-FIX-013`; DOC-05 §§4.1–4.2 and §23.1.
+
+### 16.2 Operational principal and relationship classifications
+
+The project also uses the labels `Mitra/Pekerja`, `Mitra Fisik` and `Pelanggan`. These are actor/principal or relationship classifications; they are not three additional standard Business roles, do not replace the 12-role baseline, and do not independently create membership, capability or permission.
+
+- **Mitra/Pekerja:** worker/partner principal. Operational actions require an explicit active work assignment, mapped capability and site/location/task scope.
+- **Mitra Fisik:** physical-service partner principal. Operational actions require an explicit contract/work assignment and verified task/location scope; no approval, finance or tenant-administration authority is implied.
+- **Pelanggan:** customer principal. Access is limited to the customer's own verified profile and explicitly linked order, booking, payment or relationship resources under the applicable self/relationship scope; no internal Business operational role is implied.
+
+A classification must resolve to an authenticated principal and the applicable membership, approved role/function or capability, resource relationship/assignment, scope and conditions. If any required element is absent or ambiguous, access is denied. A classification label alone is never an authorization decision.
+
+**Controlling anchors:** DOC-08 `DOC08-FIX-014`; DOC-05 §23.1 and §§22.2–22.4.
+
+### 16.3 Existing domain and category baseline cross-reference
+
+- The canonical logical domain vocabulary remains M01–M21 under DOC-06 §21.1 and DOC-08 `DOC08-FIX-015`.
+- CAT-10 Education and CAT-11 Hotel CORE/CONDITIONAL profiles remain as recorded in DOC-01 §14.1, DOC-02 §14 and DOC-08 `DOC08-FIX-016`–`DOC08-FIX-017`.
+- CORE/CONDITIONAL is product/category design vocabulary, not automatic module activation, subscription entitlement, role grant or permission.
+- The historical G02/G04 wording in §6 remains preserved. Its current scoped disposition is the later append-only clarification in §15 and DOC-02 §15 / DOC-05 §26: G02 is resolved by project design for the canonical logical domain taxonomy and the specified category profiles; G04 is resolved at logical workflow-ownership level for the 30 Education/Hotel workflows. Legacy source mapping, detailed authorization and technical acceptance remain separate OPEN/PARTIAL matters.
+
+### 16.4 Acceptance boundary
+
+This alignment records product-level vocabulary and cross-document anchors only. It does not approve role grants, module entitlements, permission keys, ownership/scope resolver behavior, physical schema, RLS/API/backend enforcement, test execution, or implementation readiness. DOC-01 remains a DRAFT reconstructed working master; its source-provenance and locator gaps in §10 remain in force unless separately reconciled.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
