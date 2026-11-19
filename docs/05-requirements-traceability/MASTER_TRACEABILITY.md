@@ -623,3 +623,115 @@ No source-native dependency was closed, no FIX decision changed, and no approval
 - Next work package: **DOC-07 — Security & Evidence Master bounded read-only audit**, following Master Checklist v2.0 §34.4. Read current DOC-07 and only the necessary controlling cross-references; do not repeat completed DOC-06 work without new evidence.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this audit.
+
+
+## 19. CW-09 — Append-only Education/Hotel row-level traceability reconciliation (19 November 2026)
+
+**Disposition: PARTIAL — ROW-LEVEL WORKFLOW/OBJECT/ACTION CANDIDATE INDEX RECORDED; DOWNSTREAM AUTHORIZATION AND TEST-EVIDENCE EDGES REMAIN OPEN.** This section adds a source-located navigation layer for the existing Education and Hotel working traceability matrix. It does not approve candidate module IDs, stable permission keys, role grants, scope profiles, data rules, approvers, test execution or implementation.
+
+### 19.1 Source basis and authority
+
+The following sources were directly reviewed for this bounded repair:
+
+| Source ID | Exact source | Locator used | Authority and boundary |
+|---|---|---|---|
+| SRC-01 | `Review_Education_Kursus_Lembaga_Pendidikan_Manager_Allowlist_Role_Module_Eligibility_RMD-66_v1.0.docx` | §3, pp.2–3 (WF-01–WF-14); §§5–9, pp.3–6 (Manager/role/module recommendations, SoD and OPEN details) | Workflow/object baseline and review details; approval addendum controls E-01–E-04 status |
+| SRC-02 | `RMD-66_Education_Manager_Role_Module_Mapping_Approval_FIX_Addendum_2026-11-14.docx` | §§1–3, pp.1–2 | E-01/E-02/E-03 FIX conceptual; E-04 and all detailed OPEN items remain OPEN |
+| SRC-03 | `Review_Hotel_Penginapan_Manager_Allowlist_Role_Module_Eligibility_RMD-68_v1.0.docx` | §3, pp.2–3 (WF-01–WF-16); §§5–10, pp.3–6 (Manager/role/module recommendations, SoD and OPEN details) | Workflow/object baseline and review details; approval addendum controls H-01–H-04 status |
+| SRC-04 | `RMD-68_v1.1_Hotel_Manager_Role_Module_Mapping_Approval_FIX_Addendum_2026-11-14.docx` | §§1–5, pp.1–2 | H-01/H-02/H-03 FIX conceptual; H-04 and all detailed OPEN items remain OPEN |
+| SRC-05 | `REC-06_Education_Hotel_Workflow_to_Capability_Traceability_Matrix_v0.1_2026-11-15.md` | §§2–5 (Education rows), §§6–7 (Hotel rows and shared controls), §§8–10 (gap/acceptance register) | Working audit matrix, PARTIAL/OPEN/CANDIDATE; row content is a candidate traceability aid, not an approval |
+| SRC-06 | `REC-06_Permission_Catalogue_Overlay_Education_Hotel_v0.1_2026-11-15.md` | §§2–4 | E/H conceptual approval boundaries and candidate module-domain lists; M-ID alignment remains CANDIDATE |
+
+The primary review documents establish the workflow baselines and their described object/resource scope. The approval addenda establish only the conceptual approvals explicitly listed. The REC-06 matrix supplies the working row-level object/action/function candidates. No recovered source in this review approves a workflow-specific M01–M21 assignment, stable permission key, complete role/action grant, final scope resolver, field-level data policy, approver threshold or executed test result.
+
+### 19.2 Row-level workflow/object/action index
+
+The following index records the 30 workflow rows already present in SRC-05. The object and action descriptions are retained at the level stated in that working matrix; candidate action families are not permissions or grants.
+
+| Category | Stable workflow ID and source title | Resource/object anchors recorded in SRC-05 | Candidate action-family anchors | Module / downstream disposition |
+|---|---|---|---|---|
+| CAT-10 Education | EDU-WF-01 — Program & Course Catalog | Program, course, curriculum, syllabus, level, prerequisite, price, version, publication record | Discover/List; View/Read; Create/Draft; Update/Edit; Review/Verify; Approve/Reject; Publish/Activate; Hold/Release | Specific M-ID NOT MAPPED; permission key OPEN |
+| CAT-10 Education | EDU-WF-02 — Intake & Admission | Inquiry, application, applicant, guardian relation, consent/evidence, admission decision | Discover/List; View/Read; Create/Draft; Update/Edit; Submit/Request; Review/Verify; Approve/Reject; Confirm/Finalize | Specific M-ID NOT MAPPED; permission key OPEN |
+| CAT-10 Education | EDU-WF-03 — Student / Participant Record | Student/participant profile, identity/contact fields, guardian link, accommodation data, status, history | Discover/List; View/Read; Create/Draft; Update/Edit; Review/Verify; Export/Download/Share (separate capability only if justified) | Specific M-ID NOT MAPPED; field classification/purpose OPEN |
+| CAT-10 Education | EDU-WF-04 — Enrollment & Class Allocation | Application-to-enrollment, class, batch, capacity, waitlist, transfer, withdrawal/cancellation status | View/Read; Create/Draft; Update/Edit; Assign/Allocate; Submit/Request; Review/Verify; Approve/Reject; Confirm/Finalize; Cancel/Void | Specific M-ID NOT MAPPED; exact scope/override authority OPEN |
+| CAT-10 Education | EDU-WF-05 — Schedule & Resource Planning | Schedule/session, room/facility, instructor assignment, capacity, conflict record | View/Read; Create/Draft; Update/Edit; Assign/Allocate; Review/Verify; Approve/Reject; Confirm/Finalize; Hold/Release | Specific M-ID NOT MAPPED; resource scope and publication authority OPEN |
+| CAT-10 Education | EDU-WF-06 — Instructor / Trainer Management | Instructor profile, qualification/credential evidence, availability, assignment, evaluation | View/Read; Create/Draft; Update/Edit; Assign/Allocate; Submit/Request; Review/Verify; Approve/Reject; Hold/Release | Specific M-ID NOT MAPPED; HR/data-purpose and credential verification OPEN |
+| CAT-10 Education | EDU-WF-07 — Class Delivery & Attendance | Class, session, attendance record, absence/leave, substitute assignment, correction evidence | View/Read; Execute/Process; Create/Draft; Update/Edit; Submit/Request; Review/Verify; Approve/Reject; Confirm/Finalize | Specific M-ID NOT MAPPED; correction/approval separation OPEN |
+| CAT-10 Education | EDU-WF-08 — Learning Material & Asset | Learning content, material, equipment/asset, issue/loan, return, access grant | View/Read; Create/Draft; Update/Edit; Assign/Allocate; Execute/Process; Confirm/Finalize; Hold/Release; Reconcile/Close | Specific M-ID NOT MAPPED; content and custody scope/SoD OPEN |
+| CAT-10 Education | EDU-WF-09 — Assessment & Examination | Assessment, exam, question/rubric, submission, grade, moderation, appeal, result | Create/Draft; View/Read; Execute/Process; Review/Verify; Approve/Reject; Confirm/Finalize; Publish/Activate | Specific M-ID NOT MAPPED; grading/moderation/finalization separation OPEN |
+| CAT-10 Education | EDU-WF-10 — Fee, Invoice & Payment | Fee schedule, invoice, installment, discount/scholarship decision, payment, refund, arrears | View/Read; Create/Draft; Update/Edit; Submit/Request; Review/Verify; Approve/Reject; Execute/Process; Confirm/Finalize; Reverse/Refund/Write-off; Reconcile/Close | Specific M-ID NOT MAPPED; finance scope and SoD/threshold OPEN |
+| CAT-10 Education | EDU-WF-11 — Guardian / Sponsor / Corporate Account | Guardian, sponsor, corporate account, student link, consent, billing relationship, statement | View/Read; Create/Draft; Update/Edit; Assign/Allocate; Submit/Request; Review/Verify; Approve/Reject; Reconcile/Close; Export/Download/Share | Specific M-ID NOT MAPPED; relationship/consent/field allowlist OPEN |
+| CAT-10 Education | EDU-WF-12 — Completion, Graduation & Certificate | Completion record, eligibility evidence, final result, certificate, serial number, correction/revocation history | View/Read; Review/Verify; Submit/Request; Approve/Reject; Confirm/Finalize; Publish/Activate | Specific M-ID NOT MAPPED; signatory/approval/revocation authority OPEN |
+| CAT-10 Education | EDU-WF-13 — Complaint, Safeguarding & Incident | Complaint, incident/case, evidence, safeguarding note, escalation, restriction, follow-up | View/Read; Create/Draft; Submit/Request; Assign/Allocate; Review/Verify; Approve/Reject; Execute/Process; Hold/Release | Specific M-ID NOT MAPPED; restricted case scope/data purpose OPEN |
+| CAT-10 Education | EDU-WF-14 — Reporting, Audit & Retention | Report, dataset, audit event, export job, archive/retention record | Discover/List; View/Read; Export/Download/Share; Reconcile/Close; Administer/Configure; Hold/Release | Specific M-ID NOT MAPPED; field/report scope and export purpose OPEN |
+| CAT-11 Hotel | HTL-WF-01 — Property, Building & Unit Master | Property, building, floor, room/unit/bed, room type, capacity, amenity, unit status/history | Discover/List; View/Read; Create/Draft; Update/Edit; Assign/Allocate; Review/Verify; Approve/Reject; Hold/Release; Administer/Configure | Specific M-ID NOT MAPPED; property/unit administration scope OPEN |
+| CAT-11 Hotel | HTL-WF-02 — Room Type, Rate Plan & Restrictions | Room type, rate plan, price, occupancy restriction, blackout, cancellation policy, tax/fee configuration | View/Read; Create/Draft; Update/Edit; Review/Verify; Approve/Reject; Publish/Activate; Hold/Release; Administer/Configure | Specific M-ID NOT MAPPED; rate approval/override thresholds OPEN |
+| CAT-11 Hotel | HTL-WF-03 — Availability & Inventory Control | Unit/bed availability, allotment, date range, hold, out-of-order/out-of-service, overbooking policy | View/Read; Update/Edit; Assign/Allocate; Hold/Release; Review/Verify; Approve/Reject; Reconcile/Close | Specific M-ID NOT MAPPED; availability/readiness and overbooking authority OPEN |
+| CAT-11 Hotel | HTL-WF-04 — Reservation & Booking | Inquiry, quote, reservation, booking, deposit, guarantee, modification, cancellation, no-show record | Discover/List; View/Read; Create/Draft; Update/Edit; Submit/Request; Review/Verify; Approve/Reject; Confirm/Finalize; Cancel/Void; Reconcile/Close | Specific M-ID NOT MAPPED; reservation/payment boundary and fee policy OPEN |
+| CAT-11 Hotel | HTL-WF-05 — Guest Profile & Identity | Guest/co-guest, identity document, contact, consent, preference, stay history, restricted note | View/Read; Create/Draft; Update/Edit; Review/Verify; Assign/Allocate; Export/Download/Share only under separate justified capability | Specific M-ID NOT MAPPED; field-level identity/data purpose OPEN |
+| CAT-11 Hotel | HTL-WF-06 — Pre-arrival & Check-in | Arrival record, guest verification, room assignment, registration, deposit, key/access credential, check-in event | View/Read; Review/Verify; Assign/Allocate; Submit/Request; Execute/Process; Confirm/Finalize; Hold/Release | Specific M-ID NOT MAPPED; identity, deposit, key and check-in authority OPEN |
+| CAT-11 Hotel | HTL-WF-07 — Stay & In-house Operations | Stay record, room move, extension, departure, guest request, incident, service assignment | View/Read; Update/Edit; Assign/Allocate; Submit/Request; Review/Verify; Approve/Reject; Execute/Process; Confirm/Finalize; Hold/Release | Specific M-ID NOT MAPPED; guest/incident scope and lifecycle OPEN |
+| CAT-11 Hotel | HTL-WF-08 — Housekeeping & Room Readiness | Room task, cleaning event, inspection evidence, linen/minibar record, room readiness state | View/Read; Assign/Allocate; Execute/Process; Submit/Request; Inspect/Certify; Review/Verify; Approve/Reject; Confirm/Finalize; Hold/Release; Reconcile/Close | Specific M-ID NOT MAPPED; cleaning/inspection/release SoD OPEN |
+| CAT-11 Hotel | HTL-WF-09 — Maintenance & Out-of-order | Work order, defect, maintenance asset/unit, safety hold, repair evidence, inspection, return-to-service record | Create/Draft; View/Read; Assign/Allocate; Execute/Process; Submit/Request; Inspect/Certify; Review/Verify; Approve/Reject; Hold/Release; Confirm/Finalize | Specific M-ID NOT MAPPED; safety clearance/return-to-service authority OPEN |
+| CAT-11 Hotel | HTL-WF-10 — POS / Guest Charges & Folio | Folio, room charge, incidental charge, source transaction, posting, adjustment, split/routing record | View/Read; Create/Draft; Update/Edit; Submit/Request; Review/Verify; Approve/Reject; Execute/Process; Confirm/Finalize; Reverse/Refund/Write-off; Reconcile/Close | Specific M-ID NOT MAPPED; posting/adjustment/refund/reconciliation SoD OPEN |
+| CAT-11 Hotel | HTL-WF-11 — Checkout, Invoice & Payment | Folio, checkout event, invoice, payment, deposit, refund, receipt, settlement record | View/Read; Review/Verify; Submit/Request; Approve/Reject; Execute/Process; Confirm/Finalize; Reverse/Refund/Write-off; Reconcile/Close | Specific M-ID NOT MAPPED; payment/refund/settlement approver thresholds OPEN |
+| CAT-11 Hotel | HTL-WF-12 — Group, Corporate & Agency Booking | Group block, corporate/agency account, negotiated rate, rooming list, billing instruction, commission | View/Read; Create/Draft; Update/Edit; Assign/Allocate; Submit/Request; Review/Verify; Approve/Reject; Confirm/Finalize; Reconcile/Close; Export/Download/Share | Specific M-ID NOT MAPPED; payer/guest identity and rate/commission scope OPEN |
+| CAT-11 Hotel | HTL-WF-13 — Guest Service & Complaint | Guest request, service task, complaint/case, lost-and-found custody, recovery action, compensation | View/Read; Create/Draft; Submit/Request; Assign/Allocate; Execute/Process; Review/Verify; Approve/Reject; Confirm/Finalize; Hold/Release | Specific M-ID NOT MAPPED; complaint/incident and compensation authority OPEN |
+| CAT-11 Hotel | HTL-WF-14 — Staff Shift & Cash Control | Shift, cashier drawer/register, handover, cash count, variance, close/review record | View/Read; Create/Draft; Assign/Allocate; Execute/Process; Submit/Request; Review/Verify; Approve/Reject; Confirm/Finalize; Reconcile/Close | Specific M-ID NOT MAPPED; cash custody/variance/close SoD OPEN |
+| CAT-11 Hotel | HTL-WF-15 — Reporting, Audit & Data Retention | Occupancy/revenue reports, guest access event, audit event, export, retention/archive record | Discover/List; View/Read; Export/Download/Share; Reconcile/Close; Administer/Configure; Hold/Release | Specific M-ID NOT MAPPED; report dataset/field scope and export purpose OPEN |
+| CAT-11 Hotel | HTL-WF-16 — Channel & External Integration | Integration configuration, connector/account, sync job, external reference, webhook/event, credential/secret, reconciliation record | View/Read; Create/Draft; Update/Edit; Review/Verify; Approve/Reject; Execute/Process; Confirm/Finalize; Hold/Release; Reconcile/Close; Administer/Configure | Specific M-ID NOT MAPPED; credential/secret scope and activation authority OPEN |
+
+### 19.3 Explicit edge-status ledger
+
+The row index above improves workflow-to-object/action navigation, but it does not close the full chain. Apply the following status to every one of the 30 rows unless a later row-specific primary approval and evidence record supersedes it:
+
+| Traceability edge | Current disposition | Evidence / closure boundary |
+|---|---|---|
+| Category → workflow ID/title | FIX — CONCEPTUAL for CAT-10 and CAT-11 baselines | RMD-66 review §3 pp.2–3; RMD-68 review §3 pp.2–3; E/H approval addenda confirm baseline preservation |
+| Workflow → resource/object | PARTIAL — SOURCE-DESCRIBED WORKING ROW | REC-06 matrix §5 (Education) / §6 (Hotel); source review workflow descriptions §3. Exact primary deep-audit brief locators are not independently recovered in this bounded pass |
+| Workflow → module M01–M21 | NOT MAPPED / OPEN | Candidate category lists in REC-06 overlay §§3–4 and Crosswalk v1.3 are not approved workflow-level assignments |
+| Module → capability/action | CANDIDATE / PARTIAL | 18 action families are vocabulary only; exact per-workflow object/action lifecycle mapping remains incomplete |
+| Capability/action → stable permission key | OPEN / NOT ESTABLISHED | No approved stable permission-key catalogue |
+| Role/function → standard role eligibility | FIX — CONCEPTUAL at approved category-level scope; row-specific function assignment PARTIAL / CANDIDATE | E-02/H-02 and approval addenda; function labels do not create new standard roles or permission grants |
+| Permission → actor/role grant | OPEN / NOT APPROVED | No final category/workflow/role/action grant matrix |
+| Action → object/geographic/assignment scope | OPEN / PARTIAL | Candidate objects and assigned-scope principles exist; canonical resolver, hierarchy, delegation, lifecycle and per-action rules unresolved |
+| Data object/field → D0–D4 and purpose | OPEN / PARTIAL | D0–D4 is conceptual; field inventory, purpose registry, masking/export/retention and jurisdiction rules unresolved |
+| Action → SoD/approval lifecycle | PARTIAL / OPEN | Separation principles recorded; final action pairs, approver eligibility, thresholds and exception lifecycle unresolved |
+| Workflow/action → negative test ID | PARTIAL / NOT VERIFIED | Category minimum negative-test ideas exist in SRC-05 §7; consolidated stable test-ID mapping and exact expected-deny rows not established |
+| Test → implementation/execution/result/evidence | NOT EVIDENCED | DOC-06 §§10–11 and REC-06 §§8–10: executable implementation, run ID, environment, actual result, retained artifact and retest not established |
+
+### 19.4 Cross-document and decision consistency
+
+- CAT-10 E-01–E-03 and CAT-11 H-01–H-03 remain FIX only at their approved conceptual scope. E-04 and H-04 remain OPEN; no detail is promoted.
+- The 14 Education module groups and 14 Hotel module groups approved in the addenda are not the same thing as M01–M21 assignments. The candidate M-domain lists in REC-06 overlay §§3–4 remain CANDIDATE.
+- Instructor/Tutor, Examiner/Assessor, Admissions Officer, Housekeeping, Reservation Agent, Night Auditor, Guest Service and Sales/Corporate Account remain function labels mapped to existing standard roles/capabilities or assignment contexts; no new standard role is created.
+- No role eligibility, module eligibility, candidate action, object scope, relationship, external payer, assigned task or UI visibility is treated as an authorization grant.
+- Education student/minor, guardian, accommodation, assessment and safeguarding data remain restricted by need-to-know and purpose; Hotel guest identity, payment, complaint/incident, room readiness and safety-release boundaries remain distinct.
+- Request, review, approve, execute, finalize, publish, reverse/refund, reconcile and export remain separate action concepts where risk requires; no thresholds or approver assignments are inferred.
+- DOC-05 §20 is a derived G01–G10 ↔ REC-06 crosswalk, not an approved row-level mapping. DOC-05 §21 confirms that G01–G10 and related scope/SoD gaps remain open.
+- DOC-07 security evidence remains outside the acceptance of this bounded CW-09 repair; no runtime control or security test result is claimed.
+
+### 19.5 CW-09 acceptance disposition and remaining work
+
+**CW-09: PARTIAL — SOURCE-LOCATED ROW-LEVEL INDEX ADDED FOR 30 EDUCATION/HOTEL WORKFLOWS; COMPLETE END-TO-END TRACEABILITY NOT ACCEPTED.**
+
+Completed in this bounded repair:
+1. Stable row identifiers and workflow titles are indexed for EDU-WF-01–14 and HTL-WF-01–16.
+2. Each row has source-described resource/object anchors and candidate action-family anchors.
+3. Exact category review and approval-addendum section/page locators are recorded.
+4. Module, permission-key, role-grant, scope, data/purpose, SoD/approval, negative-test and execution-evidence gaps are explicitly distinguished.
+5. Existing FIX and OPEN boundaries are preserved; no dependency is closed by this addendum.
+
+Still OPEN / PARTIAL:
+- Recover and verify the primary RMD-66/RMD-68 deep-audit brief content/locators at claim level, rather than relying on the REC-06 working matrix for row descriptions.
+- Reconcile each workflow/subworkflow to a specific M-ID only when G02 evidence/approval exists.
+- Establish submodule boundaries and workflow-to-submodule-to-object handoffs under G04.
+- Expand action/object/lifecycle and role/function mappings with exact source locators; no stable permission key or grant is inferred.
+- Complete per-action scope, field-level data/purpose, SoD/approval, negative-test IDs and provenance rows.
+- Recover missing test sources and runtime evidence; do not claim test implementation/execution/PASS.
+
+Dependencies newly closed: **0**. FIX decisions changed: **0**. New permission keys/grants/approvals: **0**. Test execution/PASS claims added: **0**.
+
+DOC-06 remains Version 0.2 / working Revision 0.2.2; DRAFT / RECONCILED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. REC-06 remains PARTIAL / OPEN / CANDIDATE. Stage 4.7.8 and Stage 4.9 remain PARTIAL — ACCEPTANCE NOT MET. Implementation readiness remains NOT READY.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed by this documentation repair.
