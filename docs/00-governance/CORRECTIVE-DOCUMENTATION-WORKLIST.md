@@ -444,3 +444,24 @@ The CW-09 repair was continued on the existing PR #87 branch (no second PR opene
 **Status remains PARTIAL — not CLOSED.** The remaining closure blockers are specifically: (1) G02 explicit approval/canonicalization and source-to-M-ID trace; (2) G04 approved workflow-to-submodule/object/action ownership and handoff map; (3) primary RMD-66/RMD-68 Deep Audit Brief claim-level source recovery; and (4) final permission keys/grants, per-action scope/data-purpose/SoD/approver rules, plus actual test implementation/execution/evidence. The three inspected REC-06 working artifacts do not authorize these promotions. No dependency is closed and no FIX decision is changed by this continuation.
 
 Acceptance remains honest: DOC-06 §20 closes the available category-level candidate transcription and working decomposition tasks, but CW-09, REC-06, Stage 4.7.8 and Stage 4.9 remain PARTIAL/OPEN where their source-native acceptance criteria are unmet. Next action is to resolve the G02 policy decision and recover/approve G04 source material before claiming complete workflow-level module traceability; do not force CLOSED.
+
+
+### 15.5 Project-authored design decisions — G02/G04 and authorization baseline
+
+Per the agreed operating direction, missing design detail is no longer treated as a blocker merely because a legacy/supporting source file is unavailable. The project authors its own normative design, reconciles it with existing FIX decisions, and records it in the owning master document. External/archived sources remain useful for provenance but are not prerequisites for defining product-owned architecture.
+
+DOC-06 append-only §21 now establishes:
+- Canonical logical domain taxonomy M01–M21, stable IDs and single-owner domain boundaries.
+- Education (CAT-10) and Hotel (CAT-11) CORE/CONDITIONAL domain profiles and extension gates.
+- Primary and supporting domain ownership for every EDU-WF-01–14 and HTL-WF-01–16 workflow.
+- Cross-domain single-writer, command/event, idempotency, consistency, read-model, tenant-isolation and audit contracts.
+- Permission-key grammar and explicit separation of principal, tenant, module, resource, action, scope, conditions, data class, purpose and SoD/approval.
+- Standard S0–S5 scope hierarchy; D0–D4 data classification and purpose codes; risk-family SoD baseline; deny-by-default authorization sequence.
+
+**Disposition:** G02 canonical domain taxonomy/category baseline and G04 logical workflow ownership are RESOLVED AS PROJECT DESIGN DECISIONS in DOC-06 §21. They are not left waiting for missing external/legacy files. Their downstream acceptance is now a cross-document consistency task: DOC-01/02/03/04/05/07 must be reconciled to this baseline, object-level ownership and sensitive-field inventory must be enumerated, and the detailed action/role/scope/SoD matrix must be completed.
+
+CW-09 itself remains PARTIAL until that cross-document reconciliation, the full permission-action matrix, field-level mapping and documentation-level negative-test coverage meet acceptance. Proposed negative scenarios in §20.5 remain test specifications, not executed tests. No implementation, database change, RLS/API/backend change or test execution is authorized by this design decision.
+
+Next work: use DOC-06 §21 as the controlling design baseline and repair the dependent master documents in dependency order. Do not reopen G02/G04 as missing-source blockers; reopen only if a concrete internal contradiction or explicit user-approved design change is identified.
+
+Governance: READ-ONLY / APPEND-ONLY; DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED; no Supabase Preview/Staging or Production changes.
