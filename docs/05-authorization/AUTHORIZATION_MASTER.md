@@ -1002,3 +1002,19 @@ DOC-06 §31 is the current requirements acceptance matrix. DOC-05 §§22–34 re
 6. DOC-07 §§32–34 and §43 define policy/evidence references; candidate keys and AUTH-HR tuples remain non-grant design vocabulary.
 
 **Disposition:** authorization requirements and design are cross-referenced; exact actor/key/resource/scope/condition/approval rows, production grants and technical enforcement remain OPEN / NOT AUTHORIZED.
+
+
+## 35. CW-10B category entitlement and authorization boundary (20 November 2026)
+
+DOC-02 §20 is the category eligibility authority. DOC-05 §§22–34 remain the exact permission and authorization-decision authority.
+
+1. CORE means a product-level baseline capability for the category; it does not activate a subscription, module instance, role, permission key or actor entitlement.
+2. CONDITIONAL requires a recorded use case, package entitlement, Business configuration and the applicable owner/approval. No conditional module is auto-enabled because a workflow references it.
+3. OUT-OF-BASELINE means not part of the default category profile; activation requires an explicit category design change and entitlement review.
+4. A workflow's primary owner domain does not imply that all 12 Business roles may execute its actions. Each action still requires an exact candidate key, principal/membership, resource owner, S0–S5 scope, D0–D4/purpose, state conditions and SoD/approval.
+5. CAT-08 M14 is a regulated CORE design profile only. No prescription intake, pharmacist review, dispensing, controlled-product handling or regulated sale may activate until credential, jurisdiction, professional authority and compliance gates are documented and separately approved.
+6. CAT-12 has no operational M01–M21 module activation. M01/M18 references in its exception index identify classification/control ownership only. Unknown/ambiguous activity remains fail-closed.
+7. CAT-13 Retail/Refill and Formulation/Manufacturing tracks have separate category profiles and workflow indexes. A Business must be explicitly classified into the applicable track; one track does not grant the other track's capabilities.
+8. CAT-10/CAT-11 existing FIX profiles remain unchanged. No category profile grants production permission or changes the 12 standard Business roles.
+
+**Disposition:** category-to-domain profiles are product eligibility design, not an authorization grant matrix. Exact actor/key/resource/scope/condition/approval rows remain OPEN. No role grants or technical enforcement are authorized.
