@@ -592,3 +592,39 @@ DOC-05 §25 and DOC-04 §29 were appended to the existing PR #87 branch.
 - Dependencies newly closed: 0. Permissions granted: 0. Physical schema gaps closed: 0. Test execution/PASS: 0.
 
 Next: conduct a contradiction/duplicate-owner audit across DOC-01/02/03/04/05/06/07, verify exact permission-key spelling against the DOC-07 register, and inspect PR #87 changed-file patches. Do not close CW-09 until review and all documentation acceptance criteria are met. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+### 15.11 Final contradiction-audit repair checkpoint — project-authored cross-document reconciliation (19 November 2026)
+
+**Status: TARGETED CONTRADICTIONS IDENTIFIED AND RECONCILIATION ADDENDA RECORDED ON THE EXISTING PR #87 BRANCH. CW-09 REMAINS PARTIAL PENDING FINAL FULL-DIFF REVIEW AND ACCEPTANCE.**
+
+#### 15.11.1 Findings and repair disposition
+
+| Finding | Documents / locations | Contradiction or ambiguity | Append-only disposition |
+|---|---|---|---|
+| CW09-FCA-01 — G02 stale status | DOC-01 §6; DOC-02 §8; DOC-05 §§8/16; DOC-06 §§19–21 | Earlier sections said G02 remained OPEN after the project-authored M01–M21 taxonomy decision. | DOC-01 §15, DOC-02 §15, DOC-05 §26 and DOC-06 §22 clarify G02 RESOLVED BY PROJECT DESIGN for canonical logical IDs and the stated CAT-10/CAT-11 profiles only. Full legacy/all-category entitlement mapping is not implied. |
+| CW09-FCA-02 — G04 stale status | DOC-02 §8; DOC-05 §§8/16; DOC-06 §§19–21 | Earlier sections said G04 remained OPEN after logical ownership was defined for 30 Education/Hotel workflows. | DOC-01 §15, DOC-02 §15, DOC-05 §26 and DOC-06 §22 clarify G04 RESOLVED AT LOGICAL WORKFLOW-OWNERSHIP LEVEL for EDU-WF-01–14 and HTL-WF-01–16. Lower-level exact action/actor authorization and implementation remain separate. |
+| CW09-FCA-03 — Attribute inventory status layers | DOC-04 §§28.2–29 | “0/17 field-level classification complete” could be misread as contradicting “17/17 conceptual attribute proposals enumerated.” | DOC-04 §30 distinguishes proposed conceptual attribute enumeration from accepted field-level/physical mapping: 17/17 proposals enumerated; 0/17 physical field mappings verified/accepted. |
+| CW09-FCA-04 — Classification and purpose vocabulary | DOC-04 §29.1; DOC-05 §25.1; DOC-06 §21.8–21.9 | DOC-04 omitted D0 and three purpose codes used by DOC-05/DOC-06. | DOC-04 §30 supplies D0 Public and the shared nine-code purpose vocabulary; field-specific purpose remains constrained by context. |
+| CW09-FCA-05 — Platform S0 key reference | DOC-05 §§24.2–24.3; DOC-07 §§31–32 | DOC-07 §31 still called S0.platform_admin a namespace marker while DOC-05 §24.3 had defined exact candidate platform access-grant keys. | DOC-05 §26 and DOC-07 §33 reconcile CW09-SEC-19 to PLATFORM.access_grant.approve and PLATFORM.access_grant.apply; S0 remains scope, not a permission key. |
+| CW09-FCA-06 — Illustrative M05 key | DOC-07 §31; DOC-05 §§23–25 | M05.reservation.read was presented as an example although no canonical M05 key is enumerated in the current catalogue. | DOC-07 §33 explicitly marks it illustrative only; M05 owner-domain key definition remains OPEN before executable use. |
+
+#### 15.11.2 Cross-document consistency checks retained
+
+- DOC-03 §18, DOC-01 §14, DOC-02 §14 and DOC-06 §21 use M01–M21 as the same canonical logical domain vocabulary.
+- DOC-04 §28 assigns exactly one primary owner to each of the 17 conceptual inventory/costing entities; supporting domains do not acquire write ownership.
+- DOC-05 §§23–25 and DOC-07 §§30–33 retain candidate-only keys/policies and design-only tests; no role grant, implementation, execution or PASS is claimed.
+- Scope S0 remains platform-only. Business operational scope S1–S4 and verified self/relationship scope S5 remain distinct and non-inheriting.
+- D0–D4 classifications, purpose constraints, SoD and approval are evaluated together; no classification or purpose label independently grants access.
+- Inventory ledger, projection, batch, cost-layer and transfer/shipment ownership/lifecycle remain consistent with DOC-03 §18 and DOC-04 §§27–30. inventory_cost_layer_movements remains an unapproved candidate, not an eighteenth entity.
+- No physical field, SQL identifier, constraint, retention duration, numeric threshold, grant, RLS/API behavior or runtime result is inferred by this audit.
+
+#### 15.11.3 Scope and remaining acceptance
+
+- Changed paths remain the same eight files in PR #87; this checkpoint adds no ninth file.
+- All corrections are append-only. No historical text or prior status snapshot was deleted.
+- Dependencies newly closed by this contradiction audit: **0**. G02/G04 dispositions above are project design decisions at their stated logical scope, not closures of unrelated source-native or technical dependencies.
+- Physical-field mapping: OPEN. Exact role grants: NOT APPROVED. Technical authorization implementation: NOT AUTHORIZED. Security tests: DESIGN / NOT EXECUTED.
+- Next: re-read all seven owner-document addenda and the full eight-file PR diff; verify key spelling, heading/lint integrity, current CI and current PR head/base before any merge decision.
+
+Controls: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
