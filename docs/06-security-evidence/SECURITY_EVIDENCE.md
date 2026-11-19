@@ -901,3 +901,19 @@ DOC-07 §31 lists M21.integration_secret.read in CW09-SEC-20 as an attempted act
 - Test CW09-SEC-20 remains DESIGN / NOT EXECUTED. This clarification creates no permission, key grant, secret access path, implementation or test result.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 35. Append-only candidate-key reconciliation — DOC-05 owner catalogue alignment (19 November 2026)
+
+DOC-05 §27 now records the additional candidate exact-action keys used by DOC-07 §31. This resolves the key-name lookup gap without turning candidate vocabulary into grants.
+
+- The 23 additional candidate keys used in the CW-09 negative-test references are now explicitly enumerated in DOC-05 §27 with workflow/resource anchors and action boundaries.
+- Keys already defined by DOC-05 §§23.4 and 24.2 retain those owner-document definitions; DOC-05 §27 supplements rather than duplicates those entries.
+- The earlier DOC-07 §33 description of M05.reservation.read as merely illustrative is superseded for the current design: it is now an explicit candidate key in DOC-05 §27. It remains not granted and requires the full policy tuple before any executable authorization test.
+- S0.platform_admin remains a namespace marker only. The platform candidate keys are PLATFORM.access_grant.approve and PLATFORM.access_grant.apply under DOC-05 §24.3.
+- M21.integration_secret.read remains a prohibited attempted-action label only, not a candidate permission key, per DOC-07 §34 and DOC-05 §27.2.
+- All candidate keys remain DESIGN vocabulary. No role grants, allowlists, runtime implementation, test execution or PASS is claimed.
+
+**Disposition:** candidate-key reference alignment is documented for CW09-SEC-01–24. All 24 tests remain DESIGN / NOT EXECUTED. Exact grants and technical enforcement remain OPEN / NOT AUTHORIZED.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
