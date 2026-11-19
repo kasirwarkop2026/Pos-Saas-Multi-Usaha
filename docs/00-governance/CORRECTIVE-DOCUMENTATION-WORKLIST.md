@@ -638,3 +638,23 @@ Controls: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Sta
 
 This is a design-vocabulary clarification only. CW09-SEC-20 remains DESIGN / NOT EXECUTED; no secret permission, dependency closure, implementation or PASS is claimed. The changed-file count remains eight and all edits remain append-only.
 
+
+
+### 15.13 Candidate permission-key spelling and owner-catalogue reconciliation (19 November 2026)
+
+**Finding CW09-FCA-08 — DOC-07 candidate-key labels not all present in DOC-05 owner catalogue.**
+
+A set comparison of the permission-key labels in DOC-07 §31 against DOC-05 §§23–24 found candidate labels that were used in negative-test references but had not yet been enumerated in the owning authorization master.
+
+- DOC-05 §27 now records 23 additional candidate exact-action keys with their Education/Hotel or inventory/warehouse resource anchors.
+- Existing DOC-05 §§23.4 and 24.2 entries remain the source for inventory-family and high-risk keys.
+- S0.platform_admin is retained only as a scope/namespace marker, not a permission key.
+- M21.integration_secret.read is retained only as a prohibited attempted-action label for a DENY scenario, never as a candidate grant.
+- M05.reservation.read is now explicitly enumerated as a candidate key in DOC-05 §27; the earlier DOC-07 §33 “illustrative only” wording is superseded by DOC-07 §35.
+- The candidate-key register does not approve actor/function eligibility, grants, module entitlement, scope resolver or implementation. Each key still requires its complete policy tuple and review.
+
+**Disposition:** key-name ownership/reference gap reconciled at candidate-vocabulary level. CW09-SEC-01–24 remain DESIGN / NOT EXECUTED. No dependency is closed, no grant is approved, and no technical implementation is authorized.
+
+Next: rerun exact-token comparison between DOC-05 and DOC-07; inspect the final eight-file diff; verify Documentation CI and POS SaaS CI against the latest PR head. Keep PR #87 OPEN until all checks finish.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
