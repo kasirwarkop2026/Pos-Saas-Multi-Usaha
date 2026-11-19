@@ -1255,3 +1255,31 @@ The bounded cross-check found no evidence-supported change to the substantive DO
 - Next work package: **DOC-05 — Authorization Architecture Master bounded read-only audit**, following active Master Checklist v2.0 §39. Read the current DOC-05 and only necessary controlling cross-references from `main`; do not repeat completed work. Route DOC04-F03 to the DOC-03 owner audit when that document is next in the approved remediation sequence.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this addendum.
+
+## 27. Append-only logical domain ownership and field-classification design — 19 November 2026
+
+This section adds a project-authored logical mapping layer based on DOC-06 §21. It is not a physical ERD approval, table inventory, migration specification or claim that existing database objects implement these rules.
+
+### 27.1 Logical ownership rule
+
+Every business entity/data aggregate documented in this master must be assigned exactly one authoritative owner from M01–M21. Supporting domains may hold their own records containing stable references to another domain's object, but may not mutate the owner's authoritative state. Cross-domain reporting structures are projections/read models and must be labeled as such. If an existing entity cannot yet be assigned confidently, record it as UNMAPPED with a named decision item; do not invent a second owner.
+
+### 27.2 Ownership mapping for Education and Hotel workflows
+
+Use DOC-06 §§21.3–21.4 as the authoritative workflow-level mapping for EDU-WF-01–14 and HTL-WF-01–16. During entity-level reconciliation, map each object to its workflow and primary owner, then map supporting references separately. A workflow's supporting domain is not permission for that domain to write the primary domain's records. DOC-03 owns the interaction contract; DOC-04 records entity ownership and data shape.
+
+### 27.3 Business and location isolation invariants
+
+For each business-owned entity, the logical data contract must identify business_id as its tenant association, whether direct or safely derived through an immutable parent relationship. Child references must not permit a row to point across businesses. Composite tenant-aware relationships are required wherever independent foreign-key validity could otherwise connect records from different businesses. Site/property/outlet, warehouse/location, assignment and self/relationship constraints are additional scope dimensions, not substitutes for tenant isolation. Platform-owned records are explicitly distinguished from business-owned records.
+
+### 27.4 Field-level classification and purpose inventory
+
+Apply DOC-06 §21.8 D0–D4 classification at field/document level. For each entity field, the dictionary must record: field name; owning domain; business/tenant association; classification; purpose(s); permitted read audiences; write authority; export/share eligibility; masking/minimization rule; retention/deletion rule; and audit requirement. D0 public; D1 internal; D2 confidential; D3 restricted; D4 critical secret/regulated credential. Secrets must be stored as vault-managed references or equivalent protected material, never ordinary readable application fields. Where field-level classification is not yet enumerated, mark FIELD CLASSIFICATION OPEN; do not infer that the whole table has one uniform class.
+
+### 27.5 Data lifecycle and projection rules
+
+Authoritative state changes occur only through the owning domain's lifecycle. Audit/event records preserve actor, action, target, tenant, timestamp, correlation, purpose and relevant before/after or event reference according to classification. Projections identify source owner, refresh/consistency behavior and whether stale data affects operational decisions. Retention, legal hold, correction and deletion rules must be documented per data family; derived reports must not become alternate write paths.
+
+### 27.6 Physical evidence and status boundary
+
+This logical design does not resolve the existing physical ERD/data-dictionary evidence gaps, does not close any source-native physical schema dependency and does not establish that business_id constraints, composite foreign keys, RLS or field protections exist in the database. Entity-by-entity ownership and field inventory must be reconciled against the current document's physical evidence matrices in a separate documentation pass. No SQL/DDL/DML, migration, RLS/Auth or database action is authorized. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
