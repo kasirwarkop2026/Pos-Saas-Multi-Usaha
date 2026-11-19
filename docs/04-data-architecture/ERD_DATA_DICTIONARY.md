@@ -1255,3 +1255,176 @@ The bounded cross-check found no evidence-supported change to the substantive DO
 - Next work package: **DOC-05 — Authorization Architecture Master bounded read-only audit**, following active Master Checklist v2.0 §39. Read the current DOC-05 and only necessary controlling cross-references from `main`; do not repeat completed work. Route DOC04-F03 to the DOC-03 owner audit when that document is next in the approved remediation sequence.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this addendum.
+
+## 27. Append-only logical domain ownership and field-classification design — 19 November 2026
+
+This section adds a project-authored logical mapping layer based on DOC-06 §21. It is not a physical ERD approval, table inventory, migration specification or claim that existing database objects implement these rules.
+
+### 27.1 Logical ownership rule
+
+Every business entity/data aggregate documented in this master must be assigned exactly one authoritative owner from M01–M21. Supporting domains may hold their own records containing stable references to another domain's object, but may not mutate the owner's authoritative state. Cross-domain reporting structures are projections/read models and must be labeled as such. If an existing entity cannot yet be assigned confidently, record it as UNMAPPED with a named decision item; do not invent a second owner.
+
+### 27.2 Ownership mapping for Education and Hotel workflows
+
+Use DOC-06 §§21.3–21.4 as the authoritative workflow-level mapping for EDU-WF-01–14 and HTL-WF-01–16. During entity-level reconciliation, map each object to its workflow and primary owner, then map supporting references separately. A workflow's supporting domain is not permission for that domain to write the primary domain's records. DOC-03 owns the interaction contract; DOC-04 records entity ownership and data shape.
+
+### 27.3 Business and location isolation invariants
+
+For each business-owned entity, the logical data contract must identify business_id as its tenant association, whether direct or safely derived through an immutable parent relationship. Child references must not permit a row to point across businesses. Composite tenant-aware relationships are required wherever independent foreign-key validity could otherwise connect records from different businesses. Site/property/outlet, warehouse/location, assignment and self/relationship constraints are additional scope dimensions, not substitutes for tenant isolation. Platform-owned records are explicitly distinguished from business-owned records.
+
+### 27.4 Field-level classification and purpose inventory
+
+Apply DOC-06 §21.8 D0–D4 classification at field/document level. For each entity field, the dictionary must record: field name; owning domain; business/tenant association; classification; purpose(s); permitted read audiences; write authority; export/share eligibility; masking/minimization rule; retention/deletion rule; and audit requirement. D0 public; D1 internal; D2 confidential; D3 restricted; D4 critical secret/regulated credential. Secrets must be stored as vault-managed references or equivalent protected material, never ordinary readable application fields. Where field-level classification is not yet enumerated, mark FIELD CLASSIFICATION OPEN; do not infer that the whole table has one uniform class.
+
+### 27.5 Data lifecycle and projection rules
+
+Authoritative state changes occur only through the owning domain's lifecycle. Audit/event records preserve actor, action, target, tenant, timestamp, correlation, purpose and relevant before/after or event reference according to classification. Projections identify source owner, refresh/consistency behavior and whether stale data affects operational decisions. Retention, legal hold, correction and deletion rules must be documented per data family; derived reports must not become alternate write paths.
+
+### 27.6 Physical evidence and status boundary
+
+This logical design does not resolve the existing physical ERD/data-dictionary evidence gaps, does not close any source-native physical schema dependency and does not establish that business_id constraints, composite foreign keys, RLS or field protections exist in the database. Entity-by-entity ownership and field inventory must be reconciled against the current document's physical evidence matrices in a separate documentation pass. No SQL/DDL/DML, migration, RLS/Auth or database action is authorized. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+## 28. Append-only conceptual entity-to-domain ownership register — 19 November 2026
+
+**Status: LOGICAL OWNERSHIP DESIGN RECORDED; PHYSICAL DICTIONARY AND FIELD-LEVEL CLASSIFICATION REMAIN OPEN.** This register maps the historical 17 conceptual Inventory & Costing entities in §3 to the canonical logical domains in DOC-06 §21. It does not approve physical table names or columns and does not alter the historical entity count.
+
+| # | Conceptual entity | Primary owner | Supporting domain(s) | Logical ownership rationale | Field classification status |
+|---:|---|---|---|---|---|
+| 1 | `inventory_batches` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Batch identity, expiry and physical stock state belong to inventory ledger; custody/location execution may reference it | FIELD INVENTORY OPEN; classify each eventual field individually |
+| 2 | `inventory_movements` | M06 Inventory & Material Ledger | M07 Warehouse & Custody; M16 Finance, Billing & Payment | Immutable quantity-change ledger is owned by inventory; transfer custody and financial valuation consume movement facts | FIELD INVENTORY OPEN |
+| 3 | `inventory_balances` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Rebuildable on-hand/reserved/available projection belongs to inventory ledger | FIELD INVENTORY OPEN |
+| 4 | `inventory_batch_balances` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Rebuildable batch-level stock projection belongs to inventory; warehouse is a location/custody dimension | FIELD INVENTORY OPEN |
+| 5 | `inventory_adjustments` | M06 Inventory & Material Ledger | M07 Warehouse & Custody; M18 Quality, Inspection & Compliance | Adjustment request/post/reversal changes inventory ledger; independent review evidence may be held by M18 | FIELD INVENTORY OPEN |
+| 6 | `inventory_adjustment_items` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Adjustment quantity detail generates inventory movement on posting | FIELD INVENTORY OPEN |
+| 7 | `stock_counts` | M06 Inventory & Material Ledger | M07 Warehouse & Custody; M18 Quality, Inspection & Compliance | Count reconciliation affects inventory truth; physical count execution is location/custody activity | FIELD INVENTORY OPEN |
+| 8 | `stock_count_items` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Expected/physical/variance quantities are inventory reconciliation details | FIELD INVENTORY OPEN |
+| 9 | `stock_transfers` | M07 Warehouse & Custody | M06 Inventory & Material Ledger; M19 Delivery & Fulfillment | Transfer authorization, custody handoff and transit lifecycle belong to warehouse/custody; ledger records quantity effects | FIELD INVENTORY OPEN |
+| 10 | `stock_transfer_items` | M07 Warehouse & Custody | M06 Inventory & Material Ledger | Transfer line and shipment allocation are custody lifecycle details; posted quantities reconcile to inventory ledger | FIELD INVENTORY OPEN |
+| 11 | `inventory_cost_exceptions` | M06 Inventory & Material Ledger | M16 Finance, Billing & Payment; M18 Quality, Inspection & Compliance | Inventory costing exception is attached to stock valuation lineage; financial posting and review remain separately owned | FIELD INVENTORY OPEN |
+| 12 | `inventory_reservations` | M06 Inventory & Material Ledger | M03 POS, Sales & Order; M05 Booking, Reservation & Appointment | Reservation of stock affects available inventory; sales/booking domains own the originating demand object | FIELD INVENTORY OPEN |
+| 13 | `inventory_reservation_items` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Reserved quantity and batch allocation are inventory commitments; physical pick/custody is M07 | FIELD INVENTORY OPEN |
+| 14 | `inventory_cost_layers` | M06 Inventory & Material Ledger | M16 Finance, Billing & Payment | Cost-layer identity/remaining quantity follows inventory costing architecture; financial valuation/posting remains M16 | FIELD INVENTORY OPEN |
+| 15 | `inventory_cost_layer_consumptions` | M06 Inventory & Material Ledger | M16 Finance, Billing & Payment | Consumption/compensation lineage allocates inventory cost layers; financial effects are separately posted by M16 | FIELD INVENTORY OPEN |
+| 16 | `stock_transfer_shipments` | M07 Warehouse & Custody | M19 Delivery & Fulfillment; M06 Inventory & Material Ledger | Physical shipment, dispatch, receipt, return and loss custody events belong to M07; external delivery orchestration may use M19; ledger effects remain M06 | FIELD INVENTORY OPEN |
+| 17 | `stock_transfer_shipment_items` | M07 Warehouse & Custody | M19 Delivery & Fulfillment; M06 Inventory & Material Ledger | Shipment-line custody and receipt reconciliation belong to M07; delivery proof/route belongs to M19; posted quantity effects belong to M06 | FIELD INVENTORY OPEN |
+
+### 28.1 Ownership rules and explicit non-owners
+
+1. The primary owner is the only authority for the entity's authoritative lifecycle and mutation. Supporting domains may issue commands or consume events/read models; they do not acquire write ownership.
+2. M06 owns stock ledger, balances, batch identity, reservations and cost-layer lineage. M07 owns warehouse/location custody and transfer/shipment lifecycle. M19 may own last-mile delivery/route/proof when the workflow extends beyond internal warehouse custody. M16 owns invoices, payment, financial posting and settlement; it does not mutate inventory ledger records.
+3. A transfer shipment can have a M07 custody record and a separate M19 delivery record when delivery is an actual business capability. Do not duplicate the same shipment fact in both domains.
+4. `inventory_cost_layer_movements` remains an unapproved bridge candidate; this mapping does not create entity #18.
+5. This logical map resolves ownership for these 17 conceptual names only. It does not close A38-G01–G04, GAP-04-01–16, ERD-OPEN-01–27, physical field/key evidence, RLS or implementation gaps.
+
+### 28.2 Field-classification acceptance template
+
+For each future approved field, DOC-04 must record: entity.field; owner domain; direct/derived business_id path; D0–D4 class; allowed purpose code(s); read audience/permission key; write authority; mask/minimize rule; export/share decision; retention/legal-hold rule; audit event; and evidence/status. Current conceptual entity rows do not enumerate fields, so no blanket D1/D2 classification is asserted. Until populated, field-level classification remains OPEN and protected data access must fail closed.
+
+### 28.3 Tenant and relationship constraints
+
+Every business-owned entity must carry or safely derive one immutable business context. A child-to-parent reference must preserve business equality; composite tenant-aware references are the logical requirement where independent identifiers could cross tenants. Site/property, warehouse/location and assignment are subordinate scope dimensions. Exact FK names, columns, unique indexes, constraints and RLS policies remain physical design/implementation work and are not specified here.
+
+**Disposition:** logical ownership mapped 17/17; field-level classification 0/17 complete; physical table/field/key verification remains OPEN as recorded in §§23–26. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 29. Append-only logical attribute and data-handling inventory — project-authored proposal (19 November 2026)
+
+**Status: LOGICAL ATTRIBUTE DESIGN — NOT PHYSICAL COLUMNS; FIELD CLASSIFICATION PROPOSED, NOT IMPLEMENTED.** This section fills the product-design gap identified in §28 by enumerating conceptual attributes for the 17 historical Inventory & Costing entities. Attribute labels describe business meaning, not approved SQL identifiers, column types, nullability, keys, indexes or existing database fields. A physical dictionary must later map or reject each conceptual attribute against an authorized physical schema review.
+
+### 29.1 Classification and audience legend
+
+- **D1 Internal:** operational identifiers, states and non-sensitive quantities; read by assigned operational functions within the owning Business and scope.
+- **D2 Confidential:** commercial, financial, valuation, supplier, custody, variance or transaction details; read only by assigned Inventory/Warehouse/Finance functions for their respective purposes.
+- **D3 Restricted:** person-linked, investigation, regulated or sensitive evidence; only explicitly assigned and need-to-know audiences. No general export.
+- **D4 Critical secret:** credentials/secret material; never ordinary application-readable attributes. Store only protected vault reference/metadata in the domain record; never expose secret values.
+- **Read/write notation:** “Inventory” means an explicitly assigned Inventory Operator or controlled M06 process; “Warehouse” means an explicitly assigned Warehouse Operator or controlled M07 process; “Finance” means the Finance / Accounting read/review subset; “Approver” means an independent explicitly assigned reviewer. These are candidate audiences, not grants.
+- **Purpose codes:** SERVICE_DELIVERY, FINANCIAL_PROCESSING, COMPLIANCE_AUDIT, SAFETY_RESPONSE, INTEGRATION_SYNC and LEGAL_RETENTION only where relevant. A request must declare a matching purpose.
+- **Retention:** trigger is specified conceptually; duration remains OPEN pending applicable legal, contractual and business policy. Legal hold suspends disposal.
+
+### 29.2 Conceptual attribute register
+
+| # / entity (owner) | Proposed logical attributes and classification | Read audience / purpose | Write authority and lifecycle | Retention / audit trigger |
+|---|---|---|---|---|
+| 1. inventory_batches (M06) | batch identity, product/variant reference, supplier-lot reference (D2), received date, manufacture date (D2), expiry date (D2), quality/hold state (D2), original and remaining quantity (D2), unit of measure, source receipt reference, created/updated actor/time (D1) | Inventory; Warehouse for assigned custody; Finance only valuation-relevant subset. SERVICE_DELIVERY, COMPLIANCE_AUDIT | Inventory creates/updates draft facts; quality/hold transitions require assigned authority; posted movement quantities are not edited here | Retain through batch exhaustion/expiry and related recall/claim period; audit receipt, hold/release, expiry and quantity-affecting events |
+| 2. inventory_movements (M06) | movement identity, product/variant, batch reference, location reference, movement type, quantity and UOM (D2), source document/object reference, reason code (D2), effective/recorded time, actor/service, correlation/idempotency reference, reversal-of reference (D1/D2) | Inventory; Warehouse for assigned custody; Finance read-only valuation subset. SERVICE_DELIVERY, FINANCIAL_PROCESSING, COMPLIANCE_AUDIT | Only M06 posts immutable movement facts from authorized commands; correction is a linked compensating movement, never edit/delete | Retain as immutable ledger through financial/audit/claim obligations; audit every post, reversal and replay decision |
+| 3. inventory_balances (M06) | product/variant, location, on-hand quantity, reserved quantity, available quantity, in-transit quantity where applicable, projection version/as-of time, source movement watermark (D1/D2) | Inventory and assigned Warehouse. SERVICE_DELIVERY | Controlled M06 projection process only; no direct manual write; rebuild from authoritative movement/reservation sources | Retain current projection and rebuild lineage; audit rebuild, discrepancy and stale-projection decisions |
+| 4. inventory_batch_balances (M06) | batch reference, location, on-hand/reserved/available quantities, expiry status, projection version/as-of time, source watermark (D1/D2) | Inventory; assigned Warehouse. SERVICE_DELIVERY, COMPLIANCE_AUDIT | Controlled M06 projection process only; batch allocation follows approved FEFO policy where applicable | Retain projection lineage while batch exists and through reconciliation; audit rebuild and batch discrepancy |
+| 5. inventory_adjustments (M06) | adjustment identity, location, reason, status, initiator, submitted/reviewed/approved/posted actor/time, source count/reference, variance summary and approval reference (D2), exception/incident reference (D3 only when person/incident-linked) | Inventory; independent Approver; Finance valuation subset. SERVICE_DELIVERY, COMPLIANCE_AUDIT | Inventory initiates/submits; independent approver approves; controlled M06 posting service posts ledger effects; initiator cannot approve own adjustment | Retain with linked movements and audit/claim period; audit submit, review, approve, reject, post and reverse |
+| 6. inventory_adjustment_items (M06) | parent adjustment, product/variant, batch, expected quantity, counted quantity, delta, UOM, unit-cost reference where applicable (D2), line reason (D2), source evidence reference (D2/D3) | Inventory; assigned counter; Finance cost subset. SERVICE_DELIVERY, FINANCIAL_PROCESSING | Assigned Inventory Operator edits draft lines; locked on submit/post; M06 generates movements | Retain with parent adjustment and movement lineage; audit every line change before submission and final posting |
+| 7. stock_counts (M06) | count identity, location, scope/filter, cutoff/as-of time, status, assigned counters, reviewer, approver, submission/finalization time, count method and variance summary (D2) | Inventory; Warehouse for assigned count; independent Approver. SERVICE_DELIVERY, COMPLIANCE_AUDIT | Inventory creates/assigns; counters submit; independent reviewer approves material variance; M06 finalizes ledger impact | Retain through reconciliation and audit/claim period; audit assignment, cutoff, submit, recount, approve and finalize |
+| 8. stock_count_items (M06) | parent count, product/variant, batch, expected quantity, observed quantity, UOM, count status (including explicitly counted zero), counter, recount sequence, variance and note (D2), evidence reference (D2/D3) | Assigned counter and Inventory reviewer. SERVICE_DELIVERY, COMPLIANCE_AUDIT | Assigned counter records; recount creates retained revision/sequence, not destructive overwrite; M06 owns final reconciliation | Retain all count/recount history with parent; audit record, correction, recount and approval |
+| 9. stock_transfers (M07) | transfer identity, Business, source/destination warehouse/location, status, requested/approved/dispatch/receipt/close times, initiator, approver, source/destination custodians, reason, reconciliation and loss disposition references (D2) | Warehouse at source/destination; Inventory read for ledger; Manager/Approver for assigned approval. SERVICE_DELIVERY, COMPLIANCE_AUDIT | M07 owns request, approval, dispatch, custody and close lifecycle; close blocked until all shipment quantities/dispositions reconcile | Retain through custody/claim/audit period; audit every state transition, handoff, discrepancy and closure |
+| 10. stock_transfer_items (M07) | parent transfer, product/variant, requested/approved/allocated quantity, UOM, batch/allocation reference, shipped/received/returned/lost quantity references, line status (D2) | Assigned Warehouse; Inventory read for movement reconciliation. SERVICE_DELIVERY | Warehouse allocates only within approved transfer; M07 controls line state; M06 records resulting inventory movements | Retain with transfer and movement lineage; audit allocation, split, receipt, discrepancy and disposition |
+| 11. inventory_cost_exceptions (M06) | exception identity, source movement/layer reference, product/location, unresolved cost state, exception type/reason, evidence reference, review/resolution status, resolver and timestamps, approved correction reference (D2; evidence may be D3) | Inventory costing; Finance review subset; Compliance reviewer when assigned. FINANCIAL_PROCESSING, COMPLIANCE_AUDIT | Inventory submits evidence; independent reviewer resolves according to costing policy; unknown cost remains NULL until valid resolution; no rewriting posted movement | Retain with affected cost/financial period and audit obligation; audit creation, review, resolution and downstream correction |
+| 12. inventory_reservations (M06) | reservation identity, originating demand domain/object, Business, location, status, expiry, priority/source reason, reserved quantity summary, fulfillment/release reference, idempotency reference (D2) | Inventory; originating demand domain read/status subset; Warehouse for assigned pick. SERVICE_DELIVERY, BOOKING_FULFILLMENT | M06 owns stock reservation commitment; originating M03/M05 owns demand lifecycle; release/expire/fulfill are explicit transitions | Retain through fulfillment/cancellation and reconciliation period; audit reserve, allocate, release, expire, fulfill and replay |
+| 13. inventory_reservation_items (M06) | parent reservation, product/variant, requested/reserved quantity, batch allocation, location, fulfilled/released quantity, UOM, allocation sequence and source reference (D2) | Inventory; assigned Warehouse for custody. SERVICE_DELIVERY | M06 allocates/fulfills inventory commitment; M07 records physical pick/custody; idempotent transitions prevent duplicate consumption | Retain with reservation and movement lineage; audit allocation, reallocation, fulfillment, release and compensation |
+| 14. inventory_cost_layers (M06) | cost-layer identity, product/variant, inventory location, source receipt/movement, costing method (MWA default or approved FIFO alternative), original/remaining quantity, unit/extended cost (D2), currency, effective time, source lineage (D2) | Inventory costing process; Finance read/review subset. FINANCIAL_PROCESSING, COMPLIANCE_AUDIT | Controlled M06 costing process creates/consumes layers; MWA pool identity is Business + Product/Variant + Inventory Location; no arbitrary rewrite | Retain with financial valuation and audit period; audit layer creation, consumption, correction and method decision |
+| 15. inventory_cost_layer_consumptions (M06) | consumption identity, cost-layer reference, source movement/reference, consumed quantity, unit/extended cost (D2), costing sequence, compensation reference, actor/service and timestamp (D1/D2) | Inventory costing process; Finance read subset. FINANCIAL_PROCESSING | Controlled M06 process records immutable FIFO consumption lineage; compensation is capped to eligible original quantity and linked to source | Retain with originating movement and financial period; audit consumption, compensation and reconciliation |
+| 16. stock_transfer_shipments (M07) | shipment identity, parent transfer, carrier/route reference (D2), dispatch/expected/actual receipt times, custody handoff actors, shipment status, proof reference, exception/loss/return disposition (D2; personal proof may be D3) | Assigned Warehouse; Delivery / Fulfillment Operator for assigned route; Manager/Approver for exception. SERVICE_DELIVERY, COMPLIANCE_AUDIT | M07 owns internal custody and shipment state; M19 may own separate external route/proof record; no duplicate authoritative shipment fact | Retain through delivery/claim/audit period; audit dispatch, handoff, receipt, proof, loss, return and close |
+| 17. stock_transfer_shipment_items (M07) | parent shipment, transfer item, product/batch, dispatched quantity, received/returned/damaged/lost quantities, UOM, receipt condition, discrepancy reason and reconciliation reference (D2) | Assigned Warehouse/Delivery Operator; Inventory read for ledger reconciliation. SERVICE_DELIVERY, COMPLIANCE_AUDIT | Assigned receiver records actual receipt; reconciliation is explicit; M06 posts inventory effects; duplicate receipt prevented | Retain with shipment/transfer/movement lineage; audit partial receipt, discrepancy, recount, loss and reconciliation |
+
+### 29.3 Attribute-level access and protection rules
+
+1. The table above is a conceptual attribute inventory, not permission to read every listed attribute. Each attribute inherits the narrowest audience and purpose in its row; D2 financial/cost attributes are not exposed to operational users merely because they can read quantities.
+2. Person-linked actor identifiers are D2 at minimum; when linked to an investigation, safeguarding or regulated incident, the evidence and relationship may be D3. Actor identity in audit is retained but should not expose unnecessary profile data.
+3. Supplier-lot, cost, valuation, variance, loss and adjustment reasons are D2. Attachments or evidence that contain personal or incident information are separately D3 and require restricted reference access.
+4. D4 credentials are not attributes of these 17 entities. If a future integration or carrier credential is needed, DOC-21/M21 stores only an opaque secret reference and rotation metadata; the secret value remains in a protected secret facility.
+5. Export is denied by default for D2/D3 attributes unless an exact export key, purpose, field allowlist, scope and any required independent approval are present. A report or projection does not weaken source-field restrictions.
+6. Deletion is not an ordinary CRUD action for immutable movement, count, transfer, shipment or cost lineage. Correction uses a compensating/reversal record; legal hold blocks disposal.
+7. All child attributes inherit the parent's immutable Business context. Site, warehouse, location, assignment and batch references must resolve within the same Business. A derived Business association must be stable and validated across the full parent chain.
+
+### 29.4 Retention and physical-mapping status
+
+- Retention triggers are defined conceptually above; exact durations, statutory basis, limitation periods, archival tiers and disposal approvals remain OPEN. No universal duration is invented.
+- Attribute labels are semantic. Physical column names, types, nullability, PK/FK/composite-FK, constraints, indexes, encryption-at-rest details, RLS policies and server/API enforcement are not specified or verified by this section.
+- A later physical mapping must record for every proposed attribute: mapped physical field or explicit “not represented”; source evidence; physical type/nullability; owner; tenant path; D0–D4; purpose; audience/key; write authority; masking/export; retention/hold; audit; verification status.
+- The 17/17 conceptual entity attribute proposals are now enumerated for design review. This does not promote physical Data Dictionary acceptance, close A12/GAP/ERD-OPEN findings, or imply that any field exists in the database.
+
+**Disposition:** conceptual attribute inventory drafted for 17/17 entities; field-level policy proposals are now available for cross-document review. Physical mapping/verification remains OPEN; no database or implementation work is authorized. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 30. Append-only reconciliation — logical attribute proposals, classification and purpose vocabulary (19 November 2026)
+
+This section reconciles §§28.2 and 29 without changing the physical-schema acceptance boundary.
+
+### 30.1 Attribute inventory status
+
+- DOC-04 §28.2's **0/17 field-level classification complete** means no verified field-by-field classification had been accepted at that checkpoint; the 17 conceptual entity names did not themselves supply an accepted field list.
+- DOC-04 §29 subsequently enumerates proposed conceptual attributes for **17/17 entities**. This is a completed proposal inventory for design review, not an accepted field dictionary and not proof that any physical column exists.
+- Therefore the counts describe different acceptance layers and are not contradictory: **17/17 conceptual attribute proposals enumerated; 0/17 physical field mappings verified/accepted**. Field-specific D0–D4, purpose, audience and retention decisions remain proposed until reviewed and mapped. Physical mapping remains OPEN.
+- D0–D4 classification is inherited from DOC-06 §21.8. For completeness: **D0 Public**; D1 Internal; D2 Confidential; D3 Restricted; D4 Critical Secret. D0 does not make tenant-owned records universally accessible; tenant, purpose and resource authorization still apply.
+
+### 30.2 Canonical purpose vocabulary for this design set
+
+The project purpose vocabulary used across DOC-05 §§24–25, DOC-06 §21.9 and DOC-04 §29 is:
+
+- SERVICE_DELIVERY
+- BOOKING_FULFILLMENT
+- EDUCATION_ADMIN
+- FINANCIAL_PROCESSING
+- CUSTOMER_SUPPORT
+- SAFETY_RESPONSE
+- COMPLIANCE_AUDIT
+- INTEGRATION_SYNC
+- LEGAL_RETENTION
+
+A given action/attribute must use only the purpose(s) applicable to its documented context. This list is a controlled design vocabulary, not a universal allowlist; it does not replace legal-basis, jurisdiction or field-level review. Earlier §29.1's shorter list is incomplete and is clarified by this addendum.
+
+### 30.3 Boundary
+
+The conceptual proposal inventory does not close GAP-04/A38/ERD-OPEN physical dependencies, approve physical columns/types/constraints, establish database classification controls, or prove RLS/server enforcement. Retention durations remain OPEN; legal hold suspends disposal. No SQL/DDL/DML, migration or database change is authorized.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 31. Append-only precision note — meaning of the 0/17 field-classification status (19 November 2026)
+
+This note sharpens the denominator and status wording used in §§28–30.
+
+- The 17 in “0/17 field-level classification complete” is the count of the 17 conceptual entities, not a count of physical fields.
+- The status means **zero of the 17 entities had a complete, accepted field-level classification inventory at the §28.2 checkpoint**. It does not mean that the project had counted exactly zero physical columns.
+- DOC-04 §29 subsequently enumerates proposed conceptual attribute sets for 17/17 entities. That advances design coverage but does not convert the proposals into accepted field dictionaries or verified physical columns.
+- Therefore the precise current design status is: **17/17 entity-level conceptual attribute proposals enumerated; 0/17 entities with a fully accepted field-level classification; physical field-to-column mapping remains OPEN and has no verified completion count in this document.**
+- D0–D4, purpose, audience, write authority, masking/export, retention and audit requirements still require field-by-field review. Do not treat the proposed labels in §29 as accepted classification evidence.
+
+This wording clarification does not close any physical dictionary, RLS, schema or implementation dependency. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.

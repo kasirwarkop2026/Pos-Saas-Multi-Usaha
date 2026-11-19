@@ -399,3 +399,269 @@ Use the following cycle for each bounded work item:
 - This section is proposed until its dedicated PR is reviewed, explicitly approved for merge, merged and read back from `main`.
 - It does not close CW-07 or CW-08, change any DOC acceptance status, or create a permission/technical decision.
 - Future sessions must resume from the latest verified `main` worklist and source-native document states, not from superseded chat summaries or the retired Master Checklist v2.0.
+
+
+## 15. Package B — CW-09 DOC-06 row-level traceability repair checkpoint (19 November 2026)
+
+**Status: PARTIAL — SUBSTANTIVE DOCUMENTATION REPAIR RECORDED; FULL END-TO-END ACCEPTANCE NOT MET.**
+
+### 15.1 Scope and changed paths
+
+- Owning work item: CW-09 — DOC-06 end-to-end traceability.
+- Changed paths in the proposed repair PR:
+  - `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` — append-only §19.
+  - `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` — this append-only checkpoint.
+- DOC-06 §19 indexes 30 existing Education/Hotel workflow rows (EDU-WF-01–14 and HTL-WF-01–16) using the archived REC-06 working matrix and records exact review/approval source locators.
+- No existing document content, historical checkpoint, FIX decision, or source-native OPEN register entry is deleted or rewritten.
+
+### 15.2 Repair result
+
+- Added stable workflow ID/title, source-described resource/object anchors and candidate action-family anchors for 30 Education/Hotel workflows.
+- Distinguished category/workflow conceptual FIX from candidate module alignment, action vocabulary, role-function eligibility, permission grants, scope, data/purpose, SoD/approval, negative tests and execution evidence.
+- Recorded exact source sections/pages for RMD-66/RMD-68 category review and approval addenda.
+- Explicitly retained M01–M21 workflow mapping as NOT MAPPED / OPEN; permission keys and grants OPEN / NOT APPROVED; runtime test evidence NOT EVIDENCED.
+- Preserved E-04/H-04 and all detailed OPEN items.
+- Dependencies newly closed: 0. FIX decisions changed: 0. No approval, permission key, grant, implementation, test execution or PASS created.
+
+### 15.3 Acceptance and routing
+
+CW-09 is **PARTIAL**, not CLOSED. The repair improves row-level workflow/object/action traceability for the available Education/Hotel source set but does not satisfy the full acceptance criteria across all categories or close REC-06. Primary deep-audit brief claim locators, G02/G04, per-action scope/data/SoD, negative-test IDs and retained execution evidence remain OPEN/PARTIAL.
+
+Next action: continue CW-09 only where additional primary source evidence is available; otherwise proceed to the next independently actionable CW item only after recording the remaining dependency and confirming worklist §6 sequencing. Do not mark CW-09 closed merely because this append-only index was added.
+
+Controls remain: `DB_PUSH_BLOCKED: ACTIVE`; READ-ONLY / APPEND-ONLY; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
+
+
+### 15.4 Substantive repair continuation — category crosswalk, decomposition and negative-test specifications
+
+The CW-09 repair was continued on the existing PR #87 branch (no second PR opened). DOC-06 append-only §20 adds the source-supported work that could be completed from the inspected REC-06 artifacts:
+
+- Transcribed the 21 proposed Shared Core M01–M21 domain labels from Category → Workflow → Module Crosswalk v1.3 §2.
+- Reconciled CAT-10 Education and CAT-11 Hotel CORE/CONDITIONAL/extension candidate lists against REC-06 Permission Catalogue Overlay §§3.3/4.3 and Crosswalk v1.3 §3. All M-IDs remain CANDIDATE; no workflow-level M-ID assignment or entitlement was approved.
+- Decomposed all 30 Education/Hotel workflows into source-described submodule/resource/action clusters and handoff/control boundaries, while preserving G04 as OPEN because approved submodule ownership and inter-module contracts are not established.
+- Added source-backed function-label/role guardrails and proposed expected-deny scenario specifications. These are DESIGN SPECIFICATIONS only, not stable approved test IDs, executable tests, executed runs, PASS or retained evidence.
+
+**Status remains PARTIAL — not CLOSED.** The remaining closure blockers are specifically: (1) G02 explicit approval/canonicalization and source-to-M-ID trace; (2) G04 approved workflow-to-submodule/object/action ownership and handoff map; (3) primary RMD-66/RMD-68 Deep Audit Brief claim-level source recovery; and (4) final permission keys/grants, per-action scope/data-purpose/SoD/approver rules, plus actual test implementation/execution/evidence. The three inspected REC-06 working artifacts do not authorize these promotions. No dependency is closed and no FIX decision is changed by this continuation.
+
+Acceptance remains honest: DOC-06 §20 closes the available category-level candidate transcription and working decomposition tasks, but CW-09, REC-06, Stage 4.7.8 and Stage 4.9 remain PARTIAL/OPEN where their source-native acceptance criteria are unmet. Next action is to resolve the G02 policy decision and recover/approve G04 source material before claiming complete workflow-level module traceability; do not force CLOSED.
+
+
+### 15.5 Project-authored design decisions — G02/G04 and authorization baseline
+
+Per the agreed operating direction, missing design detail is no longer treated as a blocker merely because a legacy/supporting source file is unavailable. The project authors its own normative design, reconciles it with existing FIX decisions, and records it in the owning master document. External/archived sources remain useful for provenance but are not prerequisites for defining product-owned architecture.
+
+DOC-06 append-only §21 now establishes:
+- Canonical logical domain taxonomy M01–M21, stable IDs and single-owner domain boundaries.
+- Education (CAT-10) and Hotel (CAT-11) CORE/CONDITIONAL domain profiles and extension gates.
+- Primary and supporting domain ownership for every EDU-WF-01–14 and HTL-WF-01–16 workflow.
+- Cross-domain single-writer, command/event, idempotency, consistency, read-model, tenant-isolation and audit contracts.
+- Permission-key grammar and explicit separation of principal, tenant, module, resource, action, scope, conditions, data class, purpose and SoD/approval.
+- Standard S0–S5 scope hierarchy; D0–D4 data classification and purpose codes; risk-family SoD baseline; deny-by-default authorization sequence.
+
+**Disposition:** G02 canonical domain taxonomy/category baseline and G04 logical workflow ownership are RESOLVED AS PROJECT DESIGN DECISIONS in DOC-06 §21. They are not left waiting for missing external/legacy files. Their downstream acceptance is now a cross-document consistency task: DOC-01/02/03/04/05/07 must be reconciled to this baseline, object-level ownership and sensitive-field inventory must be enumerated, and the detailed action/role/scope/SoD matrix must be completed.
+
+CW-09 itself remains PARTIAL until that cross-document reconciliation, the full permission-action matrix, field-level mapping and documentation-level negative-test coverage meet acceptance. Proposed negative scenarios in §20.5 remain test specifications, not executed tests. No implementation, database change, RLS/API/backend change or test execution is authorized by this design decision.
+
+Next work: use DOC-06 §21 as the controlling design baseline and repair the dependent master documents in dependency order. Do not reopen G02/G04 as missing-source blockers; reopen only if a concrete internal contradiction or explicit user-approved design change is identified.
+
+Governance: READ-ONLY / APPEND-ONLY; DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED; no Supabase Preview/Staging or Production changes.
+
+## 15.6 Package B continuation — project-authored cross-document design reconciliation (19 November 2026)
+
+**Status: SUBSTANTIVE APPEND-ONLY REPAIR RECORDED; FINAL ACCEPTANCE STILL OPEN.** The prior path lookup used incorrect guessed filenames. Repository tree inspection identified the actual master paths; absence at a guessed path is not treated as absence of the document and is not a reason to stop product-authored design work.
+
+### 15.6.1 Correct master paths updated on the existing PR #87 branch
+
+- DOC-01: `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md` — §14 aligns product/tenant/category boundaries to DOC-06 §21.
+- DOC-02: `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` — §14 records CAT-10/CAT-11 CORE/CONDITIONAL domain profiles, ownership and activation gates.
+- DOC-03: `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md` — §18 records canonical logical domains, single-owner boundaries, command/event, idempotency, tenant and projection contracts.
+- DOC-04: `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` — §27 records logical entity ownership, business_id isolation invariants, D0–D4 field inventory requirements and projection/lifecycle rules. Physical schema evidence remains separate and OPEN.
+- DOC-05: `docs/05-authorization/AUTHORIZATION_MASTER.md` — §22 records authorization tuple/sequence, principal namespace separation, role-function boundaries, permission catalogue format, scope, SoD and negative acceptance design.
+- DOC-07: `docs/06-security-evidence/SECURITY_EVIDENCE.md` — §29 records security invariants, threat/abuse cases, negative-test evidence format, audit evidence contract and cross-document closure gate.
+
+### 15.6.2 Design reconciliation result
+
+The six master documents now contain explicit append-only alignment sections against DOC-06 §21. The project is authoring its own normative design; missing legacy/source files are not prerequisites. No historical sections were deleted or silently rewritten. The additions distinguish logical design from physical schema, implementation, executed tests and production evidence.
+
+### 15.6.3 Remaining acceptance before CW-09 closure
+
+CW-09 remains PARTIAL until a row-level reconciliation confirms: (1) every DOC-02 workflow maps to the correct DOC-06 workflow/domain; (2) each DOC-04 entity has one owner and field-level classification/purpose/retention entry or an explicit OPEN item; (3) DOC-05 action-by-action permission matrix covers eligible function, scope, conditions, data, purpose, SoD and approver; (4) DOC-07 stable threat/test IDs cross-link to workflows, permissions and expected audit evidence; (5) internal contradictions and duplicate ownership are resolved; and (6) documentation CI and review acceptance pass. Proposed tests remain unexecuted until actual test evidence exists.
+
+No dependencies are marked CLOSED by this checkpoint. No approval grant, physical schema, RLS policy, API contract, implementation, test PASS or release readiness is asserted. PR #87 remains the only active PR; no second PR is opened. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+## 15.7 Package B continuation — entity ownership, permission catalogue and stable security test register (19 November 2026)
+
+**Status: DESIGN TRACEABILITY EXPANDED; CW-09 REMAINS PARTIAL.**
+
+### 15.7.1 DOC-04 — entity-level logical owner map
+
+DOC-04 §28 maps all 17 historical conceptual Inventory & Costing entities to one primary logical domain and identifies supporting domains without transferring write ownership. M06 owns inventory ledger, balances, reservations and cost-layer lineage; M07 owns warehouse custody, transfer and shipment lifecycle; M19 is supporting only for actual delivery/route/proof; M16 retains financial posting/settlement authority. The candidate `inventory_cost_layer_movements` remains unapproved and is not an 18th entity.
+
+Field-level classification is deliberately **0/17 complete** because the conceptual entity inventory contains no authoritative field list. DOC-04 §28.2 defines the required field inventory and keeps classification OPEN rather than inventing columns or applying a blanket class. Physical field/key/schema evidence and A38-G01–G04 / GAP-04 / ERD-OPEN statuses are unchanged.
+
+### 15.7.2 DOC-05 — role namespace and action catalogue
+
+DOC-05 §23 preserves all 12 standard Business roles in §4.2 and separate SUPER_ADMIN / PLATFORM_ADMIN platform roles. Mitra/Pekerja, Mitra Fisik and Pelanggan are treated as principal/relationship classifications, not silently added standard Business roles. The section records action-family and function-eligibility mapping for all 30 Education/Hotel workflows and candidate M06/M07 permission keys for the 17 inventory entities. These are catalogue design entries, not grants. Exact key-by-key role/scope/condition/data/purpose/SoD/approver rows remain an acceptance task.
+
+### 15.7.3 DOC-07 — stable threat and negative-test IDs
+
+DOC-07 §30 defines CW09-SEC-01 through CW09-SEC-24, linked to Education/Hotel workflow IDs, inventory/warehouse flows, tenant/scope, privilege, data classification, purpose, membership, entitlement and event/idempotency abuse cases. Each ID has an expected decision and evidence contract. All remain DESIGN / NOT EXECUTED; no PASS or security gate is claimed.
+
+### 15.7.4 Remaining bounded acceptance
+
+1. Complete field-by-field classification/purpose/retention and read/write audience mapping for actual documented entities; keep unknown fields OPEN.
+2. Expand each candidate permission key into a complete exact actor/function × Business/site/location/assignment scope × state/condition × data/purpose × SoD/approver × audit row; reconcile against all existing DOC-05 FIX decisions and category addenda.
+3. Verify DOC-02 workflow IDs and object/action anchors row-by-row against DOC-06; resolve any omissions or duplicate ownership.
+4. Cross-link every CW09-SEC test ID to exact permission key(s), expected audit event and applicable security gate; test execution remains separately unauthorized.
+5. Resolve editorial contradictions and stale navigation statements in append-only correction sections; preserve historical snapshots.
+6. Re-run documentation CI on the final PR head, review all changed paths and check Supabase/Vercel integration safety before any merge decision.
+
+Dependencies newly closed: 0. Physical schema gaps closed: 0. Executed tests: 0. Permissions granted: 0. CW-09 remains PARTIAL until all documentation acceptance criteria are met. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+### 15.8 Package B continuation — exact security-test key and audit-event cross-reference (19 November 2026)
+
+DOC-07 §31 was appended to the existing PR #87 branch. It cross-references all 24 stable CW09-SEC-01–24 test IDs to candidate exact-action permission keys and expected audit-event evidence families, using DOC-05 §§22–23 and DOC-06 §21 as the design baseline.
+
+- Coverage: 24/24 test IDs now have candidate permission-key references and expected audit-event families.
+- Key status: CANDIDATE DESIGN VOCABULARY ONLY. This does not create role grants, approved allowlists, platform permission keys or implementation.
+- Platform S0 case: exact platform resource/action key remains OPEN; the DOC-07 entry is explicitly a namespace marker, not a final key.
+- Event names: semantic evidence labels only; physical event schemas/names and retention remain future design work.
+- Tests: all remain DESIGN / NOT EXECUTED. No test code, runtime, RLS, API or Production execution was performed.
+- Exact policy tuple still OPEN for each key: actor/function, membership, module entitlement, scope, resource state, data class/purpose, SoD/approver, execution owner and audit contract.
+- Dependencies newly closed: 0. CW-09 remains PARTIAL.
+
+Next bounded work: expand the DOC-05 candidate key catalogue into per-key policy tuples, prioritizing high-risk actions (refund/write-off/settlement, safeguarding/export, safety-hold release, inventory adjustment/transfer closure, D4 secret access and platform administration). In parallel, DOC-04 field-level classification remains OPEN until a logical attribute inventory is authored and reconciled per entity; no physical columns are inferred.
+
+This update is append-only and is committed to the existing PR #87 branch; no second PR was opened. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+### 15.9 Package B continuation — high-risk authorization policy tuple design (19 November 2026)
+
+DOC-05 §24 was appended to the existing PR #87 branch. It expands 14 high-risk action policies into explicit candidate tuples: actor/prepare function, exact permission key, scope, resource preconditions, data class/purpose, SoD, independent approver, execution owner and required audit evidence.
+
+Coverage includes:
+- Refund, write-off and settlement close (M16).
+- Safeguarding case read and restricted export (M18).
+- Safety-hold release (M20).
+- Exceptional rate override (M02).
+- Inventory adjustment approval/posting (M06).
+- Stock-transfer closure (M07).
+- Integration secret-reference rotation (M21; secret value never exposed).
+- Platform access-grant approval/application (separate S0 namespace).
+
+Design clarifications:
+- `PLATFORM.access_grant.approve` and `PLATFORM.access_grant.apply` are project-authored exact keys for platform privilege administration; they do not grant Business data access and do not create a wildcard.
+- No numeric financial/quantity threshold or retention duration is invented.
+- Dual control applies to all listed high-risk operations unless a future explicit, approved policy defines a narrower exception.
+- Listed actor functions are eligibility candidates, not grants; each still requires explicit membership, capability, module entitlement, scope and conditions.
+- Audit event names remain semantic evidence families, not physical schema or runtime evidence.
+
+**Result:** 14 high-risk policy tuples specified. Remaining catalogue keys and per-field DOC-04 classification remain OPEN. No permissions granted, dependencies closed, tests executed or technical changes authorized. CW-09 remains PARTIAL.
+
+Next: continue DOC-05 tuple expansion across remaining Education/Hotel and inventory actions; then author the logical attribute/data-class/purpose/read-write/retention inventory for the 17 DOC-04 entities. Keep this work on PR #87; do not open another PR. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+### 15.10 Package B continuation — remaining workflow/inventory policy tuples and logical attribute inventory (19 November 2026)
+
+DOC-05 §25 and DOC-04 §29 were appended to the existing PR #87 branch.
+
+#### DOC-05 §25 — authorization tuple expansion
+- Adds common deny-by-default tuple conditions for active identity/membership, module entitlement, exact action, scope, lifecycle, data/purpose, SoD and owning-domain execution.
+- Adds actor/function, scope, precondition, data/purpose and SoD/execution baselines for all 30 Education/Hotel workflows (EDU-WF-01–14; HTL-WF-01–16).
+- Expands all 17 inventory/warehouse resource families from DOC-05 §23.4 with resource-specific actor, scope, state/data/purpose, SoD and owner-execution rules.
+- Keeps action keys distinct; no CRUD bundle, wildcard, implied grant, numeric threshold or retention duration is introduced.
+- High-risk controls in §24 take precedence; all candidate actors remain eligibility only.
+
+#### DOC-04 §29 — logical attribute inventory
+- Enumerates proposed conceptual attributes for all 17 historical Inventory & Costing entities.
+- Adds D1–D4 classification guidance, read-audience and purpose constraints, write authority/lifecycle, retention triggers and audit requirements.
+- Distinguishes conceptual attribute labels from physical SQL columns/types/constraints. Physical mapping, evidence and verification remain OPEN.
+- D4 secret values are excluded from ordinary entity attributes; only protected opaque references/rotation metadata may be recorded where applicable.
+- Exact retention durations remain OPEN; legal hold blocks disposal; immutable ledger/custody history uses compensating records rather than destructive edits.
+
+#### DOC-07 §32 — policy-tuple reconciliation index
+- Cross-links all 24 CW09-SEC test IDs to DOC-05 §§24–25 and DOC-04 §29 policy anchors and expected audit evidence families.
+- Coverage is documentation cross-reference only; all tests remain DESIGN / NOT EXECUTED.
+
+#### Acceptance disposition
+- Logical ownership: 17/17 entities already mapped in DOC-04 §28.
+- Logical attribute proposals: 17/17 entities enumerated in DOC-04 §29; physical-field mapping/verification remains OPEN.
+- Workflow and inventory policy tuple baselines: 30/30 Education/Hotel workflows and 17/17 inventory/warehouse resource families documented in DOC-05 §25; exact grants remain NOT APPROVED.
+- Security-test cross-reference: 24/24 IDs linked in DOC-07 §32; tests remain NOT EXECUTED.
+- Dependencies newly closed: 0. Permissions granted: 0. Physical schema gaps closed: 0. Test execution/PASS: 0.
+
+Next: conduct a contradiction/duplicate-owner audit across DOC-01/02/03/04/05/06/07, verify exact permission-key spelling against the DOC-07 register, and inspect PR #87 changed-file patches. Do not close CW-09 until review and all documentation acceptance criteria are met. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+### 15.11 Final contradiction-audit repair checkpoint — project-authored cross-document reconciliation (19 November 2026)
+
+**Status: TARGETED CONTRADICTIONS IDENTIFIED AND RECONCILIATION ADDENDA RECORDED ON THE EXISTING PR #87 BRANCH. CW-09 REMAINS PARTIAL PENDING FINAL FULL-DIFF REVIEW AND ACCEPTANCE.**
+
+#### 15.11.1 Findings and repair disposition
+
+| Finding | Documents / locations | Contradiction or ambiguity | Append-only disposition |
+|---|---|---|---|
+| CW09-FCA-01 — G02 stale status | DOC-01 §6; DOC-02 §8; DOC-05 §§8/16; DOC-06 §§19–21 | Earlier sections said G02 remained OPEN after the project-authored M01–M21 taxonomy decision. | DOC-01 §15, DOC-02 §15, DOC-05 §26 and DOC-06 §22 clarify G02 RESOLVED BY PROJECT DESIGN for canonical logical IDs and the stated CAT-10/CAT-11 profiles only. Full legacy/all-category entitlement mapping is not implied. |
+| CW09-FCA-02 — G04 stale status | DOC-02 §8; DOC-05 §§8/16; DOC-06 §§19–21 | Earlier sections said G04 remained OPEN after logical ownership was defined for 30 Education/Hotel workflows. | DOC-01 §15, DOC-02 §15, DOC-05 §26 and DOC-06 §22 clarify G04 RESOLVED AT LOGICAL WORKFLOW-OWNERSHIP LEVEL for EDU-WF-01–14 and HTL-WF-01–16. Lower-level exact action/actor authorization and implementation remain separate. |
+| CW09-FCA-03 — Attribute inventory status layers | DOC-04 §§28.2–29 | “0/17 field-level classification complete” could be misread as contradicting “17/17 conceptual attribute proposals enumerated.” | DOC-04 §30 distinguishes proposed conceptual attribute enumeration from accepted field-level/physical mapping: 17/17 proposals enumerated; 0/17 physical field mappings verified/accepted. |
+| CW09-FCA-04 — Classification and purpose vocabulary | DOC-04 §29.1; DOC-05 §25.1; DOC-06 §21.8–21.9 | DOC-04 omitted D0 and three purpose codes used by DOC-05/DOC-06. | DOC-04 §30 supplies D0 Public and the shared nine-code purpose vocabulary; field-specific purpose remains constrained by context. |
+| CW09-FCA-05 — Platform S0 key reference | DOC-05 §§24.2–24.3; DOC-07 §§31–32 | DOC-07 §31 still called S0.platform_admin a namespace marker while DOC-05 §24.3 had defined exact candidate platform access-grant keys. | DOC-05 §26 and DOC-07 §33 reconcile CW09-SEC-19 to PLATFORM.access_grant.approve and PLATFORM.access_grant.apply; S0 remains scope, not a permission key. |
+| CW09-FCA-06 — Illustrative M05 key | DOC-07 §31; DOC-05 §§23–25 | M05.reservation.read was presented as an example although no canonical M05 key is enumerated in the current catalogue. | DOC-07 §33 explicitly marks it illustrative only; M05 owner-domain key definition remains OPEN before executable use. |
+
+#### 15.11.2 Cross-document consistency checks retained
+
+- DOC-03 §18, DOC-01 §14, DOC-02 §14 and DOC-06 §21 use M01–M21 as the same canonical logical domain vocabulary.
+- DOC-04 §28 assigns exactly one primary owner to each of the 17 conceptual inventory/costing entities; supporting domains do not acquire write ownership.
+- DOC-05 §§23–25 and DOC-07 §§30–33 retain candidate-only keys/policies and design-only tests; no role grant, implementation, execution or PASS is claimed.
+- Scope S0 remains platform-only. Business operational scope S1–S4 and verified self/relationship scope S5 remain distinct and non-inheriting.
+- D0–D4 classifications, purpose constraints, SoD and approval are evaluated together; no classification or purpose label independently grants access.
+- Inventory ledger, projection, batch, cost-layer and transfer/shipment ownership/lifecycle remain consistent with DOC-03 §18 and DOC-04 §§27–30. inventory_cost_layer_movements remains an unapproved candidate, not an eighteenth entity.
+- No physical field, SQL identifier, constraint, retention duration, numeric threshold, grant, RLS/API behavior or runtime result is inferred by this audit.
+
+#### 15.11.3 Scope and remaining acceptance
+
+- Changed paths remain the same eight files in PR #87; this checkpoint adds no ninth file.
+- All corrections are append-only. No historical text or prior status snapshot was deleted.
+- Dependencies newly closed by this contradiction audit: **0**. G02/G04 dispositions above are project design decisions at their stated logical scope, not closures of unrelated source-native or technical dependencies.
+- Physical-field mapping: OPEN. Exact role grants: NOT APPROVED. Technical authorization implementation: NOT AUTHORIZED. Security tests: DESIGN / NOT EXECUTED.
+- Next: re-read all seven owner-document addenda and the full eight-file PR diff; verify key spelling, heading/lint integrity, current CI and current PR head/base before any merge decision.
+
+Controls: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+### 15.12 Additional contradiction-audit clarification — D4 secret read versus rotation (19 November 2026)
+
+| Finding | Documents / locations | Ambiguity | Append-only disposition |
+|---|---|---|---|
+| CW09-FCA-07 — Prohibited secret-read token | DOC-05 §24.2 AUTH-HR-11; DOC-07 §31 CW09-SEC-20 | DOC-07 listed M21.integration_secret.read as a candidate key although DOC-05 explicitly creates no secret read/display permission. | DOC-07 §34 classifies the token as a prohibited attempted-action label for a DENY scenario only. M21.integration_secret.rotate_secret_ref remains the separate candidate rotation action; secret values remain inaccessible. |
+
+This is a design-vocabulary clarification only. CW09-SEC-20 remains DESIGN / NOT EXECUTED; no secret permission, dependency closure, implementation or PASS is claimed. The changed-file count remains eight and all edits remain append-only.
+
+
+
+### 15.13 Candidate permission-key spelling and owner-catalogue reconciliation (19 November 2026)
+
+**Finding CW09-FCA-08 — DOC-07 candidate-key labels not all present in DOC-05 owner catalogue.**
+
+A set comparison of the permission-key labels in DOC-07 §31 against DOC-05 §§23–24 found candidate labels that were used in negative-test references but had not yet been enumerated in the owning authorization master.
+
+- DOC-05 §27 now records 23 additional candidate exact-action keys with their Education/Hotel or inventory/warehouse resource anchors.
+- Existing DOC-05 §§23.4 and 24.2 entries remain the source for inventory-family and high-risk keys.
+- S0.platform_admin is retained only as a scope/namespace marker, not a permission key.
+- M21.integration_secret.read is retained only as a prohibited attempted-action label for a DENY scenario, never as a candidate grant.
+- M05.reservation.read is now explicitly enumerated as a candidate key in DOC-05 §27; the earlier DOC-07 §33 “illustrative only” wording is superseded by DOC-07 §35.
+- The candidate-key register does not approve actor/function eligibility, grants, module entitlement, scope resolver or implementation. Each key still requires its complete policy tuple and review.
+
+**Disposition:** key-name ownership/reference gap reconciled at candidate-vocabulary level. CW09-SEC-01–24 remain DESIGN / NOT EXECUTED. No dependency is closed, no grant is approved, and no technical implementation is authorized.
+
+Next: rerun exact-token comparison between DOC-05 and DOC-07; inspect the final eight-file diff; verify Documentation CI and POS SaaS CI against the latest PR head. Keep PR #87 OPEN until all checks finish.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+### 15.14 Precision correction — 0/17 field-classification denominator (19 November 2026)
+
+The 0/17 status in DOC-04 §28.2 counts **entities with a complete accepted field-level classification inventory**, not physical fields/columns. DOC-04 §31 now clarifies that 17/17 proposed conceptual attribute sets are enumerated, 0/17 entities have a fully accepted field-level classification, and physical field-to-column mapping remains OPEN without a verified completion count. This supersedes the shorthand in §15.11.1 that described the 0/17 figure as a physical-field-mapping count.
+
+No physical dependency is closed. DOC-04 §29 remains a conceptual proposal, not an accepted physical dictionary. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.

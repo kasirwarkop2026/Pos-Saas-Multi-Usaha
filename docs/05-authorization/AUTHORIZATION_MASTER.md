@@ -505,3 +505,342 @@ Dependencies newly closed: **0**. FIX decisions changed: **0**. Authorization de
 - Next work package: continue the DOC-05–DOC-06 authorization/requirements audit sequence under Master Checklist v2.0 §34.4, with DOC-06 bounded audit and no repetition of completed REC-06 crosswalk work in DOC-05 §20.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket GitHub/archive migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this addendum.
+
+## 22. Append-only authorization decision and role-boundary baseline — 19 November 2026
+
+This section adopts DOC-06 §21.6–21.10 as the controlling logical authorization model. It defines policy structure; it does not approve concrete grants, role allowlists, technical enforcement or implementation.
+
+### 22.1 Authorization tuple and decision order
+
+Evaluate: Principal + Business + Module + Resource + Action + Scope + Conditions + Data class + Purpose + SoD/approval. A role name is not a permission. A category/module entitlement is not a permission. UI visibility is not enforcement. The exact permission key follows `<module_id>.<resource>.<action>`; actions are explicit and non-inheriting. No wildcard grant is permitted for sensitive domains or high-impact actions.
+
+Every request must fail closed unless all required checks pass: authenticated active principal; active membership and business context; category/module entitlement; exact permission key; target resource tenant match; scope S0–S5; resource lifecycle preconditions; field classification and purpose; contextual conditions; SoD/independent approval; and auditable execution by the owning domain. Indeterminate context is DENY.
+
+### 22.2 Principal and role namespaces
+
+Keep Platform Super Admin separate from Business roles. Business roles/functions currently named in project governance (Manager, Mitra/Pekerja, Mitra Fisik, Pelanggan) are role/function families, not universal grants. Their eligibility and operational duties must be mapped per category, module, resource, action and scope. A Manager has no implied cross-business, platform, finance, safeguarding, credential, approval or override authority. Mitra/Pekerja and Mitra Fisik require explicit assignment and task/resource scope. Pelanggan access is limited to own verified identity and explicit booking/order/payment or relationship resources. Platform Super Admin access is restricted to platform administration and does not imply routine tenant business-data access.
+
+### 22.3 Permission catalogue expansion format
+
+For every workflow action, the catalogue must specify: workflow ID; module/domain ID; resource; exact action key; eligible principal/role function; business membership requirement; scope S0–S5; resource-state conditions; data class and purpose; SoD conflict; independent approver; execution authority; denial reason; audit event. Distinguish request/submit, review, approve/reject, execute/post, cancel/reverse/refund, publish and export. Absence of an explicit row means DENY.
+
+### 22.4 Scope and relationship rules
+
+S0 Platform; S1 Business; S2 Site; S3 Location; S4 Assignment; S5 Self/relationship. Scope is conjunctive with the permission key and data policy. S5 requires a verified relationship, not a user-supplied identifier alone. S4 requires a current assignment. A broader role or scope cannot bypass field classification, purpose or SoD. Cross-tenant access is denied by default.
+
+### 22.5 SoD and approval paths
+
+Apply DOC-06 §21.9 risk families. Separate initiator, reviewer/approver and executor for sensitive finance, procurement, inventory, education outcome/certificate, hotel safety/rate override and privileged-access changes. No numeric thresholds are inferred. Until a threshold is explicitly defined and approved, sensitive financial and safety exceptions require dual control. The requester cannot approve their own privileged access. Emergency access is time-bound, reason-coded, least-privilege and independently reviewed; it cannot suppress audit evidence.
+
+### 22.6 Negative acceptance design
+
+At minimum, documentation acceptance must cover: cross-business resource ID substitution; wrong site/property; unassigned worker task; unverified guardian/student relationship; customer accessing another customer's booking; Manager attempting platform action; Mitra attempting approval; self-approval of refund/discount; grade author self-finalizing; maintenance self-releasing safety hold; unauthorized export of D3 data; D4 secret retrieval; purpose mismatch; expired membership/session; disabled module; and replayed idempotent command. Each scenario records actor, business, role/function, target, attempted key, scope, expected DENY, reason and required audit evidence. These are specifications, not executed tests.
+
+### 22.7 Status and implementation boundary
+
+DOC-05 remains a design/working master until the full action-by-action catalogue is populated and cross-checked against DOC-02 workflow IDs, DOC-04 object ownership/field classifications, DOC-06 traceability and DOC-07 security evidence. Existing approval statuses and OPEN dependencies are not silently promoted by this baseline. No RLS/Auth, API/backend, database, application, CI or deployment changes are authorized. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+## 23. Append-only role namespace correction and workflow permission catalogue baseline — 19 November 2026
+
+**Purpose:** resolve the role vocabulary boundary and convert the DOC-06 workflow baseline into a structured permission-catalogue work product. This section supplements, and does not override, the existing FIX decisions O-01–O-12, CR-01–CR-10, Q-01–Q-06 or the 12-role Business baseline.
+
+### 23.1 Role namespace and precedence
+
+DOC-05 §4.2 remains authoritative for the 12 standard Business roles: Manager; Supervisor / Shift Lead; Cashier; Inventory Operator; Production / Service Operator; Receptionist / Front Desk; Finance / Accounting; Employee / HR Operator; Procurement Operator; Warehouse Operator; Delivery / Fulfillment Operator; Maintenance Operator. Owner remains outside the 12-role list. SUPER_ADMIN and PLATFORM_ADMIN remain platform roles, never Business roles.
+
+Project governance also uses the operational labels Mitra/Pekerja, Mitra Fisik and Pelanggan. These labels are not silently added as three new standard Business roles and do not replace the 12-role baseline. For authorization evaluation, they are actor/principal or relationship classifications that must resolve to an authenticated principal plus explicit Business membership, one of the approved Business-role/capability assignments where applicable, and a valid assignment or relationship:
+- Mitra/Pekerja: worker/partner principal; operational actions require explicit active work assignment, mapped capability and site/location/task scope.
+- Mitra Fisik: physical-service partner principal; operational actions require explicit contract/work assignment, verified task and location scope; no approval, finance or tenant-administration authority is implied.
+- Pelanggan: customer principal; access is limited to own verified profile and explicitly linked order/booking/payment/relationship objects under S5; no internal Business operational role is implied.
+- Platform Super Admin: platform principal under S0; no routine Business data access is implied.
+
+Where a principal classification does not resolve to an explicit eligible role/function, permission key, scope and condition, the decision is DENY. Do not infer a new role, combine role namespaces or weaken existing role FIX decisions.
+
+### 23.2 Permission catalogue record format
+
+Every action row must contain: workflow ID; primary owner domain; resource; canonical key; action verb; principal/role/function; membership/relationship; module eligibility; scope; resource-state conditions; data class and purpose; SoD conflict; independent approver; execution owner; expected audit evidence; negative test ID; status. No wildcard or implied action. A missing row is DENY.
+
+### 23.3 Education and Hotel workflow permission catalogue — action families
+
+The following rows define the required distinct action families and candidate permission-key patterns. They are DESIGN CATALOGUE entries, not user/role grants. Exact field-level rules and per-actor approvals remain to be completed against the resource inventory.
+
+| Workflow | Owner | Resource/action families to enumerate as separate keys | Primary function mapping (eligibility only; not grant) | Scope baseline | SoD / deny control |
+|---|---|---|---|---|---|
+| EDU-WF-01 Program & Course Catalog | M13 | program/course/curriculum: list, read, create, update, submit, approve, publish, hold, release | Manager; Production / Service Operator (assigned education work); Supervisor / Shift Lead (assigned oversight) | S1–S4 | Author ≠ approver for publication where configured; no publish by read-only access |
+| EDU-WF-02 Intake & Admission | M13 | inquiry/application: read, create, update, submit, review, approve, reject, confirm | Manager; Receptionist / Front Desk; Production / Service Operator (assigned admissions task) | S1–S4; applicant self-service S5 | Applicant relationship cannot expose unrelated student records; submit ≠ approve |
+| EDU-WF-03 Student / Participant Record | M04 | party/student relationship: read, create, update, link, unlink, export (separate restricted key) | Manager; Receptionist / Front Desk; Employee / HR Operator only where applicable; Pelanggan/guardian only verified S5 relationship | S1–S5 | D3 fields separately gated; payer/guardian relation ≠ unrestricted record access |
+| EDU-WF-04 Enrollment & Class Allocation | M13 | enrollment/class allocation: read, create, update, assign, submit, review, approve, confirm, cancel | Manager; Receptionist / Front Desk; Production / Service Operator (assigned class) | S1–S4; student self-service S5 subset | Capacity and eligibility checks; no self-approval of exceptional allocation |
+| EDU-WF-05 Schedule & Resource Planning | M13 | session/schedule: read, create, update, assign, publish, hold, release | Manager; Supervisor / Shift Lead; Production / Service Operator (assigned class); Warehouse Operator only for assigned resource custody | S1–S4 | Resource conflicts and assignment state; release is distinct from edit |
+| EDU-WF-06 Instructor / Trainer Management | M17 | worker/credential reference/assignment: read, create, update, assign, verify, suspend | Manager; Employee / HR Operator; Production / Service Operator (own profile/assigned teaching) | S1–S4; own profile S5 | Credential verification is separate from profile editing; D3/D4 evidence restricted |
+| EDU-WF-07 Class Delivery & Attendance | M13 | class/session/attendance: read, record, submit correction, review, approve correction, finalize | Production / Service Operator (assigned class); Supervisor / Shift Lead; Manager | S2–S4; learner S5 subset | Attendance author cannot approve own correction where separation required |
+| EDU-WF-08 Learning Material & Asset | M06 | stock/material issue/return: read, reserve, issue, receive, return, adjust, inspect | Inventory Operator; Warehouse Operator; Production / Service Operator (assigned session) | S2–S4 | Custody and ledger posting separated; asset ownership remains M11 where applicable |
+| EDU-WF-09 Assessment & Examination | M13 | assessment/submission/grade: read, create, record, review, moderate, approve, finalize, publish, appeal | Production / Service Operator (assigned assessor); Supervisor / Shift Lead; Manager | S2–S4; learner S5 subset | Author ≠ moderator/finalizer for protected result workflow |
+| EDU-WF-10 Fee, Invoice & Payment | M16 | fee/invoice/payment/refund: read, create, submit, approve, capture, reverse, refund, write_off, reconcile | Finance / Accounting; Cashier (capture only); Manager (approval only where explicitly assigned) | S1–S4; payer S5 limited | Requester ≠ approver ≠ executor for sensitive adjustment; no invented thresholds |
+| EDU-WF-11 Guardian / Sponsor / Corporate Account | M04 | relationship/consent/billing link: read, create, update, verify, revoke, export | Manager; Receptionist / Front Desk; Finance / Accounting for billing subset; Pelanggan/guardian S5 verified | S1–S5 | Verified relationship and consent required; finance subset does not expose education record |
+| EDU-WF-12 Completion / Graduation / Certificate | M13 | completion/certificate: read, verify, submit, approve, issue, revoke, reissue | Production / Service Operator (prepare); Supervisor / Shift Lead (review); Manager/authorized issuer (approval/issue) | S1–S4; recipient S5 verify subset | Preparer ≠ independent verifier/issuer for controlled certificate |
+| EDU-WF-13 Complaint / Safeguarding / Incident | M18 | case/evidence: create, read, assign, escalate, investigate, review, close, export (restricted) | Manager/authorized case lead; assigned Production / Service Operator; no general role access to restricted case | S1–S4 | D3 restricted; need-to-know; subject of case cannot approve closure; export separately gated |
+| EDU-WF-14 Reporting / Audit / Retention | M18 | report/audit/retention: read, generate, export, hold, dispose, review | Manager; Finance / Accounting (financial subset); Employee / HR Operator (HR subset); platform audit roles per separate platform policy | S1–S4 | Export and disposal are distinct high-risk keys; legal hold blocks disposal |
+| HTL-WF-01 Property / Building / Unit Master | M12 | property/room/unit: read, create, update, assign, deactivate | Manager; Receptionist / Front Desk; Maintenance Operator (maintenance subset) | S1–S3 | Cross-property access denied without explicit scope |
+| HTL-WF-02 Room Type / Rate Plan / Restrictions | M02 | room type/rate/restriction: read, create, update, submit, approve, publish, override | Manager; Receptionist / Front Desk (read/quote); Finance / Accounting (financial review) | S1–S3 | Rate author ≠ exceptional override approver; publish distinct from edit |
+| HTL-WF-03 Availability / Reservation | M05 | availability/hold/reservation: read, search, hold, create, update, confirm, release, expire | Receptionist / Front Desk; Manager; Pelanggan S5 own booking | S2–S4; customer S5 | Idempotent hold/confirm; no access to unrelated guest details |
+| HTL-WF-04 Booking Lifecycle | M05 | booking: read, create, update, submit, approve exception, confirm, cancel, no_show | Receptionist / Front Desk; Manager; Pelanggan S5 own booking | S2–S4; customer S5 | Cancellation fee/refund remains M16; booking change cannot mutate payment silently |
+| HTL-WF-05 Guest Profile / Identity | M04 | guest/identity/consent: read, create, update, verify, export (restricted) | Receptionist / Front Desk; Manager; Pelanggan S5 own profile | S2–S5 | D3 identity fields minimum necessary; relationship-bound read |
+| HTL-WF-06 Pre-arrival / Check-in | M12 | arrival/check-in/room assignment/key: read, register, assign, check_in, hold, release | Receptionist / Front Desk; Manager; Maintenance Operator safety status only | S2–S4 | Identity/compliance checks; room assignment requires availability/readiness |
+| HTL-WF-07 Stay / In-house Operations | M12 | stay/room move/extension/service request: read, update, assign, extend, move, close | Receptionist / Front Desk; Production / Service Operator (assigned service); Manager | S2–S4; guest S5 subset | Stay lifecycle and payment/folio remain separate M16 authority |
+| HTL-WF-08 Housekeeping / Room Readiness | M12 | room task/readiness: read, assign, start, complete, inspect, mark_ready, hold | Production / Service Operator (assigned room task); Supervisor / Shift Lead; Maintenance Operator defect task | S2–S4 | Housekeeping task does not expose folio; ready state cannot override safety hold |
+| HTL-WF-09 Maintenance / Out-of-order | M20 | defect/work/safety_hold: create, assign, inspect, repair, request_release, approve_release, return_to_service | Maintenance Operator; Supervisor / Shift Lead; Manager/independent safety approver | S2–S4 | Maintenance actor cannot approve own safety release |
+| HTL-WF-10 POS / Guest Charges / Folio | M16 | folio/charge/order: read, create, post, adjust, submit, approve, reverse | Cashier (capture/charge under scope); Finance / Accounting; Receptionist / Front Desk (view/charge request subset) | S2–S4 | M03 owns onsite order; M16 owns posting; adjustment approval separated |
+| HTL-WF-11 Checkout / Invoice / Payment | M16 | checkout/invoice/payment/refund/settlement: read, issue, capture, submit, approve, refund, reconcile, close | Receptionist / Front Desk (checkout initiation); Cashier (capture); Finance / Accounting; Manager only explicit approval | S2–S4; payer S5 subset | Initiate ≠ capture ≠ refund approval ≠ settlement close |
+| HTL-WF-12 Group / Corporate / Agency Booking | M05 | group block/booking/relationship: read, create, update, submit, approve, allocate, cancel | Receptionist / Front Desk; Manager; Pelanggan/corporate contact S5 linked subset | S1–S3 | Corporate relationship does not grant broad guest identity access |
+| HTL-WF-13 Guest Service / Complaint | M12 | service request/complaint/compensation request: create, read, assign, resolve, escalate, submit_compensation | Production / Service Operator; Receptionist / Front Desk; Manager | S2–S4; guest S5 own case | Compensation/refund execution remains M16; restricted incident data remains M18 |
+| HTL-WF-14 Staff Shift / Cash Control | M17 | shift/roster/handover: read, create, assign, handover, review; cash variance keys owned by M16 | Supervisor / Shift Lead; Employee / HR Operator; Cashier; Finance / Accounting | S2–S4 | Shift handover ≠ cash variance approval or settlement |
+| HTL-WF-15 Reporting / Audit / Data Retention | M18 | audit/report/retention: read, generate, export, hold, dispose, review | Manager; Finance / Accounting (subset); Employee / HR Operator (subset) | S1–S4 | Restricted export; legal hold blocks disposal; source facts remain domain-owned |
+| HTL-WF-16 Channel / External Integration | M21 | connector/config/sync/webhook: read, configure, rotate_secret_ref, run_sync, reconcile, disable | Manager (request/config only where assigned); authorized integration operator; platform admin under separate S0 policy | S1–S3 | D4 secrets never displayed; sync idempotency and audit; no platform privilege inferred |
+
+### 23.4 Inventory & warehouse action catalogue starter
+
+The following keys are stable candidate vocabulary for the 17 conceptual entities in DOC-04 §28. They are not grants and must be expanded into exact role/scope/condition rows before authorization acceptance:
+
+| Resource family | Candidate permission keys | Core separation |
+|---|---|---|
+| inventory_batch | `M06.inventory_batch.read`, `M06.inventory_batch.create`, `M06.inventory_batch.update`, `M06.inventory_batch.hold`, `M06.inventory_batch.release` | Release/hold is not implied by update; expiry/regulated fields need separate classification |
+| inventory_movement | `M06.inventory_movement.read`, `M06.inventory_movement.record`, `M06.inventory_movement.reverse` | Posted movement immutable; correction is compensating movement |
+| inventory_balance | `M06.inventory_balance.read`, `M06.inventory_balance.reconcile` | Projection read/rebuild does not mutate ledger |
+| inventory_batch_balance | `M06.inventory_batch_balance.read`, `M06.inventory_batch_balance.reconcile` | Projection only; batch allocation authority remains explicit |
+| inventory_adjustment | `M06.inventory_adjustment.create`, `M06.inventory_adjustment.submit`, `M06.inventory_adjustment.approve`, `M06.inventory_adjustment.post`, `M06.inventory_adjustment.reverse` | Initiator, approver and poster separated for material adjustments |
+| inventory_adjustment_item | `M06.inventory_adjustment_item.read`, `M06.inventory_adjustment_item.create`, `M06.inventory_adjustment_item.update` | Line edits stop before posting; posted detail immutable |
+| stock_count | `M06.stock_count.create`, `M06.stock_count.assign`, `M06.stock_count.submit`, `M06.stock_count.review`, `M06.stock_count.approve`, `M06.stock_count.finalize` | Counter cannot approve own material variance |
+| stock_count_item | `M06.stock_count_item.read`, `M06.stock_count_item.record`, `M06.stock_count_item.recount` | Zero count differs from uncounted; recount retains history |
+| stock_transfer | `M07.stock_transfer.create`, `M07.stock_transfer.submit`, `M07.stock_transfer.approve`, `M07.stock_transfer.dispatch`, `M07.stock_transfer.close`, `M07.stock_transfer.cancel` | Source and destination custody; close only after reconciled disposition |
+| stock_transfer_item | `M07.stock_transfer_item.read`, `M07.stock_transfer_item.create`, `M07.stock_transfer_item.allocate` | Split shipments and quantity caps must be validated |
+| inventory_cost_exception | `M06.inventory_cost_exception.read`, `M06.inventory_cost_exception.create`, `M06.inventory_cost_exception.review`, `M06.inventory_cost_exception.resolve` | Unknown cost remains NULL; resolver cannot rewrite posted movement |
+| inventory_reservation | `M06.inventory_reservation.create`, `M06.inventory_reservation.release`, `M06.inventory_reservation.expire`, `M06.inventory_reservation.fulfill` | Reservation reduces available, not on-hand; originating demand domain retains its lifecycle |
+| inventory_reservation_item | `M06.inventory_reservation_item.read`, `M06.inventory_reservation_item.allocate`, `M06.inventory_reservation_item.fulfill`, `M06.inventory_reservation_item.release` | Allocation/fulfillment idempotent; no over-consumption |
+| inventory_cost_layer | `M06.inventory_cost_layer.read`, `M06.inventory_cost_layer.create`, `M06.inventory_cost_layer.adjust` | FIFO/MWA rules; layer identity distinct from batch identity |
+| inventory_cost_layer_consumption | `M06.inventory_cost_layer_consumption.read`, `M06.inventory_cost_layer_consumption.record`, `M06.inventory_cost_layer_consumption.compensate` | Immutable consumption; compensation capped to eligible original quantity |
+| stock_transfer_shipment | `M07.stock_transfer_shipment.create`, `M07.stock_transfer_shipment.dispatch`, `M07.stock_transfer_shipment.receive`, `M07.stock_transfer_shipment.return`, `M07.stock_transfer_shipment.resolve_loss` | Dispatch/receipt/return/loss are separate events |
+| stock_transfer_shipment_item | `M07.stock_transfer_shipment_item.read`, `M07.stock_transfer_shipment_item.record_receipt`, `M07.stock_transfer_shipment_item.reconcile` | Partial/repeated receipt and item disposition remain auditable |
+
+### 23.5 Role, scope and approval completion rules
+
+The 30 workflow rows in §23.3 provide function eligibility candidates only. Final authorization acceptance requires a row per exact key and actor function with scope S0–S5, business/site/location/assignment relationship, object-state conditions, data class/purpose, SoD conflict, approver and expected audit event. A single broad row for a workflow is insufficient. No numeric thresholds are invented. Missing or ambiguous role/key/scope/condition/approver means DENY.
+
+### 23.6 Status
+
+This section resolves the role-vocabulary ambiguity by preserving the 12 standard Business roles and distinguishing partner/customer principal classes. It records a workflow action catalogue baseline and 17-entity inventory key starter. It does not grant permissions, close G01–G10/Scope O01–O10/SoD A01–A12/AUTH-OPEN items, verify technical enforcement or authorize implementation. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 24. Append-only high-risk permission policy tuples — project-authored design baseline (19 November 2026)
+
+**Status: DESIGN SPECIFICATION — NOT A GRANT REGISTER; NOT IMPLEMENTED OR EXECUTED.** This section expands selected high-risk candidate keys into explicit policy tuples so that actor eligibility, scope, conditions, data/purpose, SoD, approval, execution ownership and audit expectations are no longer left as generic placeholders. It supplements §§22–23 and does not override O-01–O-12, CR-01–CR-10, Q-01–Q-06, or the 12-role baseline in §4.2.
+
+### 24.1 Common evaluation rules
+
+1. The listed actor functions are eligible request/prepare functions only where the Business has explicitly assigned the function and the active membership, module entitlement, scope and resource conditions all match. They are not automatic role grants.
+2. The approver must be a different authenticated principal from the initiator and must hold an explicit approval capability for the same Business/resource scope. No self-approval, shared account or delegated approval to the initiator.
+3. Unless a future separately approved policy specifies otherwise, all refunds, write-offs, settlement closures, material stock adjustments, unresolved transfer dispositions, safeguarding case closures/exports, safety-hold releases, D4 secret operations and privileged-access changes require dual control. No monetary or quantity threshold is invented here.
+4. A failed, missing, stale or indeterminate tuple element returns DENY. No wildcard, inherited action or UI-only check is valid.
+5. Scope is the narrowest resource scope necessary. Business/site/location/assignment boundaries must be checked against the target object, not inferred from a user-supplied identifier.
+6. Data classes and purposes below are policy defaults for the described data use. A field inventory may raise the classification or narrow access; it may not silently lower the stated protection.
+7. Audit labels are semantic event families, not physical event/table names. The owning domain is responsible for its authoritative business event; the authorization decision is separately auditable.
+
+### 24.2 High-risk policy tuple matrix
+
+| Policy ID / workflow | Exact candidate key | Eligible initiator / prepare function | Scope and preconditions | Data class / purpose | SoD, independent approver and executor | Required audit evidence |
+|---|---|---|---|---|---|---|
+| AUTH-HR-01 / EDU-WF-10, HTL-WF-11 | `M16.payment.refund` | Cashier or Receptionist / Front Desk may submit a refund request; Finance / Accounting may prepare a case | S1–S3 for the owning Business/site; payment must be captured/settled as applicable, refundable balance verified, linked source transaction and reason required | D2 financial; FINANCIAL_PROCESSING, CUSTOMER_SUPPORT where applicable | Initiator cannot approve or execute own refund. Independent Manager or separately assigned Finance approver approves; Finance / Accounting or controlled posting service executes | request/decision/execution actor IDs; source payment; amount/currency; reason; approval ref; idempotency ref; ledger result; authorization allow/deny |
+| AUTH-HR-02 / EDU-WF-10, HTL-WF-11 | `M16.payment.write_off` | Finance / Accounting prepares; Cashier may submit variance evidence only | S1–S3; receivable/charge must be identifiable, reason and supporting evidence required, legal/collection hold checked | D2 financial; FINANCIAL_PROCESSING, COMPLIANCE_AUDIT | Preparer ≠ approver ≠ posting executor. Independent Manager or separately assigned Finance approver; Finance / Accounting or controlled posting service posts after approval | source receivable; write-off reason; amount/currency; approver; posting reference; prior/current balance; immutable audit |
+| AUTH-HR-03 / EDU-WF-10, HTL-WF-11 | `M16.settlement.close` | Finance / Accounting prepares reconciliation; Cashier supplies shift/handover evidence but cannot close own settlement | S1–S3; all included transactions reconciled, exceptions dispositioned, cash/bank evidence attached, open disputes/holds reviewed | D2 financial; FINANCIAL_PROCESSING, COMPLIANCE_AUDIT | Settlement preparer/reviewer cannot be sole closer. Independent Finance approver or explicitly assigned Manager approves; authorized Finance / Accounting executor closes | settlement window; included transaction set/hash; variance list; approval; close actor/time; reconciliation outcome |
+| AUTH-HR-04 / EDU-WF-13 | `M18.safeguarding_case.read` | Authorized case lead and specifically assigned investigator only | S1 + S4; active case assignment, case purpose and need-to-know relationship required; subject/accused actor is excluded | D3 restricted; SAFETY_RESPONSE, COMPLIANCE_AUDIT, LEGAL_RETENTION | No general Manager/HR/report access by title alone. Case access owner authorizes assignment; investigator reads minimum necessary; case subject cannot approve access or closure | case ref; assignment; actor; purpose; fields accessed; decision/reason; access review; evidence reference |
+| AUTH-HR-05 / EDU-WF-13, HTL-WF-15 | `M18.safeguarding_case.export` | Assigned case lead may request a scoped export; investigator may prepare evidence package | S1 + S4; specific case, recipient, legal basis/purpose, field minimization and export format declared; bulk export denied by default | D3 restricted; SAFETY_RESPONSE, LEGAL_RETENTION, COMPLIANCE_AUDIT | Requester ≠ independent case/privacy approver ≠ exporter. Authorized case lead plus independent privacy/compliance approver; controlled evidence service exports | case and recipient; purpose/legal basis; field manifest; approval; artifact hash/location; expiry/access log; export decision |
+| AUTH-HR-06 / HTL-WF-09 | `M20.safety_hold.release` | Assigned Maintenance Operator may submit inspection and release request, not approve own release | S2–S4; active hold, completed repair, inspection result and required safety checklist; no unresolved defect | D2 operational/safety, D3 if personal incident data; SAFETY_RESPONSE | Repairing actor cannot approve release. Independent Supervisor / Shift Lead or explicitly assigned safety approver reviews; authorized operations executor releases hold | hold/asset/room ref; defect; repair evidence; inspector and approver IDs; checklist; state transition; time |
+| AUTH-HR-07 / HTL-WF-02 | `M02.rate_plan.override` | Receptionist / Front Desk or authorized revenue function submits exceptional rate request | S1–S3; active rate plan, date/occupancy constraints, reason code and applicable commercial policy recorded | D2 commercial/financial; SERVICE_DELIVERY, FINANCIAL_PROCESSING | Rate author/requester cannot approve own override. Independent Manager or explicitly assigned revenue approver approves; authorized rate publisher applies the approved override | prior/new rate; stay/date context; reason; initiator; approver; publication version; affected booking refs |
+| AUTH-HR-08 / Inventory adjustment | `M06.inventory_adjustment.approve` | Inventory Operator or Warehouse Operator prepares and submits count/adjustment variance | S1–S3; open adjustment, source count/evidence, location custody and variance reason; posted records immutable | D2 inventory/financially relevant; SERVICE_DELIVERY, COMPLIANCE_AUDIT | Counter/preparer cannot approve own material variance. Independent Supervisor / Shift Lead or separately assigned inventory approver approves; designated posting function separately posts | count snapshot; expected/actual/variance; source evidence; initiator; approver; posting actor; resulting movement ref |
+| AUTH-HR-09 / Inventory adjustment | `M06.inventory_adjustment.post` | Designated Inventory Operator or controlled posting service after approval | S1–S3; approved adjustment, current resource state revalidated, idempotency key and posting preconditions valid | D2 inventory; SERVICE_DELIVERY, COMPLIANCE_AUDIT | Approver is not the posting executor where dual control applies; posting service must verify approval and cannot bypass it | approved adjustment ref; approval identity; posting identity; movement refs; idempotency result; before/after projection |
+| AUTH-HR-10 / Stock transfer | `M07.stock_transfer.close` | Warehouse Operator or Inventory Operator may request closure after reconciliation | S1–S3; all shipment quantities have valid receipt/return/loss disposition; no unresolved investigation; source and destination same Business | D2 inventory/custody; SERVICE_DELIVERY, COMPLIANCE_AUDIT | Requester cannot certify own unresolved loss disposition. Independent Supervisor / Shift Lead or assigned custody reviewer approves; M07 owning workflow closes after invariant checks | transfer/shipment/item refs; dispatched/received/returned/lost quantities; investigation disposition; reviewer; closure decision |
+| AUTH-HR-11 / HTL-WF-16 | `M21.integration_secret.rotate_secret_ref` | Authorized integration operator requests rotation; Manager may request/configure only where explicitly assigned | S1–S3; connector ownership verified, rotation window and dependent integration identified; old secret invalidation/rollback plan defined | D4 credential metadata; INTEGRATION_SYNC, COMPLIANCE_AUDIT | Requester ≠ independent integration/security approver ≠ rotation executor for privileged connector. Secret value is handled only by protected secret manager; no read/display permission is created | connector ref; secret reference/version IDs only; requester/approver/executor; rotation result; invalidation time; sync health; no secret value in logs |
+| AUTH-HR-12 / Platform access administration | `PLATFORM.access_grant.approve` | Platform access requester or platform administrator submits a grant request; requester cannot approve | S0; platform principal, target platform resource, explicit privilege, business necessity, expiry and support/ticket reference required | D3/D4 depending on privilege; COMPLIANCE_AUDIT, CUSTOMER_SUPPORT | Requester ≠ independent Platform Super Admin approver ≠ platform access executor. At least two distinct platform principals; time-bounded grant and post-change review | requester/approver/executor; privilege diff; target; reason/ticket; expiry; approval; grant/revoke timestamps; review evidence |
+| AUTH-HR-13 / Platform access administration | `PLATFORM.access_grant.apply` | Dedicated platform access administrator or controlled platform service after approved request | S0; valid unexpired approval, exact privilege diff matches approved request, no self-grant or scope expansion | D3/D4; COMPLIANCE_AUDIT | Executor cannot be requester or approver. Separate reviewer verifies resulting privilege and expiry | approved request ref; before/after privilege diff; executor; policy decision; expiry; independent verification |
+| AUTH-HR-14 / Cross-domain restricted export | `M18.report.export` | Manager, Finance / Accounting or Employee / HR Operator may request only their explicitly assigned report subset | S1–S4; named report, purpose, recipient, date range and field manifest; D3 fields minimized; D4 values excluded | D2–D3; COMPLIANCE_AUDIT, FINANCIAL_PROCESSING, SERVICE_DELIVERY as applicable | Requester ≠ independent data owner/privacy approver ≠ export executor for D3/bulk export. Source-domain owner validates field manifest; controlled service exports | query/report ref; field manifest; row count; purpose; recipient; approver; artifact hash; expiry; access log |
+
+### 24.3 Platform permission namespace
+
+The platform authorization namespace is explicitly separate from M01–M21 Business domains. The project-authored key family `PLATFORM.access_grant.approve` and `PLATFORM.access_grant.apply` is adopted for platform access administration only. It does not grant access to tenant business records and does not make SUPER_ADMIN or PLATFORM_ADMIN a Business role. Platform actions require S0 context, two distinct platform principals, least privilege, expiry and independent review. Other platform actions require their own exact resource/action key; no `PLATFORM.*` wildcard is permitted.
+
+### 24.4 Data and purpose defaults for the listed high-risk actions
+
+- Payment/refund/write-off/settlement amounts and transaction references: D2; use FINANCIAL_PROCESSING and COMPLIANCE_AUDIT as applicable.
+- Safeguarding case content and evidence: D3; use SAFETY_RESPONSE, COMPLIANCE_AUDIT or LEGAL_RETENTION only for the specific case purpose.
+- Safety hold and maintenance evidence: D2 operational by default; elevate incident/person-linked content to D3.
+- Rate plan and commercial override data: D2; commercial review is not permission to access unrelated guest identity.
+- Inventory adjustment/transfer custody and valuation-relevant data: D2; inventory access does not grant financial settlement authority.
+- Integration credential references: D4; only opaque references and rotation metadata may appear in application/audit records. Secret values remain outside ordinary read/export.
+- Platform privilege records: D3 or D4 according to the privilege/credential content; never include secret values in audit payloads.
+
+### 24.5 Acceptance and limits
+
+This matrix expands 14 high-risk action policies with explicit candidate keys and policy tuples. It is a product-authored design decision, not an implemented policy engine or approved user/role grant list. Remaining work:
+1. Expand the remaining action keys in DOC-05 §§23.3–23.4 using the same tuple structure, including ordinary read/create/update actions and the remaining Education/Hotel workflows.
+2. Enumerate DOC-04 logical attributes for all 17 conceptual entities and classify each attribute by data class, purpose, read/write audience and retention trigger; do not invent physical SQL names/types.
+3. Reconcile each tuple with existing DOC-05 FIX/OPEN registers and DOC-06/DOC-07 references; any conflict is recorded, not silently overridden.
+4. Keep thresholds and retention durations OPEN until explicitly designed; dual control remains default for the high-risk actions above.
+5. Technical enforcement, RLS/API implementation, test execution and Production verification remain outside this documentation-only authorization.
+
+**Disposition:** High-risk policy tuple design is expanded for the listed 14 actions. Exact role grants remain NOT APPROVED; implementation and test execution remain NOT AUTHORIZED / NOT EXECUTED. No dependency is closed solely by this design section. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 25. Append-only standard-action policy tuple expansion — 19 November 2026
+
+**Status: PROJECT-AUTHORED DESIGN CATALOGUE — NOT GRANTS; NOT IMPLEMENTED.** This section expands the remaining ordinary workflow and inventory action families from §23 into bounded policy tuples. It supplements §24; high-risk actions listed in §24 retain their stricter independent-approval rules. The matrix is a normative design baseline for documentation reconciliation, not a role assignment or technical policy.
+
+### 25.1 Common tuple defaults
+
+- **Identity/membership:** an authenticated active principal; active membership in the owning Business; current role/function eligibility; verified customer/guardian/corporate relationship for S5; current worker/partner assignment for S4.
+- **Entitlement:** the owning module must be enabled for the Business/category. Conditional modules fail closed when inactive. Entitlement never substitutes for an exact action key.
+- **Scope:** use the narrowest scope in the workflow row below. S1 Business, S2 Site/property, S3 Location/room/warehouse, S4 active task/class/shift/assignment and S5 verified self/relationship are conjunctive, not interchangeable.
+- **Data/purpose:** D0/D1 metadata may be broadly visible only within the authorized tenant and purpose; operational records default to D1 or D2; personal, identity, education, guest and workforce fields are field-classified individually and may be D3; credentials/secrets are D4. Purpose must match the action (SERVICE_DELIVERY, BOOKING_FULFILLMENT, EDUCATION_ADMIN, FINANCIAL_PROCESSING, CUSTOMER_SUPPORT, SAFETY_RESPONSE, COMPLIANCE_AUDIT, LEGAL_RETENTION or INTEGRATION_SYNC).
+- **Lifecycle:** create/update is allowed only before the owning domain's terminal/post/finalize state. Posted ledger, finalized grade/certificate, closed settlement, released safety hold and completed custody records require explicit compensating/reversal actions, never silent edits.
+- **SoD:** the same principal cannot approve its own protected submission. The stricter dual-control policies in §24 prevail. Where no independent approver is specified below, approval is not implied; the action remains limited to the named operational function and any separate approval key.
+- **Execution/audit:** only the primary owner domain executes its authoritative state transition. Record actor, Business, exact key, target, scope, purpose, data class, before/after reference, decision, correlation/idempotency reference and approval where applicable. Missing tuple element means DENY.
+
+### 25.2 Education and Hotel ordinary-action tuple map
+
+The following table supplies the standard tuple dimensions for each workflow action family. The exact keys are formed from the resource/action vocabulary in §23.3; each listed action remains a separate permission key. Actor names are function eligibility candidates, not grants.
+
+| Workflow / owner | Eligible functions and relationship | Scope / resource conditions | Data / purpose | SoD, approval and execution |
+|---|---|---|---|---|
+| EDU-WF-01 / M13 | Manager; assigned Production / Service Operator; assigned Supervisor / Shift Lead | S1–S4; draft curriculum only for create/update; publish/hold/release require explicit lifecycle state | D1–D2; EDUCATION_ADMIN | Author may draft; publish requires separately assigned reviewer/issuer where configured; M13 executes |
+| EDU-WF-02 / M13 | Receptionist / Front Desk; assigned admissions operator; applicant S5 for own application subset | S1–S4; S5 only linked applicant object; application state must permit transition | D2; EDUCATION_ADMIN, CUSTOMER_SUPPORT | Submit ≠ review ≠ approve; applicant cannot approve; M13 executes admission decision |
+| EDU-WF-03 / M04 | Receptionist / Front Desk; Manager for assigned purpose; verified guardian/student/customer S5 subset | S1–S5; relationship and consent verified; D3 fields individually allowlisted | D2/D3; EDUCATION_ADMIN, CUSTOMER_SUPPORT | Link/unlink/verify restricted; export is separate key and approval; M04 owns party/relationship record |
+| EDU-WF-04 / M13 | Receptionist / Front Desk; assigned education operator; learner S5 limited self-service | S1–S4, S5 subset; active program, eligibility and capacity checks | D2; EDUCATION_ADMIN | Exceptional allocation requires independent approval; M13 owns enrollment |
+| EDU-WF-05 / M13 | Manager; assigned Supervisor / Shift Lead; assigned operator | S1–S4; resource availability and schedule conflict checks | D1/D2; EDUCATION_ADMIN, SERVICE_DELIVERY | Assign/publish/hold/release are distinct; M13 executes schedule state |
+| EDU-WF-06 / M17 | Manager; Employee / HR Operator; assigned worker for own profile subset | S1–S4, S5 own profile; credential verifier separate from profile editor | D2/D3, D4 credential secret; EDUCATION_ADMIN, COMPLIANCE_AUDIT | Credential verify/suspend requires designated verifier; M17 owns workforce/assignment |
+| EDU-WF-07 / M13 | Assigned Production / Service Operator; Supervisor / Shift Lead | S2–S4; current class/session assignment; correction window/state valid | D2; EDUCATION_ADMIN | Attendance author cannot approve own protected correction; M13 executes attendance lifecycle |
+| EDU-WF-08 / M06 | Inventory Operator; Warehouse Operator; assigned session operator for request/receipt subset | S2–S4; valid item, stock, custody and session reference | D1/D2; SERVICE_DELIVERY, EDUCATION_ADMIN | Request/issue/receive/return separated; ledger posting by M06, custody by M07 |
+| EDU-WF-09 / M13 | Assigned assessor; Supervisor / Shift Lead; Manager only explicit moderation/issuer function; learner S5 subset | S2–S4; assigned assessment; grade lifecycle and appeal window valid | D2/D3 where learner-sensitive; EDUCATION_ADMIN | Author ≠ moderator/finalizer for protected result; M13 owns assessment/grade |
+| EDU-WF-10 / M16 | Finance / Accounting; Cashier capture-only; payer S5 own invoice/payment subset | S1–S4; linked fee/invoice/payment; captured funds and refundable balance validated | D2; FINANCIAL_PROCESSING | Refund/write-off/settlement use §24; Cashier cannot approve; M16 posts financial state |
+| EDU-WF-11 / M04 | Receptionist / Front Desk; Manager; Finance / Accounting billing subset; verified guardian/payer S5 | S1–S5; verified relationship, consent and purpose | D2/D3; EDUCATION_ADMIN, FINANCIAL_PROCESSING | Finance sees billing subset only; relationship verify/revoke is separately controlled; M04 owns relationship |
+| EDU-WF-12 / M13 | Assigned Production / Service Operator prepares; Supervisor / Shift Lead reviews; authorized issuer approves/issues | S1–S4; completion criteria and identity match; recipient S5 verification-only subset | D2/D3; EDUCATION_ADMIN, COMPLIANCE_AUDIT | Preparer ≠ verifier/issuer; revoke/reissue reason-coded; M13 owns certificate lifecycle |
+| EDU-WF-13 / M18 | Specifically assigned case lead/investigator; no general role access | S1–S4 plus case assignment; need-to-know and case status required | D3; SAFETY_RESPONSE, COMPLIANCE_AUDIT, LEGAL_RETENTION | Subject cannot approve closure; restricted export separate; M18 owns case/evidence |
+| EDU-WF-14 / M18 | Manager; Finance / Accounting financial subset; Employee / HR Operator HR subset | S1–S4; report dataset and purpose allowlisted; legal hold blocks disposal | D1–D3 by field; COMPLIANCE_AUDIT, LEGAL_RETENTION | Export/dispose separate restricted keys; disposal requires authorized reviewer; M18 owns audit/report lifecycle |
+| HTL-WF-01 / M12 | Manager; Receptionist / Front Desk; Maintenance Operator maintenance subset | S1–S3; property/site membership; no sibling-property inference | D1/D2; SERVICE_DELIVERY | Deactivate requires dependency check; M12 owns property/unit master |
+| HTL-WF-02 / M02 | Manager; Receptionist / Front Desk quote/read subset; Finance / Accounting review subset | S1–S3; effective dates, inventory/availability and rate state valid | D2; BOOKING_FULFILLMENT, FINANCIAL_PROCESSING | Rate author ≠ exceptional override approver; §24 governs override; M02 owns rate plan |
+| HTL-WF-03 / M05 | Receptionist / Front Desk; Manager; customer S5 own booking subset | S2–S4; availability and hold expiry checked; S5 relationship verified | D2; BOOKING_FULFILLMENT | Hold/confirm idempotent; customer cannot enumerate unrelated bookings; M05 owns reservation |
+| HTL-WF-04 / M05 | Receptionist / Front Desk; Manager; customer S5 own booking subset | S2–S4/S5; valid lifecycle transition and cancellation policy | D2; BOOKING_FULFILLMENT, CUSTOMER_SUPPORT | Exception approval separate; fees/refunds remain M16; M05 owns booking lifecycle |
+| HTL-WF-05 / M04 | Receptionist / Front Desk; Manager; guest S5 own profile subset | S2–S5; verified guest relationship and minimum-necessary field allowlist | D2/D3; BOOKING_FULFILLMENT, CUSTOMER_SUPPORT | Identity verification separate from profile edit; export restricted; M04 owns guest identity |
+| HTL-WF-06 / M12 | Receptionist / Front Desk; Manager; Maintenance Operator safety-status subset | S2–S4; reservation identity, availability, readiness and safety state valid | D2/D3; BOOKING_FULFILLMENT, SAFETY_RESPONSE | Safety hold cannot be overridden by check-in; M12 executes check-in/room assignment |
+| HTL-WF-07 / M12 | Receptionist / Front Desk; assigned service operator; Manager | S2–S4; active stay and assigned service; guest S5 limited own request | D2/D3; SERVICE_DELIVERY, BOOKING_FULFILLMENT | Room move/extension requires availability; folio/payment remains M16; M12 owns stay |
+| HTL-WF-08 / M12 | Assigned Production / Service Operator; Supervisor / Shift Lead; assigned Maintenance Operator defect task | S2–S4; assigned room task and valid readiness state | D1/D2; SERVICE_DELIVERY | Task completion ≠ inspection where independent check required; safety hold blocks ready; M12 owns housekeeping state |
+| HTL-WF-09 / M20 | Maintenance Operator; Supervisor / Shift Lead; independent safety approver | S2–S4; linked defect/inspection and documented release criteria | D2/D3; SAFETY_RESPONSE, COMPLIANCE_AUDIT | Requester cannot approve own release; §24 safety-hold policy prevails; M20 owns safety lifecycle |
+| HTL-WF-10 / M16 | Cashier; Finance / Accounting; Front Desk charge-request subset | S2–S4; linked folio/charge/order and valid posting state | D2; FINANCIAL_PROCESSING | M03 order owner cannot post financial ledger; adjustment approval separate; M16 posts |
+| HTL-WF-11 / M16 | Front Desk initiates; Cashier captures; Finance / Accounting reconciles; Manager only explicit approver | S2–S4, payer S5 limited; stay/folio/payment match | D2; FINANCIAL_PROCESSING | Initiate ≠ capture ≠ refund approval ≠ settlement close; §24 prevails; M16 executes |
+| HTL-WF-12 / M05 | Receptionist / Front Desk; Manager; linked corporate contact S5 subset | S1–S3; contract/block and linked booking relationship valid | D2/D3; BOOKING_FULFILLMENT, CUSTOMER_SUPPORT | Corporate link grants no broad guest identity access; M05 owns group booking |
+| HTL-WF-13 / M12 | Assigned Production / Service Operator; Receptionist / Front Desk; Manager | S2–S4, guest S5 own case; active service request | D2/D3; SERVICE_DELIVERY, CUSTOMER_SUPPORT | Compensation submit ≠ financial approval/execution; restricted incident routed M18; M12 owns service case |
+| HTL-WF-14 / M17 | Supervisor / Shift Lead; Employee / HR Operator; Cashier own handover subset | S2–S4; active shift and assigned team; cash variance routed M16 | D2/D3; SERVICE_DELIVERY, COMPLIANCE_AUDIT | Handover ≠ cash variance approval/settlement; M17 owns roster/shift |
+| HTL-WF-15 / M18 | Manager; Finance / Accounting financial subset; Employee / HR Operator HR subset | S1–S4; report field allowlist, purpose and legal hold | D1–D3; COMPLIANCE_AUDIT, LEGAL_RETENTION | Export/dispose separate; source-domain facts remain owned by source domain; M18 owns report/retention workflow |
+| HTL-WF-16 / M21 | Assigned integration operator; Manager request/config subset; platform admin only separate S0 policy | S1–S3; connector belongs to Business; endpoint/credential reference and sync state validated | D2/D4; INTEGRATION_SYNC, COMPLIANCE_AUDIT | Secret value never read; rotate_secret_ref restricted and dual-controlled under §24; M21 executes Business connector actions |
+
+### 25.3 Inventory and warehouse action policy tuples
+
+For each key in §23.4, apply the following resource-specific tuple. The key suffixes are independent actions; no CRUD bundle or implied inheritance is created.
+
+| Resource family | Eligible function / scope | Conditions and data/purpose | SoD / approval / execution |
+|---|---|---|---|
+| inventory_batch | Inventory Operator; Warehouse Operator for assigned custody; S2–S4 | Active Business/product/location; batch, lot/expiry and hold state; D2; SERVICE_DELIVERY, COMPLIANCE_AUDIT | Create/update does not imply hold/release; restricted expiry/regulated fields individually gated; M06 executes |
+| inventory_movement | Inventory Operator or controlled M06 posting service; S2–S4 | Source command authorized; positive/negative quantity and reason validated; D2; SERVICE_DELIVERY, FINANCIAL_PROCESSING | Posted movement immutable; reverse is compensating movement with approval where material; M06 executes |
+| inventory_balance | Inventory/Warehouse Operator read within assignment; S2–S4 | Tenant/location match; projection freshness disclosed; D1/D2; SERVICE_DELIVERY | Reconcile/rebuild is not ledger mutation; controlled M06 process executes |
+| inventory_batch_balance | Inventory/Warehouse Operator; S3–S4 | Batch and location relationship valid; projection only; D2; SERVICE_DELIVERY | No direct quantity write; M06 rebuilds projection |
+| inventory_adjustment | Inventory Operator initiates; independent Supervisor/Manager approver; controlled M06 poster; S2–S4 | Reason, count/source evidence, variance and item state validated; D2; SERVICE_DELIVERY, COMPLIANCE_AUDIT | §24 dual control; initiator ≠ approver ≠ poster; M06 posts |
+| inventory_adjustment_item | Assigned Inventory Operator; S3–S4 | Parent adjustment draft; item/product/location match; D2; SERVICE_DELIVERY | Line edits stop at submit/post; posted detail immutable; M06 owns |
+| stock_count | Inventory Operator creates/counts; Supervisor reviews; independent approver finalizes; S2–S4 | Approved count scope, cutoff and location; D2; COMPLIANCE_AUDIT | Counter cannot approve own material variance; M06 finalizes ledger effect |
+| stock_count_item | Assigned counter; independent recount assignment; S3–S4 | Distinguish zero from uncounted; preserve recount history; D2; SERVICE_DELIVERY | Counter cannot overwrite submitted count; M06 owns count detail |
+| stock_transfer | Warehouse Operator at source/destination; Inventory Operator supports; S2–S4 | Both locations same Business; transfer state, quantity and custody validated; D2; SERVICE_DELIVERY | Submit/approve/dispatch/close distinct; unresolved shipment blocks close; §24 dual control; M07 executes custody |
+| stock_transfer_item | Assigned Warehouse Operator; S3–S4 | Parent transfer approved; allocation ≤ eligible quantity; D2; SERVICE_DELIVERY | No allocation beyond approved demand; M07 owns transfer line |
+| inventory_cost_exception | Finance / Accounting read/review subset; Inventory Operator may submit evidence; S2–S4 | Linked movement/cost lineage; unknown cost remains NULL; D2; FINANCIAL_PROCESSING, COMPLIANCE_AUDIT | Submitter cannot resolve own material exception; M06 resolves inventory cost state, M16 owns financial posting |
+| inventory_reservation | Originating M03/M05 demand actor requests; Inventory Operator manages; S2–S4 | Demand object valid; expiry and availability checked; D2; SERVICE_DELIVERY, BOOKING_FULFILLMENT | Release/expire/fulfill distinct; idempotent; reservation reduces available not physical on-hand; M06 executes |
+| inventory_reservation_item | Inventory Operator; assigned Warehouse Operator allocation/pick; S3–S4 | Parent reservation active; batch/quantity and FEFO selection valid where applicable; D2; SERVICE_DELIVERY | No over-allocation/over-consumption; fulfill idempotent; M06 owns allocation, M07 custody |
+| inventory_cost_layer | Inventory costing service; Finance / Accounting read/review subset; S2–S4 | MWA default pool or approved FIFO alternative; layer identity distinct from batch; D2; FINANCIAL_PROCESSING | No arbitrary layer rewrite; adjustments via approved exception/compensation; M06 owns layer |
+| inventory_cost_layer_consumption | Controlled M06 costing service; Finance / Accounting read subset; S2–S4 | Source movement and cost method valid; FIFO consumption lineage; D2; FINANCIAL_PROCESSING | Immutable consumption; compensation capped to eligible original quantity; M06 executes |
+| stock_transfer_shipment | Warehouse Operator; assigned Delivery / Fulfillment Operator only for delivery handoff; S2–S4 | Parent transfer approved; dispatch/receipt/return/loss state and custody evidence; D2; SERVICE_DELIVERY | Loss disposition and closure require independent review; M07 owns internal custody, M19 owns external route/proof |
+| stock_transfer_shipment_item | Assigned Warehouse/Delivery operator; S3–S4 | Shipment item, partial receipt, discrepancy and source quantity reconcile; D2; SERVICE_DELIVERY | Receipt/reconcile separate; no duplicate receipt; M07 executes custody reconciliation |
+
+### 25.4 Explicit non-grants and unresolved policy parameters
+
+1. This section defines eligibility candidates and policy constraints only. No role, user, service account or partner receives a grant from this document.
+2. No numeric amount, quantity, percentage, time window, approval threshold or retention duration is created. Existing OPEN parameters in O-01–O-12, G01–G10, Scope O01–O10, SoD A01–A12 and DOC-09 remain OPEN unless their owning decision record explicitly resolves them.
+3. D0–D4 is a classification scheme, not a blanket classification of every field. DOC-04 §29 is the logical attribute proposal; field-specific higher protection prevails.
+4. Platform actions remain under the separate PLATFORM namespace and S0. Business Manager, Finance, and integration functions gain no platform access.
+5. Where a workflow requires an approver but no independent eligible approver has been assigned, the operation remains pending/DENY; there is no fallback self-approval.
+6. These tuples do not establish RLS, API/server enforcement, physical event schemas, tests, or Production behavior.
+
+**Disposition:** the 30 Education/Hotel workflow action families and all 17 inventory/warehouse resource families now have project-authored tuple-level actor, scope, condition, data/purpose, SoD and owner-execution baselines. Exact grants and unresolved thresholds remain OPEN. No permission is granted and no implementation/test is claimed. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 26. Append-only reconciliation — G02/G04 scope and platform-key cross-reference (19 November 2026)
+
+This section reconciles historical candidate/gap wording in earlier sections with the project-authored design in §§22–25 and DOC-06 §21.
+
+### 26.1 G02 and G04 disposition
+
+- **G02 logical domain taxonomy: RESOLVED BY PROJECT DESIGN.** M01–M21 are canonical logical domain IDs. CAT-10 Education and CAT-11 Hotel CORE/CONDITIONAL profiles are recorded in DOC-02 §14 and DOC-01 §14. This does not close every legacy source-to-category mapping, every category's exact module eligibility, or subscription entitlement.
+- **G04 logical workflow ownership: RESOLVED AT LOGICAL LEVEL** for EDU-WF-01–14 and HTL-WF-01–16 through DOC-06 §§21.3–21.4. This does not approve every submodule/object/action permission row, actor grant, scope resolver, or technical handoff implementation.
+- Earlier statements that G02/G04 remain OPEN describe the pre-design/source-review state and are superseded only for the logical decisions stated above. Do not reopen those decisions solely because Crosswalk v1.3 or legacy eligibility matrices remain DRAFT/CANDIDATE.
+- Other source-native gaps, including G01/G03/G05–G10 and detailed authorization, scope, SoD, field-classification and evidence criteria, retain their own statuses unless independently resolved in their controlling registers.
+
+### 26.2 Platform permission keys and S0
+
+DOC-05 §24.3 is the controlling platform-key decision for the current design: PLATFORM.access_grant.approve and PLATFORM.access_grant.apply are the exact candidate keys for the two defined platform access-grant actions. They are separate from M01–M21 Business keys, require S0 platform context and dual control, and do not create Business-data access or a wildcard.
+
+The key names are design vocabulary only; they are not approved grants or implemented platform permissions. Other platform actions require their own exact resource/action key. DOC-07 §31's earlier S0.platform_admin text is only a historical namespace marker and must not be treated as the canonical key for these two actions.
+
+### 26.3 Acceptance boundary
+
+The 14 high-risk policy tuples in §24 and the 30 workflow/17 inventory-family tuple baselines in §25 remain candidate policy design, not role grants. Exact remaining actor/action rows, approval thresholds, technical enforcement and test execution retain their stated OPEN/NOT AUTHORIZED/NOT EXECUTED status.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 27. Append-only candidate key reconciliation register for CW-09 security scenarios (19 November 2026)
+
+**Status: CANDIDATE KEY VOCABULARY — NOT GRANTS, NOT AN APPROVED ROLE ALLOWLIST.** This section reconciles exact resource/action labels used by DOC-07 §§31–35 with the owner-domain catalogue. It fills the key-name lookup gap for the 24 CW09-SEC test specifications; it does not approve actor eligibility or permission assignment.
+
+### 27.1 Additional candidate exact-action keys
+
+| Candidate key | Workflow / resource anchor | Intended action boundary |
+|---|---|---|
+| M04.student_record.read | EDU-WF-03 / student record | Read only the individually authorized student-record field subset |
+| M04.student_record.export | EDU-WF-03 / student record | Separate restricted export action; never implied by read |
+| M13.attendance_correction.approve | EDU-WF-07 / attendance correction | Independent approval of a submitted correction; no self-approval |
+| M13.grade.moderate | EDU-WF-09 / assessment grade | Moderation action separate from authoring/finalization |
+| M13.grade.finalize | EDU-WF-09 / assessment grade | Finalize only after required review/moderation |
+| M13.grade.publish | EDU-WF-09 / assessment result | Publish finalized result; not implied by finalize |
+| M04.guest_identity.read | HTL-WF-05 / guest identity | Minimum-necessary identity read under verified relationship and purpose |
+| M12.housekeeping_task.read | HTL-WF-08 / housekeeping task | Read assigned task only; no folio or unrestricted guest profile access |
+| M16.guest_folio.read | HTL-WF-10 / guest folio | Read authorized financial folio subset under M16 scope |
+| M20.room.return_to_service | HTL-WF-09 / room safety lifecycle | Return to service only after independent safety release and valid state checks |
+| M02.rate_plan.approve | HTL-WF-02 / rate plan | Independent approval of a submitted rate change |
+| M02.rate_plan.publish | HTL-WF-02 / rate plan | Publish an approved rate version; not implied by edit/approve |
+| M16.folio.adjust | HTL-WF-10 / guest folio | Adjust a financial folio under M16 policy and approval controls |
+| M05.group_booking.read | HTL-WF-12 / group booking | Read only the linked group/corporate booking subset |
+| M17.staff_report.export | HTL-WF-15 / workforce report | Restricted export of the explicitly assigned staff-report subset |
+| M16.financial_report.export | EDU-WF-14 / HTL-WF-15 / financial report | Restricted financial export with field manifest, purpose and approval |
+| M12.property_stay.read | HTL-WF-07 / property stay | Read stay data within the assigned property and stay scope |
+| M12.room_task.read | HTL-WF-08 / room task | Read room task within active assignment; no cross-property inference |
+| M07.stock_transfer_shipment.reconcile | Inventory/warehouse / shipment | Reconcile custody quantities and disposition; does not post M06 ledger effects |
+| M05.reservation.read | HTL-WF-03–04 / reservation | Read reservation within verified Business/property/self relationship scope |
+| M07.stock_transfer.read | Inventory/warehouse / stock transfer | Read transfer and custody details within assigned warehouse/site scope |
+| M16.payment.capture | EDU-WF-10 / HTL-WF-11 / payment | Capture payment under M16 authority; distinct from refund, write-off and settlement close |
+| M21.integration.run_sync | HTL-WF-16 / Business connector | Execute an authorized Business connector sync; no secret-value read |
+
+### 27.2 Reconciliation and non-grant rules
+
+1. The keys above are added as candidate exact-action vocabulary because DOC-07 uses them to identify the resource/action under negative-test review. They follow the domain.resource.action grammar and are distinct actions, not CRUD bundles.
+2. The candidate list supplements the 14 high-risk keys in §24.2 and the 17 inventory/warehouse key families in §23.4. It is not a complete permission catalogue for every workflow action.
+3. Every candidate key still requires an independently reviewed actor/function, active membership, module entitlement, Business/resource scope, lifecycle condition, data class, purpose, SoD/approver, execution owner and audit requirement. A missing or ambiguous tuple is DENY.
+4. No role, person, service account or partner receives a grant from this register. No wildcard, implicit inheritance, technical enforcement, API/RLS policy or test execution is created.
+5. M21.integration_secret.read is expressly **not** a candidate permission key. It is only a prohibited attempted-action label for CW09-SEC-20; see DOC-07 §34. S0.platform_admin is a namespace marker, not a permission key; the platform access-grant candidate keys remain PLATFORM.access_grant.approve and PLATFORM.access_grant.apply under §24.3.
+6. Candidate keys do not override the primary domain ownership and execution rules in DOC-06 §21 or the higher-risk controls in §24.
+
+**Disposition:** the previously unmapped candidate key labels used by CW09-SEC-01–24 are now recorded in the owning authorization master, except the explicitly prohibited secret-read token and non-key S0 marker. Exact grants, actor allowlists, technical implementation and test execution remain NOT APPROVED / NOT AUTHORIZED / NOT EXECUTED.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
