@@ -744,3 +744,39 @@ The CW-11 branch contains four documentation paths:
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
 
 Next: review the complete four-file PR diff, confirm only these documentation paths changed, verify applicable CI and preserve the user approval gate before merge.
+
+
+### 15.18 CW-11 PR #89 merge and post-merge readback verification (19 November 2026)
+
+**PR #89 — MERGED.**
+
+- PR: #89 — `docs: reconcile FIX OPEN and conflict registers (CW-11)`.
+- URL: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/89
+- Branch: `docs/cw11-fix-open-conflict-reconciliation-2026-11-19`.
+- Base SHA: `ff1387dc8c11cc91e08513058d2bb1acea91544c`.
+- Head SHA: `d7014730db825b999888d9eb47d416896200e1dc`.
+- Merge commit (squash): `4721afac8cfa63315a4e5dcb19f7015719c2aa12`.
+- Final diff: 4 documentation paths, 233 additions, 0 deletions.
+- Documentation CI #222: SUCCESS (Markdown lint, documentation structure and internal documentation links all successful).
+- POS SaaS CI #285: SUCCESS. Application-specific Next.js build, dependency audit, ESLint and TypeScript checks were SKIPPED because no application files changed; skipped is not an application test pass.
+- Review comments at final pre-merge check: none. PR was OPEN, mergeable and head SHA unchanged at merge time.
+- Post-merge PR state: CLOSED / MERGED.
+
+#### 15.18.1 Post-merge main readback
+
+All four changed paths were fetched again from `main` after merge and verified to contain the merged content:
+
+| Path | Main blob SHA | Readback |
+|---|---|---|
+| `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` | `75c925dd8cc292ffa30b050b377f441f3c6451a3` | VERIFIED — §15.17 present |
+| `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md` | `375040adcd0401ad85f5b5f9259650b44be35b04` | VERIFIED — §13 present |
+| `docs/07-decision-registers/MASTER_FIX_REGISTER.md` | `3ad89fa69702bdfb9f268d1b7d09080ffa85b76c` | VERIFIED — DOC-08 v0.1 and all 17 DOC08-FIX IDs present |
+| `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` | `3f64b557d8d64796dfd48e037b0ce9ccc7dbd610` | VERIFIED — §11 present |
+
+#### 15.18.2 CW-11 disposition
+
+PR #89 merge and four-file post-merge readback are complete. The CW-11 documentation reconciliation is **PUBLISHED / MERGED**, but its document acceptance status remains bounded as recorded in §15.17. DOC-08 v0.1 remains reconstructed and not canonical/final/accepted; DOC-09 dependencies newly closed remain 0; CVS dispositions changed remain 0; no prior FIX decision is changed or superseded.
+
+This merge does not authorize blanket Stage 5 migration or Stage 6 implementation. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no database, application, CI workflow, deployment or Production changes were made.
+
+**Next:** Continue with the next bounded corrective item in this Worklist only after the post-merge record is published and verified.
