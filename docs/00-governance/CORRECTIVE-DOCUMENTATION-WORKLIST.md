@@ -1110,3 +1110,64 @@ CW04-ARCH-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED /
 **Next bounded task:** CW-05 — DOC-04 ERD/Data Dictionary ownership, physical entity/attribute mapping and tenant-integrity alignment against the closed logical architecture. CW-05 remains documentation/audit only; no schema mutation or DB push.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.27 CW-05 — DOC-04 logical entity ownership, attribute and tenant-integrity alignment (20 November 2026)
+
+**Objective:** align the 17-entity inventory/costing/warehouse conceptual baseline in DOC-04 with the canonical M06/M07 ownership boundaries in DOC-03 §19 and DOC-06 §21, and the resource-owner authorization rules in DOC-05 §§25, 28–30. This CW closes only logical entity ownership, logical attribute navigation and conceptual tenant-integrity cross-references. It does not invent physical SQL fields or key tuples.
+
+### 15.27.1 Current-main audit findings
+
+| Finding | Current-main observation | Required correction |
+|---|---|---|
+| CW05-F01 — entity-to-domain owner missing | DOC-04 §§3, 17–18 enumerate 17 conceptual entities and logical attributes/relationships, but do not provide one explicit M-domain owner for each entity. | Append 17/17 entity-to-owner mapping in DOC-04 §27. |
+| CW05-F02 — M06/M07 transfer boundary | DOC-04 contains both inventory ledger entities and stock transfer/shipment entities; DOC-03 §19 and DOC-05 §25.3 distinguish M06 ledger effects from M07 internal custody. | Explicitly assign inventory ledger/costing entities to M06 and transfer/custody entities to M07; keep stock posting in M06. |
+| CW05-F03 — costing taxonomy ambiguity | DOC-06 §21.1 describes M06 and says costing layer is separately governed by costing architecture; DOC-03 §19 and DOC-05 §25.3 place inventory cost-layer records under M06. | Clarify that MWA/FIFO is a separately governed costing method/capability, not a new M-domain; logical cost-layer object ownership remains M06. |
+| CW05-F04 — finance and party references | DOC-04 cost exceptions and procurement/party references touch M16 and M04; no explicit owner handoff table exists for the 17-entity baseline. | Preserve M04 party identity, M16 financial posting, M08 procurement source and M06 cost-state ownership. |
+| CW05-F05 — conceptual relationships vs physical keys | DOC-04 §18 lists 16 conceptual relationships; exact PK/FK/composite-FK tuples and referential actions remain OPEN. | Map relationship owner/handoff without converting conceptual cardinality into physical FK or adding entities. |
+| CW05-F06 — tenant integrity status | DOC-04 TEN-01–TEN-07 establish conceptual tenant rules but physical tenant columns, key tuples, RLS/server enforcement and tests remain OPEN. | Publish a 17-entity tenant-scope matrix and preserve the exact physical acceptance boundary. |
+| CW05-F07 — authorization handoff | DOC-05 §25.3 already identifies M06/M07 execution owners, but the full 17-entity map is not reciprocally indexed in DOC-04. | Add a navigation crosswalk; no role grants or permission allowlist. |
+| CW05-F08 — historical next-work wording | DOC-04 §26.6 contains a historical next-routing instruction to DOC-05. Current active Worklist now routes CW-05 to DOC-04 entity ownership and tenant-integrity alignment. | Add a current-scope routing clarification; retain the earlier audit snapshot unchanged. |
+
+### 15.27.2 Bounded audit disposition before correction
+
+- DOC-04's historical 17 conceptual entity baseline is complete as a conceptual list; the candidate `inventory_cost_layer_movements` remains unapproved entity #18.
+- DOC-04 §17.2 contains logical information groups for 17/17 entities; it does not approve physical SQL column names/types or a final physical dictionary.
+- DOC-04 §18.2 contains 16 conceptual relationships; cardinality labels are not proof of FK/UNIQUE enforcement.
+- DOC-04 TEN-01–TEN-07 and DOC-03 §18.4/§19.3 align on tenant isolation and the M06/M07 boundary. DOC-05 §25.3 confirms M06/M07 execution ownership for the inventory/warehouse resource families.
+- DOC-06 M06's phrase “costing layer is separately governed by costing architecture” is interpreted as separate costing-method governance, not as an independent M-domain. The owning logical object remains within M06; M16 owns financial posting.
+- No FIX contradiction was found in the bounded entity-owner model. The gap is missing explicit reciprocal mapping and an entity-level acceptance crosswalk.
+
+### 15.27.3 Append-only correction package
+
+| Document | New section | Purpose |
+|---|---|---|
+| DOC-04 ERD_DATA_DICTIONARY.md | §27 | 17/17 entity-to-M-domain owner map, logical attribute navigation, 16 relationship ownership/handoff rules, tenant integrity and physical non-inference boundary |
+| DOC-03 SYSTEM_ARCHITECTURE.md | §20 | Cross-reference DOC-04 §27 as the entity ownership and tenant-integrity matrix |
+| DOC-05 AUTHORIZATION_MASTER.md | §30 | 17-entity resource-owner authorization crosswalk, no-grant and fail-closed rules |
+| DOC-06 MASTER_TRACEABILITY.md | §26 | 12 data/entity/tenant acceptance scenario designs CW05-DATA-01–12 |
+| DOC-07 SECURITY_EVIDENCE.md | §40 | Evidence contracts for CW05-DATA-01–12; all remain design-only |
+| This Worklist | §15.27 | Findings, acceptance matrix and next bounded task |
+
+### 15.27.4 CW-05 acceptance matrix
+
+| Acceptance criterion | Target | Boundary |
+|---|---|---|
+| Entity-to-owner coverage | 17/17 entities assigned exactly one primary M owner | M06 inventory/costing; M07 internal custody/transfer |
+| Logical attribute navigation | 17/17 entity rows linked to DOC-04 §17.2 information groups | No SQL column names/types promoted |
+| Relationship ownership | 16/16 conceptual REL rows assigned source/target owner and handoff semantics | No physical FK tuple or entity added |
+| Tenant integrity | TEN-01–TEN-07 retained and mapped to 17 entities | Exact tenant columns/composite FK/RLS remain OPEN |
+| Costing boundary | MWA/FIFO method governance separate; cost-layer object owner M06; financial posting M16 | No new M-domain |
+| Authorization alignment | 17/17 resource families use target owner authority | Candidate vocabulary only; no grants |
+| Data acceptance scenario design | 12/12 CW05-DATA IDs in DOC-06 and DOC-07 | DESIGN / NOT EXECUTED |
+| Physical dictionary and enforcement | No unsupported status promotion | Physical acceptance remains OPEN / NOT ACCEPTED |
+
+### 15.27.5 Bounded disposition and next action
+
+**CW-05: LOGICAL ENTITY OWNERSHIP / ATTRIBUTE NAVIGATION / TENANT-INTEGRITY ALIGNMENT — READY FOR DOCUMENTATION ACCEPTANCE, PENDING PR REVIEW, CI, CONDITIONAL MERGE AND POST-MERGE READBACK.** The package will make the 17 entity owners, logical attribute references and cross-domain handoffs explicit without claiming physical dictionary acceptance or changing FIX decisions.
+
+All CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED / NOT VERIFIED. Exact SQL columns/types/defaults, PK/FK/composite-FK tuples, UNIQUE/CHECK/index definitions, delete/update actions, RLS/server enforcement, concurrency/idempotency implementation and Production behavior remain OPEN / NOT VERIFIED.
+
+**Next bounded task after verified CW-05 close:** CW-06 — reconcile DOC-05 Authorization Master against DOC-06 requirements, DOC-07 security controls and the now-aligned M01–M21/entity ownership boundaries. Keep exact production grants and technical enforcement separately gated.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
