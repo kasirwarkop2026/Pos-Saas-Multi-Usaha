@@ -297,3 +297,21 @@ A classification must resolve to an authenticated principal and the applicable m
 This alignment records product-level vocabulary and cross-document anchors only. It does not approve role grants, module entitlements, permission keys, ownership/scope resolver behavior, physical schema, RLS/API/backend enforcement, test execution, or implementation readiness. DOC-01 remains a DRAFT reconstructed working master; its source-provenance and locator gaps in §10 remain in force unless separately reconciled.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 17. CW-08 Product Blueprint to requirements traceability crosswalk (20 November 2026)
+
+DOC-06 §31 is the controlling cross-master traceability and current acceptance matrix. This section provides reciprocal navigation from the product scope baseline; it does not create new product requirements or authorize implementation.
+
+| Product Blueprint section | Product-level statement | DOC-06 traceability anchor | Supporting master / acceptance boundary |
+|---|---|---|---|
+| §2 Product vision and business model | Multi-usaha SaaS product model and supported operating categories | §§1, 3, 5, 16 | DOC-02 category taxonomy; product scope is not a testable requirement ID without decomposition |
+| §3 Tenant and ownership model | One Business tenant; multiple Outlets/Sites and Warehouses/Locations; membership, assignment and relationship are distinct | §§21.1, 21.5.9 | DOC-03 §§18–19; DOC-04 §§28, 32; physical tenant enforcement OPEN |
+| §4 Platform and Business role boundary | Platform roles separate from 12 standard Business roles; Owner outside 12 | §§21.6–21.7 | DOC-05 §§23, 32; no role grant implied |
+| §5 Category taxonomy and status | Category identity, CORE/CONDITIONAL and extension gates | §21.2 | DOC-02 §14; activation and subscription entitlement remain separate |
+| §6 Module, entitlement and authorization separation | Subscription, category eligibility, module activation, role and action permission are independent gates | §§21.2, 21.6–21.10 | DOC-05 §§22–34; candidate key is not grant |
+| §7 High-level operating principles | Single ownership, controlled cross-domain handoff, traceability and fail-closed authorization | §§3, 16, 21.5, 21.10 | DOC-03 §§18–19; DOC-05 §32 |
+| §8 Platform Super Admin product-planning boundary | S0 platform administration separate from tenant operations | §§21.6–21.7 | DOC-05 §§24.3, 32.4; DOC-07 §§33, 43 |
+| §10 Known gaps and unresolved dependencies | Physical schema, provenance, authorization and evidence gaps remain explicit | §§12, 14, 16, 21.11, 31 | Worklist and DOC-04/DOC-05/DOC-07; no OPEN item silently closed |
+
+**Status:** Product Blueprint logical statements have explicit DOC-06 navigation. This does not convert product vision prose into approved measurable acceptance criteria, physical schema or implementation evidence. DOC-01 remains a reconstructed working master / review-required document.
