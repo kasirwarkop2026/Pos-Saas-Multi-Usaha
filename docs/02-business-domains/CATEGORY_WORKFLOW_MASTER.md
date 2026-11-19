@@ -351,10 +351,10 @@ This section is the project-authored logical category crosswalk for CAT-01–CAT
 | CAT-07 Rental | M01, M02, M04, M05, M07, M09, M11, M16, M17, M20 | M03, M06, M08, M18, M19, M21 | M10, M12, M13, M14, M15 |
 | CAT-08 Pharmacy | M01, M02, M03, M04, M06, M08, M14, M16, M18 | M07, M17, M19, M20, M21 | M05, M09, M10, M11, M12, M13, M15; M14 regulated operation NOT READY until credential/jurisdiction/compliance gates evidenced |
 | CAT-09 Laundry | M01, M02, M03, M04, M05, M06, M07, M09, M15, M16, M17, M19 | M08, M11, M18, M20, M21 | M10, M12, M13, M14 |
-| CAT-10 Education | M04, M05, M13, M17 | M02, M06, M08, M16, M18, M21 | Preserve existing E-01–E-04 decision boundary; no new profile change |
-| CAT-11 Hotel | M02, M05, M12, M16, M18, M20 | M03, M04, M06, M07, M08, M17, M19, M21 | Preserve existing H-01–H-04 decision boundary; no new profile change |
+| CAT-10 Education | M04, M05, M13, M17 | M02, M06, M08, M16, M18, M21 | M01, M03, M07, M09, M10, M11, M12, M14, M15, M19, M20; preserve E-01–E-04 decision boundary |
+| CAT-11 Hotel | M02, M05, M12, M16, M18, M20 | M03, M04, M06, M07, M08, M17, M19, M21 | M01, M09, M10, M11, M13, M14, M15; preserve H-01–H-04 decision boundary |
 | CAT-12 Other / Unclassified | None — no operational M01–M21 module activated | None until classification review | Temporary classification/exception control path only; fail-closed; no specialist module auto-enable |
-| CAT-13 Retail/Refill track | M01, M02, M03, M04, M06, M08, M16 | M07, M17, M18, M19, M21 | M09, M10, M11, M12, M13, M14, M15 |
+| CAT-13 Retail/Refill track | M01, M02, M03, M04, M06, M08, M16 | M07, M17, M18, M19, M21 | M05, M09, M10, M11, M12, M13, M14, M15, M20 |
 | CAT-13 Formulation/Manufacturing track | M01, M02, M06, M08, M10, M11, M16, M17, M18, M20 | M03, M04, M07, M09, M19, M21 | M05, M12, M13, M14, M15 |
 
 **Status interpretation:** CORE means category baseline capability, not an active subscription, module grant or role permission. CONDITIONAL requires an explicit use-case, package entitlement, Business configuration and separate authorization. OUT-OF-BASELINE means not part of the default profile; changing it requires a recorded category decision. CAT-10/CAT-11 profiles are preserved as previously FIXed. CAT-12 is not an operational category profile.
