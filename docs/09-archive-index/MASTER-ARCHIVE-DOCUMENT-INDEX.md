@@ -668,3 +668,27 @@ DOC-12 bounded read-only audit: **COMPLETE — ONE SOURCE-ID CORRECTION AND ONE 
 Dependencies newly closed: **0**. FIX decisions changed: **0**. Source-native status promotions/demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+
+## 17. Append-only current navigation authority reconciliation — 19 November 2026
+
+This addendum updates only the current navigation interpretation after Master Checklist v2.0 was retired as the active workflow. It does not change the 231-row manifest transcription, content-review statuses, source identities, DOC-12 index records, archive integrity findings or Stage 4.9 acceptance result.
+
+### 17.1 Current routing authority
+
+DOC-12 §16.3's references to the “active Master Checklist v2.0” as the current navigation authority are historical snapshots. Master Checklist v2.0 is CLOSED FOR ACTIVE WORKFLOW / SUPERSEDED FOR NAVIGATION under its append-only §58.
+
+The active corrective-documentation worklist is docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md, merged through PR #81 at 041a75c838b7dc9553552cf56fb42c1d0d826b47 and verified by post-merge read-back from main. Use it for CW-01–CW-22 sequencing and current corrective-work status. DOC-00 MASTER-PROJECT-CONTROL.md §29 governs project-control context and the separation between control-plane authority and task routing.
+
+### 17.2 Index and evidence authority preserved
+
+- DOC-12 remains an inventory/index document; it does not become the active work checklist or override source-native decisions.
+- The 231-row manifest remains a historical integrity/transcription baseline. Its 231/231 transcription match is not a rehash, byte-level source verification or per-file content review.
+- GOV-OPEN-02 remains PARTIAL. Only M231-223 / DOC02-G03 is recorded as content reviewed in the bounded evidence described in §16; the other 230 manifest entries are not promoted to CONTENT REVIEWED.
+- Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET. DOC-12 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+
+### 17.3 Preservation and governance
+
+The references in §16.3 to the former active checklist and the references in earlier sections to historical Master Checklist snapshots are retained as historical context. This addendum supplies the current reading rule without deleting or rewriting prior rows, snapshots or evidence.
+
+Controls remain READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket GitHub/archive migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.

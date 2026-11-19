@@ -159,3 +159,25 @@ This worklist does not:
 - Master Checklist v2.0 is to be marked **CLOSED FOR ACTIVE WORKFLOW / SUPERSEDED FOR NAVIGATION**, while preserved as historical audit evidence.
 - No work item is claimed complete by this transition.
 - No dependency, FIX decision or technical readiness status is changed by this transition.
+
+
+## 10. Package A — initial CW-01–CW-06 current-main audit checkpoint
+
+The initial bounded review of CW-01–CW-06 was performed against the post-PR #81 current-main documents. This checkpoint records findings and routes only; it does not promote a document to canonical/final/accepted status.
+
+| Work item | Initial audit result | Disposition |
+|---|---|---|
+| CW-01 — DOC-00 | Historical §28.1/§28.4 navigation statements still identify Master Checklist v2.0 as active | Append-only reconciliation prepared in DOC-00 §29; awaiting this PR's review/merge and read-back |
+| CW-02 — DOC-01 | RMD-69 locator statements in earlier §9/§10 are superseded for that locator criterion by §13; no new contradiction established in this bounded review | No new edit proposed; existing DOC01-G01/G02/G04–G10 and other source/locator gaps remain |
+| CW-03 — DOC-02 | DOC-02's category and workflow status model is preserved; cross-document Category/Workflow → DOC-05 Authorization → DOC-06 Traceability alignment is not fully demonstrated by this bounded pass | Remains OPEN for a dedicated cross-document review; no status promotion |
+| CW-04 — DOC-03 | DOC-04 master version mismatch is already corrected by DOC-03 §17; earlier cover/path wording is interpreted by the existing append-only publication addendum | Bounded version-reference correction verified; DOC-03 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL |
+| CW-05 — DOC-08–DOC-10 | DOC-08 publication scope and DOC-09/DOC-10 draft boundaries are explicit; DOC-10 §11.2 retains an obsolete pointer to active Master Checklist v2.0 | Append-only reconciliation prepared in DOC-10 §12; awaiting this PR's review/merge and read-back |
+| CW-06 — DOC-11–DOC-12 | DOC-11 §§6/9 and DOC-12 §16.3 still route current work through Master Checklist v2.0; DOC-11 cover's proposed path is a historical pre-publication snapshot | Append-only reconciliations prepared in DOC-11 §16 and DOC-12 §17; awaiting this PR's review/merge and read-back |
+
+### 10.1 Scope and status boundary
+
+- Corrections in this checkpoint are navigation/provenance clarifications only.
+- No FIX decision, source-native dependency, physical schema, security control, test execution, implementation, deployment or Production status is changed.
+- DOC-01 through DOC-12 retain their existing draft/review/acceptance boundaries.
+- CW-03 remains OPEN; Package B work is not started by this checkpoint.
+- CW-01, CW-05 and CW-06 are not closed until the proposed append-only corrections are reviewed, merged and verified on main.

@@ -199,3 +199,18 @@ DOC-10 §10.3 states that DOC-08 and DOC-09 publications were separately scoped 
 **Disposition:** Two document-control clarifications are warranted: (1) the DOC-10 cover's proposed-path wording is historical after verified PR #22 publication; and (2) the DOC-08 reference in §10.3 must be understood as the focused ST5-11.40 correction only, not publication of the full DOC-08 v1.5 master. No CVS entry or source-native dependency requires status correction from this bounded audit. Dependencies newly closed: **0**. FIX decisions changed: **0**. Decision/status promotions or demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+
+## 12. Append-only current work-routing reconciliation — 19 November 2026
+
+This addendum updates only the current navigation interpretation after the retirement of Master Checklist v2.0 as the active workflow. It does not alter CVS-001–CVS-041, DOC-08/DOC-09/DOC-10 acceptance status, source-native decisions, or any dependency disposition.
+
+- The statement in §11.2 that the active Master Checklist v2.0 §48.3 records the DOC-08 publication distinction is a historical cross-reference. The underlying distinction remains valid: the published DOC-08 artifact is the focused ST5-11.40 correction only; the full reconstructed DOC-08 v1.5 master is not published at its proposed master path.
+- For current corrective-work routing, use docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md, merged by PR #81 at 041a75c838b7dc9553552cf56fb42c1d0d826b47 and verified on main.
+- docs/00-governance/MASTER-CHECKLIST-v2.0.md is CLOSED FOR ACTIVE WORKFLOW / SUPERSEDED FOR NAVIGATION under its §58. It remains historical evidence and must not be treated as the current work-order authority.
+- DOC-00 MASTER-PROJECT-CONTROL.md §29 governs the control-plane/work-routing distinction. This DOC-10 remains the conflict/version/supersession working register and does not become the task checklist.
+- DOC-08 remains NOT CANONICAL / NOT FINAL / ACCEPTANCE NOT MET; DOC-09 and DOC-10 remain DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. No status promotion is created by this navigation correction.
+
+Dependencies newly closed: 0. FIX decisions changed: 0. CVS dispositions changed: 0. Canonical/final/accepted status: NOT PROMOTED.
+
+Controls remain READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
