@@ -505,3 +505,37 @@ Dependencies newly closed: **0**. FIX decisions changed: **0**. Authorization de
 - Next work package: continue the DOC-05–DOC-06 authorization/requirements audit sequence under Master Checklist v2.0 §34.4, with DOC-06 bounded audit and no repetition of completed REC-06 crosswalk work in DOC-05 §20.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket GitHub/archive migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized by this addendum.
+
+## 22. Append-only authorization decision and role-boundary baseline — 19 November 2026
+
+This section adopts DOC-06 §21.6–21.10 as the controlling logical authorization model. It defines policy structure; it does not approve concrete grants, role allowlists, technical enforcement or implementation.
+
+### 22.1 Authorization tuple and decision order
+
+Evaluate: Principal + Business + Module + Resource + Action + Scope + Conditions + Data class + Purpose + SoD/approval. A role name is not a permission. A category/module entitlement is not a permission. UI visibility is not enforcement. The exact permission key follows `<module_id>.<resource>.<action>`; actions are explicit and non-inheriting. No wildcard grant is permitted for sensitive domains or high-impact actions.
+
+Every request must fail closed unless all required checks pass: authenticated active principal; active membership and business context; category/module entitlement; exact permission key; target resource tenant match; scope S0–S5; resource lifecycle preconditions; field classification and purpose; contextual conditions; SoD/independent approval; and auditable execution by the owning domain. Indeterminate context is DENY.
+
+### 22.2 Principal and role namespaces
+
+Keep Platform Super Admin separate from Business roles. Business roles/functions currently named in project governance (Manager, Mitra/Pekerja, Mitra Fisik, Pelanggan) are role/function families, not universal grants. Their eligibility and operational duties must be mapped per category, module, resource, action and scope. A Manager has no implied cross-business, platform, finance, safeguarding, credential, approval or override authority. Mitra/Pekerja and Mitra Fisik require explicit assignment and task/resource scope. Pelanggan access is limited to own verified identity and explicit booking/order/payment or relationship resources. Platform Super Admin access is restricted to platform administration and does not imply routine tenant business-data access.
+
+### 22.3 Permission catalogue expansion format
+
+For every workflow action, the catalogue must specify: workflow ID; module/domain ID; resource; exact action key; eligible principal/role function; business membership requirement; scope S0–S5; resource-state conditions; data class and purpose; SoD conflict; independent approver; execution authority; denial reason; audit event. Distinguish request/submit, review, approve/reject, execute/post, cancel/reverse/refund, publish and export. Absence of an explicit row means DENY.
+
+### 22.4 Scope and relationship rules
+
+S0 Platform; S1 Business; S2 Site; S3 Location; S4 Assignment; S5 Self/relationship. Scope is conjunctive with the permission key and data policy. S5 requires a verified relationship, not a user-supplied identifier alone. S4 requires a current assignment. A broader role or scope cannot bypass field classification, purpose or SoD. Cross-tenant access is denied by default.
+
+### 22.5 SoD and approval paths
+
+Apply DOC-06 §21.9 risk families. Separate initiator, reviewer/approver and executor for sensitive finance, procurement, inventory, education outcome/certificate, hotel safety/rate override and privileged-access changes. No numeric thresholds are inferred. Until a threshold is explicitly defined and approved, sensitive financial and safety exceptions require dual control. The requester cannot approve their own privileged access. Emergency access is time-bound, reason-coded, least-privilege and independently reviewed; it cannot suppress audit evidence.
+
+### 22.6 Negative acceptance design
+
+At minimum, documentation acceptance must cover: cross-business resource ID substitution; wrong site/property; unassigned worker task; unverified guardian/student relationship; customer accessing another customer's booking; Manager attempting platform action; Mitra attempting approval; self-approval of refund/discount; grade author self-finalizing; maintenance self-releasing safety hold; unauthorized export of D3 data; D4 secret retrieval; purpose mismatch; expired membership/session; disabled module; and replayed idempotent command. Each scenario records actor, business, role/function, target, attempted key, scope, expected DENY, reason and required audit evidence. These are specifications, not executed tests.
+
+### 22.7 Status and implementation boundary
+
+DOC-05 remains a design/working master until the full action-by-action catalogue is populated and cross-checked against DOC-02 workflow IDs, DOC-04 object ownership/field classifications, DOC-06 traceability and DOC-07 security evidence. Existing approval statuses and OPEN dependencies are not silently promoted by this baseline. No RLS/Auth, API/backend, database, application, CI or deployment changes are authorized. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
