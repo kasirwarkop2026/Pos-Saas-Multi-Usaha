@@ -202,3 +202,16 @@ The primary domain listed for each EDU-WF and HTL-WF in DOC-06 §§21.3–21.4 o
 A conditional domain is enabled only by explicit category/business configuration and applicable subscription entitlement, followed by independently evaluated permission. Extension workflows require defined owner, objects, actions, scope, data/purpose, SoD and acceptance scenarios. No role, Manager status or workflow label automatically grants access. DOC-06 §21 is the controlling logical baseline; contradictions must be logged and reconciled rather than resolved by local reinterpretation.
 
 Status: project-authored logical category design recorded; no permission grants, technical configuration, physical schema, implementation or test execution is implied. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15. Append-only clarification — category/domain baseline versus legacy crosswalk status (19 November 2026)
+
+This section reconciles §8 with the project-authored design decisions in §14 and DOC-06 §21.
+
+- **G02 is RESOLVED BY PROJECT DESIGN** for the canonical logical domain taxonomy M01–M21 and the CAT-10/CAT-11 category profiles recorded in §14. This is not a claim that every legacy category-to-module source cell or all-category entitlement matrix is approved.
+- **G04 is RESOLVED AT LOGICAL WORKFLOW-OWNERSHIP LEVEL** for the 30 Education/Hotel workflows through the primary/supporting ownership map in DOC-06 §§21.3–21.4. Detailed submodule decomposition, object/action policy rows, exact role grants and technical execution remain separate acceptance items.
+- The §8 statement that G02/G04 remain OPEN describes the earlier source-crosswalk review state and is superseded only for the logical design decisions above. Do not reopen those decisions solely because Crosswalk v1.3 remains DRAFT/CANDIDATE.
+- Crosswalk v1.3 retains its historical source-artifact status. DOC-06 §21 and this §14 are the project-authored normative logical design for the stated scope.
+- CORE/CONDITIONAL identifies product/category design, not automatic activation, subscription entitlement, permission or role grant.
+
+No dependency outside this explicitly scoped logical design is closed. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
