@@ -517,3 +517,20 @@ DOC-07 §30 defines CW09-SEC-01 through CW09-SEC-24, linked to Education/Hotel w
 6. Re-run documentation CI on the final PR head, review all changed paths and check Supabase/Vercel integration safety before any merge decision.
 
 Dependencies newly closed: 0. Physical schema gaps closed: 0. Executed tests: 0. Permissions granted: 0. CW-09 remains PARTIAL until all documentation acceptance criteria are met. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+### 15.8 Package B continuation — exact security-test key and audit-event cross-reference (19 November 2026)
+
+DOC-07 §31 was appended to the existing PR #87 branch. It cross-references all 24 stable CW09-SEC-01–24 test IDs to candidate exact-action permission keys and expected audit-event evidence families, using DOC-05 §§22–23 and DOC-06 §21 as the design baseline.
+
+- Coverage: 24/24 test IDs now have candidate permission-key references and expected audit-event families.
+- Key status: CANDIDATE DESIGN VOCABULARY ONLY. This does not create role grants, approved allowlists, platform permission keys or implementation.
+- Platform S0 case: exact platform resource/action key remains OPEN; the DOC-07 entry is explicitly a namespace marker, not a final key.
+- Event names: semantic evidence labels only; physical event schemas/names and retention remain future design work.
+- Tests: all remain DESIGN / NOT EXECUTED. No test code, runtime, RLS, API or Production execution was performed.
+- Exact policy tuple still OPEN for each key: actor/function, membership, module entitlement, scope, resource state, data class/purpose, SoD/approver, execution owner and audit contract.
+- Dependencies newly closed: 0. CW-09 remains PARTIAL.
+
+Next bounded work: expand the DOC-05 candidate key catalogue into per-key policy tuples, prioritizing high-risk actions (refund/write-off/settlement, safeguarding/export, safety-hold release, inventory adjustment/transfer closure, D4 secret access and platform administration). In parallel, DOC-04 field-level classification remains OPEN until a logical attribute inventory is authored and reconciled per entity; no physical columns are inferred.
+
+This update is append-only and is committed to the existing PR #87 branch; no second PR was opened. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
