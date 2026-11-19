@@ -1178,3 +1178,17 @@ The crosswalk makes coverage limits explicit:
 **Disposition:** CW-10 cross-document mapping is **PARTIAL — design crosswalk recorded; dedicated-test coverage gaps and execution evidence remain OPEN/NOT EXECUTED**. No dependency is closed by this section. CW-09 remains PARTIAL under its own acceptance criteria.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+### 23.7 Coverage classification precision note
+
+For avoidance of ambiguity in §§23.2–23.3:
+
+- EDU-WF-08's CW09-SEC-14/16 links are **RELATED inventory-level scenarios**, not dedicated Education learning-material workflow tests.
+- EDU-WF-11's CW09-SEC-01/21 links are **RELATED student/guest relationship and purpose scenarios**, not dedicated sponsor/corporate-account workflow tests.
+- HTL-WF-03 and HTL-WF-04's CW09-SEC-11 links are **RELATED group-booking/guest-relationship coverage**, not dedicated reservation/booking lifecycle tests.
+- HTL-WF-06's CW09-SEC-06/13 and HTL-WF-07's CW09-SEC-13 links are **RELATED identity/property-scope coverage**, not dedicated check-in or full stay-lifecycle tests.
+- HTL-WF-13's CW09-SEC-05/21 and HTL-WF-14's CW09-SEC-04/12 links are **RELATED restricted-case/purpose and finance/report controls**, not dedicated guest-service or staff-shift/cash-control tests.
+
+Accordingly, the current 30-workflow register contains **16 workflows with at least one direct scenario reference, 8 with related-only references, and 6 with no dedicated or related workflow-specific scenario**. The direct/related distinction must be preserved when calculating coverage; a cross-cutting test alone does not count as a dedicated workflow test. All linked scenarios remain DESIGN / NOT EXECUTED.
+
