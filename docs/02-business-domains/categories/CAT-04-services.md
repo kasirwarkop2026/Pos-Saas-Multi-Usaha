@@ -32,7 +32,7 @@ This page is a navigation summary, not a replacement for its primary RMD audit, 
 
 No SQL/DDL/DML, schema, RLS/Auth, API/backend, application code, deployment or Production change is authorized. Stage 6 remains NOT AUTHORIZED.
 
- 
+
 ## CW-10 project-authored logical workflow title and owner index — CAT-04 Services (20 November 2026)
 
 These are project-authored logical titles aligned to the 14-workflow baseline; they are not claimed as source-native verbatim titles.
