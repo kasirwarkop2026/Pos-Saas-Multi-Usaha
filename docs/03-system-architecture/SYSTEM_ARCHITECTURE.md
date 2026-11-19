@@ -288,3 +288,27 @@ This addendum clarifies the version reference without rewriting the historical �
 This is a document-control clarification only. It does not retroactively change the source DOC-03 v0.8 archive or DOC-04 v0.1.0 working master, and does not promote either document to canonical/final status.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED.
+
+## 18. Append-only canonical domain architecture and interaction contract — 19 November 2026
+
+This section adopts DOC-06 §21 as the project-authored logical domain baseline. It defines conceptual ownership and interaction rules only; it does not assert deployed services, physical schema, API endpoints, message broker or implementation.
+
+### 18.1 Canonical logical domains
+
+M01–M21 and their names are canonical logical domain identifiers per DOC-06 §21.1. Domain IDs are stable architecture vocabulary; they are not necessarily deployable microservices, database schemas, packages or subscription SKUs. A modular monolith is compatible with these boundaries if ownership and dependency rules are enforced.
+
+### 18.2 Single-owner boundaries
+
+Each authoritative business object has one owning domain. The primary/supporting domain mapping for EDU-WF-01–14 and HTL-WF-01–16 is defined in DOC-06 §§21.3–21.4. The owner controls object creation, mutation, lifecycle transitions, invariants, cancellation/reversal and audit history. Supporting domains own their own records and communicate through explicit commands, events or read models. Cross-domain table writes and hidden shared ownership are prohibited at the design level.
+
+### 18.3 Interaction contract
+
+Commands identify actor, business context, target object, requested action, correlation ID and idempotency key where retryable. Events identify business_id, aggregate/object ID, version, event type, occurred-at time, correlation/idempotency reference and originating actor/service. Event payloads minimize sensitive data; consumers retrieve restricted attributes through authorized access. Consumers must tolerate duplicate and out-of-order delivery and use version/sequence checks. Failed consumers must not erase committed source-domain facts; retries and reconciliation are explicit. Read models are projections, never write authorities.
+
+### 18.4 Tenant and boundary invariants
+
+Every tenant-owned command, event and resource resolves to one business_id. Outlet/property/campus, warehouse, location, assignment and self/relationship scopes refine access within that tenant. Cross-business or cross-tenant access is denied unless a separate explicit platform-supported relationship and authorization path exists. Platform operations remain separate from business operations.
+
+### 18.5 Cross-document ownership
+
+DOC-06 is the workflow/domain traceability baseline; DOC-04 must map each documented entity to one owning domain and identify references/projections; DOC-05 specifies the permission decision contract; DOC-07 specifies security controls and evidence. Any physical design must preserve these invariants and requires its own authorized technical review. No database, API, RLS, backend, application or deployment change is authorized. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
