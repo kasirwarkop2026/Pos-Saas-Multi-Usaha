@@ -909,3 +909,15 @@ This addendum links DOC-04 §27 entity ownership to the resource-owner authoriza
 5. Missing or ambiguous owner/scope/key is DENY. No CRUD bundle, wildcard or inherited permission is created.
 
 **Disposition:** 17/17 entity families are mapped to the target owner already established in DOC-04 §27 and DOC-05 §25.3. No role grant, permission allowlist, RLS policy or technical enforcement is approved.
+
+
+## 31. CW-05 DOC-04 owner-register locator correction (20 November 2026)
+
+DOC-04 §28 is the pre-existing authoritative 17-entity owner register; DOC-04 §32 is the supplemental CW-05 relationship and tenant-integrity crosswalk. The prior §30 text that points to DOC-04 §27 is superseded for navigation only.
+
+1. M06/M07 target ownership is already defined in DOC-04 §28 and DOC-05 §25.3.
+2. The CW-05 supplementary relationship handoff and TEN-01–TEN-07 mapping are referenced at DOC-04 §32.
+3. No entity owner, role, permission key, grant, scope or implementation decision changes.
+4. Candidate keys remain candidate vocabulary; exact production actor/key/resource/scope/condition/approval grants remain OPEN / NOT APPROVED.
+
+**Disposition:** this section corrects only the DOC-04 locator; no authorization grant or technical control is created.
