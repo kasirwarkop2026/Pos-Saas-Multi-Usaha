@@ -1052,3 +1052,15 @@ READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
 - Execution requires separately approved implementation scope and controlled non-production environment; no Production data is permitted.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 41. CW-05 DOC-04 owner-register locator correction (20 November 2026)
+
+The evidence contracts for CW05-DATA-01–12 are unchanged. For navigation, use DOC-04 §28 as the authoritative 17-entity owner register and DOC-04 §32 as the supplemental relationship/tenant-integrity crosswalk. The earlier CW-05 locator “DOC-04 §27” is superseded for references only.
+
+- Entity-owner evidence is reviewed against DOC-04 §28.
+- Relationship-owner, cross-domain handoff and TEN-01–TEN-07 evidence is reviewed against DOC-04 §32.
+- Logical attribute proposal references remain DOC-04 §29–31.
+- Physical field/key evidence remains OPEN / NOT ACCEPTED; no scenario is executed by this clarification.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.

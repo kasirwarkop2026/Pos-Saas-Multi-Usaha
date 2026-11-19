@@ -1211,3 +1211,38 @@ Physical Data Dictionary remains NOT ACCEPTED. Exact SQL fields/types/defaults, 
 **Next bounded task:** CW-06 — reconcile DOC-05 Authorization Master against DOC-06 requirements, DOC-07 security controls and the aligned M01–M21/entity ownership boundaries. Exact production grants and technical enforcement remain separately gated.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.29 CW-05 — append-only correction: pre-existing DOC-04 ownership register and section numbering (20 November 2026)
+
+**Reason for correction:** post-merge review found that DOC-04 already contained §§27–31 before PR #98. In particular, DOC-04 §28 had already mapped all 17 historical conceptual entities to one primary M-domain owner. CW05-F01 in §15.27 therefore overstated a missing owner map. The appended CW-05 block also reused the number “§27”, creating an ambiguous locator.
+
+### 15.29.1 Corrected audit findings
+
+| Prior CW-05 statement | Corrected interpretation |
+|---|---|
+| CW05-F01 — entity-to-domain owner missing | **RETRACTED.** DOC-04 §28 already maps 17/17 entities to one primary owner and identifies supporting domains. CW-05 reaffirmed and cross-referenced this existing decision; it did not originate or newly resolve the owner map. |
+| CW05-F02 — M06/M07 transfer boundary missing | **REVISED.** DOC-04 §28 already distinguishes M06 inventory/costing ownership from M07 transfer/shipment custody and M19 external delivery. CW-05 adds a relationship-level handoff crosswalk and reciprocal references; it does not newly decide the boundary. |
+| DOC-04 §27 as CW-05 owner/tenant matrix | **RENUMBERED FOR NAVIGATION.** The original DOC-04 §§27–31 predate CW-05. The CW-05 block appended after §31 was mistakenly labeled §27. That appended block is designated **DOC-04 §32** for all current/future references. |
+| CW-05 logical attribute coverage | **NO NEW PHYSICAL ACCEPTANCE.** DOC-04 §29 already contains the 17/17 proposed logical attribute inventory; §§30–31 clarify proposal/classification status. Physical field-to-column mapping remains OPEN. |
+
+### 15.29.2 Canonical DOC-04 section map after correction
+
+| Section | Controlling content |
+|---|---|
+| DOC-04 §27 | Pre-existing logical domain ownership and field-classification design |
+| DOC-04 §28 | Pre-existing authoritative 17-entity-to-M-domain ownership register; 17/17 mapped |
+| DOC-04 §29 | Pre-existing 17/17 conceptual logical attribute proposals; not physical columns |
+| DOC-04 §30 | Pre-existing reconciliation of attribute proposals, classification and purpose vocabulary |
+| DOC-04 §31 | Pre-existing precision note for 0/17 field-classification status |
+| DOC-04 §32 | CW-05 supplemental relationship-owner/handoff, TEN-01–TEN-07 entity-scope crosswalk and physical non-inference boundary |
+
+The appended CW-05 content that was mistakenly headed “§27” is retained append-only and is to be cited as §32. Its copied 17-entity owner table is a navigation/reconciliation copy; DOC-04 §28 remains the authoritative owner register. Within that appended block, former subheading labels 27.1–27.5 are referenced as §32.1–§32.5. No historical section is deleted or rewritten.
+
+### 15.29.3 Corrected CW-05 disposition
+
+**CW-05 remains PASS / CLOSED for the bounded logical entity ownership and tenant-integrity cross-reference scope after this locator correction.** The actual incremental CW-05 contribution is: 16 relationship source/target owner and handoff interpretations; TEN-01–TEN-07 cross-reference to the 17-entity set; explicit DOC-03/DOC-05/DOC-06/DOC-07 navigation; 12 architecture/data acceptance designs; and evidence contracts. The 17/17 owner mapping and 17/17 proposed logical attribute inventory were already present in DOC-04 §§28–29 and are not counted as newly created by CW-05.
+
+Physical Data Dictionary remains NOT ACCEPTED; physical field mapping, PK/FK/composite-FK, constraints, RLS/server enforcement and execution evidence remain OPEN / NOT VERIFIED. CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application, CI workflow, deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
