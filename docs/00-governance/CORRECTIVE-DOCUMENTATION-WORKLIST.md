@@ -628,3 +628,13 @@ Next: conduct a contradiction/duplicate-owner audit across DOC-01/02/03/04/05/06
 - Next: re-read all seven owner-document addenda and the full eight-file PR diff; verify key spelling, heading/lint integrity, current CI and current PR head/base before any merge decision.
 
 Controls: READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+### 15.12 Additional contradiction-audit clarification — D4 secret read versus rotation (19 November 2026)
+
+| Finding | Documents / locations | Ambiguity | Append-only disposition |
+|---|---|---|---|
+| CW09-FCA-07 — Prohibited secret-read token | DOC-05 §24.2 AUTH-HR-11; DOC-07 §31 CW09-SEC-20 | DOC-07 listed M21.integration_secret.read as a candidate key although DOC-05 explicitly creates no secret read/display permission. | DOC-07 §34 classifies the token as a prohibited attempted-action label for a DENY scenario only. M21.integration_secret.rotate_secret_ref remains the separate candidate rotation action; secret values remain inaccessible. |
+
+This is a design-vocabulary clarification only. CW09-SEC-20 remains DESIGN / NOT EXECUTED; no secret permission, dependency closure, implementation or PASS is claimed. The changed-file count remains eight and all edits remain append-only.
+
