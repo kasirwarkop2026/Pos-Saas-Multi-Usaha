@@ -332,3 +332,47 @@ DOC-06 §31 is the controlling cross-master traceability matrix.
 6. Historical CW09 16 direct / 8 related-only / 6 uncovered classification remains a historical baseline. Current dedicated workflow design references are 30/30 after CW03.
 
 **Disposition:** category and workflow traceability aligns at logical design level; conditional modules, technical entitlements, physical workflow state and executed evidence remain separate acceptance gates.
+
+
+## 20. CW-10 category-to-M01–M21 CORE/CONDITIONAL and workflow-owner baseline (20 November 2026)
+
+This section is the project-authored logical category crosswalk for CAT-01–CAT-13. It supplements existing category decisions; it does not create permission grants or automatically activate modules.
+
+### 20.1 Category profile matrix
+
+| Category | CORE domains | CONDITIONAL domains | OUT-OF-BASELINE / special gate |
+|---|---|---|---|
+| CAT-01 Retail | M01, M02, M03, M04, M06, M08, M16 | M05, M07, M17, M18, M19, M20, M21 | M09, M10, M11, M12, M13, M14, M15 |
+| CAT-02 Wholesale | M01, M02, M03, M04, M06, M07, M08, M16, M19 | M11, M17, M18, M20, M21 | M05, M09, M10, M12, M13, M14, M15 |
+| CAT-03 F&B | M01, M02, M03, M04, M06, M08, M10, M12, M16, M17, M18 | M07, M09, M11, M19, M20, M21 | M05, M13, M14, M15 |
+| CAT-04 Services | M01, M02, M03, M04, M05, M09, M16, M17 | M06, M08, M11, M18, M19, M20, M21 | M07, M10, M12, M13, M14, M15 |
+| CAT-05 Salon | M01, M02, M03, M04, M05, M09, M16, M17 | M06, M08, M12, M18, M20, M21 | M07, M10, M11, M13, M14, M15, M19 |
+| CAT-06 Manufacturing | M01, M02, M06, M07, M08, M10, M11, M16, M17, M18, M20 | M03, M04, M09, M19, M21 | M05, M12, M13, M14, M15 |
+| CAT-07 Rental | M01, M02, M04, M05, M07, M09, M11, M16, M17, M20 | M03, M06, M08, M18, M19, M21 | M10, M12, M13, M14, M15 |
+| CAT-08 Pharmacy | M01, M02, M03, M04, M06, M08, M14, M16, M18 | M07, M17, M19, M20, M21 | M05, M09, M10, M11, M12, M13, M15; M14 regulated operation NOT READY until credential/jurisdiction/compliance gates evidenced |
+| CAT-09 Laundry | M01, M02, M03, M04, M05, M06, M07, M09, M15, M16, M17, M19 | M08, M11, M18, M20, M21 | M10, M12, M13, M14 |
+| CAT-10 Education | M04, M05, M13, M17 | M02, M06, M08, M16, M18, M21 | Preserve existing E-01–E-04 decision boundary; no new profile change |
+| CAT-11 Hotel | M02, M05, M12, M16, M18, M20 | M03, M04, M06, M07, M08, M17, M19, M21 | Preserve existing H-01–H-04 decision boundary; no new profile change |
+| CAT-12 Other / Unclassified | None — no operational M01–M21 module activated | None until classification review | Temporary classification/exception control path only; fail-closed; no specialist module auto-enable |
+| CAT-13 Retail/Refill track | M01, M02, M03, M04, M06, M08, M16 | M07, M17, M18, M19, M21 | M09, M10, M11, M12, M13, M14, M15 |
+| CAT-13 Formulation/Manufacturing track | M01, M02, M06, M08, M10, M11, M16, M17, M18, M20 | M03, M04, M07, M09, M19, M21 | M05, M12, M13, M14, M15 |
+
+**Status interpretation:** CORE means category baseline capability, not an active subscription, module grant or role permission. CONDITIONAL requires an explicit use-case, package entitlement, Business configuration and separate authorization. OUT-OF-BASELINE means not part of the default profile; changing it requires a recorded category decision. CAT-10/CAT-11 profiles are preserved as previously FIXed. CAT-12 is not an operational category profile.
+
+### 20.2 Workflow title/owner index authority
+
+- CAT-01–CAT-09 and CAT-13 detail pages carry project-authored logical title/owner indexes.
+- CAT-10 and CAT-11 project-authored indexes remain in DOC-02 §17 and the category pages; their 14/16 titles and owners are unchanged.
+- CAT-12's 14 items are exception/classification steps, not business workflows and do not enable operational modules.
+- Each item has exactly one primary M-domain owner. The owner is responsible for its own authoritative object/state; supporting domains interact through explicit commands/events/references/read models.
+- Workflow title/owner is not a permission grant. DOC-05 remains the authority for exact actor/key/resource/scope/condition/SoD decisions.
+
+### 20.3 Category-specific guardrails
+
+1. CAT-08 Pharmacy: regulated/professional dispensing remains NOT ELIGIBLE / NOT READY until applicable credential, jurisdiction, prescription, controlled-product and compliance gates are evidenced and separately approved.
+2. CAT-12 Other: unknown/ambiguous activity remains fail-closed. No specialist module, role or permission is inferred from classification.
+3. CAT-13: Retail/Refill and Formulation/Manufacturing are separate tracks; they may not be collapsed into one 22-step lifecycle or one default module profile.
+4. CORE/CONDITIONAL labels do not bypass subscription, category activation, role eligibility, exact key, tenant scope, SoD or data-purpose controls.
+5. All category profiles are logical product design. Physical schema, technical enforcement, test execution and evidence remain separate gates.
+
+**Disposition:** category profile and workflow index is project-authored conceptual design. Source-native title recovery is not claimed for the newly authored indexes. No technical implementation or entitlement activation is authorized.
