@@ -1381,3 +1381,61 @@ CW06-AUTH-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED /
 **Next bounded task:** CW-07 — DOC-07 security-control/evidence ownership and coverage against DOC-06 requirements and DOC-05 policy tuples.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.33 CW-07 — DOC-07 security-control/evidence ownership and current coverage reconciliation (20 November 2026)
+
+**Objective:** reconcile DOC-07 security-control/evidence ownership and coverage against DOC-06 requirements, DOC-05 authorization policy tuples and DOC-03/DOC-04 resource-owner boundaries. This CW corrects historical coverage snapshots and completes the bounded evidence-design index; it does not execute tests or claim security acceptance.
+
+### 15.33.1 Current-main audit findings
+
+| Finding | Current-main observation | Disposition / correction |
+|---|---|---|
+| CW07-F01 — historical workflow coverage snapshot | DOC-06 §23.7 and DOC-07 §§36–37 record the original 16 direct / 8 related-only / 6 uncovered CW09 baseline. DOC-06 §24 and DOC-07 §38 subsequently added 14 dedicated CW03 designs. | Preserve 16/8/6 as historical CW09 baseline; publish current 30/30 dedicated workflow design coverage. |
+| CW07-F02 — inventory entity test coverage | DOC-06 §23.5 records historical direct tests for adjustment/count, transfer/shipment and reservation/movement; CW05-DATA-01–12 add cross-cutting data/tenant designs, but inventory_cost_exceptions still lacks a dedicated evidence-chain scenario. | Add CW07-EVID-13 for M06 cost exception / M16 financial posting boundary. Keep family-level vs entity-specific coverage explicit. |
+| CW07-F03 — evidence ownership | DOC-07 lists evidence fields and event families, but source-domain business facts, authorization decisions, test-run results and independent review are not consolidated into one ownership rule. | Define distinct evidence producers/owners and prevent a test runner or report projection from becoming business source of truth. |
+| CW07-F04 — test design vs execution status | 24 CW09, 14 CW03, 12 CW04, 12 CW05 and 12 CW06 scenario IDs exist. All remain design-only. | Reconcile the 74 existing IDs and add 13 CW07 evidence/coverage designs; all 87 remain NOT EXECUTED. |
+| CW07-F05 — candidate-key/policy traceability | DOC-05/DOC-07 alignment records 43 permission-like tokens: 42 candidate keys and one prohibited secret-read attempted-action label; 14 AUTH-HR tuples remain design-only. | Preserve the key and policy boundaries; map evidence to exact source owner and policy tuple without treating candidate keys as grants. |
+| CW07-F06 — CW-10 status wording | DOC-07 §36 retains PARTIAL and historical entity test gaps; later CW03/CW05 work improves design coverage but does not generate evidence or finish all field-level controls. | Update current design coverage while keeping CW-10 PARTIAL until control acceptance and execution evidence gates are satisfied. |
+
+### 15.33.2 Current coverage baseline
+
+| Coverage dimension | Current design state | Evidence / execution state |
+|---|---|---|
+| CAT-10/CAT-11 workflows | 30/30 have dedicated design references: 16 CW09-SEC direct designs + 14 CW03-SEC designs | 0 executed; no runtime evidence |
+| Inventory/warehouse conceptual entities | 17/17 have logical owners; CW05-DATA-01–12 cover cross-cutting entity/tenant families; CW07-EVID-13 adds cost-exception evidence-chain design | Not 17 independent per-entity test cases; physical fields remain OPEN |
+| Architecture interaction | 12 CW04-ARCH designs | 0 executed |
+| Authorization decision model | 12 CW06-AUTH designs | 0 executed |
+| Stable security negative tests | 24 CW09-SEC designs | 0 executed |
+| Total design IDs after CW-07 | 87 = 24 + 14 + 12 + 12 + 12 + 13 | 0 executed; 0 evidence generated/verified |
+
+### 15.33.3 Append-only correction package
+
+| Document | New section | Purpose |
+|---|---|---|
+| DOC-05 AUTHORIZATION_MASTER.md | §33 | Evidence ownership and source-domain/auth-decision/test-run separation |
+| DOC-06 MASTER_TRACEABILITY.md | §28 | Current 30-workflow/17-entity coverage map and 13 evidence acceptance designs CW07-EVID-01–13 |
+| DOC-07 SECURITY_EVIDENCE.md | §43 | Current coverage reconciliation, evidence ownership, 13 evidence contracts and cost-exception scenario |
+| This Worklist | §15.33 | Findings, corrected coverage counts, status boundary and next CW |
+
+### 15.33.4 CW-07 acceptance matrix
+
+| Acceptance criterion | Target | Boundary |
+|---|---|---|
+| Workflow design coverage | 30/30 direct workflow design references | Historical 16/8/6 remains historical baseline |
+| Entity design traceability | 17/17 logical owner references; cross-cutting family designs mapped; cost exception scenario added | Not 17 individual test executions |
+| Evidence ownership | Source fact, authorization decision, test execution and independent review have distinct accountable producers | No evidence store or runtime control implemented |
+| Test ID reconciliation | 87/87 IDs indexed across DOC-06 and DOC-07 | DESIGN / NOT EXECUTED |
+| Candidate key/policy boundary | 42 candidate keys + 1 prohibited token; 14 AUTH-HR tuples remain design-only | No grants |
+| Evidence state | NOT GENERATED / NOT VERIFIED until actual authorized execution | No pass inferred from design or CI |
+| CW-10 status | Remains PARTIAL until remaining control mapping and execution/evidence requirements are accepted | No false closure |
+
+### 15.33.5 Bounded disposition and next action
+
+**CW-07: SECURITY-CONTROL / EVIDENCE-DESIGN ALIGNMENT — READY FOR DOCUMENTATION ACCEPTANCE, PENDING PR REVIEW, CI, CONDITIONAL MERGE AND POST-MERGE READBACK.** The package reconciles the historical and current workflow coverage counts, records evidence ownership, extends cross-cutting data coverage to the inventory cost-exception boundary and indexes all design-only scenarios.
+
+CW07-EVID-01–13 and all prior CW09/CW03/CW04/CW05/CW06 designs remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED / NOT VERIFIED. CW-10 remains PARTIAL. Physical field classification, exact production grants, RLS/Auth/API/backend enforcement, runtime tests, independent security review and Production readiness remain OPEN / NOT AUTHORIZED.
+
+**Next bounded task after verified CW-07 close:** CW-08 — audit DOC-06 requirements traceability against DOC-01 Product Blueprint, DOC-02 category/workflow design, DOC-03 architecture, DOC-05 authorization and DOC-07 evidence coverage.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
