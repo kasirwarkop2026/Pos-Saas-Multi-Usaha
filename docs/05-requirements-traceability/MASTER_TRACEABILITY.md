@@ -1058,3 +1058,19 @@ Every protected request must pass all checks in this order; any failed or indete
 **CW-09 repair disposition:** G02 is resolved at the product-design decision level by adopting the canonical domain taxonomy and category baseline above. G04 is resolved at the logical workflow ownership level for all 30 Education/Hotel workflows. Neither claim implies that every object-level schema, permission key, threshold, test execution or technical authorization is complete. CW-09 may only be marked CLOSED after DOC-01/02/03/04/05/07 cross-document reconciliation and the remaining traceability acceptance items are complete. Until then, CW-09 remains PARTIAL with a bounded reconciliation task, not an unresolved request for external sources.
 
 Governance remains unchanged: this section authorizes documentation design only. DB_PUSH_BLOCKED: ACTIVE; READ-ONLY / APPEND-ONLY; no SQL/DDL/DML, schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 22. Append-only status reconciliation — normative design baseline versus earlier CW-09 checkpoints (19 November 2026)
+
+DOC-06 §21 is the project-authored normative logical design baseline and supersedes conflicting pre-decision candidate wording in §§19–20 only within the following scope:
+
+1. **G02:** M01–M21 identifiers and names are canonical logical domain identifiers. CAT-10 Education and CAT-11 Hotel CORE/CONDITIONAL profiles are adopted as recorded in DOC-01 §14 and DOC-02 §14.
+2. **G04:** primary/supporting logical workflow ownership is established for all 30 Education/Hotel workflows in §§21.3–21.4.
+3. These are logical design decisions, not source-provenance recovery, full category-wide entitlement approval, complete per-action role grants, physical data mapping, technical authorization implementation, or executed test evidence.
+4. The earlier §§19–20 statements that G02/G04 remain OPEN are historical checkpoint statements from before §21. They are superseded for the exact design scope above; do not use them to reopen the resolved design decisions.
+5. The 30 workflow ownership rows are authoritative for primary/supporting domain ownership. Detailed actor eligibility, scope, data/purpose, SoD and execution constraints are further specified in DOC-05 §§22–25. DOC-04 owns the 17 conceptual inventory entity map and attribute proposal; DOC-07 owns the 24 stable security-test design IDs and cross-references.
+6. All 24 CW09-SEC IDs remain DESIGN / NOT EXECUTED. Physical-field mapping, exact permission grants, technical enforcement and Production readiness are not established.
+
+No dependency is closed merely by this reconciliation. CW-09 remains subject to its documented acceptance criteria and the distinction between logical design completion and technical/evidence completion.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
