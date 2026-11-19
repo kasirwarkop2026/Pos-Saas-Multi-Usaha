@@ -1610,3 +1610,52 @@ CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VE
 **Next bounded task:** CW-09 — final requirements-to-release-gate and implementation-readiness audit across DOC-00–DOC-12. The audit may prepare the implementation gate but cannot authorize Stage 6. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED pending separate explicit user authorization.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.39 CW-09 — final DOC-00–DOC-12 implementation-readiness and release-gate audit (20 November 2026)
+
+**Objective:** perform a read-only readiness audit after CW-01–CW-08, reconcile current main status against DOC-00–DOC-12, and state whether the project may safely enter Stage 6. This CW is a gate audit, not an implementation authorization.
+
+### 15.39.1 Current readiness findings
+
+| Gate | Current evidence | Result |
+|---|---|---|
+| Product/category scope | DOC-01 lists CAT-01–CAT-13; DOC-02 has 13 category pages. Canonical M01–M21 CORE/CONDITIONAL profiles and 30-workflow ownership baseline are explicitly reconciled only for CAT-10 Education and CAT-11 Hotel. Other category mappings remain DRAFT/CANDIDATE/OPEN. | BLOCKED for all-13-category implementation |
+| Workflow/requirements traceability | 30/30 CAT-10/CAT-11 workflows have dedicated design references; 99 total scenario/evidence IDs are registered. | PASS at bounded design reference only; not all 13 categories |
+| Logical architecture | CW-04 closed; DOC-03 ownership and interaction clauses aligned to DOC-06. | PASS at logical design scope |
+| Logical data ownership | 17/17 conceptual entity owners and TEN-01–TEN-07 cross-references present. | PASS at logical design scope; physical Data Dictionary NOT ACCEPTED |
+| Physical schema / ERD | A12.18–A12.28 remain OPEN/UNVERIFIED; A12.40 PARTIAL; A12.41 NOT STARTED; DOC-04 physical fields/keys/constraints not accepted. | BLOCKED |
+| Authorization | Role/principal vocabulary and candidate keys reconciled; exact actor × key × resource × scope × condition × approval rows remain OPEN; no grants approved. | BLOCKED |
+| Security/test execution | 99 scenario/evidence design IDs remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED; CW-10 remains PARTIAL. | BLOCKED |
+| Cross-domain purchasing/sales | Purchasing 14→15 and Sales 20→18 crosswalk gaps remain open in DOC-11. | BLOCKED where those flows are in scope |
+| Decision registers | DOC-08 reconstructed working register, DOC-09 consolidated OPEN register and DOC-10 conflict register remain DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL / NOT ACCEPTED. | Documentation acceptance incomplete |
+| Archive/provenance | GOV-OPEN-02 PARTIAL (only M231-223 per-file content review); GOV-OPEN-05 DEFERRED; GOV-OPEN-07 OPEN; D40-203–D40-216 UNRECOVERED. | Stage 4.7.8 / Stage 4.9 acceptance remains blocked |
+| Roadmap/archive index | DOC-11 and DOC-12 are published working masters but remain DRAFT / REVIEW REQUIRED; DOC-12's 231/231 manifest transcription is not a 231-file content review. | Not final/accepted |
+| Governance authorization | DB_PUSH_BLOCKED ACTIVE; Stage 5 blanket migration and Stage 6 implementation NOT AUTHORIZED. | BLOCKED by explicit authorization gate |
+
+### 15.39.2 Bounded audit conclusion
+
+**IMPLEMENTATION READINESS: NOT READY.** CW-01–CW-08 have closed their bounded documentation-design scopes, but they do not satisfy the broader release/implementation gates. In particular, category coverage outside CAT-10/CAT-11, physical schema acceptance, exact authorization grants, technical enforcement, test execution/evidence, cross-domain purchasing/sales gaps and Stage 4.9 acceptance remain unresolved.
+
+This is not a failure of the completed CWs; it is the explicit separation between logical design consistency and implementation readiness. The project must not enter Stage 6 on the basis of document cross-reference completion alone.
+
+### 15.39.3 Prioritized corrective sequence
+
+| Priority | Next CW | Scope | Closure target |
+|---:|---|---|---|
+| 1 | CW-10 | Complete category-to-M01–M21 / workflow / module / entitlement crosswalk for CAT-01–CAT-13, including explicit scope for CAT-12 and CAT-13 tracks | Category profiles and workflow ownership accepted for the agreed product scope |
+| 2 | CW-11 | DOC-04 physical Data Dictionary and ERD specification: exact fields, types, nullability, PK/FK/composite-FK, uniqueness/checks/indexes and tenant-integrity constraints | Physical schema design accepted in documentation only; no DB push |
+| 3 | CW-12 | DOC-05 exact actor/key/resource/scope/condition/approval matrix and SoD thresholds for the agreed categories/workflows | Permission catalogue reviewed and approved at design level; no production grants |
+| 4 | CW-13 | DOC-06 full requirements-to-workflow/control/test mapping for all in-scope categories, including Purchasing/Sales 14→15 and 20→18 | Requirement traceability accepted for the agreed product scope |
+| 5 | CW-14 | DOC-07 controlled test/evidence plan, evidence ownership, retention and non-production execution gate | Evidence plan accepted; runtime execution only after separate authorization |
+| 6 | CW-15 | DOC-08/09/10 FIX/OPEN/CVS reconciliation and DOC-11/12 release/archive acceptance | Decision/control-plane and Stage 4.9 acceptance reviewed and recorded |
+
+### 15.39.4 Governance and acceptance boundary
+
+- This CW closes only the read-only readiness audit and the current release-gate status statement.
+- No dependency is closed by this audit; DOC-09 remains authoritative for exact OPEN/PARTIAL/DEFERRED item status.
+- Archive/source provenance gaps may be assessed for relevance to project-authored design decisions, but must not be silently deleted or represented as recovered. Any waiver or scope exclusion requires an explicit recorded decision.
+- Implementation may begin only after the applicable CW-10–CW-15 acceptance gates are met, a controlled non-production plan is approved, and the user separately authorizes Stage 6.
+- DB_PUSH_BLOCKED remains ACTIVE. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production change is authorized.
+
+**CW-09: READINESS AUDIT COMPLETE — IMPLEMENTATION NOT READY.** The next bounded task is CW-10, category coverage completion.

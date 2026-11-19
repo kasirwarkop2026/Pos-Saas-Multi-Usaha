@@ -1267,3 +1267,33 @@ The block appended to DOC-07 after the original §43 and mistakenly headed “§
 - No test ID, requirement, evidence status or implementation state changes.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 46. CW-09 implementation-readiness gate evidence register (20 November 2026)
+
+**Evidence status for all CW09-GATE-01–12: NOT GENERATED / NOT VERIFIED.** These contracts describe what must be reviewed or retained before a release-gate decision; they do not establish readiness.
+
+| Scenario ID | Evidence contract required | Reviewer focus |
+|---|---|---|
+| CW09-GATE-01 | 13-category M01–M21 profile and entitlement matrix | Each category's CORE/CONDITIONAL domains, workflows, owner and activation conditions |
+| CW09-GATE-02 | In-scope workflow inventory and owner/requirement/test mapping | No claim that 30 CAT-10/CAT-11 workflows cover other categories |
+| CW09-GATE-03 | Physical ERD/Data Dictionary acceptance package | Exact fields/types/nullability/defaults, PK/FK/composite-FK, constraints, indexes and referential actions |
+| CW09-GATE-04 | Tenant enforcement design and controlled verification plan | business_id, parent/child integrity, RLS/server/API boundary, non-production verification |
+| CW09-GATE-05 | Exact authorization matrix and approval record | Principal, membership, key, resource owner, scope, condition, purpose, SoD and approver |
+| CW09-GATE-06 | Test execution/evidence plan and retained result package | Test IDs, fixtures, environment, build, expected/actual, artifact integrity, independent reviewer |
+| CW09-GATE-07 | DOC-08/09/10 decision-register acceptance review | FIX completeness, OPEN disposition, CVS identity/supersession, reviewer approval |
+| CW09-GATE-08 | DOC-00–DOC-12 and Stage 4.9 acceptance record | Current versions, status, cross-reference, acceptance and release-gate disposition |
+| CW09-GATE-09 | 231-file archive content review or explicit scoped waiver | File-level review status, controlling source, locator, relevance/waiver and approval |
+| CW09-GATE-10 | Purchasing/Sales crosswalk reconciliation | 14→15 and 20→18 mapping, owner, requirements and test coverage |
+| CW09-GATE-11 | Operational readiness package | Backup/restore, secret management, monitoring, incident, rollback, migration and deployment runbooks |
+| CW09-GATE-12 | Explicit Stage 6 authorization record | Approved scope, environment, limits, rollback, user authorization and DB gate |
+
+### 46.1 Execution and authorization gate
+
+- CW09-GATE-01–12 remain DESIGN / NOT EXECUTED.
+- Evidence remains NOT GENERATED / NOT VERIFIED.
+- A release-readiness audit cannot grant Stage 6 authority.
+- Stage 6 remains NOT AUTHORIZED; DB_PUSH_BLOCKED remains ACTIVE.
+- Runtime verification requires separate authorization and controlled non-production environment. No Production data or Production mutation is permitted.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.

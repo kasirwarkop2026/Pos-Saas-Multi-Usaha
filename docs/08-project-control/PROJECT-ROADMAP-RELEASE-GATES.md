@@ -356,3 +356,37 @@ The document-control row in the original cover (§1) saying the proposed destina
 ### 16.4 Governance boundary
 
 This navigation correction does not authorize blanket Stage 5 migration, Stage 6 implementation, database/schema work, application/backend changes, CI workflow changes, Vercel/deployment or Production activity. DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No dependency or gate is closed by this addendum.
+
+
+## 17. CW-09 current release-gate and implementation-readiness reconciliation (20 November 2026)
+
+This addendum supersedes stale “next action” wording in §§5/9 only for current navigation and readiness status. It does not rewrite the dated historical roadmap snapshots.
+
+### 17.1 Current design progress
+
+- CW-01–CW-08 are closed at their bounded documentation-design scopes, as recorded in the active Corrective Documentation & Closure Worklist.
+- Logical M01–M21 ownership, CAT-10/CAT-11 profiles, 30 Education/Hotel workflows, domain interactions, 17 inventory/warehouse entity owners, authorization vocabulary and evidence-design references have been cross-reconciled.
+- The consolidated scenario/evidence design register contains 99 IDs; all remain DESIGN / NOT EXECUTED, with evidence NOT GENERATED / NOT VERIFIED.
+- CW-10 remains PARTIAL; its historic 16/8/6 baseline is distinguished from current 30/30 Education/Hotel dedicated design references.
+
+### 17.2 Current release blockers
+
+| Blocker | Current status | Release impact |
+|---|---|---|
+| Category-to-domain/workflow mapping for CAT-01–CAT-09, CAT-12 and CAT-13 | OPEN / CANDIDATE | Product-wide implementation scope not complete; only CAT-10/CAT-11 have explicit canonical M01–M21 profiles and 30 workflow owner/test references |
+| Physical ERD/Data Dictionary | NOT ACCEPTED | No canonical physical schema or migration design |
+| Authorization exact grants | OPEN / NOT APPROVED | Candidate keys and role taxonomy are not a production permission matrix |
+| Security enforcement and tests | NOT VERIFIED / NOT EXECUTED | No deployed RLS/server/API enforcement or security evidence |
+| Purchasing/Sales crosswalk | Purchasing 14→15; Sales 20→18 incomplete | Affected flows cannot be accepted end-to-end |
+| DOC-08/09/10 | DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL / NOT ACCEPTED | Decision-register acceptance remains incomplete |
+| GOV-OPEN-02 / GOV-OPEN-07 / D40 family | PARTIAL / OPEN / UNRECOVERED as recorded in DOC-09 | Archive/provenance and Stage 4.7.8 acceptance remain open |
+| Stage 4.7.8 / Stage 4.9 | PARTIAL — GATE NOT PASSED / ACCEPTANCE NOT MET | Documentation acceptance not complete |
+| DOC-11 / DOC-12 | DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL | Roadmap/archive working masters not final accepted release artifacts |
+
+### 17.3 Current readiness decision
+
+**IMPLEMENTATION READINESS: NOT READY.** The CW-01–CW-08 completions are bounded documentation-design reconciliations; they do not close the above technical, product-coverage, evidence or release blockers.
+
+The next authorized documentation-only work item is CW-10 — complete the category-to-M01–M21/workflow/module/entitlement crosswalk for CAT-01–CAT-13. This addendum does not authorize Stage 6 implementation, Stage 5 blanket migration, database/schema changes, CI workflow changes, deployment or Production activity.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
