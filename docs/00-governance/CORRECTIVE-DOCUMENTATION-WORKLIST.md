@@ -430,3 +430,17 @@ CW-09 is **PARTIAL**, not CLOSED. The repair improves row-level workflow/object/
 Next action: continue CW-09 only where additional primary source evidence is available; otherwise proceed to the next independently actionable CW item only after recording the remaining dependency and confirming worklist §6 sequencing. Do not mark CW-09 closed merely because this append-only index was added.
 
 Controls remain: `DB_PUSH_BLOCKED: ACTIVE`; READ-ONLY / APPEND-ONLY; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
+
+
+### 15.4 Substantive repair continuation — category crosswalk, decomposition and negative-test specifications
+
+The CW-09 repair was continued on the existing PR #87 branch (no second PR opened). DOC-06 append-only §20 adds the source-supported work that could be completed from the inspected REC-06 artifacts:
+
+- Transcribed the 21 proposed Shared Core M01–M21 domain labels from Category → Workflow → Module Crosswalk v1.3 §2.
+- Reconciled CAT-10 Education and CAT-11 Hotel CORE/CONDITIONAL/extension candidate lists against REC-06 Permission Catalogue Overlay §§3.3/4.3 and Crosswalk v1.3 §3. All M-IDs remain CANDIDATE; no workflow-level M-ID assignment or entitlement was approved.
+- Decomposed all 30 Education/Hotel workflows into source-described submodule/resource/action clusters and handoff/control boundaries, while preserving G04 as OPEN because approved submodule ownership and inter-module contracts are not established.
+- Added source-backed function-label/role guardrails and proposed expected-deny scenario specifications. These are DESIGN SPECIFICATIONS only, not stable approved test IDs, executable tests, executed runs, PASS or retained evidence.
+
+**Status remains PARTIAL — not CLOSED.** The remaining closure blockers are specifically: (1) G02 explicit approval/canonicalization and source-to-M-ID trace; (2) G04 approved workflow-to-submodule/object/action ownership and handoff map; (3) primary RMD-66/RMD-68 Deep Audit Brief claim-level source recovery; and (4) final permission keys/grants, per-action scope/data-purpose/SoD/approver rules, plus actual test implementation/execution/evidence. The three inspected REC-06 working artifacts do not authorize these promotions. No dependency is closed and no FIX decision is changed by this continuation.
+
+Acceptance remains honest: DOC-06 §20 closes the available category-level candidate transcription and working decomposition tasks, but CW-09, REC-06, Stage 4.7.8 and Stage 4.9 remain PARTIAL/OPEN where their source-native acceptance criteria are unmet. Next action is to resolve the G02 policy decision and recover/approve G04 source material before claiming complete workflow-level module traceability; do not force CLOSED.
