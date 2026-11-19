@@ -225,3 +225,23 @@ This recovery does not close CAT-12 technical or operational dependencies. Safe-
 - No canonical/final/accepted status or implementation authorization is created.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation remains NOT AUTHORIZED.
+
+## 14. Append-only project-authored product scope and domain baseline — 19 November 2026
+
+This section adopts DOC-06 §21 as the normative logical design baseline for product scope. It does not promote this working master to canonical/final status and does not authorize implementation.
+
+### 14.1 Domain and category alignment
+
+The canonical logical domain taxonomy is M01–M21 as defined in DOC-06 §21.1. Category profiles are: CAT-10 Education CORE = M04, M05, M13, M17; CONDITIONAL = M02, M06, M08, M16, M18, M21. CAT-11 Hotel CORE = M02, M05, M12, M16, M18, M20; CONDITIONAL = M03 (onsite POS), M04, M06, M07, M08, M17, M19, M21. Conditional modules require explicit category configuration and do not become enabled merely because a workflow references them.
+
+### 14.2 Product boundary and identity
+
+A Business is the tenant ownership boundary. A Business may contain multiple Outlets/Sites and Warehouses/Locations. Platform Super Admin is a platform-level principal and is not a Business role. Business membership, role eligibility, module entitlement, permission grant, resource assignment and customer/guardian/guest relationship are separate facts; none implies another. Every business-owned resource must resolve to exactly one Business context before access is evaluated.
+
+### 14.3 Category extension gates
+
+Education extensions (LMS, school/university, childcare, boarding/residential, regulated vocational and certificate issuance) and Hotel extensions (corporate/group/agency/OTA channels and other advanced distribution) require explicit product-scope definition, category applicability, domain owner, data classification, permission catalogue and acceptance scenarios before activation. CAT-12 remains an exception/classification route, not an implicit permission to operate an unclassified business.
+
+### 14.4 Acceptance and boundary
+
+DOC-02 owns category/workflow detail; DOC-03 owns domain architecture; DOC-04 owns logical/physical data documentation; DOC-05 owns authorization design; DOC-06 owns traceability; DOC-07 owns security/evidence. Conflicts must be reconciled to DOC-06 §21 unless an explicit approved design change supersedes it. This is a product-authored logical design, not proof of physical schema, deployed enforcement, test execution or release readiness. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
