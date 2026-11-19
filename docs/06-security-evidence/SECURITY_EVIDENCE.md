@@ -831,3 +831,45 @@ This register does not close REC-08, SEC-OPEN-01–07, REC-OPEN-12–15, histori
 - DOC-07 §30 remains the stable test register; this section supplies candidate key and audit-event cross-references only.
 
 **Disposition:** 24/24 stable test IDs now have candidate permission-key and expected audit-event references. Exact policy tuples remain incomplete; tests remain DESIGN / NOT EXECUTED; no dependency is closed. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 32. Append-only CW-09 policy-tuple reconciliation index — 19 November 2026
+
+**Status: DOCUMENTATION CROSS-REFERENCE — TESTS NOT EXECUTED.** This index connects the stable negative-test register (§30) and candidate-key map (§31) to the project-authored policy tuples now recorded in DOC-05 §§24–25 and the logical attribute inventory in DOC-04 §29. It is a traceability aid; it does not create grants or physical audit-event schemas.
+
+| Test ID | Policy tuple / catalogue anchor | Data and scope focus | Expected evidence family |
+|---|---|---|---|
+| CW09-SEC-01 | DOC-05 §25.2 EDU-WF-03; DOC-05 §24.2 AUTH-HR-04/05 | D3 student/guardian relationship; S5 verified relationship within S1 | relationship_verification.denied; restricted_field_access; authorization.denied |
+| CW09-SEC-02 | DOC-05 §25.2 EDU-WF-07 | S4 assigned class/session; author/reviewer separation | attendance_correction.review; sod_conflict; authorization.denied |
+| CW09-SEC-03 | DOC-05 §25.2 EDU-WF-09 | S4 assigned assessment; grade author/moderator/finalizer separation | grade_lifecycle.transition_denied; sod_conflict |
+| CW09-SEC-04 | DOC-05 §24.2 AUTH-HR-01/02/03; §25.2 EDU-WF-10 | D2 financial; S1–S3; initiator/approver/executor separation | financial_approval.denied; settlement.close_denied; sod_conflict |
+| CW09-SEC-05 | DOC-05 §24.2 AUTH-HR-04/05; §25.2 EDU-WF-13 | D3 case content; S1–S4 case assignment and purpose | restricted_case_access; restricted_export.denied |
+| CW09-SEC-06 | DOC-05 §25.2 HTL-WF-05 | D2/D3 identity; S2–S5 verified guest relationship and minimum fields | purpose_check.denied; field_minimization |
+| CW09-SEC-07 | DOC-05 §25.2 HTL-WF-08; M16 folio remains separate owner | S4 room task cannot imply M16 financial read | cross_domain_access.denied; scope_check.denied |
+| CW09-SEC-08 | DOC-05 §24.2 AUTH-HR-06; §25.2 HTL-WF-09 | D2 safety state; S2–S4; independent release approver | safety_hold.release_denied; sod_conflict |
+| CW09-SEC-09 | DOC-05 §24.2 AUTH-HR-07; §25.2 HTL-WF-02 | D2 rate plan; S1–S3; rate author cannot approve own override | rate_override.denied; sod_conflict |
+| CW09-SEC-10 | DOC-05 §24.2 AUTH-HR-01/02/03; §25.2 HTL-WF-10/11 | D2 folio/payment; capture, refund and settlement are separate | financial_adjustment.denied; sod_conflict |
+| CW09-SEC-11 | DOC-05 §25.2 HTL-WF-12 and HTL-WF-05 | S1–S3 corporate booking link does not grant guest identity enumeration | relationship_scope.denied; cross_tenant_enumeration.denied |
+| CW09-SEC-12 | DOC-05 §25.2 EDU-WF-14 / HTL-WF-15; §24.2 AUTH-HR-14 | D1–D3 field allowlist; S1–S4; export purpose and approval | restricted_export.denied; purpose_check.denied |
+| CW09-SEC-13 | DOC-05 §25.2 HTL-WF-01/07 | S2 property and S3 room; assignment must match target property | site_scope.denied; cross_property_access.denied |
+| CW09-SEC-14 | DOC-05 §24.2 AUTH-HR-08/09; §25.3 inventory_adjustment and stock_count | D2 quantity/variance; S2–S4; counter/initiator ≠ approver/poster | inventory_adjustment.approval_denied; sod_conflict |
+| CW09-SEC-15 | DOC-05 §24.2 AUTH-HR-10; §25.3 stock_transfer / shipment | D2 custody; unresolved quantity/loss disposition blocks close | transfer_closure.denied; unresolved_disposition |
+| CW09-SEC-16 | DOC-05 §25.3 inventory_reservation / reservation_item / movement | D2 quantity; idempotency and single-effect invariant | idempotency.replay_detected; duplicate_effect.prevented |
+| CW09-SEC-17 | DOC-05 §25.2 and §25.3 tenant-scoped resource tuples; DOC-04 §29.3 | All business-owned attributes inherit immutable Business context | tenant_isolation.denied; target_business_mismatch |
+| CW09-SEC-18 | DOC-05 §25.2 site/location/assignment rules; §25.3 warehouse/location tuples | S2–S4; sibling site/location not included by default | scope_check.denied; assignment_scope.denied |
+| CW09-SEC-19 | DOC-05 §24.3 platform namespace; DOC-05 §25.4 | S0 platform namespace is separate from all Business keys | principal_namespace.denied; platform_privilege.denied |
+| CW09-SEC-20 | DOC-05 §24.2 AUTH-HR-11; DOC-04 §29.3–29.4 | D4 secret value denied; only opaque reference/rotation metadata | secret_access.denied; restricted_data_access.denied |
+| CW09-SEC-21 | DOC-05 §25.1 purpose gate; §25.2 EDU-WF-03/HTL-WF-05 | Valid key with incompatible purpose remains DENY | purpose_check.denied; authorization.denied |
+| CW09-SEC-22 | DOC-05 §25.1 active membership/assignment gate | Revoked/expired membership invalidates cached eligibility | membership_revocation.enforced; stale_session.denied |
+| CW09-SEC-23 | DOC-05 §25.1 module entitlement gate; §25.2 conditional workflow profiles | Conditional module inactive means exact key cannot be exercised | module_entitlement.denied; authorization.denied |
+| CW09-SEC-24 | DOC-05 §25.3 movement/transfer; §25.2 HTL-WF-16 integration; DOC-03 event contract | Duplicated/out-of-order commands/events preserve one authorized effect | event_replay.detected; invalid_transition.denied; idempotency.single_effect |
+
+### 32.1 Cross-document interpretation
+
+1. DOC-05 §24 remains the high-risk tuple authority; §25 supplies ordinary workflow and inventory tuple baselines. If an action appears in both, §24's stricter SoD/approval controls prevail.
+2. DOC-04 §29 enumerates conceptual attributes and proposed protection/audience/retention triggers. It does not establish physical fields or runtime enforcement.
+3. DOC-06 §21 remains the workflow/domain, scope, data-class and purpose baseline. DOC-03 remains the domain interaction contract.
+4. DOC-05 exact permission keys are candidate policy vocabulary only. No role grant, allowlist, RLS policy, API enforcement or platform permission assignment is created.
+5. All 24 tests remain DESIGN / NOT EXECUTED. Evidence labels remain semantic families, not physical event names. A future test requires separate authorization and actual retained execution evidence.
+
+**Disposition:** cross-reference coverage 24/24 stable test IDs to the expanded policy design; no test execution or dependency closure is claimed. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
