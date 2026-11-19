@@ -1022,3 +1022,33 @@ All 24 CW09-SEC IDs remain DESIGN / NOT EXECUTED. READ-ONLY • APPEND-ONLY • 
 - DOC-07 evidence ownership does not convert a DOC-03 conceptual rule into a deployed control.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 40. CW-05 entity ownership and tenant-integrity evidence register (20 November 2026)
+
+**Evidence status for all rows: NOT GENERATED / NOT VERIFIED.** This register defines evidence required for future separately authorized verification; it does not assert database or application behavior.
+
+| Scenario ID | Evidence contract required when authorized | Required lineage / reviewer focus |
+|---|---|---|
+| CW05-DATA-01 | Entity-owner map plus attempted cross-domain mutation/owner-command trace | Entity, caller, primary owner, target action, decision/reason |
+| CW05-DATA-02 | Tenant-context test record across representative/all 17 entity families | Resolved Business, entity identity, tenant decision |
+| CW05-DATA-03 | Parent/child same-tenant positive and cross-tenant negative test | Parent/child identity, Business context, key/enforcement mechanism |
+| CW05-DATA-04 | Transfer source/destination tenant and distinct-location test | Source/destination location, Business, expected denial |
+| CW05-DATA-05 | Posted movement immutability and compensating-movement trace | Original movement, attempted mutation, reversal link, actor |
+| CW05-DATA-06 | Projection rebuild/provenance and direct-write denial trace | Source ledger range, projection version, reconciliation result |
+| CW05-DATA-07 | Batch-versus-cost-layer identity and selection/consumption trace | Batch identity, layer identity, FEFO/FIFO decision |
+| CW05-DATA-08 | MWA pool partition test across Business/product/variant/location | Pool dimensions, input layers, rejected cross-pool aggregation |
+| CW05-DATA-09 | Reservation availability/on-hand and A01/A02 source-separation trace | Demand source, reservation header context, movement registry distinction |
+| CW05-DATA-10 | Shipment dispatch/partial receipt/return/loss reconciliation trace | Shipment identity, dispatched/received/returned/lost totals, movement refs |
+| CW05-DATA-11 | Cost consumption and cumulative compensation cap test | Original allocation/consumption, partial compensations, remaining eligible quantity |
+| CW05-DATA-12 | M06/M07 owner-key and assigned-scope authorization trace | Principal, owner domain, exact key, scope, decision/reason |
+
+### 40.1 Evidence and execution gate
+
+- CW05-DATA-01–12 remain **DESIGN / NOT EXECUTED**.
+- Evidence remains **NOT GENERATED / NOT VERIFIED**.
+- DOC-04 physical Data Dictionary remains **NOT ACCEPTED** until all required physical fields, keys, constraints and tenant enforcement are separately specified and verified.
+- Exact PK/FK/composite-FK tuples, UNIQUE/CHECK/index definitions, RLS/server enforcement and concurrency/idempotency evidence are not inferred by this register.
+- Execution requires separately approved implementation scope and controlled non-production environment; no Production data is permitted.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
