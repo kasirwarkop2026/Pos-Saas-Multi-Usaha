@@ -844,3 +844,30 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remai
 **Disposition:** the previously unmapped candidate key labels used by CW09-SEC-01–24 are now recorded in the owning authorization master, except the explicitly prohibited secret-read token and non-key S0 marker. Exact grants, actor allowlists, technical implementation and test execution remain NOT APPROVED / NOT AUTHORIZED / NOT EXECUTED.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 28. CW-03 authorization-catalogue reconciliation and closure rules (20 November 2026)
+
+This addendum reconciles the 30 workflow action-family rows in §23.3 with the project-authored workflow index and dedicated negative-test designs in DOC-02 §17, DOC-06 §24 and DOC-07 §38. It supplements §§22–27; it does not issue concrete access grants.
+
+### 28.1 Canonical mapping rules
+
+1. The 30 workflow IDs, titles and primary owner domains are fixed to DOC-06 §§21.3–21.4. Supporting domains retain ownership of their own records and receive explicit commands/events/references/read models only.
+2. Every action family in §23.3 must be decomposed into a separate canonical key using the grammar module_id.resource.action. Resource and action names must be explicit; list/read/create/update/submit/review/approve/reject/execute/post/cancel/reverse/refund/publish/export/release/reconcile are not interchangeable.
+3. The primary-function column in §23.3 remains eligibility vocabulary only. It is not a role assignment, user grant, entitlement or final allowlist. A test actor is a controlled negative-test fixture, not an approved production role grant.
+4. For each eventual permission row, required fields remain principal classification, approved role/function where applicable, active membership/relationship, category/module entitlement, exact key, target resource owner, S0–S5 scope, object state, D0–D4 field class, purpose, SoD conflict, independent approver, execution owner, denial reason and audit event.
+5. A supporting-domain action must use that domain's own key and authority; an orchestrating workflow cannot lend its primary owner's key to mutate a supporting-domain object.
+
+### 28.2 Dedicated test-design reconciliation
+
+DOC-06 §24 and DOC-07 §38 define 14 dedicated negative-test designs, CW03-SEC-01–CW03-SEC-14, for the 8 prior related-only and 6 previously uncovered workflow rows. Together with the 16 direct workflow-specific CW09-SEC references, all 30 workflow rows now have a dedicated design reference. All 38 referenced IDs (CW09-SEC-01–24 and CW03-SEC-01–14) remain DESIGN / NOT EXECUTED; no test execution or evidence is claimed.
+
+### 28.3 Explicit non-grant and fail-closed rule
+
+No exact production actor × key × resource × scope × condition × approval grant is approved by this addendum. Until each required row is explicitly accepted and technically enforced, missing, ambiguous, expired, unassigned, out-of-scope, wrong-tenant, wrong-purpose or SoD-conflicting requests are DENY. The 30 workflow catalogue rows are specification coverage, not an authorization allowlist.
+
+### 28.4 CW-03 disposition
+
+At the documentation-design level, CW-03 closes the cross-reference consistency and workflow-specific test-design coverage gaps for CAT-10/CAT-11: 30/30 workflow IDs, titles and primary owners are aligned; 30/30 have dedicated test-design references; and the DOC-02/DOC-05/DOC-06/DOC-07 authority boundaries are explicit. Exact grants, numeric thresholds not yet decided, physical field/object mapping, enforcement and executed test evidence remain separate OPEN implementation/evidence gates and are not falsely closed here.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No role grants, schema, RLS/Auth, API/backend, application, CI workflow, deployment or Production change is authorized.
