@@ -1298,3 +1298,32 @@ This addendum corrects the DOC-04 references in CW05-DATA-01–12. DOC-04 §28 i
 - All 12 scenario definitions and expected outcomes remain unchanged.
 
 **Disposition:** this is a locator correction only. CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; no evidence or physical enforcement is claimed.
+
+
+## 27. CW-06 authorization acceptance scenario designs (20 November 2026)
+
+**Status:** design-only acceptance scenarios. They do not grant permissions, implement server guards or claim runtime execution. These scenarios supplement CW09-SEC-01–24 and do not renumber prior test IDs.
+
+| ID | Authorization invariant | Scenario / attempted behavior | Expected result | Primary references |
+|---|---|---|---|---|
+| CW06-AUTH-01 | Role/principal namespace | Mitra/Pekerja, Mitra Fisik or Pelanggan is treated as a standard Business role without explicit capability/assignment/relationship | DENY; resolve principal classification and exact eligibility first | DOC-05 §§23.1, 32.1; DOC-06 §21.6 |
+| CW06-AUTH-02 | Exact key / no inheritance | Actor with resource.read attempts create/update/approve/export or uses wildcard/role-name inference | DENY; each action requires its own exact key and tuple | DOC-05 §§22.1, 23.2; DOC-06 §21.6 |
+| CW06-AUTH-03 | Membership and tenant | Expired/revoked membership or mismatched business_id is used with an otherwise valid key | DENY; resolve active membership and target tenant server-side | DOC-05 §§22.1, 25.1; DOC-06 §21.10 |
+| CW06-AUTH-04 | Module entitlement | Conditional category/module is inactive while the actor presents a candidate key | DENY; entitlement is a prerequisite, not a permission | DOC-05 §§22.1, 25.1; DOC-06 §§21.2, 21.10 |
+| CW06-AUTH-05 | Scope and relationship | Actor accesses another site/property, unassigned task or unverified S5 relationship | DENY; S0–S5 scope and current assignment/verified relationship must match | DOC-05 §§22.4, 25.1; DOC-06 §21.7 |
+| CW06-AUTH-06 | Resource state and conditions | Exact key is present but the target object is expired, held, closed, unapproved or in an invalid lifecycle state | DENY; owning domain validates the current transition preconditions | DOC-05 §§22.1, 25.1; DOC-06 §21.10 |
+| CW06-AUTH-07 | D0–D4 and purpose | Valid read key is used for incompatible purpose or requests D3/D4 fields beyond need-to-know | DENY/minimize; field classification and purpose narrow access; no secret value returned | DOC-05 §§24.1, 25.1, 27.2; DOC-06 §21.8 |
+| CW06-AUTH-08 | SoD and independent approval | Initiator approves/executes own refund, write-off, adjustment, safety release or privileged grant | DENY; distinct eligible initiator, approver and executor required | DOC-05 §§22.5, 24–25; DOC-06 §21.9 |
+| CW06-AUTH-09 | Resource-owner authority | Orchestrating/primary workflow domain uses its own key to mutate an M06/M07/M16 supporting-domain object | DENY; target owner evaluates its own exact key and lifecycle | DOC-05 §§28–32; DOC-03 §19; DOC-04 §28/§32 |
+| CW06-AUTH-10 | Platform S0 separation | Business Manager or tenant principal attempts PLATFORM.access_grant.approve/apply, or platform principal is treated as having tenant-data access | DENY; S0 platform namespace and Business S1–S5 remain separate; dual control applies | DOC-05 §§24.3, 26.2, 32.4; DOC-07 §33 |
+| CW06-AUTH-11 | D4 secret boundary | Actor attempts M21.integration_secret.read or an ordinary report/export attempts to return secret value | DENY; prohibited token is not a key; only separately authorized rotate_secret_ref workflow may operate on opaque reference metadata | DOC-05 §§24.2 AUTH-HR-11, 27.2, 32.3; DOC-07 §34 |
+| CW06-AUTH-12 | Audit and single-effect execution | Authorized action is replayed, membership is revoked mid-session or audit lineage is missing | Re-evaluate current eligibility; deny stale context; prevent duplicate side effect; retain attributable decision/effect evidence | DOC-05 §§22.1, 25.1, 32.2; DOC-06 §21.10; DOC-07 §§31–32 |
+
+### 27.1 Acceptance rules
+
+1. Every eventual grant row must bind one authenticated principal/function, Business membership, category/module entitlement, exact key, target resource owner, S0–S5 scope, object state, D0–D4/purpose, SoD/approver, execution owner, denial reason and audit event.
+2. A candidate key or scenario reference is not a grant. Missing/ambiguous tuple means DENY.
+3. Runtime tests require separately approved implementation scope and controlled non-production environment. No Production data or Production mutation is permitted.
+4. A design review or negative scenario specification is not an executed test or evidence.
+
+**Disposition:** 12/12 CW06-AUTH scenarios specified; 0 executed; 0 evidence generated. Exact grants and technical enforcement remain OPEN / NOT AUTHORIZED.
