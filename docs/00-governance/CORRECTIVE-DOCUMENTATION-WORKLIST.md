@@ -1561,3 +1561,12 @@ Post-merge readback identified an append-only content-placement error: the inten
 No requirement, domain owner, product decision, permission, test ID or implementation state changes. CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED. The corrected matrix must reside in DOC-06; the evidence contract must reside in DOC-07.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application, CI workflow, deployment or Production change.
+
+
+## 15.37 CW-08 — PR #107 readback and DOC-07 mirror-locator follow-up (20 November 2026)
+
+**PR #107:** [CW-08 traceability section-placement correction](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/107) merged as `58fea5c809f8a2afe61c306fa622366e78a3ebde`. Documentation structure, Markdown lint and internal links passed; POS SaaS CI passed, with application jobs skipped for documentation-only changes.
+
+Post-merge readback confirms DOC-06 §31 now contains the authoritative product-to-requirement matrix and CW08-TRACE-01–12, and DOC-07 §44 contains the evidence register. The misplaced mirror note intended as DOC-07 §45 was not included in PR #107 and requires one additional append-only locator correction. CW-08 remains PARTIAL until that note is published and verified.
+
+No design decision, test status or implementation state changes. CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED. DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.

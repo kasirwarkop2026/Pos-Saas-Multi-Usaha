@@ -1254,3 +1254,16 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No implementation or prod
 - Runtime verification requires separately authorized implementation scope and controlled non-production environment; no Production data or Production mutation is permitted.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 45. CW-08 misplaced traceability-matrix mirror locator correction (20 November 2026)
+
+The block appended to DOC-07 after the original §43 and mistakenly headed “§31. CW-08 product-to-requirement and cross-master traceability acceptance matrix” is retained append-only but designated **DOC-07 §45** for navigation. It is a mirror/copy of the authoritative DOC-06 §31 matrix, not the DOC-07 evidence register.
+
+- Original DOC-07 §31 (CW09 candidate-key/security crosswalk) remains unchanged and authoritative for its original subject.
+- DOC-06 §31 is the authoritative product-to-requirement and cross-master traceability matrix.
+- DOC-07 §44 is the CW-08 evidence contract register.
+- The misplaced copy designated DOC-07 §45 must not be cited as an evidence register or used to replace DOC-06 §31.
+- No test ID, requirement, evidence status or implementation state changes.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
