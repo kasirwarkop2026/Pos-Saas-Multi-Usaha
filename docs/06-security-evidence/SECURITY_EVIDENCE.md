@@ -968,3 +968,27 @@ The prior §36.2 figure of 23/30 was an incorrect aggregate count. It is superse
 
 All 24 CW09-SEC IDs remain DESIGN / NOT EXECUTED. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 and Stage 6 remain NOT AUTHORIZED.
 
+
+
+## 38. CW-03 — dedicated workflow negative-test design register (20 November 2026)
+
+**Authority:** project-authored design supplement to DOC-06 §24. Stable IDs CW03-SEC-01–CW03-SEC-14 fill the 8 prior related-only and 6 no-workflow-specific-test gaps. The IDs are design references only; no test has been executed.
+
+| Test ID | Workflow | Control focus | Expected negative outcome | Evidence contract |
+|---|---|---|---|---|
+| CW03-SEC-01 | EDU-WF-01 | Publication review and publish capability | DENY publish if required review/capability absent | actor, Business, program, review state, key, decision/reason, correlation |
+| CW03-SEC-02 | EDU-WF-02 | Admission site scope and independent approval | DENY out-of-scope or self-approved admission | actor, application, site, initiator/approver, scope, decision/reason |
+| CW03-SEC-03 | EDU-WF-04 | Class capacity, active state and exception approval | DENY allocation to full/inactive class without approved exception | actor, learner, class, capacity/state, decision/reason |
+| CW03-SEC-04 | EDU-WF-05 | Schedule resource conflict and site scope | DENY unavailable or out-of-scope resource | actor, schedule, resource, site, conflict, decision/reason |
+| CW03-SEC-05 | EDU-WF-06 | Credential verification and instructor eligibility | DENY self-verification or assignment with inactive/unverified credential | actor, instructor, credential, approver, decision/reason |
+| CW03-SEC-06 | EDU-WF-08 | Inventory issue/adjustment custody and warehouse scope | DENY unassigned stock posting; ledger unchanged | actor, session, item, warehouse, quantity, key, event ref |
+| CW03-SEC-07 | EDU-WF-11 | Sponsor/payer relationship and D3 academic-data boundary | DENY access beyond verified billing relationship | actor, learner, relationship, class, purpose, fields, decision/reason |
+| CW03-SEC-08 | EDU-WF-12 | Completion eligibility and certificate SoD | DENY issue without verified completion or independent issuer | actor, learner, completion, verifier/issuer, decision/reason |
+| CW03-SEC-09 | HTL-WF-03 | Reservation expiry and room readiness | DENY expired hold or unavailable/safety-held room confirmation | actor, property, room, hold/expiry, readiness, decision/reason, idempotency |
+| CW03-SEC-10 | HTL-WF-04 | Booking relationship and financial side-effect separation | DENY change to unrelated booking; no silent refund | actor, booking, relationship, guest, key, decision/reason |
+| CW03-SEC-11 | HTL-WF-06 | Guest verification, booking and room readiness | DENY check-in when identity/booking/readiness fails | actor, booking, guest, room, verification/readiness, decision/reason |
+| CW03-SEC-12 | HTL-WF-07 | Stay transition, property scope and cross-domain ownership | DENY invalid/out-of-scope stay transition; no M05/M16 side effect | actor, stay, property, transition, linked refs, decision/reason |
+| CW03-SEC-13 | HTL-WF-13 | Restricted complaint access and M16 compensation ownership | DENY unassigned case access and direct refund | actor, guest, case, class, purpose, owner, decision/reason |
+| CW03-SEC-14 | HTL-WF-14 | Shift/cash SoD | DENY self-approval or self-close of cash variance | actor, shift, drawer, variance, initiator/approver, decision/reason |
+
+**Lifecycle:** DESIGN / NOT EXECUTED. Evidence NOT GENERATED / NOT VERIFIED. Execution requires separately approved test environment and implementation authorization. No production data may be used. These new IDs do not modify or renumber CW09-SEC-01–24.
