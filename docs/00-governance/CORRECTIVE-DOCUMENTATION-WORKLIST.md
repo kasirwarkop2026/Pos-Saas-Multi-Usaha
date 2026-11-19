@@ -1246,3 +1246,43 @@ The appended CW-05 content that was mistakenly headed “§27” is retained app
 Physical Data Dictionary remains NOT ACCEPTED; physical field mapping, PK/FK/composite-FK, constraints, RLS/server enforcement and execution evidence remain OPEN / NOT VERIFIED. CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application, CI workflow, deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.30 CW-05 — PR #100 locator correction merge and post-merge readback (20 November 2026)
+
+**PR:** [#100 — correct CW-05 DOC-04 owner-register and section locators](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/100)  
+**Branch:** `docs/cw05-numbering-and-source-register-correction-2026-11-20`  
+**Head SHA:** `22481af6fe2d32aed3e227ee35d92afc3cc81d35`  
+**Base SHA:** `e7be9378ad95dc8f69d9cc37cec342d50a3878b9`  
+**Squash merge commit:** `d28e9309e3aa0b6f2d400b131fb39f1a97fe80f6`
+
+### 15.30.1 CI result
+
+- Documentation CI run `44579037301`: SUCCESS — Documentation structure, Markdown lint and Internal documentation links.
+- POS SaaS CI run `44579036572`: SUCCESS.
+- Detect application changes: SUCCESS.
+- ESLint, TypeScript, Next.js build and Dependency audit: SKIPPED because the PR was documentation-only; not claimed as executed tests.
+- PR #100 was mergeable, head SHA matched the expected SHA, and no review submissions or inline review threads were present.
+
+### 15.30.2 Post-merge readback from main
+
+PR #100 is CLOSED / MERGED. All six changed files were fetched again from `main` and the corrected section references were verified:
+
+| File | Main blob SHA | Readback |
+|---|---|---|
+| `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` | `bf3bfa2bab107fc603d00fa77c607bda26284edd` | §15.29 and correction record present |
+| `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md` | `2e95927901e6b40078e8d2fe426fbb0f3e1472fe` | §21 points to DOC-04 §§28 and 32 |
+| `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` | `07da27fe2e2cd79a2b692ea38c6b02656d469e21` | §32 clarifies pre-existing §§27–31 and supplemental crosswalk |
+| `docs/05-authorization/AUTHORIZATION_MASTER.md` | `dd396b5d0f08faf02d3d45d3cce70a039006fffd` | §31 points to DOC-04 §§28 and 32 |
+| `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` | `172405491ccb0202666e48d56e3151dc55b2d3e8` | §27 corrects CW05-DATA locators |
+| `docs/06-security-evidence/SECURITY_EVIDENCE.md` | `c1da9a3f6e1090158dd48b83740e08d4fae1cae3` | §41 corrects CW05-DATA evidence locators |
+
+### 15.30.3 Final corrected CW-05 disposition
+
+**CW-05: PASS / CLOSED — LOGICAL ENTITY-OWNERSHIP / RELATIONSHIP-HANDOFF / TENANT-INTEGRITY CROSS-REFERENCE SCOPE.** DOC-04 §28 is the pre-existing authoritative 17/17 entity-owner map; DOC-04 §29–31 are the pre-existing logical attribute proposal and status notes; DOC-04 §32 is the CW-05 supplemental relationship/tenant crosswalk. The earlier overbroad CW05-F01 claim is retracted; the M06/M07 boundary is confirmed as pre-existing and now cross-referenced at relationship level.
+
+CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED / NOT VERIFIED. Physical Data Dictionary remains NOT ACCEPTED; physical field-to-column mapping, keys, constraints, RLS/server enforcement and implementation remain OPEN / NOT VERIFIED. No owner, FIX, entity or implementation status changed.
+
+**Next bounded task:** CW-06 — DOC-05 Authorization Master against DOC-06 requirements, DOC-07 security controls and the aligned M01–M21/entity ownership boundaries.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
