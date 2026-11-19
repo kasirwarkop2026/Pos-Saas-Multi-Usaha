@@ -227,3 +227,52 @@ Package B / CW-07 is **not started** by this checkpoint. Route the next task onl
 - No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
 - Stage 5 blanket GitHub/archive migration remains **NOT AUTHORIZED**; Stage 6 implementation remains **NOT AUTHORIZED**.
 - This checkpoint is proposed documentation until its PR is reviewed, merged with explicit approval, and read back from `main`.
+
+
+## 12. Package B — CW-07 DOC-01 / DOC-02 / DOC-05 product, workflow and authorization alignment checkpoint (19 November 2026)
+
+A bounded read-only cross-document audit was performed against the current `main` versions of:
+
+- `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md` — DOC-01.
+- `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` and `docs/02-business-domains/categories/CAT-01-retail.md` through `CAT-13-parfum.md` — DOC-02 and category detail pages.
+- `docs/05-authorization/AUTHORIZATION_MASTER.md` — DOC-05.
+- The current decision summary `docs/DECISION-REGISTER.md` and the published DOC-08 authorization CVS correction were used as bounded cross-reference aids, not as substitutes for primary approval records.
+
+### 12.1 Audit coverage and findings
+
+| Finding | Audit result | Disposition |
+|---|---|---|
+| CW07-F01 — Category identity and taxonomy | DOC-01 §5 and DOC-02 §3 agree on stable category IDs CAT-01–CAT-13 and the category names/status boundaries. DOC-02 category pages retain their matching CAT identifiers. | PASS — taxonomy consistent within reviewed masters |
+| CW07-F02 — Workflow identifiers and category boundaries | DOC-02 §3 and category pages record CAT-01 WF-01–WF-12; CAT-02–CAT-09 WF-01–WF-14; CAT-10 a 14-workflow baseline; CAT-11 a 16-workflow baseline; CAT-12 a 14-item temporary classification/exception baseline; CAT-13 separate RF-01–RF-10 Retail/Refill and FM-01–FM-12 Formulation/Manufacturing tracks. DOC-01 §5 preserves the CAT-10/11/12/13 boundaries. | PARTIAL — stable identifiers/counts align, but full source-native titles/sequence are not present for multiple categories; CAT-12 items are not treated as ordinary operational workflows |
+| CW07-F03 — Standard-role and platform/tenant boundary | DOC-01 §4 and DOC-05 §4.2 agree on the 12 standard Business roles. Owner remains outside the 12; SUPER_ADMIN/PLATFORM_ADMIN are platform roles. Manager is governance, not a universal operational grant; Supervisor/Shift Lead, Finance/Accounting and Employee/HR Operator remain conditional under stated guardrails. | PASS — conceptual role baseline and separation consistent |
+| CW07-F04 — Category-specific role mapping | DOC-01 §§4–5, DOC-02 §7 and category pages preserve E-01–E-03 and H-01–H-03 conceptual mapping approvals. DOC-05 §§4.3, 6–7 records Instructor and Housekeeping as existing Production / Service Operator duties with assigned class/session or room/task scope; no new standard roles. | PARTIAL — Education/Hotel mappings are bounded and source-identified; complete exact Manager/standard-role allowlists for all categories are not established in the reviewed masters |
+| CW07-F05 — Module catalogue and category/workflow mapping | DOC-01 §6, DOC-02 §8 and DOC-05 §§8, 14–15 consistently keep M01–M21 and Category_Workflow_to_Module_Crosswalk v1.3 DRAFT/CANDIDATE/NOT FINAL/NOT FIX. DOC-05 G01 and G02 remain OPEN; G03 PARTIALLY RESOLVED; G04 OPEN. | OPEN — no approved canonical module catalogue or complete category × module / workflow × module mapping established |
+| CW07-F06 — Capability/action taxonomy | DOC-05 §8 records 18 conceptual action families and explicitly says they are vocabulary, not stable permission identifiers or approved role-to-action grants. DOC-05 G05 remains PARTIAL; workflow-to-object/action mapping remains OPEN under G04. | PARTIAL — action vocabulary is consistent as a design vocabulary; per-workflow and role/action mapping is not approved or complete |
+| CW07-F07 — Authorization boundary and independent gates | DOC-01 §6, DOC-02 §§2, 6–8 and DOC-05 §§3–11 consistently separate category/workflow, role eligibility, module/entitlement, capability/action, object/geographic scope, purpose/data/context, approval/SoD and technical authorization. | PASS — conceptual boundary consistent; no technical enforcement claim |
+| CW07-F08 — Provenance and residual dependencies | DOC-01 §§9–10 and DOC-02 §§9–10 retain incomplete claim locators and mapping gaps; DOC-05 §§14–17 retains G01–G10, Scope O01–O10, SoD A01–A12 and REC-06 dependencies. CAT-12 locator recovery in DOC-01 §13 and DOC-02 §§12–13 supersedes earlier UNRECOVERED wording for the locator criterion only. | PARTIAL / OPEN — exact primary locators and source-to-claim evidence remain incomplete for several category and authorization mappings |
+
+### 12.2 Cross-document consistency disposition
+
+- No substantive contradiction was established in the reviewed category taxonomy, conceptual role baseline, platform/tenant separation, or distinction between eligibility and authorization.
+- CAT-13 Retail/Refill and Formulation/Manufacturing remain separate tracks; CAT-12 remains a temporary classification/exception and fail-closed path; CAT-08 regulated workflows remain gated pending credential, jurisdiction and compliance evidence.
+- The Education and Hotel mapping approvals retain their bounded scope. E-04 and H-04 are approved preservation decisions; their underlying detailed OPEN items remain OPEN.
+- The 18 action families remain conceptual vocabulary only. No stable permission key, complete role-to-action mapping, or workflow-to-object/action mapping is established.
+- Candidate module IDs and CORE/CONDITIONAL/REGULATED labels do not create module entitlements, role grants, capability grants or access.
+- No FIX decision changed; no source-native dependency was closed; no role grant, module assignment, permission key, scope rule, approval, test result or implementation status was promoted.
+
+### 12.3 CW-07 status and closure gate
+
+**CW-07: AUDIT COMPLETE — CLOSURE BLOCKED BY INCOMPLETE CATEGORY/ROLE/MODULE/ACTION MAPPINGS AND CLAIM-LEVEL PROVENANCE.**
+
+The bounded audit of the available current-main masters and category pages is complete. CW-07 is **not CLOSED** because its closure criteria require each mapped item to have a controlling source and stable identifier, with gaps explicitly listed. The current documents do not establish complete exact Manager/standard-role allowlists across all categories, an approved canonical M01–M21 catalogue, complete category/workflow-to-module mapping, or complete workflow/role-to-capability/action mapping. Several individual category workflow titles and claim-level primary locators also remain unavailable in the reviewed masters.
+
+No content correction is proposed in DOC-01, DOC-02, category pages or DOC-05 from this bounded audit. The reviewed documents already preserve the unresolved boundaries and do not make unsupported mapping claims. New primary evidence is required before those gaps can be filled. CW-08 is **not started** by this checkpoint.
+
+### 12.4 Change and governance boundary
+
+- Changed path in this checkpoint: this worklist only.
+- DOC-01, DOC-02, all 13 category detail pages and DOC-05 remain unchanged.
+- READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+- No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, deployment, Supabase Preview/Staging or Production changes.
+- Stage 5 blanket GitHub/archive migration remains **NOT AUTHORIZED**; Stage 6 implementation remains **NOT AUTHORIZED**.
+- This checkpoint is proposed documentation until its PR is reviewed, merged with explicit approval, and read back from `main`.
