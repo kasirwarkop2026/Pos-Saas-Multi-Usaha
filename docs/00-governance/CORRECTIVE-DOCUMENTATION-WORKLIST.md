@@ -1540,3 +1540,24 @@ CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED 
 **Next bounded task after verified CW-08 close:** CW-09 — final requirements-to-release-gate and implementation-readiness audit across DOC-00–DOC-12, preserving Stage 5 and Stage 6 authorization gates. No implementation may begin until the user separately authorizes it and all technical prerequisites are accepted.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.36 CW-08 — PR #106 post-merge locator/readback correction (20 November 2026)
+
+**PR #106:** [product-to-requirement and cross-master traceability](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/106) merged as `3d1c917c7adbfdc54ea45a829d2183b116f9f478`. CI passed: Documentation structure, Markdown lint, internal links and POS SaaS CI. Application-specific jobs were SKIPPED for documentation-only changes.
+
+Post-merge readback identified an append-only content-placement error: the intended DOC-06 §31 cross-master acceptance matrix was appended to DOC-07, while the intended DOC-07 §44 evidence register was omitted. The cross-master matrix therefore exists in the wrong file and its locator collides with DOC-07's original §31. CW-08 is **PARTIAL pending correction PR and new post-merge readback**; it is not closed by PR #106 alone.
+
+### 15.36.1 Correction scope
+
+| File | Required correction |
+|---|---|
+| DOC-06 MASTER_TRACEABILITY.md | Append the missing authoritative CW-08 §31 product-to-requirement/cross-master acceptance matrix and 12 CW08-TRACE scenarios. Existing §30 numbering note remains. |
+| DOC-07 SECURITY_EVIDENCE.md | Append the missing CW-08 §44 evidence contract register; designate the misplaced matrix copy appended after §43 as §45 mirror only. Original DOC-07 §31 remains unchanged. |
+| This Worklist | Record correction and keep CW-08 PARTIAL until CI, merge and post-merge readback. |
+
+### 15.36.2 Preserved boundaries
+
+No requirement, domain owner, product decision, permission, test ID or implementation state changes. CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED. The corrected matrix must reside in DOC-06; the evidence contract must reside in DOC-07.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application, CI workflow, deployment or Production change.

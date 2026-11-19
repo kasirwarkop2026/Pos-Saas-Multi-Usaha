@@ -1224,3 +1224,33 @@ DOC-01 is product-scope authority, not a complete numeric requirement-ID catalog
 **CW-08 disposition:** product-to-requirement and cross-master logical traceability PASS at documentation-design level. DOC-06 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. This bounded closure does not close provenance, physical schema, exact grants, enforcement, test execution, evidence retention or release readiness.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No implementation or production change is authorized.
+
+
+## 44. CW-08 product-to-requirement traceability evidence register (20 November 2026)
+
+**Evidence status for all CW08-TRACE scenarios: NOT GENERATED / NOT VERIFIED.** These are evidence contracts for later, separately authorized review/execution; no scenario has been run.
+
+| Scenario ID | Evidence contract required when authorized | Required lineage / reviewer focus |
+|---|---|---|
+| CW08-TRACE-01 | Product-scope-to-measurable-acceptance review | DOC-01 section, DOC-06 anchor, acceptance criterion or explicit non-testable rationale |
+| CW08-TRACE-02 | Tenant/ownership traceability record | Business boundary, owner domain, entity, scope, enforcement status |
+| CW08-TRACE-03 | Role/principal taxonomy comparison | Owner, 12 Business roles, S0 platform roles, relationship classifications |
+| CW08-TRACE-04 | Category activation decision record | Category, CORE/CONDITIONAL domain, configuration, entitlement, extension gate |
+| CW08-TRACE-05 | Entitlement-versus-permission negative review | Subscription, category, module, exact key and independent decision |
+| CW08-TRACE-06 | Single-owner and supporting-domain handoff trace | Object, primary owner, supporting owner, command/event/reference |
+| CW08-TRACE-07 | 30-workflow row-level traceability completeness record | Workflow ID/title, owner, requirement, control, dedicated design ID, evidence state |
+| CW08-TRACE-08 | Architecture interaction contract review | Command/event/read model, idempotency, transaction/reversal and source owner |
+| CW08-TRACE-09 | Exact authorization tuple completeness review | Principal, key, resource owner, tenant/scope, conditions, purpose, SoD/approver |
+| CW08-TRACE-10 | D0–D4/purpose/SoD review | Field class, purpose, minimum response, approver, unresolved thresholds |
+| CW08-TRACE-11 | Evidence status and artifact integrity review | Test ID, run/build, environment, expected/actual, artifact integrity, independent reviewer |
+| CW08-TRACE-12 | Governance and implementation authorization review | Worklist status, DB_PUSH_BLOCKED, Stage 5/6 authority, explicit user approval |
+
+### 44.1 Evidence and execution gate
+
+- CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED.
+- Evidence remains NOT GENERATED / NOT VERIFIED.
+- Total design register after CW-08: 99 IDs, all unexecuted; no evidence artifact is claimed.
+- A documentation acceptance pass is not test execution, technical enforcement, security certification or implementation authorization.
+- Runtime verification requires separately authorized implementation scope and controlled non-production environment; no Production data or Production mutation is permitted.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.

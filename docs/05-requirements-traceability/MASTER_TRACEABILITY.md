@@ -1417,3 +1417,79 @@ This append-only locator correction resolves duplicate section labels without de
 5. Worklist §§15.31 and 15.33 references to the duplicate DOC-06 §27/§28 labels are superseded for navigation by §§28/29 respectively. Historical checkpoint wording remains unchanged.
 
 **Disposition:** DOC-06 section references are unambiguous for the CW06/CW07 scenario and coverage packages. No requirement, test ID, status or decision changes.
+
+
+## 31. CW-08 product-to-requirement and cross-master traceability acceptance matrix (20 November 2026)
+
+This section is the authoritative DOC-06 cross-master traceability matrix. It supplements §§1–30 and supersedes stale “cross-document reconciliation required” wording in §21.11 only for the bounded design crosswalks below. It does not rewrite the original §21.11 checkpoint.
+
+### 31.1 Product Blueprint to requirement anchors
+
+| DOC-01 product section | Requirement/traceability anchor | Acceptance interpretation |
+|---|---|---|
+| §§2, 7 — product vision and operating principles | DOC-06 §§3, 5, 16, 21.5 | Product principles decomposed into domain/operating rules; measurable release requirements still need explicit acceptance where applicable |
+| §3 — tenant and ownership | DOC-06 §§21.1, 21.5.9 | One Business tenant; multiple sites/warehouses; membership, assignment and relationship remain separate |
+| §4 — platform/Business roles | DOC-06 §§21.6–21.7 | 12 Business roles; Owner outside 12; platform roles separate |
+| §5 — category taxonomy | DOC-06 §21.2 | CAT-10/CAT-11 CORE/CONDITIONAL profiles and extension gates |
+| §6 — entitlement/authorization separation | DOC-06 §§21.2, 21.6–21.10 | Subscription, category, module, role, exact key and scope are independent checks |
+| §8 — Platform Super Admin boundary | DOC-06 §§21.6–21.7 | S0 platform context separated from Business S1–S5 |
+| §10 — known gaps | DOC-06 §§12, 14, 16, 21.11 | Open dependencies remain explicit; no gap is closed by a cross-reference alone |
+
+DOC-01 is product-scope authority, not a complete numeric requirement-ID catalogue. Section anchors are used rather than invented requirement IDs.
+
+### 31.2 Cross-master acceptance matrix
+
+| Design requirement | Product/category | Architecture/data | Authorization | Security/evidence | Current design status |
+|---|---|---|---|---|---|
+| M01–M21 canonical domains | DOC-01 §14.1 | DOC-03 §§18–19; DOC-04 §28 | DOC-05 §§23–25, 32 | DOC-07 §43 | PASS — logical taxonomy cross-referenced |
+| CAT-10/CAT-11 CORE/CONDITIONAL | DOC-01 §14.1; DOC-02 §14 | DOC-03 §19.4 | DOC-05 §§22–25 | DOC-07 §43 | PASS — activation remains conditional where defined |
+| 30 workflow titles/owners | DOC-02 §17 | DOC-03 §§18–19 | DOC-05 §§23, 28 | DOC-07 §§38, 43 | PASS — 30/30 dedicated design refs |
+| 17 entity owners / TEN-01–07 | DOC-01 §3 | DOC-04 §§28, 32; DOC-03 §§19–21 | DOC-05 §§25, 30–31 | DOC-07 §§40, 43 | PASS — logical ownership; physical acceptance OPEN |
+| Domain interaction contract | DOC-01 §7 | DOC-03 §§18–19; DOC-06 §21.5 | DOC-05 §§28–34 | DOC-07 §43 | PASS — logical interaction design |
+| Permission model / decision order | DOC-01 §§4, 6, 8 | DOC-03 §§19–21 | DOC-05 §§22–34; DOC-06 §§21.6–21.10 | DOC-07 §§31–35, 43 | PASS — design vocabulary only; exact grants OPEN |
+| D0–D4, purpose, SoD | DOC-01 §§6–7 | DOC-04 §§29–31 | DOC-05 §§24–25, 32 | DOC-07 §§32–34, 43 | PASS — policy design; physical field classification/thresholds OPEN |
+| Requirements-to-test/evidence chain | DOC-01 §10 | DOC-04 §§28–32 | DOC-05 §32 | DOC-06 §§24–29; DOC-07 §§38–45 | PASS — design references only; 0 executed |
+
+### 31.3 Current traceability coverage and status
+
+- CAT-10/CAT-11 workflow ownership: 30/30.
+- Dedicated workflow negative-test design references: 30/30 (16 CW09-SEC + 14 CW03-SEC).
+- Inventory/warehouse conceptual entity ownership: 17/17; cross-cutting data/tenant design coverage is recorded in CW05-DATA and CW07-EVID; this is not 17 independent runtime tests.
+- Architecture and authorization acceptance designs: CW04-ARCH-01–12 and CW06-AUTH-01–12.
+- Current design register before CW-08: 87 IDs; all DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED.
+- CW08-TRACE-01–12 add 12 traceability acceptance designs; after CW-08, total design ID inventory is 99. All remain unexecuted.
+- CW-10 remains PARTIAL pending applicable control acceptance, physical mapping and actual execution/evidence. No CI success or SKIPPED job is treated as a security test pass.
+
+### 31.4 CW08-TRACE-01–12 acceptance scenario designs
+
+| ID | Traceability invariant | Scenario / attempted behavior | Expected result |
+|---|---|---|---|
+| CW08-TRACE-01 | Product vision decomposition | Treat product vision text as an approved measurable acceptance requirement without a traceable criterion | DENY promotion; retain product-scope anchor and identify missing measurable acceptance where required |
+| CW08-TRACE-02 | Tenant/ownership traceability | Trace Business/site/warehouse/membership/assignment/relationship to domain, entity and scope controls | Complete chain to DOC-03/DOC-04/DOC-05/DOC-06; physical enforcement OPEN |
+| CW08-TRACE-03 | Role/principal traceability | Treat principal classification or Owner as an additional standard Business role | DENY; use canonical role/principal taxonomy |
+| CW08-TRACE-04 | Category eligibility | Activate a CONDITIONAL domain because a workflow mentions it | DENY implicit activation; require explicit category configuration and entitlement |
+| CW08-TRACE-05 | Module/permission separation | Treat subscription or category eligibility as a permission grant | DENY; evaluate entitlement and exact action separately |
+| CW08-TRACE-06 | Domain ownership | Assign one authoritative object to multiple M domains or let workflow owner mutate supporting-domain records | DENY; one owner and explicit handoff |
+| CW08-TRACE-07 | Workflow completeness | Trace one of 30 workflow rows from DOC-02 title/owner through DOC-06 requirement/control/test/evidence | Complete direct design-reference chain; no execution claim |
+| CW08-TRACE-08 | Architecture interaction | Use implicit cross-domain write or projection as source-of-truth | DENY; command/event/read-model contract and owner authority required |
+| CW08-TRACE-09 | Authorization policy traceability | Infer a role grant from candidate key, UI, relationship or workflow primary owner | DENY; exact tuple and target owner required |
+| CW08-TRACE-10 | Data/purpose/SoD traceability | Omit D0–D4, purpose, independent approver or scope from a high-risk requirement | Reject incomplete traceability row; no inferred threshold |
+| CW08-TRACE-11 | Evidence status integrity | Mark design-only test or skipped CI job as executed/verified | DENY status promotion; require retained artifact and independent review |
+| CW08-TRACE-12 | Governance/readiness boundary | Interpret cross-master documentation closure as Stage 6 implementation authorization | DENY; explicit user authorization and technical acceptance gates remain mandatory |
+
+### 31.5 Current bounded acceptance disposition
+
+| DOC-06 §21.11 acceptance row | Current design reconciliation | Remaining OPEN gate |
+|---|---|---|
+| G02 canonical taxonomy/category baseline | PASS — DOC-01/02/03/06 cross-referenced | Product/category extensions require separate change control |
+| G04 workflow ownership | PASS — 30/30 workflow owners aligned | Physical entity/service ownership and implementation remain separate |
+| Domain interactions | PASS — DOC-03 §§18–19 align to DOC-06 §21.5 | Deployed commands/events/transactions not implemented |
+| Permission catalogue | PASS — vocabulary and decision sequence cross-referenced | Exact actor/key/resource/scope/condition/approval grant rows incomplete |
+| Scope and data classification | PASS — logical S0–S5 and D0–D4/purpose rules cross-referenced | Physical field-level classification and enforcement OPEN |
+| SoD / approvals | PASS — design baseline and high-risk tuple crosswalk present | Numeric thresholds and complete actor-specific tuples OPEN |
+| Enforcement | DESIGN ONLY | RLS/Auth/API/backend implementation and verification NOT AUTHORIZED |
+| Test/evidence chain | DESIGN REFERENCES COMPLETE within bounded scope | 99 IDs DESIGN / NOT EXECUTED; 0 evidence generated/verified |
+
+**CW-08 disposition:** product-to-requirement and cross-master logical traceability PASS at documentation-design level. DOC-06 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. This bounded closure does not close provenance, physical schema, exact grants, enforcement, test execution, evidence retention or release readiness.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
