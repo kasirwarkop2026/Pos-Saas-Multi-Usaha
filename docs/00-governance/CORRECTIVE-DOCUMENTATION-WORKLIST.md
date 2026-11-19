@@ -885,3 +885,45 @@ READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, databas
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application, CI workflow, Vercel deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
 
 **Next bounded task:** CW-03 — audit DOC-02 category/workflow references against DOC-05 authorization and DOC-06 traceability, preserving the completed CW-09 logical ownership decisions and CW-10 security evidence crosswalk.
+
+
+### 15.22 CW-03 — DOC-02 category/workflow, DOC-05 authorization and DOC-06 traceability reconciliation (20 November 2026)
+
+**Audit identity and current-main basis:**
+
+- DOC-02 `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` — main blob SHA `92c411c12b85ddf87f5755d68041c10c568dd26d`, §§2–10 and §§14–15.
+- DOC-05 `docs/05-authorization/AUTHORIZATION_MASTER.md` — main blob SHA `0845c9cf88159dad6c06724916554f5bd98f299b`, §§22–27.
+- DOC-06 `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` — main blob SHA `14a6b9c0f1f2bfe58978278f363199ac877d3109`, §§21–23.
+- CAT-10 and CAT-11 detail summaries were read from current main; they retain 14- and 16-workflow baselines and explicitly state that the full source-native title sequence is not reproduced.
+
+### 15.22.1 Current-main findings and verification
+
+| Finding | Result | Disposition |
+|---|---|---|
+| CW03-F01 — CAT-10/CAT-11 category profiles | DOC-02 §§14.1–14.2 match DOC-06 §21.2 CORE/CONDITIONAL domain profiles. | PASS — no category decision changed |
+| CW03-F02 — Logical workflow ownership | DOC-06 §§21.3–21.4 contain 14 EDU-WF and 16 HTL-WF rows. DOC-05 §23.3 contains the same 30 IDs; primary owner-domain codes match DOC-06 for 30/30. | PASS — no owner mapping changed |
+| CW03-F03 — Authorization action catalogue | DOC-05 §§23.1–23.6 preserves 12 Business roles, principal classifications, candidate action families, scope/SoD and fail-closed completion rules. Eligibility and candidate keys are not grants. | PASS — boundary consistent; exact grants remain OPEN |
+| CW03-F04 — Requirements/security/test crosswalk | DOC-06 §§23.2–23.3 contains the same 30 workflow IDs; primary owner-domain codes match DOC-06 §§21.3–21.4 for 30/30. | PASS — no traceability owner mismatch |
+| CW03-F05 — Test coverage and evidence | DOC-06 §23.7 classifies 16 direct, 8 related-only and 6 without dedicated/related workflow-specific scenarios. All 24 CW09-SEC IDs remain DESIGN / NOT EXECUTED. | PARTIAL — test execution and evidence remain absent |
+| CW03-F06 — Historical G02/G04 wording | Earlier OPEN statements in DOC-02 §8, DOC-05 §14 and DOC-06 §§19–20 are scoped historical snapshots; DOC-02 §§14–15, DOC-05 §26.1 and DOC-06 §§21–22 are the later controlling logical design. | PASS — limited supersession only; residual source/technical gaps remain OPEN |
+| CW03-F07 — Source-native workflow detail | CAT-10/CAT-11 detail pages preserve counts but do not reproduce complete source-native workflow title sequences; DOC-02-G01/G02 and other provenance gaps remain. | OPEN / PARTIAL — no inferred titles or locators |
+
+### 15.22.2 Substantive correction published
+
+- DOC-02 §16 appended the current logical ownership, authorization-catalogue and test-traceability cross-references.
+- DOC-02 §16 records the 30/30 primary-owner alignment across DOC-06 §§21.3–21.4, DOC-05 §23.3 and DOC-06 §23.2–23.3.
+- DOC-02 §16 distinguishes the scoped G02/G04 logical design resolution from legacy category crosswalks, source-native workflow-title recovery, exact authorization grants and test evidence.
+- No earlier DOC-02 section, category decision, workflow owner, permission key, role grant or test status was rewritten or promoted.
+
+### 15.22.3 Bounded disposition
+
+**CW-03: CROSS-DOCUMENT LOGICAL CONSISTENCY PASS; OVERALL PARTIAL / NOT CLOSED.** The reviewed category profiles and 30 Education/Hotel workflow-owner references are consistent. Remaining source-native title/locator gaps, broader category/module/action mapping, exact actor/action grants, scope/SoD/approval parameters, physical data mapping, technical enforcement and test execution remain OPEN/NOT VERIFIED as applicable. No source-native dependency is closed by this checkpoint.
+
+**Changed paths:**
+
+1. `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` — append-only §16.
+2. This Worklist — append-only §15.22.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application, CI workflow, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+**Next bounded task:** CW-04 — audit DOC-03 System Architecture against DOC-06 §21 domain ownership/interactions and the current DOC-02/DOC-05 boundaries. Preserve all completed CW-09/CW-10 logical design and evidence classifications; do not infer physical implementation.
