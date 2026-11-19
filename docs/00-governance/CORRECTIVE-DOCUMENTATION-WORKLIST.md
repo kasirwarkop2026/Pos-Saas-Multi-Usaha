@@ -864,3 +864,24 @@ Not closed by CW-02: DOC-01 source-provenance/claim-locator gaps in §10; RMD-56
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
 
 **Next bounded task:** CW-03 — audit DOC-02 category/workflow references against DOC-05 authorization and DOC-06 traceability, preserving already-completed CW-09 logical ownership decisions and the CW-10 security evidence crosswalk.
+
+
+### 15.21 CW-02 — post-merge verification record (20 November 2026)
+
+**PR:** [#92 — docs: align DOC-01 product roles with FIX register (CW-02)](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/92)
+
+**Merge result:** PR #92 is CLOSED / MERGED by squash. Merge commit: `0502a88b495314ca953a953812c31de9bb696e95`. The merged PR contains exactly two documentation files, 86 additions and 0 deletions.
+
+**Post-merge readback from `main`:**
+
+- `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md` — §16 is present and includes the `SUPER_ADMIN` / `PLATFORM_ADMIN` platform-role namespace and the Mitra/Pekerja, Mitra Fisik and Pelanggan principal/relationship classifications. Readback blob SHA: `a7cf7ac1638adf1145ab157c0b78ac9f8a1e21cc`.
+- `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` — §15.20 is present, including the CW-03 next bounded task. Readback blob SHA before this verification addendum: `0a2f67ac8ce082bc00244909a208a039542f86ee`.
+- PR metadata confirms state CLOSED, merged=true, and the merge commit above.
+
+**CI interpretation:** Documentation structure, Markdown lint and internal documentation links completed successfully. Application-change detection completed successfully and identified no application changes; application-specific Next.js build, dependency audit, TypeScript and ESLint jobs were skipped. Skipped jobs are not represented as passed application tests. The Vercel commit status was pending at readback and is not a merge acceptance criterion for this documentation-only change; no deployment action was requested or performed.
+
+**Disposition:** CW-02 post-merge readback **PASS**. CW-02 remains **PASS / CLOSED only at product-level terminology and FIX-reference alignment scope**. DOC-01 remains DRAFT / reconstructed working master; provenance/locator, authorization, physical schema, enforcement, test and implementation-readiness dependencies remain OPEN as recorded in §15.20. No additional dependency is closed by this verification.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application, CI workflow, Vercel deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+**Next bounded task:** CW-03 — audit DOC-02 category/workflow references against DOC-05 authorization and DOC-06 traceability, preserving the completed CW-09 logical ownership decisions and CW-10 security evidence crosswalk.
