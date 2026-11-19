@@ -304,3 +304,17 @@ This append-only section completes the project-authored CAT-10/CAT-11 workflow i
 **CW-03 documentation-design disposition:** the workflow-title/index, logical-owner, authorization-boundary and dedicated-test-design gaps within this bounded CAT-10/CAT-11 scope are specified. Final publication acceptance remains subject to cross-document review, CI, merge approval and post-merge readback. This is not implementation readiness certification or Stage 6 authorization.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 18. CW-04 architecture ownership and workflow-orchestration alignment (20 November 2026)
+
+DOC-03 §19 is the architecture-level crosswalk for the canonical domain ownership in DOC-06 §21. DOC-02 §17 remains the controlling CAT-10/CAT-11 project-authored workflow index; its 30 primary owners are unchanged.
+
+1. A workflow may orchestrate multiple domains but does not become co-owner of supporting-domain objects. The primary owner in DOC-06 §§21.3–21.4 owns its authoritative object and lifecycle; each supporting domain owns its own records.
+2. A workflow handoff is a command, event, reference or read-model interaction as defined in DOC-03 §§18–19. A handoff does not authorize cross-domain table writes or direct mutation of a supporting-domain object.
+3. Inventory movement and cost-layer state belong to M06; warehouse custody and internal transfer handling belong to M07; external delivery route/proof belongs to M19. Money, payment, cash, bank, AP/AR and financial posting belong to M16. Party identity and relationship belong to M04.
+4. Category CORE/CONDITIONAL profiles remain the DOC-02 §14 baseline. A supporting-domain reference or workflow handoff does not activate a module, create an entitlement or grant a role.
+5. Authorization for every mutation is resolved against the owning domain's exact resource/action key under DOC-05 §§28–29. The orchestrating workflow's primary owner cannot lend its key or authority to a supporting domain.
+6. DOC-03 §19 and DOC-06 §25 define logical architecture acceptance only. They do not establish physical services, tables, endpoints, queues, event brokers, grants or implementation.
+
+**Disposition:** no workflow ID, title, primary owner, supporting owner, category profile or FIX decision is changed by CW-04. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.

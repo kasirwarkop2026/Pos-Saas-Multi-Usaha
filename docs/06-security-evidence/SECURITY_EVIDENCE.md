@@ -992,3 +992,33 @@ All 24 CW09-SEC IDs remain DESIGN / NOT EXECUTED. READ-ONLY • APPEND-ONLY • 
 | CW03-SEC-14 | HTL-WF-14 | Shift/cash SoD | DENY self-approval or self-close of cash variance | actor, shift, drawer, variance, initiator/approver, decision/reason |
 
 **Lifecycle:** DESIGN / NOT EXECUTED. Evidence NOT GENERATED / NOT VERIFIED. Execution requires separately approved test environment and implementation authorization. No production data may be used. These new IDs do not modify or renumber CW09-SEC-01–24.
+
+
+## 39. CW-04 architecture acceptance evidence register (20 November 2026)
+
+**Evidence status for every row: NOT GENERATED / NOT VERIFIED.** The entries below define the minimum evidence contract for later, separately authorized architecture/implementation verification. A scenario ID is not proof of execution.
+
+| Scenario ID | Evidence contract required when authorized | Required lineage / reviewer focus |
+|---|---|---|
+| CW04-ARCH-01 | Owner map and command trace showing rejected direct cross-domain write and accepted owner command | Caller, target owner, object, command, decision/reason, correlation |
+| CW04-ARCH-02 | Lifecycle transition trace including invalid bypass attempt | Owner invariant, prior/next state, actor, decision, audit reference |
+| CW04-ARCH-03 | Tenant-context and parent-link test record for valid and mismatched business/resource context | Resolved business_id, parent/child identity, scope, deny reason |
+| CW04-ARCH-04 | Interaction decision record explaining sync versus durable async handoff | Immediate decision requirement, dependency, transaction boundary |
+| CW04-ARCH-05 | Idempotency replay record for same key/payload and duplicate delivery | Business scope, operation identity, first result, duplicate result, no duplicate effect |
+| CW04-ARCH-06 | Event duplicate/out-of-order replay record | Event ID, aggregate/version, consumer checkpoint, dedupe/sequence result |
+| CW04-ARCH-07 | Source-commit plus downstream-failure/retry/reconciliation trace | Source commit identity, consumer failure, retained fact, retry/reconciliation outcome |
+| CW04-ARCH-08 | Read-model provenance and attempted-write denial record | Source owner, projection version/freshness, rejected mutation, reconciliation state |
+| CW04-ARCH-09 | Event payload classification/minimization review and authorized field retrieval trace | Data class, purpose, payload manifest, owner authorization decision |
+| CW04-ARCH-10 | Authorization decision trace for primary-owner versus target-owner key | Exact key, target owner, principal, scope, SoD, decision/reason |
+| CW04-ARCH-11 | Audit completeness review for command/event decision lineage | Actor/service, action, target, scope, purpose, decision, time, correlation, before/after reference |
+| CW04-ARCH-12 | Platform/business boundary negative-test record | Principal type, S0 vs S1–S5 context, requested action, deny reason |
+
+### 39.1 Evidence and execution gate
+
+- All CW04-ARCH-01–12 remain **DESIGN / NOT EXECUTED**.
+- Evidence remains **NOT GENERATED / NOT VERIFIED**.
+- Execution requires separately approved implementation scope, a controlled non-production environment, test data and explicit authorization.
+- No Production access, role grant, RLS/Auth/API/backend change, schema mutation or deployment is authorized by this register.
+- DOC-07 evidence ownership does not convert a DOC-03 conceptual rule into a deployed control.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.

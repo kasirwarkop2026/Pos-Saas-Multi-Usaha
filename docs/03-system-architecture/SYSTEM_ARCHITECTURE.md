@@ -312,3 +312,80 @@ Every tenant-owned command, event and resource resolves to one business_id. Outl
 ### 18.5 Cross-document ownership
 
 DOC-06 is the workflow/domain traceability baseline; DOC-04 must map each documented entity to one owning domain and identify references/projections; DOC-05 specifies the permission decision contract; DOC-07 specifies security controls and evidence. Any physical design must preserve these invariants and requires its own authorized technical review. No database, API, RLS, backend, application or deployment change is authorized. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 19. CW-04 canonical domain ownership and interaction contract reconciliation (20 November 2026)
+
+This addendum makes the logical ownership already adopted in §18 explicit against DOC-06 §21. It supplements §§1–18 and does not replace the detailed workflow map or the owning domain documents.
+
+### 19.1 Concept-to-owner crosswalk for DOC-03 §§5–9
+
+| DOC-03 capability / source-of-truth row | Canonical owner | Supporting boundary |
+|---|---|---|
+| Business profile, tenant identity and organization | M01 | Outlet/warehouse hierarchy remains within the Business boundary; platform administration is separate |
+| Product/service catalog, variants, units, categories and pricing | M02 | Sales/order execution is M03; hospitality room sellable catalog/rates follow the DOC-06 workflow map |
+| Sales cart, order, quotation-to-order and sales transaction lifecycle | M03 | Payment, refund and financial posting are M16; M03 does not own the money ledger |
+| Customer, guest, student, supplier/party identity and relationship context | M04 | Booking lifecycle is M05; financial obligation/payment is M16; sensitive fields remain separately classified |
+| Booking, reservation, appointment, availability hold and booking lifecycle | M05 | Property/room readiness is M12; resource capacity may be M11; payment/deposit is M16 |
+| Inventory identity, batch, stock movement, reservation, balance projection and cost-layer/costing lineage | M06 | Costing is a capability within M06, not a new M-domain; physical custody/warehouse handling is M07; financial journal posting is M16 |
+| Warehouse, bin/location custody, picking/put-away and internal transfer custody | M07 | M06 owns physical inventory ledger effects; M19 owns external delivery route/proof |
+| Supplier, purchase request/order, receiving procurement workflow and procurement commitment | M08 | Supplier party identity/reference is M04; supplier invoice/AP obligation and payment are M16 |
+| Service request, work order, task execution and service completion | M09 | Asset maintenance is M20; inventory consumption is M06; workforce assignment is M17 |
+| BOM/recipe/formula, production planning/execution, consumption/yield | M10 | Stock movements/cost layers are posted/owned by M06; finance posting by M16 |
+| Reusable asset, fleet, capacity resource and utilization | M11 | Maintenance/safety lifecycle is M20; warehouse custody is M07 |
+| Property/building/room/unit/bed, stay, housekeeping and hospitality operations | M12 | Booking is M05; room catalog/rate is M02; folio/payment is M16; maintenance release is M20 |
+| Program/course/curriculum/class/session/enrollment/attendance/assessment | M13 | Student/guardian identity is M04; staff profile/roster is M17; credential/compliance review is M18 |
+| Regulated product/prescription/dispensing and regulated controls | M14 | Party identity is M04; inventory movement is M06; compliance evidence is M18; financial posting is M16 |
+| Laundry/item intake, custody, sorting, processing, quality and release | M15 | Inventory/material movements are M06; warehouse custody M07; workforce M17; quality controls M18 |
+| Payment, refund, settlement, cash/bank, AP/AR, receivable/payable, customer credit/advance and financial journal posting | M16 | Party identity/relationship M04; sales source document M03; procurement source M08; journal/report projections are not new money sources |
+| Worker/staff profile, shift, roster, availability, assignment and attendance | M17 | HR identity belongs here; case/credential compliance evidence M18; cash drawer and settlement M16 |
+| Quality, inspection, nonconformance, compliance evidence, audit finding and controlled review/release | M18 | Source-domain facts remain in their originating domains; platform audit remains a separate platform control-plane event family |
+| Dispatch, external shipment, route, delivery, proof of delivery and fulfillment exception | M19 | Internal warehouse custody/transfer is M07; stock ledger effects M06 |
+| Maintenance plan/work, defect, safety hold, inspection, repair and return-to-service authority | M20 | Asset identity M11; room/property operational state M12; procurement M08 |
+| External connector/channel configuration, mapping, sync jobs, webhook delivery and external exchange reconciliation | M21 | Business data remains owned by source domains; secret values are never exposed as ordinary records |
+
+**Legacy §5 row interpretation:** Inventory = M06; Costing = M06 capability; Sales = M03; Payment/Cash/Bank/AP/AR/Customer credit/advance/Accounting = M16 for financial records and posting; Reporting/Audit/Compliance control = M18 for governance and evidence, while source facts and transaction event lineage remain owned by their source domains; provider delivery logs and external exchange jobs = M21. Platform audit is not absorbed into M18 or any Business M-domain.
+
+### 19.2 Normative interaction-contract crosswalk to DOC-06 §21.5
+
+| DOC-06 clause | DOC-03 architecture alignment / clarification |
+|---|---|
+| §21.5.1 Single writer / single owner | §18.2: one authoritative owner; only that owner creates/mutates its object |
+| §21.5.2 No cross-domain table ownership | §18.2: foreign-key/reference does not grant mutation; no hidden shared ownership or cross-domain table writes |
+| §21.5.3 Lifecycle authority | §18.2 and §19.3: owner controls validation, state transitions, cancellation/reversal and audit history |
+| §21.5.4 Synchronous dependency | Synchronous command only when caller needs an immediate authoritative decision; otherwise prefer durable event/async orchestration and avoid distributed multi-domain writes |
+| §21.5.5 Event contract | §18.3: business_id, aggregate/object ID, version, event type, occurred-at, correlation/idempotency reference and actor/service; minimize sensitive payload |
+| §21.5.6 Idempotency | Retryable commands/syncs require stable idempotency identity and deterministic duplicate handling; retries must not double-post |
+| §21.5.7 Consistency | Inventory, finance and booking changes require explicit transaction boundary and reversal/compensation semantics; a downstream failure cannot erase a committed owner-domain fact |
+| §21.5.8 Read models | Read models/reports are projections, never write authorities; material projection lag and reconciliation state must be visible |
+| §21.5.9 Tenant isolation | §18.4: every tenant command/event/resource resolves to one business_id; outlet/property/campus/warehouse/class/task scopes refine access below tenant |
+| §21.5.10 Auditability | Record actor, action, target, business/resource scope, purpose/context, authorization decision/reason, timestamp, correlation/idempotency reference and before/after or immutable event reference according to classification/retention |
+
+### 19.3 Explicit owner and interaction invariants
+
+1. A command is addressed to the owner of the target authoritative object. An orchestrator may validate workflow state and coordinate handoffs but cannot write the supporting domain's authoritative table or bypass its lifecycle.
+2. A supporting domain may return an authoritative decision or publish an event; the requesting domain stores only its own object and permitted reference/projection.
+3. A synchronous dependency must be justified by the need for an immediate authoritative answer. Other cross-domain work uses durable asynchronous handoff where appropriate; no implicit distributed transaction is assumed.
+4. Every retryable command carries an idempotency key scoped to business and operation identity. Duplicate command/event delivery must not create duplicate money, stock movement, booking, journal or external side effect.
+5. A source-domain commit remains authoritative if a downstream consumer fails. Retry, dead-letter/quarantine, replay and reconciliation lifecycle must be explicit in a future technical design; a consumer failure must not silently roll back or erase the source fact.
+6. Cross-domain read models identify their source owner, projection version/freshness and reconciliation state where operationally material. A projection cannot mutate source state.
+7. Events carry minimum necessary data. Sensitive identity, financial, credential or regulated fields are retrieved through the owning domain's authorization path, not copied into broad event payloads.
+8. Business tenant context is resolved server-side. Client-supplied business/outlet/property/role/device identifiers are context hints, not authorization proof. S0 platform operations remain separate from Business S1–S5 scopes.
+9. Authorization is evaluated for the target resource owner and exact action. Workflow orchestration, foreign keys, event subscription or read-model access do not imply mutation authority.
+10. Audit evidence preserves actor/service, action, target, scope, purpose, decision/reason, time and correlation/idempotency lineage; exact storage, retention and tamper controls remain technical OPEN dependencies.
+
+### 19.4 Cross-document authority and scope
+
+- DOC-06 §21.1 owns the canonical M01–M21 taxonomy; DOC-06 §§21.3–21.4 own the CAT-10/CAT-11 workflow primary/supporting owner map; DOC-06 §21.5 owns the normative interaction contract.
+- DOC-02 §17 owns the project-authored 30-workflow title/index and repeats the primary owner for navigation only; it does not override DOC-06.
+- DOC-05 §§23–28 own permission catalogue vocabulary, candidate key and authorization decision boundaries. DOC-05 §29 clarifies that the target resource's owner domain must evaluate its own exact key and policy. No M-domain key or role is inferred from this architecture crosswalk.
+- DOC-04 remains owner for entity/attribute and physical data dictionary mapping. This addendum does not resolve physical entity/field ownership, keys, constraints, indexes, RLS or server enforcement.
+- DOC-07 owns security control/evidence contracts. CW04-ARCH-01–12 are architecture acceptance designs only; they are not executed evidence.
+
+### 19.5 Acceptance and status boundary
+
+**CW-04 logical architecture alignment: PASS at design cross-reference level, subject to the CW-04 package's remaining PR/CI/merge/post-merge gates.** Generic source-of-truth capabilities in §5–§9 are now mapped to existing M owners; costing is not a separate M-domain; financial posting remains M16; custody and inventory ledger responsibilities are separated; and DOC-03's interaction contract is explicitly aligned to all ten DOC-06 §21.5 clauses.
+
+DOC-03 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. This addendum does not close physical API/service contracts, event infrastructure, transaction boundaries, concurrency, idempotency storage, RLS/server enforcement, exact production grants, test execution, evidence, backup/DR or Production readiness.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No implementation or production change is authorized.

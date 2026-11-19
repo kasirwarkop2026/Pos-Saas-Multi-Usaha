@@ -1228,3 +1228,32 @@ The 14 scenarios map to the 8 prior related-only and 6 no-dedicated-test workflo
 ### 24.4 Acceptance boundary
 
 This section closes missing dedicated scenario design coverage only. It does not claim test code, execution, pass/fail, retained artifacts, independent review, technical enforcement, exact production role grants or implementation acceptance. Existing CW09-SEC status remains unchanged.
+
+
+## 25. CW-04 architecture ownership and interaction acceptance scenarios (20 November 2026)
+
+**Status:** architecture acceptance design only; no executable test code or runtime result is implied. These scenarios trace DOC-03 §19 to DOC-06 §21.5 and DOC-05 §§28–29. They complement, and do not renumber or reclassify, CW03-SEC and CW09-SEC designs.
+
+| ID | Architecture invariant | Scenario / attempted behavior | Expected design result | Primary references |
+|---|---|---|---|---|
+| CW04-ARCH-01 | Single owner | Orchestrator attempts to mutate a supporting-domain authoritative object directly | DENY direct write; issue owner-domain command | DOC-03 §§18.2, 19.3; DOC-06 §21.5.1–2 |
+| CW04-ARCH-02 | Owner lifecycle authority | Consumer attempts to bypass owner validation or lifecycle transition | DENY; owner validates transition and records audit lineage | DOC-03 §19.3; DOC-06 §21.5.3 |
+| CW04-ARCH-03 | Tenant binding | Command/event uses a client-supplied or mismatched business_id/resource parent | DENY unresolved or cross-tenant context; resolve server-side tenant and parent linkage | DOC-03 §18.4, §19.3; DOC-06 §21.5.9 |
+| CW04-ARCH-04 | Synchronous dependency discipline | Non-immediate downstream work is implemented as an assumed distributed synchronous write | Require durable handoff; synchronous call only for immediate authoritative decision | DOC-03 §19.2; DOC-06 §21.5.4 |
+| CW04-ARCH-05 | Idempotent retry | Same retryable command is delivered repeatedly with same idempotency identity | One logical effect; deterministic duplicate response; no duplicate posting | DOC-03 §§18.3, 19.3; DOC-06 §21.5.6 |
+| CW04-ARCH-06 | Event replay/order | Duplicate or out-of-order event reaches a consumer | Consumer deduplicates and checks aggregate/version sequence; no stale overwrite | DOC-03 §18.3, §19.3; DOC-06 §21.5.5 |
+| CW04-ARCH-07 | Source fact survives consumer failure | Downstream consumer fails after owner-domain commit | Source fact remains committed; retry/reconciliation is explicit | DOC-03 §19.3; DOC-06 §21.5.7 |
+| CW04-ARCH-08 | Projection is not authority | Dashboard/read-model attempts to mutate or post into source ledger | DENY projection write; command must go to source owner | DOC-03 §§18.3, 19.3; DOC-06 §21.5.8 |
+| CW04-ARCH-09 | Sensitive event minimization | Event payload includes broad identity, financial, credential or regulated fields not required by consumer | Reject/minimize payload; consumer retrieves allowed fields via owner authorization | DOC-03 §§18.3, 19.3; DOC-06 §21.5.5 |
+| CW04-ARCH-10 | Authorization follows resource owner | Workflow primary owner attempts a supporting-domain mutation using its own key | DENY; target owner evaluates its exact resource/action key under DOC-05 | DOC-03 §19.4; DOC-05 §§28–29 |
+| CW04-ARCH-11 | Audit lineage | Command/event lacks actor, target, scope, purpose, decision or correlation lineage | Reject or quarantine as policy requires; retain complete attributable decision trail | DOC-03 §19.2–19.3; DOC-06 §21.5.10 |
+| CW04-ARCH-12 | Platform/business separation | Business principal attempts S0 platform action or platform context is used as tenant permission | DENY; platform namespace and Business scope remain separate | DOC-03 §18.4, §19.3; DOC-05 §§24.3, 29 |
+
+### 25.1 Acceptance rules
+
+1. Each scenario must eventually have an owning requirement, target owner, authorization decision, expected state/effect, denial reason where applicable and evidence reference.
+2. Runtime tests require an independently authorized non-production environment and implementation. No production data or Production mutation is permitted by this design.
+3. A passing architecture review or a scenario specification is not an executed test, technical control or security certification.
+4. All scenarios must preserve the source owner's immutable/compensating semantics and the applicable M-domain authority.
+
+**Disposition:** 12/12 architecture acceptance scenarios specified; 0 executed; 0 evidence generated. DOC-03/DOC-06/DOC-05 alignment is documented, not implemented.

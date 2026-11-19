@@ -871,3 +871,17 @@ No exact production actor × key × resource × scope × condition × approval g
 At the documentation-design level, CW-03 closes the cross-reference consistency and workflow-specific test-design coverage gaps for CAT-10/CAT-11: 30/30 workflow IDs, titles and primary owners are aligned; 30/30 have dedicated test-design references; and the DOC-02/DOC-05/DOC-06/DOC-07 authority boundaries are explicit. Exact grants, numeric thresholds not yet decided, physical field/object mapping, enforcement and executed test evidence remain separate OPEN implementation/evidence gates and are not falsely closed here.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No role grants, schema, RLS/Auth, API/backend, application, CI workflow, deployment or Production change is authorized.
+
+
+## 29. CW-04 architecture-to-authorization handoff boundary (20 November 2026)
+
+This section supplements §§23–28 and aligns the DOC-03 §19 interaction model with the authorization catalogue.
+
+1. **Resolve by target resource owner.** For a command that mutates an authoritative object, the target object's owning M-domain evaluates the exact module.resource.action key and its own lifecycle invariants. The orchestrating workflow's primary domain does not lend its key to a supporting domain.
+2. **Separate orchestration from execution.** A caller may request a command, receive a decision, consume an event or read an authorized projection. It does not gain direct table-write authority, service bypass or an implied grant.
+3. **Preserve tenant and scope context.** Resolve Business membership and business_id server-side, then evaluate the applicable S1–S5 resource scope. S0 platform actions remain a separate namespace and do not imply Business-data access.
+4. **Evaluate complete policy tuple.** Principal/relationship, active membership, category/module entitlement, exact key, target owner, scope, object state, data class, purpose, SoD, independent approver, execution owner and audit requirement remain mandatory as applicable.
+5. **Fail closed.** Missing owner, ambiguous key, unresolved tenant/scope, expired membership, unsupported relationship, missing entitlement, invalid lifecycle, prohibited purpose or SoD conflict results in DENY. No fallback to the workflow's primary owner or Manager role is implied.
+6. **Non-grant rule.** DOC-03 architecture vocabulary, DOC-02 workflow indexing, events, foreign keys and read-model references are not permission grants. Candidate keys remain candidate vocabulary until separately accepted and technically enforced.
+
+**Disposition:** no role grants, permission allowlist, RLS policy, API guard, service identity, platform permission or Production behavior is approved by CW-04. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
