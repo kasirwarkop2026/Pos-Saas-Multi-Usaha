@@ -32,7 +32,7 @@ This page is a navigation summary, not a replacement for its primary RMD audit, 
 
 No SQL/DDL/DML, schema, RLS/Auth, API/backend, application code, deployment or Production change is authorized. Stage 6 remains NOT AUTHORIZED.
 
- 
+
 ## CW-10 project-authored logical workflow indexes — CAT-13 Parfum / Fragrance (20 November 2026)
 
 CAT-13 contains two distinct tracks. These indexes are project-authored logical titles aligned to the 10-item Retail/Refill and 12-item Formulation/Manufacturing baselines; they are not source-native verbatim transcriptions. The tracks must not be collapsed into one 22-step lifecycle.
