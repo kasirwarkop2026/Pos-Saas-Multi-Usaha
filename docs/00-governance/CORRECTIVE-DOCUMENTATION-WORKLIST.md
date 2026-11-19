@@ -1286,3 +1286,60 @@ CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED /
 **Next bounded task:** CW-06 — DOC-05 Authorization Master against DOC-06 requirements, DOC-07 security controls and the aligned M01–M21/entity ownership boundaries.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.31 CW-06 — DOC-05 authorization, requirements and security-evidence consistency (20 November 2026)
+
+**Objective:** audit DOC-05 §§22–31 against DOC-06 §§21–27, DOC-07 §§31–41, and the M01–M21/entity ownership boundaries in DOC-03 §§19–21 and DOC-04 §§28, 32. The scope is cross-document authorization-design consistency and test/evidence traceability; it does not grant permissions or approve technical enforcement.
+
+### 15.31.1 Current-main audit findings
+
+| Finding | Current-main observation | Disposition / correction |
+|---|---|---|
+| CW06-F01 — role/principal wording precedence | DOC-05 §22.2 uses older generic “role/function families” wording for Manager and partner/customer labels; DOC-05 §23.1 and DOC-06 §21.6 distinguish the 12 standard Business roles, Owner, platform roles and relationship/principal classifications. | Clarify precedence: §23.1 controls; Mitra/Pekerja, Mitra Fisik and Pelanggan are not additional standard Business roles. |
+| CW06-F02 — authorization tuple and decision sequence | DOC-05 §§22–25 and DOC-06 §§21.6–21.10 agree on exact action keys, scope, entitlement, data/purpose, SoD, fail-closed order and owning-domain execution. | PASS — append a clause-by-clause crosswalk; no policy decision changed. |
+| CW06-F03 — candidate-key and prohibited-token boundary | DOC-07 §31 uses 43 distinct permission-like tokens; all 43 are present in DOC-05 §§23–27. Of these, 42 are candidate keys and M21.integration_secret.read is only a prohibited attempted-action label. S0.platform_admin is a namespace marker, not a permission key. | PASS — record exact coverage and preserve the two explicit non-key exceptions. |
+| CW06-F04 — high-risk policy tuples and evidence links | DOC-05 §24 defines AUTH-HR-01–14. DOC-07 §§32–34 map the finance, restricted-data, safety, rate, inventory, transfer, export, platform and secret boundaries; AUTH-HR-12/13 platform grant actions are represented by the CW09-SEC-19 S0 scenario. | PASS at design cross-reference level; no test execution or grant approval. |
+| CW06-F05 — resource-owner alignment | DOC-05 §§23.3–23.4 and §§25.2–25.3 align with DOC-06 §§21.3–21.4 and DOC-04 §28 / §32. Primary workflow/entity owners remain M01–M21 as previously fixed. | PASS — no owner, role or candidate key changed. |
+| CW06-F06 — security-test/evidence traceability | DOC-06 and DOC-07 contain 24 CW09-SEC, 14 CW03-SEC, 12 CW04-ARCH and 12 CW05-DATA designs (62 IDs). DOC-05 §§28–30 cross-reference the corresponding workflow, architecture and entity boundaries. | PASS for design references; all remain DESIGN / NOT EXECUTED and evidence NOT GENERATED / NOT VERIFIED. |
+| CW06-F07 — final actor/key policy rows and enforcement | DOC-05 §§23.5, 25.4, 26.3 and 27.2 explicitly leave full per-actor exact-key/scope/condition/approval tuples, remaining parameters and technical enforcement OPEN. | OPEN / NOT ACCEPTED — preserve as a separate authorization completion and implementation gate. |
+
+### 15.31.2 Bounded audit disposition before correction
+
+- The 12 standard Business roles, Owner-outside-12 rule, SUPER_ADMIN/PLATFORM_ADMIN S0 separation and Mitra/Pekerja, Mitra Fisik, Pelanggan principal classifications are consistent with the project FIX decisions.
+- DOC-05's authorization tuple and fail-closed decision order align with DOC-06's key grammar, S0–S5 scope, D0–D4 classification, purpose codes, SoD baseline and decision sequence.
+- Candidate-key comparison: 43 distinct permission-like tokens in DOC-07 §31; 43/43 occur in DOC-05 §§23–27. Exactly one token, M21.integration_secret.read, is prohibited rather than candidate. S0.platform_admin is a namespace marker and not part of the exact-key count.
+- The 14 AUTH-HR high-risk policy tuples and 30 workflow / 17 inventory-family catalogues remain design baselines, not approved grants.
+- The 30 workflow primary owners and 17 entity owners remain aligned with DOC-06, DOC-03 and DOC-04; no cross-document owner mismatch was found in this bounded audit.
+
+### 15.31.3 Append-only correction package
+
+| Document | New section | Purpose |
+|---|---|---|
+| DOC-05 AUTHORIZATION_MASTER.md | §32 | Role/principal precedence clarification, DOC-06 decision-sequence crosswalk, candidate-key count, high-risk tuple/test mapping and explicit non-grant boundary |
+| DOC-06 MASTER_TRACEABILITY.md | §27 | 12 authorization acceptance scenario designs CW06-AUTH-01–12 |
+| DOC-07 SECURITY_EVIDENCE.md | §42 | Evidence contracts for CW06-AUTH-01–12; all remain design-only |
+| This Worklist | §15.31 | Audit findings, coverage metrics, bounded disposition and next task |
+
+### 15.31.4 CW-06 acceptance matrix
+
+| Acceptance criterion | Target | Boundary |
+|---|---|---|
+| Role/principal namespace | 12 standard Business roles; Owner outside 12; 2 platform roles; 3 relationship/principal classifications | No additional role invented |
+| Authorization tuple and decision order | 10/10 design clauses aligned across DOC-05 and DOC-06 | No runtime enforcement claimed |
+| Candidate key reconciliation | 43/43 DOC-07 §31 tokens located in DOC-05; 42 candidate keys + 1 prohibited attempted-action label | No grants |
+| Platform namespace | S0 marker distinguished from PLATFORM.access_grant.approve/apply candidate keys | No S0 wildcard or tenant-data access |
+| High-risk policy tuple crosswalk | AUTH-HR-01–14 mapped to owner policy/test references | Candidate design only |
+| Workflow/entity owner alignment | 30/30 workflow owner references and 17/17 entity owner references preserved | No owner change |
+| Authorization acceptance design | 12/12 CW06-AUTH IDs in DOC-06 and DOC-07 | DESIGN / NOT EXECUTED |
+| Exact grants and enforcement | No status promotion | OPEN / NOT APPROVED / NOT AUTHORIZED |
+
+### 15.31.5 Bounded disposition and next action
+
+**CW-06: AUTHORIZATION-DESIGN CROSS-DOCUMENT CONSISTENCY — READY FOR DOCUMENTATION ACCEPTANCE, PENDING PR REVIEW, CI, CONDITIONAL MERGE AND POST-MERGE READBACK.** The package clarifies the controlling role/principal precedence and records the consistency between DOC-05, DOC-06, DOC-07 and the current M01–M21/entity-owner decisions. No FIX decision, role, owner, key or permission grant is changed.
+
+CW06-AUTH-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED / NOT VERIFIED. Exact actor × key × resource × scope × condition × approval catalogue completion, production grants, RLS/Auth/API/backend enforcement, test execution and security acceptance remain OPEN / NOT AUTHORIZED.
+
+**Next bounded task after verified CW-06 close:** CW-07 — reconcile DOC-07 security-control/evidence ownership and coverage against DOC-06 requirements and DOC-05 authorization policy tuples, preserving all unexecuted evidence as OPEN.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
