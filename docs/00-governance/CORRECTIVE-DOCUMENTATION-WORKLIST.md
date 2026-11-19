@@ -692,3 +692,17 @@ Proceed to CW-10, DOC-06 ↔ DOC-07 requirements-to-security-control-to-test-evi
 The CW-10 working crosswalk is recorded append-only in DOC-06 §23 and DOC-07 §36 on the next single documentation PR. Its initial disposition is PARTIAL until coverage gaps are explicitly accepted or repaired and execution/evidence gates are met. CW-09 remains PARTIAL under its own criteria.
 
 Governance remains READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 and Stage 6 remain NOT AUTHORIZED. One PR at a time; no database, source application, backend, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
+
+
+### 15.16 CW-10 coverage-count reconciliation (19 November 2026)
+
+The first CW-10 crosswalk draft contained an incorrect aggregate workflow reference count in DOC-07 §36.2. A row-by-row recount and classification clarification were appended:
+
+- 16/30 workflows have at least one direct test scenario reference.
+- 8/30 workflows have related-only references; these are not dedicated coverage.
+- 6/30 workflows have no dedicated or related workflow-specific scenario reference.
+- EDU-WF-08 and EDU-WF-11, plus the listed related Hotel workflows, are explicitly not counted as direct coverage.
+- Cross-cutting tenant/scope/purpose/membership/entitlement tests are not counted as workflow-specific tests.
+
+DOC-06 §23.7 and DOC-07 §37 now contain the controlling classification and corrected count. All test IDs remain DESIGN / NOT EXECUTED. CW-10 remains PARTIAL; no dependency closure or security PASS is claimed.
+
