@@ -1192,3 +1192,39 @@ For avoidance of ambiguity in §§23.2–23.3:
 
 Accordingly, the current 30-workflow register contains **16 workflows with at least one direct scenario reference, 8 with related-only references, and 6 with no dedicated or related workflow-specific scenario**. The direct/related distinction must be preserved when calculating coverage; a cross-cutting test alone does not count as a dedicated workflow test. All linked scenarios remain DESIGN / NOT EXECUTED.
 
+
+
+## 24. CW-03 — dedicated workflow negative-test design completion (20 November 2026)
+
+**Purpose:** close the workflow-specific design-coverage gap identified in §23.6–23.7. These 14 scenarios supplement the 24 stable CW09-SEC scenarios. They are project-authored design specifications, not executed tests, evidence artifacts, or production permission grants.
+
+### 24.1 Scenario catalogue
+
+| Test ID | Workflow | Threat / attempted action | Required fixture and boundary | Expected result | Required audit/evidence fields |
+|---|---|---|---|---|---|
+| CW03-SEC-01 | EDU-WF-01 Program & Course Catalog | Catalog editor attempts publication without required review or publish capability | Same Business; valid program; actor has draft/edit only; publish key absent or review incomplete | DENY publish; draft unchanged | actor, business, program, attempted key, review state, decision, reason, correlation ID |
+| CW03-SEC-02 | EDU-WF-02 Intake & Admission | Intake operator attempts out-of-site or self-approved admission | Active membership; application outside actor site or actor is initiator; no independent approver | DENY approval; application unchanged | actor, application, site, initiator, approver, scope, decision, reason |
+| CW03-SEC-03 | EDU-WF-04 Enrollment & Class Allocation | Operator allocates learner to full/inactive class or bypasses approval | Valid learner/class; capacity exhausted or class inactive; no approved exception | DENY allocation; no enrollment/seat mutation | actor, learner ref, class, capacity/state, attempted key, decision, reason |
+| CW03-SEC-04 | EDU-WF-05 Schedule & Resource Planning | Scheduler publishes timetable using unavailable or out-of-scope resource | Resource conflict or wrong site; no valid assignment/override | DENY publish/assignment; schedule preserved | actor, schedule, resource, site, conflict, scope, decision, reason |
+| CW03-SEC-05 | EDU-WF-06 Instructor / Trainer Management | HR operator verifies credential without independent authority or assigns inactive/unqualified instructor | Credential pending/expired; actor is editor/requester; verifier/approver absent | DENY verification/assignment; credential unchanged | actor, instructor, credential status, assignment, approver, decision, reason |
+| CW03-SEC-06 | EDU-WF-08 Learning Material & Asset | Instructor posts stock issue/adjustment outside assigned session/warehouse | M06 material; instructor has session assignment only; no inventory posting key or warehouse scope | DENY movement/adjustment; ledger unchanged | actor, session, item, warehouse, quantity, key, decision, event ref |
+| CW03-SEC-07 | EDU-WF-11 Guardian / Sponsor / Corporate Account | Payer/sponsor accesses learner academic or restricted identity data beyond verified billing relationship | Verified payer link limited to billing; no guardian/academic relationship; D3 fields excluded | DENY restricted read/export; billing subset remains scoped | actor, learner, relationship, class, purpose, fields, decision, reason |
+| CW03-SEC-08 | EDU-WF-12 Completion / Graduation / Certificate | Certificate preparer issues/finalizes without independent eligibility verification | Completion prerequisites incomplete or preparer=issuer without accepted exception | DENY issue/finalize; no valid certificate | actor, learner, completion state, verifier, issuer, key, decision, reason |
+| CW03-SEC-09 | HTL-WF-03 Availability / Reservation | Reservation actor confirms expired hold or unavailable/out-of-service room | Property-scoped room; expired hold or M12 readiness/safety hold; no override | DENY confirm; no reservation/room allocation | actor, property, room, hold/expiry, readiness, decision, reason, idempotency key |
+| CW03-SEC-10 | HTL-WF-04 Booking Lifecycle | Customer/agent modifies or cancels another guest booking or changes financial effect through booking mutation | S5 relationship mismatch; cancellation fee/refund belongs to M16 | DENY unrelated booking change; no silent payment/refund mutation | actor, booking, relationship, target guest, key, decision, reason |
+| CW03-SEC-11 | HTL-WF-06 Pre-arrival / Check-in | Front desk checks in without guest verification, valid booking or room readiness | Booking mismatch, identity incomplete, room not ready or safety-held | DENY check-in; stay/room unchanged | actor, booking, guest ref, room, verification, readiness, decision, reason |
+| CW03-SEC-12 | HTL-WF-07 Stay / In-house Operations | Staff moves/extends/closes stay outside property or bypasses rate/payment approval | Wrong property or unapproved extension; M05/M16 remain owner-controlled | DENY invalid transition; no cross-domain side effect | actor, stay, property, transition, linked booking/payment refs, decision, reason |
+| CW03-SEC-13 | HTL-WF-13 Guest Service / Complaint | Service operator reads restricted complaint/incident or issues compensation/refund directly | Actor assigned service task only, not M18 case; refund key belongs to M16 | DENY restricted access/export and direct refund | actor, guest, case, class, purpose, key, owner domain, decision, reason |
+| CW03-SEC-14 | HTL-WF-14 Staff Shift / Cash Control | Shift supervisor approves own cash variance or closes own reconciliation | Same actor initiates and approves; no independent Finance approver | DENY approval/close; variance pending | actor, shift, drawer, variance, initiator, approver, decision, reason |
+
+### 24.2 Execution and evidence contract
+
+Each scenario must be an isolated test with explicit actor, Business, role/function fixture, membership/relationship, module entitlement, resource owner, scope, resource state, data class/purpose, SoD/approver, attempted key, expected deny reason and immutable audit-event assertion. Tests must assert state preservation and capture evidence. No real customer or student data may be used. Execution requires an explicitly authorized non-production environment; no Supabase Preview/Staging environment is assumed or authorized here.
+
+### 24.3 Coverage reconciliation
+
+The 14 scenarios map to the 8 prior related-only and 6 no-dedicated-test workflow rows in DOC-06 §23.7. With the 16 direct workflow-specific CW09-SEC links already present, CAT-10/CAT-11 workflow-specific design coverage is 30/30. Cross-cutting references are not counted as dedicated coverage. All CW03-SEC-01–14 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED.
+
+### 24.4 Acceptance boundary
+
+This section closes missing dedicated scenario design coverage only. It does not claim test code, execution, pass/fail, retained artifacts, independent review, technical enforcement, exact production role grants or implementation acceptance. Existing CW09-SEC status remains unchanged.
