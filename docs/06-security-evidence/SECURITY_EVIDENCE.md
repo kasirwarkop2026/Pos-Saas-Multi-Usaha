@@ -873,3 +873,19 @@ This register does not close REC-08, SEC-OPEN-01–07, REC-OPEN-12–15, histori
 5. All 24 tests remain DESIGN / NOT EXECUTED. Evidence labels remain semantic families, not physical event names. A future test requires separate authorization and actual retained execution evidence.
 
 **Disposition:** cross-reference coverage 24/24 stable test IDs to the expanded policy design; no test execution or dependency closure is claimed. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 33. Append-only reconciliation — platform S0 test-key reference (19 November 2026)
+
+This section reconciles the historical S0 marker in §31 with the exact candidate platform keys adopted in DOC-05 §24.3 and referenced by §32.
+
+- The §31 row for CW09-SEC-19 used S0.platform_admin as a namespace marker because the platform resource/action key had not yet been defined at that checkpoint.
+- DOC-05 §24.3 subsequently defines two exact candidate action keys: PLATFORM.access_grant.approve and PLATFORM.access_grant.apply. For CW09-SEC-19, these are the relevant candidate keys when the negative scenario exercises approval/application of a platform access grant. The expected denial is assessed separately for each action and the corresponding actor/approver/executor separation.
+- The old S0.platform_admin marker is superseded for this specific test-key reference; it is not a permission key and must not be used as one. S0 remains the platform scope namespace. No PLATFORM.* wildcard or general platform-admin grant is created.
+- Other S0 platform resources/actions require their own exact resource/action keys. The two keys above are candidate design vocabulary, not approved grants or implemented permissions.
+- DOC-05 §§24–25 now contain the high-risk and workflow/inventory tuple baselines referenced by DOC-07 §32. These baselines do not imply that every actor/key combination has been approved, that technical enforcement exists, or that any test ran.
+- M05.reservation.read in §31 is an illustrative resource-specific example only, not a canonical key established by the current DOC-05 catalogue. Before an executable test uses it, the owning M05 resource/action catalogue must define and review the exact key. The M06 inventory-reservation keys remain separate.
+
+**Disposition:** CW09-SEC-19 now has explicit candidate key references for its defined platform access-grant scenario; remaining key/action details are subject to the owner-domain catalogue. All 24 tests remain DESIGN / NOT EXECUTED. No PASS, permission grant, dependency closure or implementation is claimed.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
