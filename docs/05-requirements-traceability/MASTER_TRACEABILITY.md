@@ -1257,3 +1257,32 @@ This section closes missing dedicated scenario design coverage only. It does not
 4. All scenarios must preserve the source owner's immutable/compensating semantics and the applicable M-domain authority.
 
 **Disposition:** 12/12 architecture acceptance scenarios specified; 0 executed; 0 evidence generated. DOC-03/DOC-06/DOC-05 alignment is documented, not implemented.
+
+
+## 26. CW-05 data-entity ownership and tenant-integrity acceptance scenarios (20 November 2026)
+
+**Status:** logical data/tenant acceptance design only. No SQL test, database mutation, runtime test or production result is implied. These scenarios trace DOC-04 §27 to DOC-03 §§19–20, DOC-05 §30 and DOC-06 §21.
+
+| ID | Invariant | Scenario / attempted behavior | Expected design result | Primary references |
+|---|---|---|---|---|
+| CW05-DATA-01 | Single entity owner | Orchestrator or supporting domain attempts direct mutation of one of the 17 authoritative entities | DENY; route command to the entity's primary owner | DOC-04 §27.1; DOC-03 §19.3; DOC-05 §30 |
+| CW05-DATA-02 | Tenant ownership | Entity record is created/read with unresolved or mismatched Business context | DENY; resolve tenant server-side; every tenant-owned entity belongs to one Business | DOC-04 §27.3 TEN-01; DOC-03 §18.4 |
+| CW05-DATA-03 | Parent/child tenant integrity | Child record references a parent in another Business | DENY; same-tenant relationship required; physical composite key remains unspecified | DOC-04 §27.3 TEN-02; DOC-06 §21.5.9 |
+| CW05-DATA-04 | Transfer location integrity | Transfer uses source/destination from different Business or same location | DENY; same Business and distinct source/destination | DOC-04 §27.3 TEN-03; DOC-04 §3 |
+| CW05-DATA-05 | Inventory ledger immutability | Attempt to edit/delete a posted movement rather than issue a correction | DENY mutation; use reversal/compensating movement under M06 | DOC-04 §§3–4, 27.1; DOC-03 §6 |
+| CW05-DATA-06 | Projection non-authority | Attempt to write inventory balance or batch-balance projection directly | DENY direct write; rebuild/reconcile from authoritative ledger | DOC-04 §§3–4, 27.1; DOC-03 §19.3 |
+| CW05-DATA-07 | Batch/cost-layer separation | Use physical batch identity as cost-layer identity or merge their lifecycles | DENY conflation; FEFO selects batch, FIFO consumes cost layer; MWA remains method default | DOC-04 §§6, 27.3 TEN-04/05; DOC-03 §19.1 |
+| CW05-DATA-08 | MWA pool boundary | Combine cost pool across Business, Product/Variant or Inventory Location | DENY cross-pool aggregation; pool is Business + Product/Variant + Inventory Location | DOC-04 §§6, 27.3 TEN-04 |
+| CW05-DATA-09 | Reservation semantics | Treat reservation as physical stock decrement or use A01 movement registry fields for A02 reservation source | DENY semantic conflation; reservation reduces available only; A02 Alternative A remains header source_type/source_id | DOC-04 §§5, 27.3 TEN-06 |
+| CW05-DATA-10 | Shipment quantity reconciliation | Repeated/partial receipt, return or loss exceeds dispatched quantity or duplicates a physical dispatch | DENY over-receipt/duplicate effect; reconcile per shipment item; M07 custody, M06 posting | DOC-04 §§7–8, 27.2/27.3 TEN-07 |
+| CW05-DATA-11 | Cost consumption/compensation cap | Consumption exceeds eligible layer quantity or cumulative compensation exceeds original eligible quantity | DENY excess; preserve immutable consumption and capped partial compensation lineage | DOC-04 §§8, 18.2 REL-12–14, 21 |
+| CW05-DATA-12 | Authorization owner separation | M07 custody actor attempts M06 movement posting, or M06 actor attempts unassigned M07 custody mutation | DENY cross-owner mutation; each owner evaluates its own exact action and scope | DOC-04 §27.1–27.2; DOC-05 §30 |
+
+### 26.1 Acceptance rules
+
+1. Each scenario must eventually bind to an entity/relationship, owner domain, tenant scope, expected state/effect, denial reason and evidence artifact.
+2. These designs do not establish exact SQL columns, physical FK tuples, constraint expressions, RLS policies or server/API enforcement.
+3. Runtime verification requires separately authorized implementation and controlled non-production data. No production data or Production mutation is permitted by this design.
+4. A conceptual invariant or design review is not an executed database test.
+
+**Disposition:** 12/12 CW05-DATA scenarios specified; 0 executed; 0 evidence generated. Physical dictionary and tenant enforcement remain OPEN / NOT ACCEPTED.

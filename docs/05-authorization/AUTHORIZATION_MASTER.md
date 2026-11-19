@@ -885,3 +885,27 @@ This section supplements §§23–28 and aligns the DOC-03 §19 interaction mode
 6. **Non-grant rule.** DOC-03 architecture vocabulary, DOC-02 workflow indexing, events, foreign keys and read-model references are not permission grants. Candidate keys remain candidate vocabulary until separately accepted and technically enforced.
 
 **Disposition:** no role grants, permission allowlist, RLS policy, API guard, service identity, platform permission or Production behavior is approved by CW-04. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 30. CW-05 entity-owner authorization crosswalk (20 November 2026)
+
+This addendum links DOC-04 §27 entity ownership to the resource-owner authorization boundary in §§23–29. It supplements §25.3 and does not create grants.
+
+| DOC-04 entity family | Target resource owner | Authorization/execution boundary |
+|---|---|---|
+| `inventory_batches`, `inventory_movements`, `inventory_balances`, `inventory_batch_balances` | M06 | M06 evaluates its own exact action; projections are read/rebuild-only and posted movement is immutable |
+| `inventory_adjustments`, `inventory_adjustment_items` | M06 | Initiate/review/approve/post remain distinct; independent approval; M06 posts |
+| `stock_counts`, `stock_count_items` | M06 | Counter/reviewer/finalizer separation; M06 owns count and ledger effect |
+| `stock_transfers`, `stock_transfer_items`, `stock_transfer_shipments`, `stock_transfer_shipment_items` | M07 | M07 owns custody and transfer/shipment lifecycle; M06 separately posts stock movement; M19 only external delivery route/proof |
+| `inventory_cost_exceptions`, `inventory_cost_layers`, `inventory_cost_layer_consumptions` | M06 | M06 owns cost state/layer/consumption; Finance / Accounting read/review subset; M16 owns financial journal posting |
+| `inventory_reservations`, `inventory_reservation_items` | M06 | M03/M05 may originate demand; M06 controls reservation/allocation; M07 performs assigned physical pick/custody |
+
+### 30.1 Authorization constraints
+
+1. The entity's target owner, not the workflow orchestrator, evaluates the exact resource/action key.
+2. A Warehouse Operator's custody assignment does not grant M06 ledger mutation; an Inventory Operator's stock function does not grant M07 custody outside assignment.
+3. Finance / Accounting review of cost exception/layer data does not grant direct inventory mutation or journal posting beyond separately authorized M16 actions.
+4. Every action still requires approved principal/role, active membership, entitlement, tenant/resource scope, lifecycle state, data class, purpose, SoD/approver and audit policy under §§24–29.
+5. Missing or ambiguous owner/scope/key is DENY. No CRUD bundle, wildcard or inherited permission is created.
+
+**Disposition:** 17/17 entity families are mapped to the target owner already established in DOC-04 §27 and DOC-05 §25.3. No role grant, permission allowlist, RLS policy or technical enforcement is approved.

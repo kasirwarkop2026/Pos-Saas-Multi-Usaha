@@ -1428,3 +1428,82 @@ This note sharpens the denominator and status wording used in §§28–30.
 - D0–D4, purpose, audience, write authority, masking/export, retention and audit requirements still require field-by-field review. Do not treat the proposed labels in §29 as accepted classification evidence.
 
 This wording clarification does not close any physical dictionary, RLS, schema or implementation dependency. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 27. CW-05 logical entity ownership, attribute navigation and tenant-integrity matrix (20 November 2026)
+
+This addendum supplements §§3–26 and maps the historical 17 conceptual entities to the canonical M01–M21 logical ownership model. It does not change the 17-entity baseline, authorize physical SQL definitions, or convert conceptual relationships into physical foreign keys.
+
+### 27.1 Entity-to-owner and logical-attribute crosswalk
+
+| # | Conceptual entity | Primary owner | Logical attribute groups (DOC-04 §17.2) | Supporting handoff / boundary |
+|---:|---|---|---|---|
+| 1 | `inventory_batches` | M06 | Business/product/variant; physical lot identity; production/expiry; batch state; supplier reference | M07 custody; M08 supplier reference; M14 regulated controls where applicable |
+| 2 | `inventory_movements` | M06 | Business/source identity; source document; time; product/variant/location; optional batch; signed base delta; actor; reversal/idempotency lineage | M07 custody context; source-domain command; immutable posted ledger |
+| 3 | `inventory_balances` | M06 | Business/product/variant/location; on-hand/reserved/available projection; rebuild/reconciliation provenance | Read-only projection; never a posting authority |
+| 4 | `inventory_batch_balances` | M06 | Parent balance; batch; projected on-hand/reserved/available; reconciliation to parent | Batch projection; no direct quantity write |
+| 5 | `inventory_adjustments` | M06 | Business/location; adjustment identity; lifecycle/review/approval; reason; posting/reversal context | Independent approval under DOC-05; M06 posts ledger effect |
+| 6 | `inventory_adjustment_items` | M06 | Parent adjustment; product/variant/batch; entered quantity/unit; conversion snapshot; signed base delta; movement reference | M06 owns line and movement posting |
+| 7 | `stock_counts` | M06 | Business/location; count scope/session; snapshot/cutoff; blind-count; assignment; posting/reconciliation | M17 supplies workforce assignment; M06 finalizes stock effect |
+| 8 | `stock_count_items` | M06 | Parent count; product/variant/batch; expected/count/variance; completion/recount context | M06 owns count detail; zero differs from uncounted NULL |
+| 9 | `stock_transfers` | M07 | Business; transfer identity; source/destination locations; virtual transit; status; closure/disposition | M06 posts stock ledger effects; same Business and distinct source/destination |
+| 10 | `stock_transfer_items` | M07 | Parent transfer; product/variant; requested quantity; shipment split; dispatched/received/returned/lost summaries | M06 owns corresponding inventory movement; summaries derive from events |
+| 11 | `inventory_cost_exceptions` | M06 | Business/product/variant/location; cost exception; unknown-cost NULL; investigation/resolution; correction provenance | M16 owns any resulting financial journal posting; M06 owns inventory cost state |
+| 12 | `inventory_reservations` | M06 | Business/source type/source ID; expiry/TTL; lifecycle; request/idempotency context | M03/M05 originate demand; M06 owns reservation state; A02 Alternative A remains distinct from A01 movement source registry |
+| 13 | `inventory_reservation_items` | M06 | Parent reservation; product/variant/location; reserved/fulfilled/released; batch allocation; event history | M07 supports physical pick/custody; M06 owns allocation and atomic stock effect |
+| 14 | `inventory_cost_layers` | M06 | Business/product/variant/location pool; source/receipt; layer identity; quantity/cost; transfer and landed-cost lineage | MWA/FIFO method governance is separate; not a separate M-domain; M16 owns financial posting |
+| 15 | `inventory_cost_layer_consumptions` | M06 | Cost layer; movement/allocation; original consumption; eligible negative allocation; partial compensation; idempotency | M06 owns consumption/compensation lineage; M16 owns any journal posting |
+| 16 | `stock_transfer_shipments` | M07 | Business/parent transfer; physical shipment identity; dispatch; transit; partial receipt; return/loss/cancel evidence | M06 posts inventory movements; M19 owns external delivery route/proof where applicable |
+| 17 | `stock_transfer_shipment_items` | M07 | Parent shipment/transfer item; product/variant/batch; dispatched/received/returned/lost quantities; movement/cost reconciliation | M07 owns custody reconciliation; M06 owns stock ledger effect |
+
+**Owner rule:** every entity above has exactly one primary logical owner. Supporting domains own their own objects and may provide references, commands, events, decisions or projections; they do not gain direct write ownership over the entity.
+
+### 27.2 Relationship ownership and handoff crosswalk
+
+| DOC-04 relationship | Source owner | Target owner | Required interpretation |
+|---|---|---|---|
+| REL-01 adjustment → adjustment items | M06 | M06 | Same-owner parent/child; M06 lifecycle controls |
+| REL-02 stock count → count items | M06 | M06 | Same-owner parent/child; snapshot/recount rules remain |
+| REL-03 transfer → transfer items | M07 | M07 | Same-owner custody aggregate |
+| REL-04 transfer → shipments | M07 | M07 | One transfer may have multiple physical shipments |
+| REL-05 transfer items → shipment items | M07 | M07 | Split shipment allocation; quantity caps remain conceptual until physically specified |
+| REL-06 shipment → shipment items | M07 | M07 | Same-owner shipment aggregate |
+| REL-07 shipment item → receipt events | M07 | M07 | Event structure remains conceptual/unapproved as a 17th-entity addition |
+| REL-08 posted receipt detail → inventory movement | M07 | M06 | Cross-domain command/event handoff; M06 alone posts the movement |
+| REL-09 posted return detail → inventory movement | M07 | M06 | Cross-domain command/event handoff; M06 alone posts the movement |
+| REL-10 inventory movement → cost-layer allocation | M06 | M06 | Cost allocation lineage; bridge remains candidate |
+| REL-11 cost layer → cost-layer allocation | M06 | M06 | Cost-layer lineage; bridge remains candidate |
+| REL-12 eligible negative allocation → original consumption | M06 | M06 | Conceptual 1:1 cardinality; physical key/unique enforcement OPEN |
+| REL-13 non-consumption allocation → zero consumption | M06 | M06 | Conceptual zero-consumption invariant; no physical row inferred |
+| REL-14 original consumption → compensation | M06 | M06 | Partial compensation 1:N; aggregate cap remains conceptual until enforced |
+| REL-15 reservation → reservation items | M06 | M06 | Same-owner reservation aggregate |
+| REL-16 reservation items → batch allocations/batches | M06 | M06 | M06 owns allocation; M07 may perform physical custody/picking |
+
+### 27.3 Tenant-scope matrix for all 17 entities
+
+| Tenant rule | Entity coverage | Conceptual acceptance | Physical status |
+|---|---|---|---|
+| TEN-01 — tenant ownership context | All 17 entities | Each record resolves to one Business context | Exact tenant columns and keys OPEN |
+| TEN-02 — same-tenant parent/child | Entities 4–10, 13, 16–17 and all REL parent/child references | No cross-Business parent/child relation | Composite-FK tuples and enforcement OPEN |
+| TEN-03 — transfer source/destination | `stock_transfers`, `stock_transfer_items` | Both locations same Business; source differs from destination | Physical location keys and constraints OPEN |
+| TEN-04 — MWA pool scope | `inventory_cost_layers` and costing lineage | Business + Product/Variant + Inventory Location; no cross-location pool | Physical key/unique tuple OPEN |
+| TEN-05 — batch vs cost layer | `inventory_batches`, `inventory_cost_layers`, related allocations/consumptions | Separate identities and lifecycles | Physical independent keys OPEN |
+| TEN-06 — reservation source | `inventory_reservations` | A02 Alternative A source_type/source_id on header with strict server validation; not A01 movement registry | Type allowlist, validation and FK strategy OPEN |
+| TEN-07 — shipment/receipt/return/loss lineage | `stock_transfers`, `stock_transfer_items`, `stock_transfer_shipments`, `stock_transfer_shipment_items`, `inventory_movements` | Same-tenant lineage and reconciled disposition; M07 custody handoff to M06 posting | Physical event links, tenant keys and enforcement OPEN |
+
+### 27.4 Physical-definition and non-inference guardrails
+
+1. DOC-04 §17.2 remains the logical attribute inventory for 17/17 entities. This crosswalk assigns logical ownership and navigation; it does not turn descriptive information groups into approved SQL identifiers.
+2. Physical field/key locator coverage remains 0/17 in the prior bounded recovery record. Do not claim a physical field dictionary is complete.
+3. Do not infer generic `id`, `business_id`, timestamps, status columns, exact composite FK tuples, ON DELETE/UPDATE actions, indexes, numeric precision or SQL types.
+4. The historical 17-entity baseline is unchanged. `inventory_cost_layer_movements` remains a candidate bridge, not an approved entity #18.
+5. DOC-04 §18 cardinality labels remain conceptual. Cross-domain references do not authorize cross-domain writes; REL-08/09 require M07-to-M06 command/event handoff.
+6. DOC-04 §26.6's next-routing instruction to DOC-05 is a historical snapshot. The active corrective sequence is governed by the current Worklist; CW-05 is the current DOC-04 owner-mapping task.
+
+### 27.5 Acceptance boundary
+
+**CW-05 logical entity ownership and tenant-integrity mapping: PASS at design cross-reference level, subject to PR/CI/merge/post-merge gates.** All 17 conceptual entities have one primary M owner; all 16 conceptual REL rows have source/target owner and handoff interpretation; TEN-01–TEN-07 are mapped without inventing physical keys.
+
+Physical Data Dictionary acceptance remains **NOT ACCEPTED**. PK/FK/composite-FK tuples, field names/types/nullability/defaults, UNIQUE/CHECK/index definitions, referential actions, RLS/server enforcement, concurrency/idempotency implementation and executed evidence remain OPEN / NOT VERIFIED.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
