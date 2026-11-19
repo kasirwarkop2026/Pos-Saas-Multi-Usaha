@@ -1415,3 +1415,16 @@ A given action/attribute must use only the purpose(s) applicable to its document
 The conceptual proposal inventory does not close GAP-04/A38/ERD-OPEN physical dependencies, approve physical columns/types/constraints, establish database classification controls, or prove RLS/server enforcement. Retention durations remain OPEN; legal hold suspends disposal. No SQL/DDL/DML, migration or database change is authorized.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 31. Append-only precision note — meaning of the 0/17 field-classification status (19 November 2026)
+
+This note sharpens the denominator and status wording used in §§28–30.
+
+- The 17 in “0/17 field-level classification complete” is the count of the 17 conceptual entities, not a count of physical fields.
+- The status means **zero of the 17 entities had a complete, accepted field-level classification inventory at the §28.2 checkpoint**. It does not mean that the project had counted exactly zero physical columns.
+- DOC-04 §29 subsequently enumerates proposed conceptual attribute sets for 17/17 entities. That advances design coverage but does not convert the proposals into accepted field dictionaries or verified physical columns.
+- Therefore the precise current design status is: **17/17 entity-level conceptual attribute proposals enumerated; 0/17 entities with a fully accepted field-level classification; physical field-to-column mapping remains OPEN and has no verified completion count in this document.**
+- D0–D4, purpose, audience, write authority, masking/export, retention and audit requirements still require field-by-field review. Do not treat the proposed labels in §29 as accepted classification evidence.
+
+This wording clarification does not close any physical dictionary, RLS, schema or implementation dependency. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
