@@ -1742,3 +1742,50 @@ It does not approve role grants, exact permission keys, regulated pharmacy opera
 **Next CW10B:** cross-reference all 13 profiles and 190 workflow owners into DOC-03, DOC-05, DOC-06, DOC-07 and DOC-11; define test/evidence design coverage and release acceptance.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No database, application, CI workflow, deployment or Production change.
+
+
+## 15.42 CW-10A — PR #112 category profile/workflow index merge and readback (20 November 2026)
+
+**PR:** [#112 — complete CW-10 category profiles and workflow owner indexes](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/112)  
+**Branch:** `docs/cw10-category-domain-workflow-crosswalk-2026-11-20`  
+**Final head SHA:** `336fa9070e9026883f85d48cbc3f618d6c2a57b0`  
+**Base SHA:** `b181fb69bde424e6c5e870fa0dfe9b1c8b523892`  
+**Squash merge commit:** `c009cbccfb384f5245fe9887fdbd0f066b81a628`
+
+### 15.42.1 CI result at merge
+
+- Final Documentation CI run `44584185731`: SUCCESS — Documentation structure, Markdown lint and Internal documentation links.
+- POS SaaS CI run `44584186029`: SUCCESS — Detect application changes.
+- ESLint, TypeScript, Next.js build and Dependency audit: SKIPPED because the PR was documentation-only; not claimed as executed application tests.
+- The first documentation run found one MD009 trailing-space error in CAT-13. The whitespace was corrected in the PR branch and the final Documentation CI rerun passed.
+- PR #112 was mergeable; expected head SHA matched; no review submissions or inline review threads were present.
+
+### 15.42.2 Post-merge readback from main
+
+PR #112 is CLOSED / MERGED. All 13 changed files were fetched again from `main` and verified:
+
+| File | Main blob SHA |
+|---|---|
+| `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` | `eff730e5bf48eaec3a740b2c8e6acd980a4c5d96` |
+| `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` | `2991bd412b6c8d9e0b9e98db39973fd033cbc1d6` |
+| `docs/02-business-domains/categories/CAT-01-retail.md` | `08d2d1b800d71808c524f783cce109a93ee7c959` |
+| `docs/02-business-domains/categories/CAT-02-wholesale.md` | `18f4d06ebbbeae7244c4909e6577c9265e8818c2` |
+| `docs/02-business-domains/categories/CAT-03-fnb.md` | `50e8d0bc4dcd538788dff7ba98e196e984e202a4` |
+| `docs/02-business-domains/categories/CAT-04-services.md` | `2c326a6e5f09321f00c5d852299084ab84034971` |
+| `docs/02-business-domains/categories/CAT-05-salon.md` | `31b6321b9c67559bce34d18b0fcb61114068cdbb` |
+| `docs/02-business-domains/categories/CAT-06-manufacturing.md` | `64b70184a4cb84277e163f81818c4223f04a44ba` |
+| `docs/02-business-domains/categories/CAT-07-rental.md` | `a22c5127a2a1349cffbc3a36b4c9189cfd513dfe` |
+| `docs/02-business-domains/categories/CAT-08-pharmacy.md` | `dd106d4a157fbe11cf49585f63d5e89435da9a2f` |
+| `docs/02-business-domains/categories/CAT-09-laundry.md` | `a5301c7ef41bb414939a947b0e533dc9be53193d` |
+| `docs/02-business-domains/categories/CAT-12-other.md` | `b532cd290ad328f51998f3fc68c12a2ffee0cff1` |
+| `docs/02-business-domains/categories/CAT-13-parfum.md` | `7c332b238a489eabfb38d68c5fdd8b9006935fbd` |
+
+### 15.42.3 Final bounded disposition
+
+**CW-10A: PASS / CLOSED — CATEGORY PROFILE AND WORKFLOW INDEX SCOPE.** DOC-02 §20 contains the project-authored category CORE/CONDITIONAL/OUT-OF-BASELINE matrix; CAT-01–CAT-09 and CAT-13 carry project-authored title/owner indexes; CAT-01 retains its 12 existing titles; CAT-10/CAT-11 indexes are unchanged; CAT-12 has 14 fail-closed exception steps, not operational workflows. The baseline contains 190 logical workflow/exception items across 13 categories and the CAT-13 dual tracks.
+
+All 13 changed files were verified from `main`. Category profiles and workflow owners remain logical design only. CORE/CONDITIONAL is not module activation or permission grant. CAT-08 remains regulated / NOT READY pending credential, jurisdiction and compliance gates; CAT-12 remains fail-closed; CAT-13 tracks remain separate. Physical schema, exact grants, technical enforcement, test execution and evidence remain OPEN.
+
+**Next bounded task:** CW-10B — reconcile all 13 category profiles and 190 workflow owners into DOC-03, DOC-05, DOC-06, DOC-07 and DOC-11, including requirements/test/evidence crosswalk and explicit per-category release gates.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 and Stage 6 remain NOT AUTHORIZED.
