@@ -1507,3 +1507,38 @@ This addendum supplements §§3–26 and maps the historical 17 conceptual entit
 Physical Data Dictionary acceptance remains **NOT ACCEPTED**. PK/FK/composite-FK tuples, field names/types/nullability/defaults, UNIQUE/CHECK/index definitions, referential actions, RLS/server enforcement, concurrency/idempotency implementation and executed evidence remain OPEN / NOT VERIFIED.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 32. CW-05 section-numbering and pre-existing ownership-register clarification (20 November 2026)
+
+This append-only note corrects the section locator for the CW-05 material appended after the original DOC-04 §31. The pre-existing sections §§27–31 are retained exactly as published before CW-05.
+
+### 32.1 Existing authoritative registers
+
+1. **§28 remains the authoritative 17-entity-to-domain owner register.** It already assigns each historical conceptual entity exactly one primary owner and lists supporting domains. The owner map was not first created by CW-05.
+2. **§29 remains the conceptual logical attribute proposal inventory for 17/17 entities.** Its labels are semantic attribute proposals, not approved SQL columns.
+3. **§30 remains the reconciliation of logical attribute proposals, D0–D4/purpose vocabulary and classification status.**
+4. **§31 remains the precision note:** 17/17 conceptual attribute proposals enumerated; 0/17 entities with a fully accepted field-level classification; physical field-to-column mapping remains OPEN without a verified completion count.
+
+### 32.2 CW-05 supplemental crosswalk
+
+The CW-05 content appended after §31 and originally given the duplicate heading “§27” is designated **§32** for navigation. Its five subparts are referenced as §§32.1–32.5. The 17-entity table is a navigation/reconciliation copy of §28 and does not create new owner decisions.
+
+- §32.1 — entity-to-owner and logical-attribute cross-reference to §§28–29.
+- §32.2 — source/target owner and command/event handoff for REL-01–REL-16.
+- §32.3 — TEN-01–TEN-07 tenant-scope mapping.
+- §32.4 — physical-definition and non-inference guardrails.
+- §32.5 — bounded acceptance status.
+
+### 32.3 Corrected authority and status
+
+- DOC-04 §28 is controlling for the primary owner of each of the 17 entities.
+- DOC-04 §32 supplements §28 with relationship-level handoffs and tenant-rule navigation.
+- DOC-03 §19 and DOC-06 §21 remain controlling for M-domain ownership and interactions; DOC-05 controls authorization decision boundaries.
+- The candidate `inventory_cost_layer_movements` remains unapproved entity #18.
+- Physical Data Dictionary remains NOT ACCEPTED. No physical field, SQL identifier, PK/FK/composite-FK tuple, constraint, index, RLS policy or server enforcement is approved by this clarification.
+- CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED / NOT VERIFIED.
+
+This locator correction does not change any FIX decision, conceptual entity owner, attribute proposal, relationship cardinality, tenant rule or implementation status.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
