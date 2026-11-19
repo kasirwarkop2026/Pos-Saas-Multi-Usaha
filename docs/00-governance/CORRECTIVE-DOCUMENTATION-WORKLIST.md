@@ -534,3 +534,29 @@ DOC-07 §31 was appended to the existing PR #87 branch. It cross-references all 
 Next bounded work: expand the DOC-05 candidate key catalogue into per-key policy tuples, prioritizing high-risk actions (refund/write-off/settlement, safeguarding/export, safety-hold release, inventory adjustment/transfer closure, D4 secret access and platform administration). In parallel, DOC-04 field-level classification remains OPEN until a logical attribute inventory is authored and reconciled per entity; no physical columns are inferred.
 
 This update is append-only and is committed to the existing PR #87 branch; no second PR was opened. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+### 15.9 Package B continuation — high-risk authorization policy tuple design (19 November 2026)
+
+DOC-05 §24 was appended to the existing PR #87 branch. It expands 14 high-risk action policies into explicit candidate tuples: actor/prepare function, exact permission key, scope, resource preconditions, data class/purpose, SoD, independent approver, execution owner and required audit evidence.
+
+Coverage includes:
+- Refund, write-off and settlement close (M16).
+- Safeguarding case read and restricted export (M18).
+- Safety-hold release (M20).
+- Exceptional rate override (M02).
+- Inventory adjustment approval/posting (M06).
+- Stock-transfer closure (M07).
+- Integration secret-reference rotation (M21; secret value never exposed).
+- Platform access-grant approval/application (separate S0 namespace).
+
+Design clarifications:
+- `PLATFORM.access_grant.approve` and `PLATFORM.access_grant.apply` are project-authored exact keys for platform privilege administration; they do not grant Business data access and do not create a wildcard.
+- No numeric financial/quantity threshold or retention duration is invented.
+- Dual control applies to all listed high-risk operations unless a future explicit, approved policy defines a narrower exception.
+- Listed actor functions are eligibility candidates, not grants; each still requires explicit membership, capability, module entitlement, scope and conditions.
+- Audit event names remain semantic evidence families, not physical schema or runtime evidence.
+
+**Result:** 14 high-risk policy tuples specified. Remaining catalogue keys and per-field DOC-04 classification remain OPEN. No permissions granted, dependencies closed, tests executed or technical changes authorized. CW-09 remains PARTIAL.
+
+Next: continue DOC-05 tuple expansion across remaining Education/Hotel and inventory actions; then author the logical attribute/data-class/purpose/read-write/retention inventory for the 17 DOC-04 entities. Keep this work on PR #87; do not open another PR. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
