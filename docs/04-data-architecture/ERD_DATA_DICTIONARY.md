@@ -1283,3 +1283,45 @@ Authoritative state changes occur only through the owning domain's lifecycle. Au
 ### 27.6 Physical evidence and status boundary
 
 This logical design does not resolve the existing physical ERD/data-dictionary evidence gaps, does not close any source-native physical schema dependency and does not establish that business_id constraints, composite foreign keys, RLS or field protections exist in the database. Entity-by-entity ownership and field inventory must be reconciled against the current document's physical evidence matrices in a separate documentation pass. No SQL/DDL/DML, migration, RLS/Auth or database action is authorized. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+## 28. Append-only conceptual entity-to-domain ownership register — 19 November 2026
+
+**Status: LOGICAL OWNERSHIP DESIGN RECORDED; PHYSICAL DICTIONARY AND FIELD-LEVEL CLASSIFICATION REMAIN OPEN.** This register maps the historical 17 conceptual Inventory & Costing entities in §3 to the canonical logical domains in DOC-06 §21. It does not approve physical table names or columns and does not alter the historical entity count.
+
+| # | Conceptual entity | Primary owner | Supporting domain(s) | Logical ownership rationale | Field classification status |
+|---:|---|---|---|---|---|
+| 1 | `inventory_batches` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Batch identity, expiry and physical stock state belong to inventory ledger; custody/location execution may reference it | FIELD INVENTORY OPEN; classify each eventual field individually |
+| 2 | `inventory_movements` | M06 Inventory & Material Ledger | M07 Warehouse & Custody; M16 Finance, Billing & Payment | Immutable quantity-change ledger is owned by inventory; transfer custody and financial valuation consume movement facts | FIELD INVENTORY OPEN |
+| 3 | `inventory_balances` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Rebuildable on-hand/reserved/available projection belongs to inventory ledger | FIELD INVENTORY OPEN |
+| 4 | `inventory_batch_balances` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Rebuildable batch-level stock projection belongs to inventory; warehouse is a location/custody dimension | FIELD INVENTORY OPEN |
+| 5 | `inventory_adjustments` | M06 Inventory & Material Ledger | M07 Warehouse & Custody; M18 Quality, Inspection & Compliance | Adjustment request/post/reversal changes inventory ledger; independent review evidence may be held by M18 | FIELD INVENTORY OPEN |
+| 6 | `inventory_adjustment_items` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Adjustment quantity detail generates inventory movement on posting | FIELD INVENTORY OPEN |
+| 7 | `stock_counts` | M06 Inventory & Material Ledger | M07 Warehouse & Custody; M18 Quality, Inspection & Compliance | Count reconciliation affects inventory truth; physical count execution is location/custody activity | FIELD INVENTORY OPEN |
+| 8 | `stock_count_items` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Expected/physical/variance quantities are inventory reconciliation details | FIELD INVENTORY OPEN |
+| 9 | `stock_transfers` | M07 Warehouse & Custody | M06 Inventory & Material Ledger; M19 Delivery & Fulfillment | Transfer authorization, custody handoff and transit lifecycle belong to warehouse/custody; ledger records quantity effects | FIELD INVENTORY OPEN |
+| 10 | `stock_transfer_items` | M07 Warehouse & Custody | M06 Inventory & Material Ledger | Transfer line and shipment allocation are custody lifecycle details; posted quantities reconcile to inventory ledger | FIELD INVENTORY OPEN |
+| 11 | `inventory_cost_exceptions` | M06 Inventory & Material Ledger | M16 Finance, Billing & Payment; M18 Quality, Inspection & Compliance | Inventory costing exception is attached to stock valuation lineage; financial posting and review remain separately owned | FIELD INVENTORY OPEN |
+| 12 | `inventory_reservations` | M06 Inventory & Material Ledger | M03 POS, Sales & Order; M05 Booking, Reservation & Appointment | Reservation of stock affects available inventory; sales/booking domains own the originating demand object | FIELD INVENTORY OPEN |
+| 13 | `inventory_reservation_items` | M06 Inventory & Material Ledger | M07 Warehouse & Custody | Reserved quantity and batch allocation are inventory commitments; physical pick/custody is M07 | FIELD INVENTORY OPEN |
+| 14 | `inventory_cost_layers` | M06 Inventory & Material Ledger | M16 Finance, Billing & Payment | Cost-layer identity/remaining quantity follows inventory costing architecture; financial valuation/posting remains M16 | FIELD INVENTORY OPEN |
+| 15 | `inventory_cost_layer_consumptions` | M06 Inventory & Material Ledger | M16 Finance, Billing & Payment | Consumption/compensation lineage allocates inventory cost layers; financial effects are separately posted by M16 | FIELD INVENTORY OPEN |
+| 16 | `stock_transfer_shipments` | M07 Warehouse & Custody | M19 Delivery & Fulfillment; M06 Inventory & Material Ledger | Physical shipment, dispatch, receipt, return and loss custody events belong to M07; external delivery orchestration may use M19; ledger effects remain M06 | FIELD INVENTORY OPEN |
+| 17 | `stock_transfer_shipment_items` | M07 Warehouse & Custody | M19 Delivery & Fulfillment; M06 Inventory & Material Ledger | Shipment-line custody and receipt reconciliation belong to M07; delivery proof/route belongs to M19; posted quantity effects belong to M06 | FIELD INVENTORY OPEN |
+
+### 28.1 Ownership rules and explicit non-owners
+
+1. The primary owner is the only authority for the entity's authoritative lifecycle and mutation. Supporting domains may issue commands or consume events/read models; they do not acquire write ownership.
+2. M06 owns stock ledger, balances, batch identity, reservations and cost-layer lineage. M07 owns warehouse/location custody and transfer/shipment lifecycle. M19 may own last-mile delivery/route/proof when the workflow extends beyond internal warehouse custody. M16 owns invoices, payment, financial posting and settlement; it does not mutate inventory ledger records.
+3. A transfer shipment can have a M07 custody record and a separate M19 delivery record when delivery is an actual business capability. Do not duplicate the same shipment fact in both domains.
+4. `inventory_cost_layer_movements` remains an unapproved bridge candidate; this mapping does not create entity #18.
+5. This logical map resolves ownership for these 17 conceptual names only. It does not close A38-G01–G04, GAP-04-01–16, ERD-OPEN-01–27, physical field/key evidence, RLS or implementation gaps.
+
+### 28.2 Field-classification acceptance template
+
+For each future approved field, DOC-04 must record: entity.field; owner domain; direct/derived business_id path; D0–D4 class; allowed purpose code(s); read audience/permission key; write authority; mask/minimize rule; export/share decision; retention/legal-hold rule; audit event; and evidence/status. Current conceptual entity rows do not enumerate fields, so no blanket D1/D2 classification is asserted. Until populated, field-level classification remains OPEN and protected data access must fail closed.
+
+### 28.3 Tenant and relationship constraints
+
+Every business-owned entity must carry or safely derive one immutable business context. A child-to-parent reference must preserve business equality; composite tenant-aware references are the logical requirement where independent identifiers could cross tenants. Site/property, warehouse/location and assignment are subordinate scope dimensions. Exact FK names, columns, unique indexes, constraints and RLS policies remain physical design/implementation work and are not specified here.
+
+**Disposition:** logical ownership mapped 17/17; field-level classification 0/17 complete; physical table/field/key verification remains OPEN as recorded in §§23–26. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
