@@ -399,3 +399,34 @@ Use the following cycle for each bounded work item:
 - This section is proposed until its dedicated PR is reviewed, explicitly approved for merge, merged and read back from `main`.
 - It does not close CW-07 or CW-08, change any DOC acceptance status, or create a permission/technical decision.
 - Future sessions must resume from the latest verified `main` worklist and source-native document states, not from superseded chat summaries or the retired Master Checklist v2.0.
+
+
+## 15. Package B — CW-09 DOC-06 row-level traceability repair checkpoint (19 November 2026)
+
+**Status: PARTIAL — SUBSTANTIVE DOCUMENTATION REPAIR RECORDED; FULL END-TO-END ACCEPTANCE NOT MET.**
+
+### 15.1 Scope and changed paths
+
+- Owning work item: CW-09 — DOC-06 end-to-end traceability.
+- Changed paths in the proposed repair PR:
+  - `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` — append-only §19.
+  - `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` — this append-only checkpoint.
+- DOC-06 §19 indexes 30 existing Education/Hotel workflow rows (EDU-WF-01–14 and HTL-WF-01–16) using the archived REC-06 working matrix and records exact review/approval source locators.
+- No existing document content, historical checkpoint, FIX decision, or source-native OPEN register entry is deleted or rewritten.
+
+### 15.2 Repair result
+
+- Added stable workflow ID/title, source-described resource/object anchors and candidate action-family anchors for 30 Education/Hotel workflows.
+- Distinguished category/workflow conceptual FIX from candidate module alignment, action vocabulary, role-function eligibility, permission grants, scope, data/purpose, SoD/approval, negative tests and execution evidence.
+- Recorded exact source sections/pages for RMD-66/RMD-68 category review and approval addenda.
+- Explicitly retained M01–M21 workflow mapping as NOT MAPPED / OPEN; permission keys and grants OPEN / NOT APPROVED; runtime test evidence NOT EVIDENCED.
+- Preserved E-04/H-04 and all detailed OPEN items.
+- Dependencies newly closed: 0. FIX decisions changed: 0. No approval, permission key, grant, implementation, test execution or PASS created.
+
+### 15.3 Acceptance and routing
+
+CW-09 is **PARTIAL**, not CLOSED. The repair improves row-level workflow/object/action traceability for the available Education/Hotel source set but does not satisfy the full acceptance criteria across all categories or close REC-06. Primary deep-audit brief claim locators, G02/G04, per-action scope/data/SoD, negative-test IDs and retained execution evidence remain OPEN/PARTIAL.
+
+Next action: continue CW-09 only where additional primary source evidence is available; otherwise proceed to the next independently actionable CW item only after recording the remaining dependency and confirming worklist §6 sequencing. Do not mark CW-09 closed merely because this append-only index was added.
+
+Controls remain: `DB_PUSH_BLOCKED: ACTIVE`; READ-ONLY / APPEND-ONLY; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
