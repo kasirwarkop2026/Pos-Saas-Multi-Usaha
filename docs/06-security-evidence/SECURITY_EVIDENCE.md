@@ -1064,3 +1064,33 @@ The evidence contracts for CW05-DATA-01–12 are unchanged. For navigation, use 
 - Physical field/key evidence remains OPEN / NOT ACCEPTED; no scenario is executed by this clarification.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 42. CW-06 authorization acceptance evidence register (20 November 2026)
+
+**Evidence status for all rows: NOT GENERATED / NOT VERIFIED.** These contracts define what must be retained when execution is separately authorized. They do not assert that a policy or guard is deployed.
+
+| Scenario ID | Evidence contract required when authorized | Required lineage / reviewer focus |
+|---|---|---|
+| CW06-AUTH-01 | Principal/role namespace resolution trace | Authenticated principal, classification, Business role/function, assignment/relationship, decision |
+| CW06-AUTH-02 | Exact-key negative test for non-inheriting actions | Requested key/action, available candidate key, denied action, no wildcard/inference |
+| CW06-AUTH-03 | Membership revocation and cross-tenant negative test | Actor, membership status, resolved Business, target Business, deny reason |
+| CW06-AUTH-04 | Conditional-module entitlement test | Category, module activation, principal, key, entitlement decision |
+| CW06-AUTH-05 | S0–S5 scope and relationship test | Target scope, assignment/relationship proof, principal, expected deny |
+| CW06-AUTH-06 | Resource lifecycle precondition test | Object state, requested transition, owner decision, denial reason |
+| CW06-AUTH-07 | Field-classification/purpose minimization test | Field manifest, D0–D4, declared purpose, returned-field manifest, denied fields |
+| CW06-AUTH-08 | SoD/independent-approval trace | Initiator, approver, executor, distinct principal IDs, approval reference, decision |
+| CW06-AUTH-09 | Cross-domain owner-key denial and owner-command trace | Workflow owner, target resource owner, exact key, command/handoff, decision |
+| CW06-AUTH-10 | Platform S0 grant-approval/application separation test | Platform principal, requested privilege diff, approver, executor, expiry, tenant-data boundary |
+| CW06-AUTH-11 | Prohibited secret-read negative test and opaque-reference rotation trace | Attempted token, deny reason, opaque reference metadata, no secret value, rotation audit |
+| CW06-AUTH-12 | Replay/revocation/audit completeness trace | Idempotency identity, prior effect, replay result, current membership, actor/action/target/scope/purpose/decision/time |
+
+### 42.1 Evidence and execution gate
+
+- CW06-AUTH-01–12 remain DESIGN / NOT EXECUTED.
+- Evidence remains NOT GENERATED / NOT VERIFIED.
+- Candidate keys and policy tuples remain non-grant design vocabulary until separately accepted and technically enforced.
+- Execution requires separately approved implementation scope and controlled non-production environment; no Production data or Production mutation is permitted.
+- No RLS/Auth/API/backend, database, role-grant or deployment change is authorized by this register.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
