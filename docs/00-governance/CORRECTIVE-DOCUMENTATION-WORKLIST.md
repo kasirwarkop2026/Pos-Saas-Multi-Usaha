@@ -465,3 +465,26 @@ CW-09 itself remains PARTIAL until that cross-document reconciliation, the full 
 Next work: use DOC-06 §21 as the controlling design baseline and repair the dependent master documents in dependency order. Do not reopen G02/G04 as missing-source blockers; reopen only if a concrete internal contradiction or explicit user-approved design change is identified.
 
 Governance: READ-ONLY / APPEND-ONLY; DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED; no Supabase Preview/Staging or Production changes.
+
+## 15.6 Package B continuation — project-authored cross-document design reconciliation (19 November 2026)
+
+**Status: SUBSTANTIVE APPEND-ONLY REPAIR RECORDED; FINAL ACCEPTANCE STILL OPEN.** The prior path lookup used incorrect guessed filenames. Repository tree inspection identified the actual master paths; absence at a guessed path is not treated as absence of the document and is not a reason to stop product-authored design work.
+
+### 15.6.1 Correct master paths updated on the existing PR #87 branch
+
+- DOC-01: `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md` — §14 aligns product/tenant/category boundaries to DOC-06 §21.
+- DOC-02: `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` — §14 records CAT-10/CAT-11 CORE/CONDITIONAL domain profiles, ownership and activation gates.
+- DOC-03: `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md` — §18 records canonical logical domains, single-owner boundaries, command/event, idempotency, tenant and projection contracts.
+- DOC-04: `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` — §27 records logical entity ownership, business_id isolation invariants, D0–D4 field inventory requirements and projection/lifecycle rules. Physical schema evidence remains separate and OPEN.
+- DOC-05: `docs/05-authorization/AUTHORIZATION_MASTER.md` — §22 records authorization tuple/sequence, principal namespace separation, role-function boundaries, permission catalogue format, scope, SoD and negative acceptance design.
+- DOC-07: `docs/06-security-evidence/SECURITY_EVIDENCE.md` — §29 records security invariants, threat/abuse cases, negative-test evidence format, audit evidence contract and cross-document closure gate.
+
+### 15.6.2 Design reconciliation result
+
+The six master documents now contain explicit append-only alignment sections against DOC-06 §21. The project is authoring its own normative design; missing legacy/source files are not prerequisites. No historical sections were deleted or silently rewritten. The additions distinguish logical design from physical schema, implementation, executed tests and production evidence.
+
+### 15.6.3 Remaining acceptance before CW-09 closure
+
+CW-09 remains PARTIAL until a row-level reconciliation confirms: (1) every DOC-02 workflow maps to the correct DOC-06 workflow/domain; (2) each DOC-04 entity has one owner and field-level classification/purpose/retention entry or an explicit OPEN item; (3) DOC-05 action-by-action permission matrix covers eligible function, scope, conditions, data, purpose, SoD and approver; (4) DOC-07 stable threat/test IDs cross-link to workflows, permissions and expected audit evidence; (5) internal contradictions and duplicate ownership are resolved; and (6) documentation CI and review acceptance pass. Proposed tests remain unexecuted until actual test evidence exists.
+
+No dependencies are marked CLOSED by this checkpoint. No approval grant, physical schema, RLS policy, API contract, implementation, test PASS or release readiness is asserted. PR #87 remains the only active PR; no second PR is opened. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
