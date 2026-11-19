@@ -331,3 +331,28 @@ This addendum clarifies the grouped package statement in §4 so that publication
 The grouped DOC-08–DOC-10 row in §4 is therefore a package-level summary only. Read each package according to the exact artifact and scope above; do not infer that the full DOC-08 v1.5 master was migrated or published.
 
 This clarification does not authorize blanket Stage 5 archive migration, any additional document publication, Stage 6 implementation, database/schema changes, application/backend work, CI workflow changes, deployment or Production changes. `DB_PUSH_BLOCKED: ACTIVE` remains in force. Dependencies newly closed: **0**. FIX decisions changed: **0**. Gate/status promotions or demotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
+
+
+## 16. Append-only active work-routing and publication-path reconciliation — 19 November 2026
+
+This addendum updates the current navigation and publication interpretation only. It does not change DOC-11's roadmap/gate content, project-stage status, release-gate result, dependency status or acceptance boundary.
+
+### 16.1 Current task-routing authority
+
+The references in §§6, 7, 9 and 11 to the “latest Master Checklist” and its next authorized action are historical navigation instructions. Master Checklist v2.0 has been retired as the active workflow under its append-only §58 and is no longer the task-routing authority.
+
+The active corrective-documentation worklist is docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md, merged through PR #81 at 041a75c838b7dc9553552cf56fb42c1d0d826b47 and verified by post-merge read-back from main. Use that worklist for CW-01–CW-22 sequencing and corrective-work status. DOC-00 MASTER-PROJECT-CONTROL.md §29 remains the project control-plane reference. This DOC-11 remains a roadmap and release-gate planning aid; it does not assign current corrective-work tasks.
+
+### 16.2 Historical checkpoint and next-action snapshots
+
+- §6's GOV-OPEN-02-first recommended control order and §9's ST5-12.06B / PR #27 / GOV-OPEN-02 next-action table are preserved as dated historical snapshots.
+- They must not be followed as the current corrective-work sequence where they conflict with the active worklist.
+- The underlying evidence boundaries remain unchanged: GOV-OPEN-02 is PARTIAL; Stage 4.7.8 is PARTIAL — GATE NOT PASSED; Stage 4.9 is PARTIAL — ACCEPTANCE NOT MET; A12.40 remains PARTIAL/OPEN; A12.41 remains NOT STARTED/NOT VERIFIED; Implementation Readiness remains NOT READY.
+
+### 16.3 Published path clarification
+
+The document-control row in the original cover (§1) saying the proposed destination is not approved is a historical pre-publication snapshot. The current published working-master path is docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md, as already recorded in §13.1 and verified on main. DOC-11 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL; publication does not satisfy Stage 4.9 acceptance.
+
+### 16.4 Governance boundary
+
+This navigation correction does not authorize blanket Stage 5 migration, Stage 6 implementation, database/schema work, application/backend changes, CI workflow changes, Vercel/deployment or Production activity. DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No dependency or gate is closed by this addendum.
