@@ -864,3 +864,197 @@ Still OPEN / PARTIAL and not safely closable from the inspected evidence:
 Source locators: REC-06 Permission Catalogue Overlay §§2, 3.3–3.5, 4.3–4.5, 5–8; REC-06 Workflow-to-Capability Traceability Matrix §§2, 5–7; Category → Workflow → Module Crosswalk v1.3 §§1–5. The page/section locator for each underlying RMD review/addendum remains in DOC-06 §19.1.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed by this documentation repair.
+
+
+
+## 21. Normative design baseline — M01–M21 ownership, permission model and workflow control map
+
+**Decision type:** Project-authored architecture baseline for documentation consistency. **Disposition:** FIX-DESIGN for the logical domain taxonomy and traceability rules in this section. This is not a technical implementation authorization, not a permission grant, and not approval to modify schema/RLS/API/backend. The design is authored for this product because the project owns its architecture and may define missing specifications directly. All other DOCs must be reconciled to this baseline; conflicting draft/candidate language is superseded only after its owning document is updated and reviewed.
+
+### 21.1 Canonical logical domain taxonomy
+
+The M01–M21 identifiers and names are adopted as the canonical logical domain taxonomy for POS SaaS Multi-Usaha v3.0. IDs are stable identifiers; labels may be clarified without changing an ID. A domain owns its business concepts, lifecycle rules and invariants. It does not automatically own every UI screen or grant every role access.
+
+| ID | Canonical domain | Ownership boundary |
+|---|---|---|
+| M01 | Business Profile & Organization | Business identity, tenant profile, legal/business settings, organizational hierarchy and business-level configuration |
+| M02 | Catalog, Product & Pricing | Product/service catalog, variants, units, categories, price lists and pricing rules; excludes transaction execution |
+| M03 | POS, Sales & Order | Sales cart/order lifecycle, quotations converted to orders, checkout orchestration and sales transaction initiation |
+| M04 | Customer / Guest / Student / CRM | Party/customer/guest/student profile, relationship, consent, contact and interaction history; category-specific sensitive fields remain separately classified |
+| M05 | Booking, Reservation & Appointment | Booking, reservation, appointment, availability hold, allocation request and booking lifecycle |
+| M06 | Inventory & Material Ledger | Stock identity, batches/serials, stock movements, reservations and inventory balance projection; costing layer is separately governed by costing architecture |
+| M07 | Warehouse & Custody | Warehouse/bin/location operations, custody, transfer handling, picking/put-away and physical custody accountability |
+| M08 | Procurement & Supplier | Supplier, purchase request/order, receiving procurement workflow, supplier return and procurement commitments |
+| M09 | Service & Work Order Operations | Service request, work order, task execution, service completion and operational job lifecycle |
+| M10 | Production, Recipe & Formulation | BOM/recipe/formula, production planning/execution, consumption/yield and production batch lifecycle |
+| M11 | Asset, Fleet & Capacity | Identifiable reusable assets, fleet, capacity resources, assignment and utilization; does not replace inventory ledger |
+| M12 | Hospitality Operations | Property, building, room/unit/bed, stay, housekeeping, room readiness and hospitality-specific operational lifecycle |
+| M13 | Education Operations | Program/course, curriculum, class/session, enrollment operations, attendance, assessment and education completion lifecycle |
+| M14 | Pharmacy & Regulated Product Operations | Regulated product, prescription/professional review, dispensing and regulated product controls; credential/compliance gates apply |
+| M15 | Laundry & Item Processing | Item intake/custody, sorting, processing stages, quality, packing and release for laundry/item-processing businesses |
+| M16 | Finance, Billing & Payment | Invoice/receivable/payable, payment, refund, settlement, reconciliation, tax/charges and financial posting lifecycle |
+| M17 | Workforce & Scheduling | Worker/staff profile, shift, roster, availability, assignment, attendance and workforce scheduling |
+| M18 | Quality, Inspection & Compliance | Inspection, quality check, nonconformance, audit finding, compliance evidence and controlled release/approval checks |
+| M19 | Delivery & Fulfillment | Dispatch, shipment, route, delivery, proof of delivery, fulfillment and delivery exception lifecycle |
+| M20 | Maintenance & Safety | Maintenance plan/work, defect, safety hold, inspection, repair and authorized return-to-service |
+| M21 | Integration & Channel | External channel/connector configuration, mapping, sync jobs, webhook events, credentials references and reconciliation of external exchanges |
+
+**Cross-domain rule:** a workflow may orchestrate more than one domain, but every persisted business object has one owning domain. Other domains consume it through an explicit command, event, reference or read model. A duplicate owner for the same business fact is prohibited. Shared identifiers and audit metadata do not transfer domain ownership.
+
+### 21.2 Category eligibility baseline — Education and Hotel
+
+The category-level eligibility baseline is defined as follows. CORE means the domain is part of the normal category operating model; CONDITIONAL means it is activated only when the business model uses that capability. Neither label is a role grant or permission.
+
+| Category | CORE domains | CONDITIONAL domains | Extension gate |
+|---|---|---|---|
+| Education (CAT-10) | M04, M05, M13, M17 | M02, M06, M08, M16, M18, M21 | LMS/online learning, formal school/university, childcare, boarding/residential, regulated vocational and specialized certification require extension profiles and compliance review; other domains are not implicitly activated |
+| Hotel (CAT-11) | M02, M05, M12, M16, M18, M20 | M03 (onsite POS), M04, M06, M07, M08, M17, M19, M21 | Group/corporate/agency and OTA/channel integrations are conditional workflow extensions; other domains are not implicitly activated |
+
+The category profile is an activation baseline, not a technical subscription entitlement. Tenant subscription, category eligibility, module activation, role assignment and action authorization are five separate checks.
+
+### 21.3 Workflow-to-domain ownership — CAT-10 Education
+
+The primary owner is the authoritative domain for the workflow's main business object/lifecycle. Supporting domains own only their own objects and actions. This table closes the logical ownership map for the Education workflow baseline; implementation contracts remain separately specified and unauthorized.
+
+| Workflow | Primary owning domain | Supporting domains | Owned objects / handoff |
+|---|---|---|---|
+| EDU-WF-01 Program & Course Catalog | M13 Education Operations | M02, M18 | Program/course/curriculum/prerequisite and education publication lifecycle; M02 owns reusable catalog/price references where used |
+| EDU-WF-02 Intake & Admission | M13 Education Operations | M04, M05, M16 | Application/admission decision belongs to M13; applicant/guardian party data to M04; appointment/booking to M05; fee/payment to M16 |
+| EDU-WF-03 Student / Participant Record | M04 Customer / Guest / Student / CRM | M13, M18 | Student identity/party profile and relationship in M04; enrollment/academic status in M13; restricted compliance evidence in M18 |
+| EDU-WF-04 Enrollment & Class Allocation | M13 Education Operations | M05, M17, M16 | Enrollment/class allocation/capacity in M13; schedule slot in M05; instructor roster in M17; fees in M16 |
+| EDU-WF-05 Schedule & Resource Planning | M13 Education Operations | M05, M11, M17 | Academic schedule/session plan in M13; booking slot in M05; physical capacity resource in M11; staff availability in M17 |
+| EDU-WF-06 Instructor / Trainer Management | M17 Workforce & Scheduling | M13, M18 | Worker profile/availability in M17; teaching assignment in M13; credential/qualification verification in M18 |
+| EDU-WF-07 Class Delivery & Attendance | M13 Education Operations | M17, M18 | Class/session and attendance event in M13; instructor assignment in M17; correction/exception review evidence in M18 |
+| EDU-WF-08 Learning Material & Asset | M06 Inventory & Material Ledger | M07, M11, M13 | Consumable learning stock in M06; warehouse custody in M07; reusable equipment in M11; learning assignment/content context in M13 |
+| EDU-WF-09 Assessment & Examination | M13 Education Operations | M18, M04 | Exam/assessment/grade lifecycle in M13; moderation/quality evidence in M18; learner identity reference in M04 |
+| EDU-WF-10 Fee, Invoice & Payment | M16 Finance, Billing & Payment | M13, M04 | Invoice/payment/refund/settlement in M16; education fee basis and enrollment status in M13; payer/student relationship in M04 |
+| EDU-WF-11 Guardian / Sponsor / Corporate Account | M04 Customer / Guest / Student / CRM | M13, M16 | Guardian/sponsor/corporate relationship in M04; education access relationship in M13; billing authority and balances in M16 |
+| EDU-WF-12 Completion / Graduation / Certificate | M13 Education Operations | M18, M04 | Completion eligibility and certificate lifecycle in M13; verification/audit evidence in M18; recipient identity reference in M04 |
+| EDU-WF-13 Complaint / Safeguarding / Incident | M18 Quality, Inspection & Compliance | M13, M04 | Restricted case, evidence and escalation controls in M18; education operational context in M13; person reference in M04 |
+| EDU-WF-14 Reporting / Audit / Retention | M18 Quality, Inspection & Compliance | M13, M16, M17, M21 | Audit/retention control in M18; source datasets remain owned by their domains; export/channel delivery via M21 |
+
+### 21.4 Workflow-to-domain ownership — CAT-11 Hotel
+
+| Workflow | Primary owning domain | Supporting domains | Owned objects / handoff |
+|---|---|---|---|
+| HTL-WF-01 Property / Building / Unit Master | M12 Hospitality Operations | M11, M20, M18 | Property/building/room/unit/bed and hospitality operational status in M12; reusable physical asset in M11; maintenance state in M20; inspection evidence in M18 |
+| HTL-WF-02 Room Type / Rate Plan / Restrictions | M02 Catalog, Product & Pricing | M12, M16, M18 | Room type sellable catalog and rate rules in M02; room/property applicability in M12; tax/charge calculation and financial posting in M16; approval evidence in M18 |
+| HTL-WF-03 Availability / Reservation | M05 Booking, Reservation & Appointment | M12, M02, M16 | Reservation/hold lifecycle in M05; room availability/readiness in M12; sellable room/rate reference in M02; deposit/payment in M16 |
+| HTL-WF-04 Booking Lifecycle | M05 Booking, Reservation & Appointment | M12, M04, M16 | Booking create/modify/cancel/no-show lifecycle in M05; room allocation in M12; guest relationship in M04; cancellation/deposit financial effect in M16 |
+| HTL-WF-05 Guest Profile / Identity | M04 Customer / Guest / Student / CRM | M12, M18 | Guest party/identity/consent in M04; stay context in M12; restricted privacy/incident evidence in M18 |
+| HTL-WF-06 Pre-arrival / Check-in | M12 Hospitality Operations | M05, M04, M16, M18 | Arrival/registration/room assignment/key state in M12; booking in M05; guest identity in M04; deposit/payment in M16; compliance checks in M18 |
+| HTL-WF-07 Stay / In-house Operations | M12 Hospitality Operations | M04, M05, M16, M18 | Stay/room move/extension/service request context in M12; guest party in M04; booking change in M05; folio/charges in M16; incident evidence in M18 |
+| HTL-WF-08 Housekeeping / Room Readiness | M12 Hospitality Operations | M17, M06, M07, M18 | Room status/task/readiness in M12; worker/shift assignment in M17; linen/minibar stock in M06; custody in M07; inspection evidence in M18 |
+| HTL-WF-09 Maintenance / Out-of-order | M20 Maintenance & Safety | M12, M11, M18, M08 | Defect/work/safety hold/return-to-service authority in M20; room availability state in M12; asset record in M11; inspection in M18; vendor procurement in M08 |
+| HTL-WF-10 POS / Guest Charges / Folio | M16 Finance, Billing & Payment | M12, M03, M04 | Folio/charge posting/adjustment in M16; stay context in M12; onsite order/cart in M03; guest/payer reference in M04 |
+| HTL-WF-11 Checkout / Invoice / Payment | M16 Finance, Billing & Payment | M12, M04, M18 | Invoice/payment/refund/settlement in M16; checkout/stay close in M12; guest/payer reference in M04; financial audit evidence in M18 |
+| HTL-WF-12 Group / Corporate / Agency Booking | M05 Booking, Reservation & Appointment | M04, M12, M16 | Group block/booking allocation in M05; corporate/agency party in M04; room/property operations in M12; billing/commission in M16 |
+| HTL-WF-13 Guest Service / Complaint | M12 Hospitality Operations | M04, M18, M16 | Guest service request lifecycle in M12; guest party in M04; restricted complaint/incident evidence in M18; approved compensation/refund in M16 |
+| HTL-WF-14 Staff Shift / Cash Control | M17 Workforce & Scheduling | M16, M12, M18 | Shift/roster/handover assignment in M17; cash drawer/variance/settlement in M16; property operational context in M12; review evidence in M18 |
+| HTL-WF-15 Reporting / Audit / Data Retention | M18 Quality, Inspection & Compliance | M12, M16, M17, M21 | Audit/retention/export control in M18; source facts remain in owning domains; external report delivery via M21 |
+| HTL-WF-16 Channel / External Integration | M21 Integration & Channel | M05, M02, M12, M16, M18 | Connector credentials/config/sync/reconciliation in M21; booking in M05; rate/catalog in M02; room/stay state in M12; payment in M16; compliance/audit in M18 |
+
+### 21.5 Domain interaction contract
+
+1. **Single writer / single owner:** only the owning domain may create or mutate its authoritative business object. Other domains request a command or consume a published event/read model.
+2. **No cross-domain table ownership:** a foreign-key reference does not authorize another domain to mutate the referenced object. Cross-domain writes must be represented as an explicit command/transaction boundary.
+3. **Lifecycle authority:** each domain owns its state transitions, validation invariants, cancellation/reversal rules and audit history. A consumer cannot bypass the owner's transition rules.
+4. **Synchronous dependency:** use only where the caller requires an immediate authoritative decision (e.g. reservation capacity check). Avoid distributed multi-domain writes where an orchestrated workflow and durable event can be used.
+5. **Event contract:** events identify business object, tenant/business, aggregate/version, event type, occurred-at time, correlation/idempotency key and actor context. Events contain minimum necessary data; sensitive fields are fetched through authorized domain access, not copied broadly into events.
+6. **Idempotency:** commands that may be retried (payment, reservation, stock movement, external sync) require an idempotency key and deterministic duplicate handling.
+7. **Consistency:** financial, inventory and booking state changes require explicit transaction/reversal semantics. A failed downstream consumer must not silently erase a committed source-domain fact.
+8. **Read models:** cross-domain dashboards and reports are projections; they are not write authorities. Projection lag and reconciliation status must be visible where operationally material.
+9. **Tenant isolation:** every business-owned object and event is bound to business_id. Property/outlet/warehouse/class/task constraints refine scope below the tenant boundary; no cross-tenant access is implied.
+10. **Auditability:** actor, action, target, scope, purpose/context, decision, timestamp, correlation and before/after or event reference are recorded according to data classification and retention policy.
+
+### 21.6 Permission model and key grammar
+
+Permission is evaluated as an explicit tuple:
+
+**Principal + Business + Module + Resource + Action + Scope + Conditions + Data class + Purpose + SoD/approval**.
+
+Canonical key grammar: **<module_id>.<resource>.<action>**.
+
+Examples (illustrative naming convention, not grants): M13.enrollment.create, M13.attendance.record, M13.attendance.correct, M16.payment.capture, M16.payment.refund, M20.safety_hold.release, M12.room.assign, M21.connector.manage.
+
+Rules:
+- Use lowercase snake_case for resource/action segments; key names are immutable once published. Renames require alias/deprecation and migration planning, not silent reuse.
+- Actions are explicit verbs: list, read, create, update, submit, assign, record, execute, approve, reject, cancel, reverse, refund, publish, export, administer, release.
+- request/submit, review, approve, execute/post, reverse/refund are distinct. No action implies another action.
+- Wildcard grants are prohibited for sensitive domains and high-impact actions. “Admin” is not a substitute for enumerated capabilities.
+- Eligibility is not a grant; subscription entitlement is not authorization; UI hiding is not enforcement.
+- Authorization is enforced server-side at every protected operation and rechecked against current tenant, scope, resource state and approval context.
+
+### 21.7 Standard scope hierarchy
+
+| Scope code | Meaning | Examples |
+|---|---|---|
+| S0 Platform | Platform-level administration only, separately authorized | Platform Super Admin operations; never implied by business role |
+| S1 Business | One business tenant | Business settings and business-wide permitted reporting |
+| S2 Site | Assigned outlet/property/campus/branch | One hotel property, campus, outlet or branch |
+| S3 Location | Assigned warehouse/building/floor/room/class resource group | Warehouse/bin, building/floor, class/session location |
+| S4 Assignment | Explicitly assigned object/task/shift/session/case | Assigned room task, class session, work order, incident case |
+| S5 Self / relationship | Own profile or verified relationship subset | Own worker profile, verified guardian/student relationship, booking payer subset |
+
+Scope is conjunctive with the permission key and conditions. A broader scope does not override field-level classification, purpose, SoD or approval. Cross-property, cross-business and cross-tenant access requires a separate explicit grant and valid relationship; it is never inferred from Manager.
+
+### 21.8 Data classification and purpose controls
+
+The D0–D4 scale is adopted as the logical classification baseline. A higher class is more restrictive. Classification applies at field and document level, not merely table level.
+
+| Class | Label | Examples | Minimum access rule |
+|---|---|---|---|
+| D0 | Public | Published catalog, public service/room description, public business contact | Public read only for explicitly published fields |
+| D1 | Internal | Operational status, non-sensitive schedule, stock summary, room readiness without guest identity | Authenticated business users with relevant module and scope |
+| D2 | Confidential | Customer contact, transaction detail, employee roster, supplier terms, booking details | Need-to-know role/function, narrow scope, business purpose and audit |
+| D3 | Restricted | Government ID, minor/student sensitive records, payment instrument references, payroll, safeguarding/incident details, health/accommodation notes | Explicit capability, narrow assignment, purpose, field minimization, enhanced audit; approval where risk requires |
+| D4 | Critical secret / regulated credential | Passwords, API secrets, private keys, authentication recovery material, regulated professional credentials where legally restricted | Never expose as ordinary application data; secret vault/reference only, tightly controlled break-glass and audited rotation/access |
+
+Purpose codes for sensitive read/export where context is not self-evident: SERVICE_DELIVERY, BOOKING_FULFILLMENT, EDUCATION_ADMIN, FINANCIAL_PROCESSING, SAFETY_RESPONSE, COMPLIANCE_AUDIT, CUSTOMER_SUPPORT, LEGAL_RETENTION, INTEGRATION_SYNC. A purpose does not create permission; it narrows an otherwise valid permission. Unsupported or incompatible purpose results in deny.
+
+### 21.9 Segregation of duties and approval baseline
+
+| Risk family | Initiate / prepare | Independent review / approval | Execute / post | Prohibited combination without documented exception |
+|---|---|---|---|---|
+| Finance — discount, refund, write-off, cash variance, settlement | Transaction operator | Authorized Manager/Finance approver within threshold | Finance executor or controlled posting service | Initiator cannot approve own high-risk adjustment; settlement reviewer cannot silently rewrite source transactions |
+| Procurement — purchase/receiving/supplier return | Requester / buyer | Independent budget or procurement approver | Receiving/warehouse operator | Requester cannot certify receipt alone for high-value or controlled goods |
+| Inventory — adjustment, transfer, stocktake variance | Custodian / stock operator | Independent supervisor | Authorized stock posting action | Same actor must not create, approve and post material adjustment without an explicitly controlled low-risk policy |
+| Education — attendance, grades, certificates, safeguarding | Assigned instructor/assessor/case reporter | Independent reviewer/moderator/authorized case lead | Authorized registrar/certificate issuer or case executor | Grade author cannot unilaterally moderate/finalize/publish; safeguarding access not inherited from Manager |
+| Hotel — rate override, room safety release, guest compensation | Front desk/rate author/maintenance/service operator | Independent revenue/operations/safety approver | Authorized rate publisher/safety release/finance executor | Maintenance cannot self-release safety hold; rate author cannot self-approve exceptional override; compensation/refund not implicit in service role |
+| Access administration | Access requester / manager | Authorized owner or delegated security approver | Access administrator applies approved change | Requester cannot approve own privileged grant; privilege changes require audit and expiry/review |
+
+No numeric approval threshold is invented in this baseline. Until a category-specific threshold is configured and approved, sensitive financial or safety exceptions must use dual control and must not be auto-approved. Emergency break-glass access is time-bound, reason-coded, least-privilege, notified and independently reviewed; it cannot authorize irreversible financial posting or suppress audit evidence.
+
+### 21.10 Default authorization decision sequence
+
+Every protected request must pass all checks in this order; any failed or indeterminate check returns deny:
+
+1. Authenticate actor and validate active session.
+2. Resolve tenant/business context and verify actor membership/status.
+3. Verify category and module entitlement/activation.
+4. Resolve exact permission key and action; no role-name inference.
+5. Resolve target resource and verify business_id/tenant isolation.
+6. Evaluate scope S0–S5 and explicit assignment/relationship.
+7. Evaluate resource state and lifecycle transition preconditions.
+8. Evaluate field-level D0–D4 classification and purpose limitation.
+9. Evaluate conditions, credential/compliance gates and time validity.
+10. Evaluate SoD conflict and required independent approval.
+11. Execute through the owning domain and record immutable audit evidence.
+12. Return only the minimum necessary response fields.
+
+### 21.11 Acceptance criteria and closure mapping
+
+| CW-09 requirement | Decision in this section | Acceptance evidence required in documentation | Status after this section |
+|---|---|---|---|
+| G02 — canonical M01–M21 taxonomy | §21.1 adopts all 21 IDs/names as canonical logical domains | DOC-03 architecture taxonomy and DOC-04 data ownership cross-reference must match; no duplicate owners | DESIGN DECISION RECORDED; cross-document reconciliation required |
+| G02 — category baseline | §21.2 adopts Education and Hotel CORE/CONDITIONAL domain profiles | DOC-02 category/workflow and DOC-01 product scope must match; extensions explicitly gated | DESIGN DECISION RECORDED; cross-document reconciliation required |
+| G04 — workflow ownership | §§21.3–21.4 assign primary/supporting domain to all 30 workflows | DOC-03 domain boundaries and DOC-04 object ownership must match; each object has one authoritative owner | LOGICAL WORKFLOW MAP COMPLETE; object-level reconciliation required |
+| Domain interactions | §21.5 defines single owner, command/event, idempotency and read-model rules | DOC-03 integration/domain interaction section must match | DESIGN BASELINE RECORDED |
+| Permission catalogue | §21.6 defines key grammar and non-inference rules | DOC-05 authorization matrix must enumerate keys and permitted actor/scope conditions | DESIGN BASELINE RECORDED; full matrix expansion required |
+| Scope and data | §§21.7–21.8 define scope and D0–D4/purpose baseline | DOC-05 and DOC-07 must align; sensitive field inventory must be enumerated in DOC-04 | DESIGN BASELINE RECORDED; field inventory reconciliation required |
+| SoD / approvals | §21.9 defines risk-family separation | DOC-05/DOC-07 must include per-action conflict and approval path; numeric thresholds remain category decision parameters | DESIGN BASELINE RECORDED; detailed matrix expansion required |
+| Enforcement | §21.10 defines deny-by-default authorization sequence | DOC-03/DOC-05/DOC-07 must agree; technical enforcement remains Stage 6 | SPECIFICATION ONLY; NOT IMPLEMENTED / NOT VERIFIED |
+
+**CW-09 repair disposition:** G02 is resolved at the product-design decision level by adopting the canonical domain taxonomy and category baseline above. G04 is resolved at the logical workflow ownership level for all 30 Education/Hotel workflows. Neither claim implies that every object-level schema, permission key, threshold, test execution or technical authorization is complete. CW-09 may only be marked CLOSED after DOC-01/02/03/04/05/07 cross-document reconciliation and the remaining traceability acceptance items are complete. Until then, CW-09 remains PARTIAL with a bounded reconciliation task, not an unresolved request for external sources.
+
+Governance remains unchanged: this section authorizes documentation design only. DB_PUSH_BLOCKED: ACTIVE; READ-ONLY / APPEND-ONLY; no SQL/DDL/DML, schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
