@@ -798,3 +798,49 @@ The key names are design vocabulary only; they are not approved grants or implem
 The 14 high-risk policy tuples in §24 and the 30 workflow/17 inventory-family tuple baselines in §25 remain candidate policy design, not role grants. Exact remaining actor/action rows, approval thresholds, technical enforcement and test execution retain their stated OPEN/NOT AUTHORIZED/NOT EXECUTED status.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 27. Append-only candidate key reconciliation register for CW-09 security scenarios (19 November 2026)
+
+**Status: CANDIDATE KEY VOCABULARY — NOT GRANTS, NOT AN APPROVED ROLE ALLOWLIST.** This section reconciles exact resource/action labels used by DOC-07 §§31–35 with the owner-domain catalogue. It fills the key-name lookup gap for the 24 CW09-SEC test specifications; it does not approve actor eligibility or permission assignment.
+
+### 27.1 Additional candidate exact-action keys
+
+| Candidate key | Workflow / resource anchor | Intended action boundary |
+|---|---|---|
+| M04.student_record.read | EDU-WF-03 / student record | Read only the individually authorized student-record field subset |
+| M04.student_record.export | EDU-WF-03 / student record | Separate restricted export action; never implied by read |
+| M13.attendance_correction.approve | EDU-WF-07 / attendance correction | Independent approval of a submitted correction; no self-approval |
+| M13.grade.moderate | EDU-WF-09 / assessment grade | Moderation action separate from authoring/finalization |
+| M13.grade.finalize | EDU-WF-09 / assessment grade | Finalize only after required review/moderation |
+| M13.grade.publish | EDU-WF-09 / assessment result | Publish finalized result; not implied by finalize |
+| M04.guest_identity.read | HTL-WF-05 / guest identity | Minimum-necessary identity read under verified relationship and purpose |
+| M12.housekeeping_task.read | HTL-WF-08 / housekeeping task | Read assigned task only; no folio or unrestricted guest profile access |
+| M16.guest_folio.read | HTL-WF-10 / guest folio | Read authorized financial folio subset under M16 scope |
+| M20.room.return_to_service | HTL-WF-09 / room safety lifecycle | Return to service only after independent safety release and valid state checks |
+| M02.rate_plan.approve | HTL-WF-02 / rate plan | Independent approval of a submitted rate change |
+| M02.rate_plan.publish | HTL-WF-02 / rate plan | Publish an approved rate version; not implied by edit/approve |
+| M16.folio.adjust | HTL-WF-10 / guest folio | Adjust a financial folio under M16 policy and approval controls |
+| M05.group_booking.read | HTL-WF-12 / group booking | Read only the linked group/corporate booking subset |
+| M17.staff_report.export | HTL-WF-15 / workforce report | Restricted export of the explicitly assigned staff-report subset |
+| M16.financial_report.export | EDU-WF-14 / HTL-WF-15 / financial report | Restricted financial export with field manifest, purpose and approval |
+| M12.property_stay.read | HTL-WF-07 / property stay | Read stay data within the assigned property and stay scope |
+| M12.room_task.read | HTL-WF-08 / room task | Read room task within active assignment; no cross-property inference |
+| M07.stock_transfer_shipment.reconcile | Inventory/warehouse / shipment | Reconcile custody quantities and disposition; does not post M06 ledger effects |
+| M05.reservation.read | HTL-WF-03–04 / reservation | Read reservation within verified Business/property/self relationship scope |
+| M07.stock_transfer.read | Inventory/warehouse / stock transfer | Read transfer and custody details within assigned warehouse/site scope |
+| M16.payment.capture | EDU-WF-10 / HTL-WF-11 / payment | Capture payment under M16 authority; distinct from refund, write-off and settlement close |
+| M21.integration.run_sync | HTL-WF-16 / Business connector | Execute an authorized Business connector sync; no secret-value read |
+
+### 27.2 Reconciliation and non-grant rules
+
+1. The keys above are added as candidate exact-action vocabulary because DOC-07 uses them to identify the resource/action under negative-test review. They follow the domain.resource.action grammar and are distinct actions, not CRUD bundles.
+2. The candidate list supplements the 14 high-risk keys in §24.2 and the 17 inventory/warehouse key families in §23.4. It is not a complete permission catalogue for every workflow action.
+3. Every candidate key still requires an independently reviewed actor/function, active membership, module entitlement, Business/resource scope, lifecycle condition, data class, purpose, SoD/approver, execution owner and audit requirement. A missing or ambiguous tuple is DENY.
+4. No role, person, service account or partner receives a grant from this register. No wildcard, implicit inheritance, technical enforcement, API/RLS policy or test execution is created.
+5. M21.integration_secret.read is expressly **not** a candidate permission key. It is only a prohibited attempted-action label for CW09-SEC-20; see DOC-07 §34. S0.platform_admin is a namespace marker, not a permission key; the platform access-grant candidate keys remain PLATFORM.access_grant.approve and PLATFORM.access_grant.apply under §24.3.
+6. Candidate keys do not override the primary domain ownership and execution rules in DOC-06 §21 or the higher-risk controls in §24.
+
+**Disposition:** the previously unmapped candidate key labels used by CW09-SEC-01–24 are now recorded in the owning authorization master, except the explicitly prohibited secret-read token and non-key S0 marker. Exact grants, actor allowlists, technical implementation and test execution remain NOT APPROVED / NOT AUTHORIZED / NOT EXECUTED.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
