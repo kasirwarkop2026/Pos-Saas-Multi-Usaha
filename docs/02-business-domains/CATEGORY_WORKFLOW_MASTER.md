@@ -215,3 +215,36 @@ This section reconciles §8 with the project-authored design decisions in §14 a
 - CORE/CONDITIONAL identifies product/category design, not automatic activation, subscription entitlement, permission or role grant.
 
 No dependency outside this explicitly scoped logical design is closed. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 16. Append-only CW-03 category/workflow-to-authorization and traceability alignment — 20 November 2026
+
+This addendum reconciles DOC-02's category and workflow baseline with the later project-authored logical ownership, authorization-catalogue and test-traceability design. It supplements §§2–10 and §§14–15; it does not rewrite historical source-review snapshots or promote candidate authorization and test designs to approved grants or executed evidence.
+
+### 16.1 Controlling logical category and workflow baseline
+
+- CAT-10 Education CORE/CONDITIONAL domains and CAT-11 Hotel CORE/CONDITIONAL domains in DOC-02 §§14.1–14.2 match DOC-06 §21.2. CORE/CONDITIONAL remains category design vocabulary, not subscription entitlement, module activation or permission.
+- The 14 Education workflows (EDU-WF-01–14) and 16 Hotel workflows (HTL-WF-01–16) have a project-authored logical primary/supporting ownership map in DOC-06 §§21.3–21.4. This is the controlling logical ownership map for those 30 workflow IDs.
+- DOC-05 §23.3 contains the same 30 workflow IDs and its primary owner-domain identifiers match DOC-06 §§21.3–21.4 for all 30/30 rows. DOC-06 §23.2–23.3 carries the same 30 workflow IDs into the requirements/security-control/test-design crosswalk; its primary owner-domain identifiers also match for all 30/30 rows.
+- DOC-02 §14.3's primary-owner rule is consistent with DOC-06 §§21.3–21.5: the primary domain owns its authoritative workflow lifecycle; supporting domains retain ownership of their own records and participate through explicit commands/events/references/read models. A workflow label does not transfer object ownership or grant write authority.
+
+### 16.2 Authorization catalogue and permission boundary
+
+- DOC-05 §§23.1–23.6 supplies the role/principal boundary, permission-catalogue record format, 30-workflow action-family catalogue, 17-entity inventory/warehouse key starter, and completion/deny rules.
+- The primary function column in DOC-05 §23.3 is eligibility vocabulary only, not an assignment or grant. Candidate keys and policy tuples in DOC-05 §§24–25 and §27 remain design specifications/candidate vocabulary. DOC-05 §26.1 and DOC-06 §22 control the scoped G02/G04 logical dispositions.
+- DOC-02 §§2, 6–8 and §14.4 remain aligned with DOC-05 §§22–27 and DOC-06 §§21–23: category, role/function, module entitlement, capability/action, resource, scope, data/purpose, SoD/approval and technical enforcement are independent checks. Missing or ambiguous authorization elements fail closed.
+- No final exact actor × key × resource × scope × condition × approval grant matrix, technical enforcement, physical schema or implementation is established by this crosswalk.
+
+### 16.3 Test traceability and evidence boundary
+
+DOC-06 §23.2–23.7 is the controlling workflow-to-security-control-to-test-design crosswalk for the 30 Education/Hotel workflows. Its current classification is 16 workflows with direct scenario references, 8 with related-only references, and 6 with no dedicated or related workflow-specific scenario. Cross-cutting tests are not counted as dedicated workflow coverage. All 24 CW09-SEC IDs remain DESIGN / NOT EXECUTED; linked evidence is NOT GENERATED / NOT VERIFIED. These design references do not establish test execution, pass/fail, retained evidence, independent review or technical security acceptance.
+
+### 16.4 Historical status reconciliation and residual gaps
+
+Earlier statements in §§8–10 and the earlier DOC-02/DOC-05/DOC-06 audit checkpoints that G02/G04 or workflow-to-domain mapping remain OPEN are historical pre-normative-design snapshots. For the exact scope now defined, the later controlling records are DOC-02 §§14–15, DOC-05 §26.1 and DOC-06 §§21–22: G02 is resolved by project design for canonical M01–M21 and the CAT-10/CAT-11 profiles; G04 is resolved at logical primary/supporting ownership level for the 30 Education/Hotel workflows. This limited supersession does not close legacy category-wide source crosswalks, full source-native workflow title/sequence recovery, claim-level provenance, exact actor/action grants, scope/SoD/approval parameters, physical object/field mapping, technical enforcement or test execution.
+
+The category detail pages remain source-aligned summaries and explicitly do not reproduce the complete source-native workflow title sequence. DOC02-G01/G02 and other residual items retain their recorded status unless separately reconciled. No source-native dependency is closed by this addendum.
+
+**Disposition:** CW-03 cross-document logical consistency **PASS** for the reviewed CAT-10/CAT-11 profiles and the 30 Education/Hotel workflow-owner references. CW-03 is **PARTIAL / NOT CLOSED overall** because full category/workflow source locators and titles, broader category/module/action mapping, complete authorization grants and evidence/technical acceptance remain open. This is a bounded project-authored design reconciliation, not an external-source recovery or implementation approval.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
