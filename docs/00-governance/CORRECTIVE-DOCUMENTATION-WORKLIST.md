@@ -1477,3 +1477,66 @@ The consolidated design register contains 87 IDs (24 CW09-SEC + 14 CW03-SEC + 12
 **Next bounded task:** CW-08 — audit DOC-06 requirements traceability against DOC-01 Product Blueprint, DOC-02 category/workflow design, DOC-03 architecture, DOC-05 authorization and DOC-07 evidence coverage.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.35 CW-08 — DOC-06 product-to-requirement and cross-master traceability reconciliation (20 November 2026)
+
+**Objective:** audit DOC-06 Requirements & Traceability Master against DOC-01 Product Blueprint, DOC-02 Category/Workflow, DOC-03 Architecture, DOC-04 Data Dictionary, DOC-05 Authorization and DOC-07 Security/Evidence. This CW consolidates the logical design reconciliation completed by CW-03–CW-07, corrects current traceability status/navigation, and defines acceptance scenarios. It does not claim physical implementation or executed tests.
+
+### 15.35.1 Current-main audit findings
+
+| Finding | Current-main observation | Disposition / correction |
+|---|---|---|
+| CW08-F01 — Product Blueprint requirement navigation | DOC-01 §§2–8 define product vision, tenant ownership, platform/Business roles, category taxonomy, entitlement separation, operating principles and platform boundary; DOC-06 has corresponding normative anchors but no single product-section crosswalk. | Add DOC-01 section-to-DOC-06 traceability crosswalk; do not invent new requirement IDs. |
+| CW08-F02 — category and workflow traceability | DOC-01 §14.1, DOC-02 §14/§17 and DOC-06 §§21.2–21.4 align on CAT-10/CAT-11 profiles and 30 workflow primary owners. | PASS — record 30/30 reciprocal traceability and retain conditional activation boundaries. |
+| CW08-F03 — architecture and data ownership | DOC-03 §§18–21 and DOC-04 §§28/32 align to DOC-06 §§21.1/21.5; physical fields/keys remain open. | PASS at logical design level; preserve physical data acceptance as OPEN. |
+| CW08-F04 — authorization traceability | DOC-05 §§22–34 aligns to DOC-06 §§21.6–21.10 and 14 AUTH-HR policy tuples; exact grants and technical enforcement remain open. | PASS at authorization-design level; no permission grants. |
+| CW08-F05 — security/evidence traceability | DOC-07 §43 reconciles 30/30 workflow design references, 17 entity-family coverage and 87 prior design IDs; all remain unexecuted. | PASS for design navigation; no test or evidence status promotion. |
+| CW08-F06 — stale DOC-06 §21.11 status | The original acceptance table still says DOC-01/02/03/04/05/07 cross-document reconciliation is required, despite CW03–CW07 append-only reconciliations now present. | Add a current bounded acceptance matrix that supersedes stale status wording without rewriting §21.11. |
+| CW08-F07 — DOC-06 duplicate section numbering | DOC-06 has a pre-existing §27 locator correction, a later CW06 block also labeled §27, and a CW07 block labeled §28. | Correct navigation append-only: retain original §27; designate CW06 block §28 and CW07 block §29; new CW08 crosswalk §31. |
+| CW08-F08 — product-to-evidence chain and status semantics | The 3→4→5→6→7 master chain is distributed across files; no current single summary distinguishes design coverage, physical acceptance, execution and evidence. | Add one cross-master requirement chain and acceptance status matrix; retain all technical and evidence gates OPEN. |
+
+### 15.35.2 Bounded cross-document disposition before correction
+
+- Product scope and role/tenant boundaries in DOC-01 §§2–8/14–16 align with DOC-06 §§21.1–21.10 and DOC-05 §§22–34.
+- CAT-10 Education and CAT-11 Hotel CORE/CONDITIONAL profiles in DOC-01 §14.1 and DOC-02 §14 match DOC-06 §21.2.
+- All 30 EDU-WF/HTL-WF IDs and primary owners align across DOC-02 §17, DOC-03 §§18–19, DOC-05 §§23/28, DOC-06 §§21.3–21.5 and DOC-07 §§38/43.
+- The M01–M21 taxonomy, single-owner interaction contract, 17-entity owner register, authorization tuple and evidence ownership have bounded logical cross-references in DOC-03 §§18–21, DOC-04 §§28/32, DOC-05 §§32–34 and DOC-07 §43.
+- Current design register before CW-08: 87 IDs; all DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED.
+- Exact grants, physical field/key acceptance, RLS/server/API enforcement, runtime tests, evidence storage/retention and Production readiness remain OPEN / NOT AUTHORIZED.
+
+### 15.35.3 Append-only correction package
+
+| Document | New section | Purpose |
+|---|---|---|
+| DOC-01 PRODUCT_BLUEPRINT.md | §17 | Product-section to DOC-06 requirement traceability crosswalk |
+| DOC-02 CATEGORY_WORKFLOW_MASTER.md | §19 | Reciprocal category/workflow requirement traceability |
+| DOC-03 SYSTEM_ARCHITECTURE.md | §22 | Architecture-to-requirement and acceptance crosswalk |
+| DOC-04 ERD_DATA_DICTIONARY.md | §33 | Entity/tenant-to-requirement crosswalk and physical status boundary |
+| DOC-05 AUTHORIZATION_MASTER.md | §34 | Authorization requirement/evidence crosswalk and non-grant boundary |
+| DOC-06 MASTER_TRACEABILITY.md | §§30–31 | Section-number correction, current cross-master acceptance matrix and 12 CW08-TRACE scenarios |
+| DOC-07 SECURITY_EVIDENCE.md | §44 | Evidence contracts for CW08-TRACE-01–12 |
+| This Worklist | §15.35 | Audit findings, acceptance, scope and next bounded task |
+
+### 15.35.4 CW-08 acceptance matrix
+
+| Acceptance criterion | Target | Boundary |
+|---|---|---|
+| Product Blueprint section traceability | DOC-01 §§2–8 and §10 mapped to DOC-06 anchors | Product scope is not an executable requirement ID by itself |
+| Category/workflow alignment | 2 category profiles and 30/30 workflow owners cross-referenced | No conditional entitlement auto-activation |
+| Architecture/data alignment | M01–M21 and 17 entity owners referenced to DOC-06 | Physical Data Dictionary remains NOT ACCEPTED |
+| Authorization alignment | Role/principal, key, S0–S5, D0–D4, purpose, SoD and fail-closed sequence aligned | Exact grants remain OPEN |
+| Security/evidence alignment | 30/30 workflow design references; 17 entity families; 87 prior IDs indexed | 0 executed; evidence 0 generated/verified |
+| Current acceptance matrix | DOC-06 §31 supersedes stale cross-document “required” status only at logical design scope | Technical and provenance dependencies remain open |
+| Traceability acceptance design | 12/12 CW08-TRACE IDs in DOC-06 and DOC-07 | DESIGN / NOT EXECUTED |
+| Section numbering | DOC-06 §27–29 locators unambiguous | Append-only; no historical section rewritten |
+
+### 15.35.5 Bounded disposition and next action
+
+**CW-08: PRODUCT-TO-REQUIREMENT / CROSS-MASTER TRACEABILITY — READY FOR DOCUMENTATION ACCEPTANCE, PENDING PR REVIEW, CI, CONDITIONAL MERGE AND POST-MERGE READBACK.** The package closes the bounded logical traceability navigation and reconciles stale acceptance wording against the completed CW03–CW07 documentation packages. It does not close physical schema, source provenance, exact grants, technical enforcement or execution evidence.
+
+CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED / NOT VERIFIED. DOC-06 remains a reconstructed working master pending full physical, provenance, implementation and evidence acceptance.
+
+**Next bounded task after verified CW-08 close:** CW-09 — final requirements-to-release-gate and implementation-readiness audit across DOC-00–DOC-12, preserving Stage 5 and Stage 6 authorization gates. No implementation may begin until the user separately authorizes it and all technical prerequisites are accepted.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
