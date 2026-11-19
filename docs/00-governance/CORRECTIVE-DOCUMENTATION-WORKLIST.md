@@ -566,25 +566,25 @@ Next: continue DOC-05 tuple expansion across remaining Education/Hotel and inven
 
 DOC-05 §25 and DOC-04 §29 were appended to the existing PR #87 branch.
 
-**DOC-05 §25 — authorization tuple expansion**
+#### DOC-05 §25 — authorization tuple expansion
 - Adds common deny-by-default tuple conditions for active identity/membership, module entitlement, exact action, scope, lifecycle, data/purpose, SoD and owning-domain execution.
 - Adds actor/function, scope, precondition, data/purpose and SoD/execution baselines for all 30 Education/Hotel workflows (EDU-WF-01–14; HTL-WF-01–16).
 - Expands all 17 inventory/warehouse resource families from DOC-05 §23.4 with resource-specific actor, scope, state/data/purpose, SoD and owner-execution rules.
 - Keeps action keys distinct; no CRUD bundle, wildcard, implied grant, numeric threshold or retention duration is introduced.
 - High-risk controls in §24 take precedence; all candidate actors remain eligibility only.
 
-**DOC-04 §29 — logical attribute inventory**
+#### DOC-04 §29 — logical attribute inventory
 - Enumerates proposed conceptual attributes for all 17 historical Inventory & Costing entities.
 - Adds D1–D4 classification guidance, read-audience and purpose constraints, write authority/lifecycle, retention triggers and audit requirements.
 - Distinguishes conceptual attribute labels from physical SQL columns/types/constraints. Physical mapping, evidence and verification remain OPEN.
 - D4 secret values are excluded from ordinary entity attributes; only protected opaque references/rotation metadata may be recorded where applicable.
 - Exact retention durations remain OPEN; legal hold blocks disposal; immutable ledger/custody history uses compensating records rather than destructive edits.
 
-**DOC-07 §32 — policy-tuple reconciliation index**
+#### DOC-07 §32 — policy-tuple reconciliation index
 - Cross-links all 24 CW09-SEC test IDs to DOC-05 §§24–25 and DOC-04 §29 policy anchors and expected audit evidence families.
 - Coverage is documentation cross-reference only; all tests remain DESIGN / NOT EXECUTED.
 
-**Acceptance disposition**
+#### Acceptance disposition
 - Logical ownership: 17/17 entities already mapped in DOC-04 §28.
 - Logical attribute proposals: 17/17 entities enumerated in DOC-04 §29; physical-field mapping/verification remains OPEN.
 - Workflow and inventory policy tuple baselines: 30/30 Education/Hotel workflows and 17/17 inventory/warehouse resource families documented in DOC-05 §25; exact grants remain NOT APPROVED.
