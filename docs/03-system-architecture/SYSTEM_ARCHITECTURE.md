@@ -415,3 +415,20 @@ This section corrects the DOC-04 locator used in DOC-03 §20 without changing th
 - DOC-03 §§19–21 and DOC-06 §21 remain the logical domain/interaction authorities. Physical field/key definitions and enforcement remain DOC-04 OPEN dependencies.
 
 **Disposition:** DOC-03 §20's reference to DOC-04 §27 as the entity/tenant matrix is superseded for navigation by DOC-04 §§28 and 32. No owner, M-domain, FIX decision or technical status changes.
+
+
+## 22. CW-08 architecture-to-requirement traceability crosswalk (20 November 2026)
+
+DOC-06 §31 is the current cross-master acceptance matrix.
+
+| Architecture concern | DOC-06 anchor | Architecture authority | Acceptance boundary |
+|---|---|---|---|
+| M01–M21 domain taxonomy | §21.1 | DOC-03 §§18.1, 19.1 | Logical domain names and owners; not deployable service boundaries |
+| Category profiles | §21.2 | DOC-03 §19.4; DOC-02 §14 | CORE/CONDITIONAL; no implicit module activation |
+| 30 workflow owners | §§21.3–21.4 | DOC-03 §§18.2, 19.2 | One primary owner; supporting domains retain their own records |
+| Domain interaction | §21.5 | DOC-03 §§18.2–19.3 | Commands/events/read models; no hidden cross-domain write |
+| Authorization sequence | §§21.6–21.10 | DOC-03 §§19.3–19.4; DOC-05 §§22–34 | Design only; no server enforcement |
+| Tenant context | §21.5.9 | DOC-03 §18.4; DOC-04 §§28, 32 | business_id and lower-level scope; physical keys/RLS OPEN |
+| Security and evidence | §21.11 | DOC-05 §32; DOC-07 §43 | Test/evidence design only; 0 executed |
+
+**Disposition:** DOC-03 architecture and DOC-06 requirements are aligned at logical design level. Physical services, APIs, queues, transaction boundaries, RLS/server enforcement, concurrency, backup/DR and Production behavior remain OPEN / NOT VERIFIED.

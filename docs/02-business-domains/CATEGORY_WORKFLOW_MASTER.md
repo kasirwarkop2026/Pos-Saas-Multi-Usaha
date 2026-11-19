@@ -318,3 +318,17 @@ DOC-03 §19 is the architecture-level crosswalk for the canonical domain ownersh
 6. DOC-03 §19 and DOC-06 §25 define logical architecture acceptance only. They do not establish physical services, tables, endpoints, queues, event brokers, grants or implementation.
 
 **Disposition:** no workflow ID, title, primary owner, supporting owner, category profile or FIX decision is changed by CW-04. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 19. CW-08 category/workflow-to-requirement traceability crosswalk (20 November 2026)
+
+DOC-06 §31 is the controlling cross-master traceability matrix.
+
+1. DOC-02 §14 is the controlling CAT-10 Education and CAT-11 Hotel CORE/CONDITIONAL profile; DOC-06 §21.2 is the normative traceability anchor; DOC-01 §14.1 is the product-scope mirror.
+2. DOC-02 §17 is the project-authored 30-workflow title index; DOC-06 §§21.3–21.4 own the primary/supporting domain assignment and DOC-06 §24 supplies the 14 added dedicated negative-test designs.
+3. DOC-03 §§18–19 define single-owner and cross-domain interaction rules; workflow orchestration does not create supporting-domain ownership.
+4. DOC-05 §§23–34 define the authorization candidate-key and decision boundaries; workflow owner and primary-function labels are not permission grants.
+5. DOC-07 §§38 and 43 record the 14 CW03 dedicated workflow designs and current evidence/coverage status. All remain DESIGN / NOT EXECUTED.
+6. Historical CW09 16 direct / 8 related-only / 6 uncovered classification remains a historical baseline. Current dedicated workflow design references are 30/30 after CW03.
+
+**Disposition:** category and workflow traceability aligns at logical design level; conditional modules, technical entitlements, physical workflow state and executed evidence remain separate acceptance gates.

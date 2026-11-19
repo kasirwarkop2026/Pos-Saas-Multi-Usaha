@@ -1404,3 +1404,16 @@ Candidate-key and policy tuple boundaries remain DOC-05-controlled: 43 permissio
 
 **Disposition:** current workflow design coverage 30/30; cross-cutting entity design coverage mapped for 17/17 owner families; 87 total scenario/evidence design IDs; 0 executed; 0 evidence generated/verified. Physical mapping, grants, enforcement and runtime security acceptance remain OPEN.
 
+
+
+## 30. CW-08 DOC-06 section-numbering reconciliation (20 November 2026)
+
+This append-only locator correction resolves duplicate section labels without deleting or rewriting historical content.
+
+1. The first pre-existing section titled “§27. CW-05 DOC-04 owner-register and section-locator correction” remains **DOC-06 §27**.
+2. The later appended block titled “§27. CW-06 authorization acceptance scenario designs” is designated **DOC-06 §28** for all current/future references. Its former subheading 27.1 is referenced as §28.1.
+3. The later appended block titled “§28. CW-07 current security-evidence coverage and acceptance design index” is designated **DOC-06 §29** for all current/future references. Its former subheadings 28.1–28.5 are referenced as §§29.1–29.5.
+4. The CW-06 and CW-07 content is retained append-only; only the canonical locators are clarified. DOC-06 §30 is this numbering note and §31 is the CW-08 cross-master traceability crosswalk.
+5. Worklist §§15.31 and 15.33 references to the duplicate DOC-06 §27/§28 labels are superseded for navigation by §§28/29 respectively. Historical checkpoint wording remains unchanged.
+
+**Disposition:** DOC-06 section references are unambiguous for the CW06/CW07 scenario and coverage packages. No requirement, test ID, status or decision changes.
