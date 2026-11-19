@@ -434,3 +434,38 @@ This clarification reconciles the header's historical proposed-path wording with
 **Disposition:** DOC-09 bounded audit identified one evidence-supported document-control clarification: historical proposed-path wording versus verified current-main publication. The correction is limited to publication metadata/navigation. Dependencies newly closed: **0**. FIX decisions changed: **0**. Decision/status promotions: **0**. Canonical/final/accepted status: **NOT PROMOTED**.
 
 Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+
+## 11. Append-only DOC-08/DOC-09 FIX-to-OPEN reconciliation — 19 November 2026
+
+This addendum records the bounded CW-11 reconciliation against the reconstructed DOC-08 v0.1 working register. It does not change the source-native status of any DOC-09 item.
+
+### 11.1 Current DOC-08 working reference
+
+- The full DOC-08 v1.5 historical reconstructed master was not present at its proposed GitHub path during the preceding audit. A new project-authored working reconstruction is now proposed at `docs/07-decision-registers/MASTER_FIX_REGISTER.md`.
+- Its stable local identifiers are DOC08-FIX-001–DOC08-FIX-017. These identifiers are new register-local IDs; they are not represented as recovered historical DOC-08 numbering.
+- The reconstructed register is DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL / NOT ACCEPTED. It does not claim byte-for-byte recovery or complete historical FIX coverage.
+- The focused ST5-11.40 correction remains a separate artifact and retains only its narrow CVS O/CR/Q crosswalk scope.
+
+### 11.2 FIX-to-OPEN boundary reconciliation
+
+| DOC-08 FIX family | DOC-09 OPEN/partial boundary retained | Reconciliation |
+|---|---|---|
+| DOC08-FIX-001–003: Owner/Business structure, Outlet/Warehouse multiplicity, Platform/Business separation | AUTH-OPEN and platform/business authorization details | Product/principal boundaries are fixed conceptually; exact membership, actor, permission and enforcement remain OPEN. |
+| DOC08-FIX-004: tenant isolation principle | Physical data, RLS, API/backend and tenant enforcement dependencies | Tenant isolation is a design requirement, not evidence of physical constraints or deployed enforcement. |
+| DOC08-FIX-005–009: inventory ledger/projection, batch/cost-layer identity, FEFO, FIFO, reservation availability effect | DOC-04 physical dictionary, inventory lifecycle and costing-specific dependencies | Logical invariants are fixed; physical field mapping, valuation implementation and test evidence remain OPEN. |
+| DOC08-FIX-010–011: MWA default/FIFO alternative and MWA pool dimensions | Costing detail, physical schema and exception handling | Costing design baseline is fixed; no physical key, valuation code or exception policy is inferred. |
+| DOC08-FIX-012–014: 12 Business roles, Owner/platform role separation, relationship classifications | AUTH-OPEN-01–27 and role/action/scope/SoD dependencies | Role/principal taxonomy is fixed; exact role grants, eligibility, approval and scope mappings remain OPEN/NOT APPROVED. |
+| DOC08-FIX-015: M01–M21 logical domain vocabulary | Category/module entitlement and workflow/action mapping dependencies | Canonical logical IDs are fixed; unapproved category/module/workflow mappings are not implied. |
+| DOC08-FIX-016–017: CAT-10 Education and CAT-11 Hotel CORE/CONDITIONAL profiles | Conditional entitlement, exact grant and scope dependencies | Category profiles are fixed at the stated logical scope; conditional activation and exact authorization remain OPEN. |
+
+### 11.3 Reconciliation controls
+
+- DOC-08 records positive design decisions; DOC-09 continues to record unresolved dependencies. The same subject may therefore be FIX at conceptual level and OPEN at physical, authorization or evidence level without contradiction.
+- No DOC-09 item is closed, downgraded, deleted or merged into a FIX row by this addendum.
+- No exact role grant, permission, physical column, SQL constraint, RLS/API behavior, threshold, retention duration, test execution or PASS is created.
+- Historical source-native identifiers and statuses remain unchanged. Any later closure must identify its exact DOC-09 item and satisfy that item's own acceptance criteria.
+
+**Disposition:** FIX-to-OPEN consistency is reconciled for the 17 newly registered conceptual/logical decisions at the stated scope. DOC-09 remains DRAFT v0.2 / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Dependencies newly closed: **0**. Status promotions: **0**.
+
+Controls remain READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
