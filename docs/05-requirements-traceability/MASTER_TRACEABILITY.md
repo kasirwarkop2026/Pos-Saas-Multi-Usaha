@@ -1327,3 +1327,80 @@ This addendum corrects the DOC-04 references in CW05-DATA-01–12. DOC-04 §28 i
 4. A design review or negative scenario specification is not an executed test or evidence.
 
 **Disposition:** 12/12 CW06-AUTH scenarios specified; 0 executed; 0 evidence generated. Exact grants and technical enforcement remain OPEN / NOT AUTHORIZED.
+
+
+## 28. CW-07 current security-evidence coverage and acceptance design index (20 November 2026)
+
+This section updates the current coverage interpretation without rewriting historical CW-10/CW-09 checkpoints. DOC-07 §36–37 and DOC-06 §23.7 preserve the historical baseline; the later dedicated scenario packages are additive.
+
+### 28.1 Current workflow coverage
+
+| Workflow group | Historical CW09 classification | Dedicated design added | Current design coverage |
+|---|---|---|---|
+| 16 originally direct workflows | Direct CW09-SEC reference | Existing CW09-SEC scenarios | 16/16 direct |
+| 8 originally related-only workflows | Related-only CW09 reference | CW03-SEC-01–14 includes 8 of these | Dedicated design now present |
+| 6 originally uncovered workflows | No dedicated/related workflow-specific scenario | CW03-SEC-01–14 includes the remaining 6 | Dedicated design now present |
+
+**Current CAT-10/CAT-11 total: 30/30 workflows have a dedicated design reference (16 CW09-SEC + 14 CW03-SEC).** The historical 16 direct / 8 related-only / 6 uncovered count remains valid for the original CW09 baseline; it is not the current post-CW03 count. No workflow test has been executed.
+
+### 28.2 Current inventory/warehouse entity coverage
+
+| Entity family | Current design references | Coverage interpretation |
+|---|---|---|
+| inventory_batches | CW05-DATA-07; CW05-DATA-08 | Batch identity, FEFO selection and pool boundary |
+| inventory_movements | CW09-SEC-16/24; CW05-DATA-05 | Immutable ledger, replay and compensation |
+| inventory_balances | CW05-DATA-06 | Projection provenance/rebuild and no direct write |
+| inventory_batch_balances | CW05-DATA-06/07 | Batch projection and batch/cost identity separation |
+| inventory_adjustments / items | CW09-SEC-14; CW05-DATA-05 | Approval/SoD, posting and immutable correction |
+| stock_counts / items | CW09-SEC-14 | Count/variance approval and retained count evidence |
+| stock_transfers / items | CW09-SEC-15/24; CW05-DATA-04/10 | Custody, tenant boundary and quantity reconciliation |
+| inventory_cost_exceptions | CW07-EVID-13 | M06 cost exception state, unknown-cost handling and M16 financial-posting boundary |
+| inventory_reservations / items | CW09-SEC-16/24; CW05-DATA-09 | Reservation availability semantics and idempotent fulfillment |
+| inventory_cost_layers | CW05-DATA-07/08/11 | Batch/layer distinction, MWA pool and consumption lineage |
+| inventory_cost_layer_consumptions | CW05-DATA-11 | Immutable consumption and capped compensation |
+| stock_transfer_shipments / items | CW09-SEC-15/24; CW05-DATA-10 | Dispatch/partial receipt/return/loss reconciliation |
+
+This is cross-cutting design coverage of the 17-entity family set, not 17 independent entity-specific test executions. DOC-04 §28 remains the authoritative 17-entity owner map; physical field/key acceptance remains OPEN.
+
+### 28.3 Consolidated design-ID and policy coverage
+
+| Design family | Count | Status |
+|---|---:|---|
+| CW09-SEC | 24 | DESIGN / NOT EXECUTED |
+| CW03-SEC | 14 | DESIGN / NOT EXECUTED |
+| CW04-ARCH | 12 | DESIGN / NOT EXECUTED |
+| CW05-DATA | 12 | DESIGN / NOT EXECUTED |
+| CW06-AUTH | 12 | DESIGN / NOT EXECUTED |
+| CW07-EVID | 13 | DESIGN / NOT EXECUTED |
+| **Total** | **87** | **0 executed; 0 evidence generated/verified** |
+
+Candidate-key and policy tuple boundaries remain DOC-05-controlled: 43 permission-like tokens in DOC-07 §31 map to DOC-05 §§23–27 (42 candidate keys plus one prohibited attempted-action label); 14 AUTH-HR tuples remain design-only. S0.platform_admin is a namespace marker, not a permission key.
+
+### 28.4 CW-07 evidence acceptance scenarios
+
+| ID | Evidence invariant | Scenario / attempted behavior | Expected result |
+|---|---|---|---|
+| CW07-EVID-01 | Workflow requirement traceability | Select any of 30 CAT-10/CAT-11 workflow rows and trace owner → control → dedicated test design → evidence contract | Complete, non-ambiguous path; 30/30 direct design refs |
+| CW07-EVID-02 | Historical/current coverage distinction | Read the original 16/8/6 CW09 baseline as if it were the current total | DENY stale interpretation; label it historical and use current 30/30 design coverage |
+| CW07-EVID-03 | Inventory entity coverage | Trace the 17 conceptual entities to owner and relevant scenario families | All 17 owners traceable; disclose cross-cutting vs entity-specific coverage and remaining physical OPEN status |
+| CW07-EVID-04 | Stable scenario registry | Count CW09/CW03/CW04/CW05/CW06/CW07 identifiers across DOC-06 and DOC-07 | 87/87 unique IDs indexed; no duplicates or silent renumbering |
+| CW07-EVID-05 | Candidate key and prohibited token | Treat M21.integration_secret.read or S0.platform_admin as an allow-capable permission key | DENY; one is prohibited attempted-action label, the other a namespace marker |
+| CW07-EVID-06 | High-risk policy evidence | Trace AUTH-HR-01–14 to the relevant DOC-07 scenario/evidence contract | Owner, exact candidate key, SoD/approver and audit evidence reference present; still not a grant |
+| CW07-EVID-07 | Evidence source ownership | Test runner/report projection attempts to authoritatively create or rewrite a Business fact | DENY; source owner remains authoritative |
+| CW07-EVID-08 | Authorization decision provenance | Evidence record omits principal, key, target owner, scope, purpose or decision reason | Reject/quarantine incomplete evidence contract |
+| CW07-EVID-09 | Semantic vs physical event names | Treat a semantic evidence label as an approved physical event/table/schema | DENY inference; physical event schema remains separate OPEN design |
+| CW07-EVID-10 | Artifact integrity and independent review | Mark evidence VERIFIED without source commit, environment, result, artifact integrity and independent reviewer | DENY VERIFIED status |
+| CW07-EVID-11 | Retention and legal hold | Delete evidence before approved retention trigger or during legal hold | DENY disposal; exact duration remains OPEN |
+| CW07-EVID-12 | Execution and CI status | Treat DESIGN, NOT GENERATED, NOT VERIFIED or SKIPPED CI job as PASS | DENY status promotion |
+| CW07-EVID-13 | Inventory cost exception evidence | Resolve an unknown-cost exception by rewriting a posted movement or posting directly to M16 from M06 | DENY; M06 owns exception/cost state, unknown cost remains NULL until valid resolution, M16 separately owns financial journal posting |
+
+### 28.5 Acceptance rules
+
+1. A design ID is not test code, execution evidence, a security control or a pass.
+2. Every future artifact must bind to requirement/control/test ID, owner domain, exact action/policy reference, Business/scope, environment, source commit/build, expected/actual result, timestamp, artifact integrity and independent review.
+3. Source-domain business events, authorization decisions, test-run outputs and independent review are distinct evidence sources.
+4. No production data may be used for test execution. Runtime execution requires separately authorized implementation scope and controlled non-production environment.
+5. CW-10 remains PARTIAL until all applicable control mappings and execution/evidence requirements are accepted; 30/30 workflow design references alone do not close technical or evidence dependencies.
+
+**Disposition:** current workflow design coverage 30/30; cross-cutting entity design coverage mapped for 17/17 owner families; 87 total scenario/evidence design IDs; 0 executed; 0 evidence generated/verified. Physical mapping, grants, enforcement and runtime security acceptance remain OPEN.
+
