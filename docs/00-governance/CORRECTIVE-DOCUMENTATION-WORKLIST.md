@@ -488,3 +488,32 @@ The six master documents now contain explicit append-only alignment sections aga
 CW-09 remains PARTIAL until a row-level reconciliation confirms: (1) every DOC-02 workflow maps to the correct DOC-06 workflow/domain; (2) each DOC-04 entity has one owner and field-level classification/purpose/retention entry or an explicit OPEN item; (3) DOC-05 action-by-action permission matrix covers eligible function, scope, conditions, data, purpose, SoD and approver; (4) DOC-07 stable threat/test IDs cross-link to workflows, permissions and expected audit evidence; (5) internal contradictions and duplicate ownership are resolved; and (6) documentation CI and review acceptance pass. Proposed tests remain unexecuted until actual test evidence exists.
 
 No dependencies are marked CLOSED by this checkpoint. No approval grant, physical schema, RLS policy, API contract, implementation, test PASS or release readiness is asserted. PR #87 remains the only active PR; no second PR is opened. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+## 15.7 Package B continuation — entity ownership, permission catalogue and stable security test register (19 November 2026)
+
+**Status: DESIGN TRACEABILITY EXPANDED; CW-09 REMAINS PARTIAL.**
+
+### 15.7.1 DOC-04 — entity-level logical owner map
+
+DOC-04 §28 maps all 17 historical conceptual Inventory & Costing entities to one primary logical domain and identifies supporting domains without transferring write ownership. M06 owns inventory ledger, balances, reservations and cost-layer lineage; M07 owns warehouse custody, transfer and shipment lifecycle; M19 is supporting only for actual delivery/route/proof; M16 retains financial posting/settlement authority. The candidate `inventory_cost_layer_movements` remains unapproved and is not an 18th entity.
+
+Field-level classification is deliberately **0/17 complete** because the conceptual entity inventory contains no authoritative field list. DOC-04 §28.2 defines the required field inventory and keeps classification OPEN rather than inventing columns or applying a blanket class. Physical field/key/schema evidence and A38-G01–G04 / GAP-04 / ERD-OPEN statuses are unchanged.
+
+### 15.7.2 DOC-05 — role namespace and action catalogue
+
+DOC-05 §23 preserves all 12 standard Business roles in §4.2 and separate SUPER_ADMIN / PLATFORM_ADMIN platform roles. Mitra/Pekerja, Mitra Fisik and Pelanggan are treated as principal/relationship classifications, not silently added standard Business roles. The section records action-family and function-eligibility mapping for all 30 Education/Hotel workflows and candidate M06/M07 permission keys for the 17 inventory entities. These are catalogue design entries, not grants. Exact key-by-key role/scope/condition/data/purpose/SoD/approver rows remain an acceptance task.
+
+### 15.7.3 DOC-07 — stable threat and negative-test IDs
+
+DOC-07 §30 defines CW09-SEC-01 through CW09-SEC-24, linked to Education/Hotel workflow IDs, inventory/warehouse flows, tenant/scope, privilege, data classification, purpose, membership, entitlement and event/idempotency abuse cases. Each ID has an expected decision and evidence contract. All remain DESIGN / NOT EXECUTED; no PASS or security gate is claimed.
+
+### 15.7.4 Remaining bounded acceptance
+
+1. Complete field-by-field classification/purpose/retention and read/write audience mapping for actual documented entities; keep unknown fields OPEN.
+2. Expand each candidate permission key into a complete exact actor/function × Business/site/location/assignment scope × state/condition × data/purpose × SoD/approver × audit row; reconcile against all existing DOC-05 FIX decisions and category addenda.
+3. Verify DOC-02 workflow IDs and object/action anchors row-by-row against DOC-06; resolve any omissions or duplicate ownership.
+4. Cross-link every CW09-SEC test ID to exact permission key(s), expected audit event and applicable security gate; test execution remains separately unauthorized.
+5. Resolve editorial contradictions and stale navigation statements in append-only correction sections; preserve historical snapshots.
+6. Re-run documentation CI on the final PR head, review all changed paths and check Supabase/Vercel integration safety before any merge decision.
+
+Dependencies newly closed: 0. Physical schema gaps closed: 0. Executed tests: 0. Permissions granted: 0. CW-09 remains PARTIAL until all documentation acceptance criteria are met. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
