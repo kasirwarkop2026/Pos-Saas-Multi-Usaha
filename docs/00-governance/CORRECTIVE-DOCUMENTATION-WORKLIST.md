@@ -1014,3 +1014,59 @@ All CW03-SEC-01–14 and CW09-SEC-01–24 remain DESIGN / NOT EXECUTED; evidence
 **Next bounded task:** CW-04 — audit DOC-03 System Architecture against DOC-06 domain ownership/interactions and the current DOC-02/DOC-05 boundaries. Continue one PR at a time.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.25 CW-04 — DOC-03 system architecture ownership and interaction alignment (20 November 2026)
+
+**Objective:** reconcile DOC-03 architecture ownership, source-of-truth and interaction statements with the canonical M01–M21 taxonomy and workflow ownership in DOC-06 §21, the 30-workflow index in DOC-02 §17, and authorization boundaries in DOC-05 §§23–28. This is a project-authored logical architecture correction; it does not require source-native title recovery or authorize implementation.
+
+### 15.25.1 Current-main audit findings
+
+| Finding | Current-main observation | Required correction |
+|---|---|---|
+| CW04-F01 — generic domain labels lack explicit M-ID ownership | DOC-03 §5 lists Inventory, Costing, Sales, Payment, Cash, Bank, AP, AR, Customer credit/advance, Accounting, Reporting and Audit/security without an explicit M01–M21 owner mapping. | Append a bounded concept-to-owner crosswalk in DOC-03 §19; do not create new M domains. |
+| CW04-F02 — costing and finance boundary | DOC-03 §§5–7 describe Costing separately from Inventory and list several finance capabilities separately, while DOC-06 §21.1 has no standalone Costing, Cash, Bank, AP, AR or Accounting domain. | Clarify M06 owns inventory/cost-layer costing records; M16 owns money, obligations, allocations, cash/bank and financial posting; M04 owns party identity/relationship. |
+| CW04-F03 — custody and cross-domain ownership | DOC-03 §18.2 adopts one owner and explicit supporting-domain handoffs, but §5/§6 does not explicitly map transfer custody versus inventory ledger effects. | State M06 owns physical stock ledger effects and M07 owns warehouse/custody/transfer handling; M19 owns external delivery route/proof where applicable. |
+| CW04-F04 — interaction contract completeness | DOC-03 §18.3 is consistent with much of DOC-06 §21.5 but does not explicitly carry all ten normative clauses, notably when synchronous calls are justified, transaction/reversal semantics, projection freshness and complete audit context. | Append the missing contract details and a clause-by-clause crosswalk; preserve the existing contract. |
+| CW04-F05 — workflow index and authorization handoff | DOC-02 §17 lists 30 workflow IDs/titles/primary owners; DOC-06 §§21.3–21.5 controls owner and interaction semantics; DOC-05 §28 prohibits borrowing a supporting domain's authority. | Add explicit reciprocal references and a non-grant rule; do not change workflow owners, roles or candidate keys. |
+| CW04-F06 — tenant/platform and implementation boundary | DOC-03 §18.4 and DOC-06 §21.5.9 align on business_id and lower-level scopes; DOC-05 separates S0 platform actions from Business permissions. | Explicitly preserve the platform control plane, fail-closed behavior and technical OPEN states. |
+
+### 15.25.2 Bounded audit disposition before correction
+
+The current-main logical architecture is directionally consistent: DOC-03 §18.2 adopts single ownership; §18.3 defines command/event/read-model principles; §18.4 defines tenant boundaries; DOC-06 §21.5 is the more detailed normative interaction contract; DOC-02 §17 and DOC-05 §28 provide workflow and authorization references. No FIX contradiction or changed primary workflow owner was identified in this bounded review.
+
+The gap is insufficient explicit mapping and incomplete cross-reference of the detailed interaction clauses in the DOC-03 working master, not a reason to reopen the M01–M21 taxonomy or the 30 Education/Hotel owner decisions.
+
+### 15.25.3 Append-only corrections proposed in CW-04 PR
+
+| Document | New section | Correction |
+|---|---|---|
+| DOC-03 SYSTEM_ARCHITECTURE.md | §19 | Explicit concept-to-M-domain ownership crosswalk, M06/M07/M16 boundary, ten interaction-contract alignments, tenant/platform and authorization handoff |
+| DOC-02 CATEGORY_WORKFLOW_MASTER.md | §18 | Clarifies category workflow orchestration versus primary/supporting domain ownership; references DOC-03 §19 and DOC-06 §21 |
+| DOC-05 AUTHORIZATION_MASTER.md | §29 | Clarifies architecture-to-authorization handoff, resource-owner key rule, S0/S1–S5 separation and fail-closed non-grant boundary |
+| DOC-06 MASTER_TRACEABILITY.md | §25 | Adds 12 architecture acceptance scenario designs CW04-ARCH-01–12 and maps them to DOC-03/DOC-05 clauses |
+| DOC-07 SECURITY_EVIDENCE.md | §39 | Registers evidence contracts for CW04-ARCH-01–12; all design-only and not executed |
+| This Worklist | §15.25 | Records audit findings, bounded disposition, correction package and acceptance gates |
+
+### 15.25.4 CW-04 acceptance matrix
+
+| Acceptance criterion | Target | Boundary |
+|---|---|---|
+| Every generic domain capability in DOC-03 §5 mapped to an existing canonical M owner | 100% of listed concepts | No new domain IDs or independent domain authorities |
+| Inventory/costing/custody/finance boundaries explicit | M06 / M07 / M16 with M04 party reference | No physical schema or posting implementation |
+| Workflow ownership reciprocal cross-reference | 30/30 CAT-10/CAT-11 rows remain aligned | DOC-02 §17 and DOC-06 §§21.3–21.4 unchanged |
+| DOC-03 interaction contract aligned to DOC-06 §21.5 | 10/10 clauses explicitly cross-referenced | Conceptual contract only |
+| Authorization handoff respects DOC-05 §28 | Supporting domain uses its own owner key; no inherited grants | Candidate vocabulary only; no production grant |
+| Architecture acceptance scenario design | 12/12 CW04-ARCH IDs registered in DOC-06 and DOC-07 | DESIGN / NOT EXECUTED |
+| Tenant/platform boundary | business_id invariant and separate S0 platform context | RLS/API/server enforcement remains OPEN |
+| Technical and evidence readiness | No status promotion | Implementation and test execution remain separately gated |
+
+### 15.25.5 Bounded disposition and next action
+
+**CW-04: LOGICAL ARCHITECTURE ALIGNMENT — READY FOR DOCUMENTATION ACCEPTANCE, PENDING PR REVIEW, CI, CONDITIONAL MERGE AND POST-MERGE READBACK.** The package clarifies ownership and interactions without changing FIX decisions, category profiles, primary workflow owners, permission grants, physical schema or implementation state. Closure is limited to the documented logical architecture alignment after all acceptance gates pass.
+
+No CW04-ARCH scenario is executed by this documentation change. Evidence remains NOT GENERATED / NOT VERIFIED until separately authorized implementation/test work. Physical API/service contracts, transaction orchestration, RLS/server enforcement, event infrastructure, idempotency storage, concurrency, audit retention, backup/DR and Production behavior remain OPEN / NOT VERIFIED.
+
+**Next bounded task after verified CW-04 close:** CW-05 — DOC-04 ERD/Data Dictionary ownership, physical entity/attribute mapping and tenant-integrity alignment against the now-closed logical architecture, without schema mutation or DB push.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
