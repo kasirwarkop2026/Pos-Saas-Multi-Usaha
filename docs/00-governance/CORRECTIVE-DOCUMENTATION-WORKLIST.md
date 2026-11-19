@@ -276,3 +276,61 @@ No content correction is proposed in DOC-01, DOC-02, category pages or DOC-05 fr
 - No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, deployment, Supabase Preview/Staging or Production changes.
 - Stage 5 blanket GitHub/archive migration remains **NOT AUTHORIZED**; Stage 6 implementation remains **NOT AUTHORIZED**.
 - This checkpoint is proposed documentation until its PR is reviewed, merged with explicit approval, and read back from `main`.
+
+
+## 13. Package B — CW-08 DOC-05 authorization-matrix bounded audit checkpoint (19 November 2026)
+
+A bounded read-only audit was completed against the current `main` version of DOC-05 and its registered authorization source families. This checkpoint records the audit result and routes remaining gaps; it does not create permission keys, grants, approver assignments, numeric thresholds, technical policy, or implementation evidence.
+
+### 13.1 Audit scope and sources
+
+- `docs/05-authorization/AUTHORIZATION_MASTER.md` — DOC-05 §§1–17 and append-only audit/crosswalk sections §§20–21.
+- `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` — DOC-09 §3D AUTH-OPEN-01–27, used as the consolidated unresolved-item register, not as a substitute for primary decisions.
+- `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` — DOC-06 §§3–12, including authorization chain, role/action mapping, scope, data/purpose, SoD, server authorization and evidence gaps.
+- `Keputusan_FIX_Otorisasi_POS_SaaS_O01-O12_v1.0.docx` — conceptual platform authorization decisions and residual OPEN parameters.
+- `SoD_Approval_and_Sensitive_Data_Classification_Matrix_v1.0.docx` — proposed SoD lifecycle, cross-workflow control matrix, candidate T0–T3 tiers and D0–D4 classification.
+- `Scope_Dimension_Object_Geographic_Boundary_Matrix_Design_v1.0.docx` — proposed object and geographic/organizational scope model and SC-01–SC-15 candidate checks.
+- `Permission_Catalogue_Category_Role_Module_Eligibility_POS_SaaS_v1.0.docx` — DRAFT/CANDIDATE eligibility catalogue; not an approved permission catalogue.
+- `Matriks_Halaman_Permission_Scope_POS_SaaS_v1.0.docx` — PROPOSED page/access/scope matrix; descriptive labels are not stable permission identifiers.
+- Authorization Audit Tahap 2.4 and Stage 4.7.2 / Stage 4.7.8 source-routing records — inventory and source-locator boundaries.
+
+### 13.2 Audit findings
+
+| Finding | Audit result | Disposition |
+|---|---|---|
+| CW08-F01 — Actor, identity and role boundary | DOC-05 §§4.1–4.3 preserves the 12 standard Business roles and separates Owner, SUPER_ADMIN and PLATFORM_ADMIN. Platform Admin authority is individual per account; Manager is governance, not a universal operational grant. | PASS — conceptual boundary consistent; complete category/workflow role allowlists remain OPEN. |
+| CW08-F02 — Action and resource model | DOC-05 §8 preserves 18 action families as conceptual vocabulary. DOC-05 §§3, 8 and 12 distinguish view, submit, approve, execute, publish, reverse, export and administer. The reviewed sources do not establish stable permission keys or complete workflow × resource × action rows. | PARTIAL — action vocabulary and separation principles exist; G04/G05 and AUTH-OPEN-04/05/23 remain OPEN/PARTIAL. |
+| CW08-F03 — Tenant, object and geographic scope | DOC-05 §9 and the Scope Dimension Matrix distinguish object/relationship scope from geographic/organizational scope, prohibit cross-tenant, upward and sibling inheritance by default, and reject assignment/ownership/custody as automatic permission. Resolver, canonical scope-node catalogue, lifecycle, delegation, historical access and per-action scope rows remain unresolved. | PARTIAL — conceptual guardrails consistent; G06 and AUTH-OPEN-06/24 remain PARTIAL/TODO. |
+| CW08-F04 — Data classification and purpose | DOC-05 §10 retains D0–D4 as conceptual classes and states field-level mapping, legal/jurisdiction basis, masking, retention and exact access policy remain OPEN. The SoD source matrix further distinguishes data domains and minimum-access constraints, but remains PROPOSED/CANDIDATE. | PARTIAL — D0–D4 baseline preserved; G08 and AUTH-OPEN-08 plus relevant REC-06 criteria remain PARTIAL/OPEN. |
+| CW08-F05 — SoD and approval lifecycle | DOC-05 §11 and DOC-06 §8 preserve request/review/approve/execute/finalize/reconcile/reverse/export separation, no self-approval, no auto-approval, payload integrity and revalidation. The source SoD matrix contains candidate workflow rows and T0–T3 risk tiers; thresholds, exact tier assignment, approver count/eligibility, exceptions and final dual-control action list remain OPEN. | PARTIAL — principles align; no final action-level SoD/approver matrix is established; G07 and AUTH-OPEN-07/21/26 remain PARTIAL/OPEN. |
+| CW08-F06 — Platform Admin and elevated/cross-tenant permissions | DOC-05 §§5 and 12 preserve O-01–O-12 conceptual FIX boundaries: individual PLATFORM_ADMIN grants, SUPER_ADMIN catalogue/grant authority, refund requester/approver separation, target-specific cross-tenant read default, separately controlled write, no bulk price change or permanent Business deletion by PLATFORM_ADMIN. Residual O-01–O-12 parameters remain OPEN. | PASS — conceptual FIX boundaries preserved; AUTH-OPEN-11–22 remain OPEN for detailed parameters. |
+| CW08-F07 — Permission catalogue and eligibility separation | The candidate Permission Catalogue explicitly says category/role/module eligibility does not itself grant permission. It remains DRAFT/CANDIDATE and lists PC-01–PC-12 as OPEN/REVIEW/NOT READY. The legacy candidate contains functional-role labels and older taxonomy that must not supersede the 12-role baseline or CR/Q decisions. | OPEN — no approved stable permission catalogue, complete role/module/action map or grant matrix. AUTH-OPEN-01–05/23 and RMD-OPEN-06/12/15 remain open as applicable. |
+| CW08-F08 — Negative tests and technical evidence | DOC-05 §13 and DOC-06 §§10–11 distinguish designed scenarios from implementation, execution, pass/fail and retained evidence. The reviewed candidate checks do not prove runtime enforcement or CI security acceptance. | PARTIAL — G10 and AUTH-OPEN-10/27 remain PARTIAL/NOT VERIFIED; test execution and enforcement are not established. |
+| CW08-F09 — Source/status terminology and provenance | DOC-05 §2/§15 and the source-routing audits preserve the 17-file authorization inventory but do not establish exhaustive page/paragraph claim locators for every mapping. The SoD source uses candidate risk tiers T0–T3, while DOC-09 AUTH-OPEN-07 closure wording refers to L0–L3. No reviewed primary approval establishes that these labels are equivalent. | OPEN — record as a terminology/provenance discrepancy; do not rename, map or choose a tier vocabulary without source evidence/approval. |
+
+### 13.3 Cross-document consistency and supersession disposition
+
+- DOC-05 §§3–12 and DOC-06 §§3, 6–9 are conceptually aligned: category/workflow, role eligibility, module/entitlement, capability/action, object/geographic scope, data/purpose, approval/SoD and server authorization remain separate gates.
+- O-01–O-12 are FIX only at the conceptual scope explicitly recorded in the decision addendum. Their residual parameters remain OPEN. Older question wording in the PROPOSED Page × Permission × Scope matrix is historical design content and does not supersede the later O-01–O-12 decision register.
+- CR-01–CR-10 and Q-01–Q-06 remain FIX only at their approved conceptual scope. No role grant or category-specific permission is inferred.
+- The SoD matrix, Scope Matrix, Page × Permission × Scope matrix and Permission Catalogue remain PROPOSED/CANDIDATE design inputs; their presence does not establish final policy or implementation.
+- DOC-09 AUTH-OPEN-01–27 and DOC-06 TRC-OPEN-01–15 retain their source-native statuses. No dependency is closed by this audit.
+- No substantive contradiction was established in the high-level authorization boundaries. The T0–T3 versus L0–L3 risk-tier label difference is a specific unresolved terminology discrepancy, not an approved equivalence.
+- No source-backed complete actor × role × action × resource × tenant/business × outlet/warehouse × SoD × approval × permission-key matrix is present in the reviewed current-main/source set.
+
+### 13.4 CW-08 status and closure gate
+
+**CW-08: AUDIT COMPLETE — CLOSURE BLOCKED BY INCOMPLETE SOURCE-BACKED ACTION/RESOURCE/PERMISSION MAPPING, SCOPE RESOLUTION, APPROVER/SoD PARAMETERS, FIELD-LEVEL DATA RULES AND CLAIM-LEVEL PROVENANCE.**
+
+The bounded audit is complete for the sources listed in §13.1. CW-08 is **not CLOSED**. Closure requires a complete source-backed authorization matrix with stable identifiers and controlling locators for each applicable actor/role, action, resource, tenant/business scope, outlet/warehouse scope, SoD, approval and permission catalogue entry. The current sources do not establish those complete rows or final stable permission keys. Unresolved policy decisions and technical enforcement remain OPEN/NOT VERIFIED.
+
+No correction is proposed to DOC-05 from this bounded pass: it already preserves the candidate and unresolved status boundaries. The T0–T3 / L0–L3 terminology discrepancy requires primary-source reconciliation before any normalization. No permission, threshold, approver, scope resolver, technical policy or implementation status is promoted.
+
+### 13.5 Change and governance boundary
+
+- Changed path for this checkpoint: this worklist only.
+- DOC-05, DOC-06, DOC-09 and all historical authorization source artifacts remain unchanged.
+- READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+- No SQL/DDL/DML, database/schema/migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel configuration, deployment, Supabase Preview/Staging or Production changes.
+- Stage 5 blanket GitHub/archive migration remains **NOT AUTHORIZED**; Stage 6 implementation remains **NOT AUTHORIZED**.
+- This checkpoint is proposed documentation until its PR is reviewed, merged with explicit approval, and read back from `main`.
