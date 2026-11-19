@@ -2042,3 +2042,35 @@ PR #79 records the PR #78 closeout and confirms §56 is present in current `main
 The next controlled action remains the bounded, read-only, source-backed assessment of Purchasing 14→15 and Sales 20→18 described in §55.4. Search only already-published primary sources, capture exact source/version/page/section/table/entity locators, and retain either crosswalk OPEN if evidence is absent or insufficient. Do not infer or reconstruct mappings to force closure. Report findings before proposing any correction.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, deployment, Supabase Preview/Staging or Production changes are authorized or performed by this checkpoint.
+
+
+## 58. Append-only retirement of Master Checklist v2.0 as active workflow — 19 November 2026
+
+### 58.1 Administrative closure
+
+At the user's direction, Master Checklist v2.0 is **CLOSED FOR ACTIVE WORKFLOW / SUPERSEDED FOR NAVIGATION**. It must no longer be used to route new corrective-documentation tasks or to select the next work package.
+
+This is an administrative closure of the checklist's active-navigation role only. It is **not** a declaration that the project stages, documents, dependencies, evidence gaps or implementation-readiness requirements recorded in it are complete.
+
+### 58.2 Preservation and interpretation
+
+- This file and all of its historical checkpoints remain preserved as audit history.
+- No earlier section, decision, evidence record or status snapshot is deleted or silently rewritten.
+- The original header and earlier next-action instructions are historical snapshots and must not be followed as current work routing.
+- Domain-specific documents, source-native registers and primary evidence remain controlling for their respective subject matter.
+- No OPEN, PARTIAL, UNVERIFIED, NOT STARTED, REVIEW REQUIRED or NOT ACCEPTED item is promoted or closed by this administrative notice.
+- No FIX decision is changed by this notice.
+
+### 58.3 Replacement navigation
+
+The replacement navigation document is `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md`.
+
+It becomes the active corrective-documentation worklist only after its PR is merged and its content is verified by post-merge read-back from `main`. Until then, it remains proposed work and must not be treated as an active main-branch instruction.
+
+The new worklist organizes correction and closure tasks into Packages A–D (CW-01–CW-22), followed by a new Stage 4.9 acceptance review. Its initial statuses are explicitly provisional and require verification against current-main source-native records before execution.
+
+### 58.4 Status and governance boundary
+
+This transition does not change the latest recorded substantive statuses: Stage 4.7.8 PARTIAL — GATE NOT PASSED; Stage 4.8 13/13 DRAFTED — NOT ACCEPTED; Stage 4.9 PARTIAL — ACCEPTANCE NOT MET; A12.40 PARTIAL/OPEN; A12.41 NOT STARTED/NOT VERIFIED; physical Data Dictionary not accepted; Implementation Readiness NOT READY.
+
+Controls remain: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, deployment, Supabase Preview/Staging or Production changes are authorized or performed by this transition.
