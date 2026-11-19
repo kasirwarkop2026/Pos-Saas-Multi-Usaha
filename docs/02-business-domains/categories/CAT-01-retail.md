@@ -32,7 +32,7 @@ This page is a navigation summary, not a replacement for its primary RMD audit, 
 
 No SQL/DDL/DML, schema, RLS/Auth, API/backend, application code, deployment or Production change is authorized. Stage 6 remains NOT AUTHORIZED.
 
- 
+
 ## CW-10 project-authored workflow owner index — CAT-01 Retail (20 November 2026)
 
 The existing 12 workflow titles are retained. The following primary-owner mapping is project-authored for logical crosswalk and does not change category decisions or permission grants.
