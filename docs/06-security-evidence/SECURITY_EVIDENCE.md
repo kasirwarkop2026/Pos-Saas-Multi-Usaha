@@ -1094,3 +1094,57 @@ READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
 - No RLS/Auth/API/backend, database, role-grant or deployment change is authorized by this register.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 43. CW-07 current security-evidence coverage, ownership and acceptance register (20 November 2026)
+
+**Purpose:** reconcile the historical CW-10 coverage checkpoint with the later CW03/CW04/CW05/CW06 design additions, define evidence-source ownership and add the cost-exception evidence scenario. This section supplements §§30–42; it does not rewrite historical records.
+
+### 43.1 Current coverage reconciliation
+
+- Historical CW09 workflow baseline remains 16 direct / 8 related-only / 6 uncovered, as recorded in DOC-06 §23.7 and DOC-07 §37.
+- After CW03, current dedicated workflow design coverage is **30/30**: 16 direct CW09-SEC designs plus 14 CW03-SEC designs. The historical 8 related-only and 6 uncovered classifications remain true only for the earlier CW09 snapshot.
+- DOC-04 §28 maps 17/17 conceptual inventory/warehouse entities. CW05-DATA-01–12 add cross-cutting entity/tenant design coverage; CW07-EVID-13 adds the missing inventory_cost_exceptions evidence-chain scenario. This is family-level design coverage, not 17 independent test executions.
+- Current design register: 24 CW09-SEC + 14 CW03-SEC + 12 CW04-ARCH + 12 CW05-DATA + 12 CW06-AUTH + 13 CW07-EVID = **87 unique IDs**. All remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED.
+- DOC-05 remains authority for candidate keys and policy tuples: 42 candidate exact-action keys plus one prohibited attempted-action label; 14 AUTH-HR tuples remain design-only. S0.platform_admin is not a permission key.
+
+### 43.2 Evidence ownership and integrity
+
+1. Source-domain owner supplies authoritative business event/state evidence; M01–M21 ownership remains in DOC-06/DOC-03 and the entity map in DOC-04.
+2. Authorization enforcement point supplies the separate allow/deny decision trace under DOC-05; the source owner does not manufacture an authorization decision.
+3. Test runner supplies execution output and artifact metadata; it does not create or mutate authoritative business facts.
+4. Independent reviewer verifies source commit/build, environment, fixture, expected/actual result, artifact integrity, owner/scope and disposition before any VERIFIED label.
+5. Platform S0 evidence is owned by the platform control plane, not by a Business M-domain.
+6. Semantic evidence labels are not physical event names, database tables, columns, logs or schemas. Physical event contracts remain OPEN.
+7. Retention duration, storage, access control, legal basis and disposal policy remain OPEN; legal hold prevents disposal.
+
+### 43.3 CW07-EVID-01–13 evidence contract register
+
+| ID | Evidence contract | Required reviewer focus |
+|---|---|---|
+| CW07-EVID-01 | 30 workflow requirement-to-owner-control-test-evidence trace | Every workflow has a direct design reference; no related-only substitution |
+| CW07-EVID-02 | Historical 16/8/6 versus current 30/30 coverage reconciliation | Correct checkpoint/date and classification semantics |
+| CW07-EVID-03 | 17-entity owner and scenario-family coverage matrix | All owners traceable; entity-specific gaps and physical OPEN status explicit |
+| CW07-EVID-04 | Consolidated 87-ID registry check | Uniqueness, stable IDs, no silent renumbering |
+| CW07-EVID-05 | Candidate-key/non-key exception check | 42 candidate keys, prohibited M21.integration_secret.read, non-key S0.platform_admin |
+| CW07-EVID-06 | AUTH-HR-01–14 policy/evidence crosswalk | Exact owner/key, SoD/approver, expected audit evidence |
+| CW07-EVID-07 | Source-domain evidence ownership check | Test runner/projection cannot replace authoritative source owner |
+| CW07-EVID-08 | Authorization decision provenance completeness | Principal, Business, key, target owner, scope, purpose, decision/reason, correlation |
+| CW07-EVID-09 | Semantic evidence label vs physical schema review | No inferred event/table/column name |
+| CW07-EVID-10 | Artifact integrity and independent-review acceptance | Commit/build, environment, expected/actual, artifact hash, reviewer |
+| CW07-EVID-11 | Retention/legal-hold acceptance | No unapproved deletion; duration remains OPEN |
+| CW07-EVID-12 | Status/CI interpretation check | DESIGN, NOT GENERATED, NOT VERIFIED and SKIPPED never treated as PASS |
+| CW07-EVID-13 | Inventory cost exception evidence chain | M06 cost exception owner, unknown-cost NULL, review/resolution, no movement rewrite, M16 financial posting boundary |
+
+### 43.4 Execution and acceptance gate
+
+- CW07-EVID-01–13 remain **DESIGN / NOT EXECUTED**.
+- Evidence remains **NOT GENERATED / NOT VERIFIED**.
+- Current 30/30 workflow design references do not establish runtime enforcement or test success.
+- CW-10 remains PARTIAL pending applicable control acceptance and actual execution/evidence.
+- Physical field classification, RLS/server/API enforcement, exact production grants, evidence storage/retention and Production readiness remain OPEN / NOT AUTHORIZED.
+- Execution requires separately approved implementation scope and controlled non-production environment. No Production data or Production mutation is authorized.
+
+**Disposition:** documentation coverage and evidence ownership are reconciled; no test is executed and no security certification or implementation readiness is claimed.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
