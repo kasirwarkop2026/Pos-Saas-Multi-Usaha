@@ -432,3 +432,40 @@ DOC-06 §31 is the current cross-master acceptance matrix.
 | Security and evidence | §21.11 | DOC-05 §32; DOC-07 §43 | Test/evidence design only; 0 executed |
 
 **Disposition:** DOC-03 architecture and DOC-06 requirements are aligned at logical design level. Physical services, APIs, queues, transaction boundaries, RLS/server enforcement, concurrency, backup/DR and Production behavior remain OPEN / NOT VERIFIED.
+
+
+## 23. CW-10B category-to-domain/workflow owner and interaction crosswalk (20 November 2026)
+
+DOC-02 §20 and the category detail pages are the current project-authored category/workflow owner index. This section extends the single-owner and explicit-handoff architecture contract across all 13 categories.
+
+### 23.1 Category owner coverage
+
+| Category | Workflow/exception item count | Primary owner domains represented | Architecture constraint |
+|---|---:|---|---|
+| CAT-01 Retail | 12 | M02, M03, M04, M06, M07, M08, M16, M18 | Sales owner M03; inventory owner M06; warehouse custody M07; finance M16 |
+| CAT-02 Wholesale | 14 | M02, M03, M04, M06, M07, M08, M16, M19 | Order owner M03; warehouse M07; external delivery M19 |
+| CAT-03 F&B | 14 | M02, M03, M06, M08, M10, M12, M16, M18 | Recipe/production M10; guest/service M12; stock ledger M06 |
+| CAT-04 Services | 14 | M02, M03, M04, M05, M06, M09, M16, M17, M18 | Booking M05; work order/service M09; workforce M17 |
+| CAT-05 Salon | 14 | M02, M03, M04, M05, M06, M09, M16, M17, M18 | Appointment M05; treatment M09; consultation M04 |
+| CAT-06 Manufacturing | 14 | M02, M06, M07, M08, M10, M11, M16, M17, M18, M20 | Formula/production M10; material ledger M06; QC M18; maintenance M20 |
+| CAT-07 Rental | 14 | M02, M03, M04, M05, M07, M11, M16, M18, M20 | Asset/capacity M11; custody M07; maintenance M20 |
+| CAT-08 Pharmacy | 14 | M02, M03, M04, M06, M07, M08, M14, M16, M18 | Regulated product/dispensing owner M14; compliance M18; not eligible until gates |
+| CAT-09 Laundry | 14 | M02, M04, M05, M06, M15, M16, M18, M19 | Item processing M15; stock ledger M06; delivery M19 |
+| CAT-10 Education | 14 | M04, M05, M13, M17 plus conditional M02, M06, M08, M16, M18, M21 | Preserve existing CAT-10 FIX profile and DOC-02 §17 owner map |
+| CAT-11 Hotel | 16 | M02, M03, M04, M05, M06, M07, M08, M12, M16, M17, M18, M19, M20 | Preserve existing CAT-11 FIX profile and DOC-02 §17 owner map |
+| CAT-12 Other | 14 exception steps | M01/M18 classification/control owners only | No operational M01–M21 module activated; fail-closed |
+| CAT-13 Retail/Refill | 10 | M02, M03, M04, M06, M07, M08, M16, M18 | Refill/retail track only |
+| CAT-13 Formulation/Manufacturing | 12 | M02, M06, M07, M08, M10, M11, M16, M17, M18, M20 | Separate formula/production track |
+
+### 23.2 Owner and interaction invariants
+
+1. Each workflow/exception item has exactly one primary logical owner, recorded in its category detail page. The category page is the row-level locator; DOC-02 §20 is the profile authority.
+2. The primary owner controls the authoritative business object, lifecycle state, command validation, event and correction/reversal rules.
+3. Supporting domains provide explicit commands, events, references, read models or financial settlement; they do not gain co-ownership or implicit write authority.
+4. M06 owns inventory movement/cost state; M07 owns warehouse/custody; M08 owns procurement/supplier; M10 owns recipe/formulation/production; M11 owns asset/capacity; M12 owns hotel/hospitality operations; M13 education operations; M14 regulated pharmacy operations; M15 laundry processing; M16 financial journal/payment/settlement; M18 quality/compliance; M19 delivery; M20 maintenance/safety; M21 integration/channel.
+5. Category CORE/CONDITIONAL status does not create a service boundary, deployed API, database schema, module activation or permission grant.
+6. CAT-08 regulated operations remain disabled until credential/jurisdiction/compliance acceptance. CAT-12 remains a classification exception path. CAT-13 tracks are separate bounded product tracks.
+
+### 23.3 Architecture acceptance boundary
+
+**Disposition:** 190/190 category workflow/exception items have a logical primary-owner reference in DOC-02/category pages. The 14 CAT-12 items are exception steps, not operational workflows. Physical service boundaries, APIs, transactions, queues, event schemas, database keys, RLS and runtime enforcement remain OPEN / NOT IMPLEMENTED / NOT AUTHORIZED.

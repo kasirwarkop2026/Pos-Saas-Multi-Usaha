@@ -1789,3 +1789,61 @@ All 13 changed files were verified from `main`. Category profiles and workflow o
 **Next bounded task:** CW-10B — reconcile all 13 category profiles and 190 workflow owners into DOC-03, DOC-05, DOC-06, DOC-07 and DOC-11, including requirements/test/evidence crosswalk and explicit per-category release gates.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 15.43 CW-10B — cross-master category/workflow, architecture, authorization and evidence alignment (20 November 2026)
+
+**Objective:** complete the second half of CW-10 by reconciling DOC-02 §20 and the 190 category workflow/exception owner indexes with DOC-03, DOC-05, DOC-06, DOC-07 and DOC-11. This is logical design alignment only; category CORE/CONDITIONAL is not subscription activation, role permission or runtime enforcement.
+
+### 15.43.1 Audit findings
+
+| Finding | Observation | Correction |
+|---|---|---|
+| CW10B-F01 — architecture owner references | DOC-03 single-owner/interaction rule was explicitly reconciled for CAT-10/CAT-11, but the new 11 category indexes were not yet cross-referenced. | DOC-03 §23 adopts the 13-category/190-item owner index and special CAT-08/12/13 boundaries. |
+| CW10B-F02 — authorization boundary | DOC-05 exact-key and principal model does not automatically map category CORE/CONDITIONAL profiles to roles or grants. | DOC-05 §35 states the non-grant boundary and special-category restrictions. |
+| CW10B-F03 — requirement coverage | DOC-06 cross-master index covered 30 CAT-10/CAT-11 workflows, not all 190 category items. | DOC-06 §33 indexes 190 items and 13 category-level acceptance designs CW10-CAT-01–13. |
+| CW10B-F04 — workflow-specific test gap | Only CAT-10/CAT-11 have 30 dedicated workflow negative-test designs. The other 146 operational workflows plus 14 CAT-12 exception steps do not have individual workflow-specific security test IDs. | State the gap explicitly; category-level tests do not substitute for workflow-level tests. Carry to CW-13/CW-14. |
+| CW10B-F05 — evidence coverage | DOC-07 contains 99 prior scenario/evidence IDs, but no category-level evidence contracts for all 13 profiles. | DOC-07 §47 registers CW10-CAT-01–13 evidence contracts; all design-only. |
+| CW10B-F06 — release gate | DOC-11 records category mapping as incomplete. CW-10A has now published all 13 profiles and 190 logical owner indexes. | DOC-11 §18 updates category design coverage while preserving other implementation blockers. |
+
+### 15.43.2 Current category/workflow coverage
+
+| Category | Indexed items | Primary-owner index | Special boundary |
+|---|---:|---|---|
+| CAT-01 Retail | 12 | CAT-01 page + DOC-02 §20 | Existing 12 titles retained |
+| CAT-02 Wholesale | 14 | CAT-02 page + DOC-02 §20 | Project-authored titles |
+| CAT-03 F&B | 14 | CAT-03 page + DOC-02 §20 | Recipe/food safety handoffs |
+| CAT-04 Services | 14 | CAT-04 page + DOC-02 §20 | Appointment/work-order handoffs |
+| CAT-05 Salon | 14 | CAT-05 page + DOC-02 §20 | Consultation/consent and hygiene remain gated |
+| CAT-06 Manufacturing | 14 | CAT-06 page + DOC-02 §20 | BOM/WIP/quality/maintenance ownership |
+| CAT-07 Rental | 14 | CAT-07 page + DOC-02 §20 | Asset custody/condition/maintenance |
+| CAT-08 Pharmacy | 14 | CAT-08 page + DOC-02 §20 | Regulated / NOT READY until credential and jurisdiction gates |
+| CAT-09 Laundry | 14 | CAT-09 page + DOC-02 §20 | Item custody and processing |
+| CAT-10 Education | 14 | DOC-02 §17 + CAT-10 page | Existing FIX profile and owner map preserved |
+| CAT-11 Hotel | 16 | DOC-02 §17 + CAT-11 page | Existing FIX profile and owner map preserved |
+| CAT-12 Other / Unclassified | 14 exception steps | CAT-12 page + DOC-02 §20 | Not operational workflows; fail-closed; no modules |
+| CAT-13 Parfum | 22 (10 RF + 12 FM) | CAT-13 page + DOC-02 §20 | Retail/Refill and Formulation/Manufacturing remain separate |
+| **Total** | **190** | **190/190 logical owner references** | **Not 190 executed tests** |
+
+### 15.43.3 Append-only correction package
+
+| Document | New section | Purpose |
+|---|---|---|
+| DOC-03 SYSTEM_ARCHITECTURE.md | §23 | 13-category/190-item single-owner and interaction crosswalk |
+| DOC-05 AUTHORIZATION_MASTER.md | §35 | Category entitlement vs exact permission boundary and special-category controls |
+| DOC-06 MASTER_TRACEABILITY.md | §33 | 190-item traceability index, 13 category-level tests, explicit per-workflow test gap |
+| DOC-07 SECURITY_EVIDENCE.md | §47 | Evidence contracts for CW10-CAT-01–13 |
+| DOC-11 PROJECT-ROADMAP-RELEASE-GATES.md | §18 | Updated category coverage gate and remaining blockers |
+| This Worklist | §15.43 | Findings, coverage and CW10 closure boundary |
+
+### 15.43.4 Bounded disposition
+
+**CW-10: CATEGORY-TO-DOMAIN/WORKFLOW/MODULE CROSSWALK — READY FOR DOCUMENTATION ACCEPTANCE, PENDING PR REVIEW, CI AND POST-MERGE READBACK.** The 13 category profiles and 190 logical workflow/exception owner references are reconciled into architecture, authorization, requirements, evidence and roadmap masters.
+
+CW10-CAT-01–13 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED. The 146 non-Education/Hotel operational workflow items do not yet have dedicated workflow-specific negative-test designs; CAT-12 has 14 exception steps, not operational workflows. This gap remains OPEN for CW-13/CW-14. CAT-08 remains regulated / NOT READY; CAT-12 fail-closed; CAT-13 tracks separate.
+
+This CW does not close physical schema, exact grants, technical enforcement, test execution, Purchasing/Sales crosswalk, DOC-08/09/10 acceptance, Stage 4.9 or Stage 6 authorization.
+
+**Next bounded task:** CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only with DB push blocked.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. Stage 5 and Stage 6 remain NOT AUTHORIZED.

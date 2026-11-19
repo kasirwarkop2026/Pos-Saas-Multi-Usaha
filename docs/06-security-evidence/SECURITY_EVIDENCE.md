@@ -1297,3 +1297,34 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
 - Runtime verification requires separate authorization and controlled non-production environment. No Production data or Production mutation is permitted.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 47. CW-10B all-category profile acceptance evidence register (20 November 2026)
+
+**Evidence status for all CW10-CAT-01–13: NOT GENERATED / NOT VERIFIED.** These contracts define later review/execution evidence; they do not assert category activation or runtime test results.
+
+| Scenario ID | Evidence contract | Required reviewer focus |
+|---|---|---|
+| CW10-CAT-01 | CAT-01 profile/entitlement decision record | Core vs conditional vs out-of-baseline; no implicit activation |
+| CW10-CAT-02 | CAT-02 workflow owner/handoff review | M03 sales, M07 custody, M19 delivery and M16 finance separation |
+| CW10-CAT-03 | CAT-03 recipe/service/food-safety handoff review | M10 recipe/production, M12 hospitality, M06 stock, M18 quality |
+| CW10-CAT-04 | CAT-04 booking/work-order/service review | M05 booking, M09 execution, M17 workforce, M06 materials |
+| CW10-CAT-05 | CAT-05 consultation/appointment/treatment review | M04 consultation, M05 appointment, M09 treatment, M18 hygiene |
+| CW10-CAT-06 | CAT-06 formula/production/batch review | M10 production, M06 materials, M18 QC, M20 maintenance |
+| CW10-CAT-07 | CAT-07 asset/custody/return review | M11 asset, M05 reservation, M07 custody, M20 maintenance |
+| CW10-CAT-08 | CAT-08 regulated eligibility evidence | Credential, jurisdiction, professional authority, prescription and compliance gates |
+| CW10-CAT-09 | CAT-09 item custody/processing/delivery review | M15 processing, M06 material, M18 quality, M19 delivery |
+| CW10-CAT-10 | CAT-10 unchanged FIX profile verification | CORE/CONDITIONAL baseline and 14-workflow owner index |
+| CW10-CAT-11 | CAT-11 unchanged FIX profile verification | CORE/CONDITIONAL baseline and 16-workflow owner index |
+| CW10-CAT-12 | CAT-12 fail-closed classification review | No operational module; exception status, safe-mode and reviewer OPEN items |
+| CW10-CAT-13 | CAT-13 track-separation review | RF-01–10 vs FM-01–12, no cross-track auto-entitlement |
+
+### 47.1 Evidence and execution gate
+
+- CW10-CAT-01–13 remain DESIGN / NOT EXECUTED.
+- Evidence remains NOT GENERATED / NOT VERIFIED.
+- CORE/CONDITIONAL profiles do not activate a module or grant a permission.
+- The 146 CAT-01–09/CAT-13 operational workflows still require dedicated workflow-specific test designs before their full security acceptance.
+- No regulated pharmacy operation, CAT-12 specialist module, CAT-13 cross-track activation, RLS/Auth/API/backend enforcement or Production activity is authorized.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.

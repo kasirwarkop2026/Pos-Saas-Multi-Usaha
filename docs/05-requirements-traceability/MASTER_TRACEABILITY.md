@@ -1534,3 +1534,62 @@ This section maps the release/implementation readiness gates after CW-01–CW-08
 ### 32.2 Acceptance boundary
 
 **CW-09 readiness audit result: NOT READY FOR IMPLEMENTATION.** CW09-GATE-01–12 are design-only gate scenarios; 0 executed and 0 evidence generated. The next corrective package is CW-10 category/workflow/module/entitlement crosswalk completion for CAT-01–CAT-13.
+
+
+## 33. CW-10B all-category requirement and workflow-owner traceability index (20 November 2026)
+
+This section extends DOC-06 §31 to the 13-category product scope. DOC-02 §20 is the profile authority; each category detail page is the row-level workflow/exception title and primary-owner locator.
+
+### 33.1 Category and workflow item traceability
+
+| Category | Item ID range | Count | Primary owner/title locator | Category profile |
+|---|---|---:|---|---|
+| CAT-01 Retail | WF-01–WF-12 | 12 | categories/CAT-01-retail.md | DOC-02 §20 |
+| CAT-02 Wholesale | WF-01–WF-14 | 14 | categories/CAT-02-wholesale.md | DOC-02 §20 |
+| CAT-03 F&B | WF-01–WF-14 | 14 | categories/CAT-03-fnb.md | DOC-02 §20 |
+| CAT-04 Services | WF-01–WF-14 | 14 | categories/CAT-04-services.md | DOC-02 §20 |
+| CAT-05 Salon | WF-01–WF-14 | 14 | categories/CAT-05-salon.md | DOC-02 §20 |
+| CAT-06 Manufacturing | WF-01–WF-14 | 14 | categories/CAT-06-manufacturing.md | DOC-02 §20 |
+| CAT-07 Rental | WF-01–WF-14 | 14 | categories/CAT-07-rental.md | DOC-02 §20 |
+| CAT-08 Pharmacy | WF-01–WF-14 | 14 | categories/CAT-08-pharmacy.md | DOC-02 §20 |
+| CAT-09 Laundry | WF-01–WF-14 | 14 | categories/CAT-09-laundry.md | DOC-02 §20 |
+| CAT-10 Education | WF-01–WF-14 | 14 | DOC-02 §17; categories/CAT-10-education.md | DOC-02 §20 |
+| CAT-11 Hotel | WF-01–WF-16 | 16 | DOC-02 §17; categories/CAT-11-hotel.md | DOC-02 §20 |
+| CAT-12 Other / Unclassified | EXC-01–EXC-14 | 14 | categories/CAT-12-other.md | DOC-02 §20 |
+| CAT-13 Parfum — Retail/Refill | RF-01–RF-10 | 10 | categories/CAT-13-parfum.md | DOC-02 §20 |
+| CAT-13 Parfum — Formulation/Manufacturing | FM-01–FM-12 | 12 | categories/CAT-13-parfum.md | DOC-02 §20 |
+| **Total** | **190 logical items** | **190** | **190/190 owner/title locators** | **13 categories; CAT-13 has 2 tracks** |
+
+CAT-12's 14 items are exception/classification steps, not operational workflows. CAT-13's two tracks are not a single 22-step lifecycle.
+
+### 33.2 Category-level acceptance scenario designs
+
+These 13 scenarios test category profile/entitlement boundaries only. They do not replace dedicated workflow-specific negative tests.
+
+| ID | Category | Acceptance invariant | Expected result |
+|---|---|---|---|
+| CW10-CAT-01 | CAT-01 Retail | Core retail profile and conditional warehouse/workforce/compliance/delivery/integration modules are distinguished | Core profile is explicit; conditional activation requires package/configuration; no permission grant |
+| CW10-CAT-02 | CAT-02 Wholesale | Wholesale order, warehouse custody, procurement, finance and delivery ownership remains separated | One owner per workflow; no implicit warehouse/delivery write |
+| CW10-CAT-03 | CAT-03 F&B | Menu/recipe/production, guest service, stock and food-safety boundaries are distinct | M10/M12/M06/M18 owner handoffs explicit; safety gates remain required |
+| CW10-CAT-04 | CAT-04 Services | Booking, sales proposal, work order, workforce, material and finance boundaries remain distinct | M05/M03/M09/M17/M06/M16 handoff explicit |
+| CW10-CAT-05 | CAT-05 Salon | Consultation, appointment, treatment, consumption, commission and hygiene boundaries remain distinct | M04/M05/M09/M06/M16/M18 ownership explicit; sensitive consent/retention OPEN |
+| CW10-CAT-06 | CAT-06 Manufacturing | Formula/BOM, procurement, material, production, batch, QC, finished goods and maintenance owners are distinct | M10/M08/M06/M18/M07/M20 handoffs explicit |
+| CW10-CAT-07 | CAT-07 Rental | Asset availability, reservation, custody, condition, deposit and maintenance owners are distinct | M11/M05/M07/M16/M20 handoffs explicit |
+| CW10-CAT-08 | CAT-08 Pharmacy | Regulated operations cannot activate from category profile alone | DENY until credential, jurisdiction, professional authority and compliance evidence accepted |
+| CW10-CAT-09 | CAT-09 Laundry | Item identity/custody, processing, material, quality, delivery and billing remain distinct | M15/M06/M18/M19/M16 handoffs explicit |
+| CW10-CAT-10 | CAT-10 Education | Existing CORE/CONDITIONAL profile and 14-workflow index are unchanged | Preserve existing FIX; no new module or role inferred |
+| CW10-CAT-11 | CAT-11 Hotel | Existing CORE/CONDITIONAL profile and 16-workflow index are unchanged | Preserve existing FIX; no new module or role inferred |
+| CW10-CAT-12 | CAT-12 Other | Unknown/ambiguous activity cannot activate specialist modules | DENY; classification exception only; fail-closed |
+| CW10-CAT-13 | CAT-13 Parfum | Retail/Refill and Formulation/Manufacturing tracks remain separate | No cross-track automatic entitlement; track must be explicitly selected |
+
+### 33.3 Dedicated workflow-test coverage boundary
+
+- CAT-10/CAT-11: 30/30 workflows have dedicated CW09-SEC/CW03-SEC design references.
+- CAT-01–CAT-09 and CAT-13: 146 operational workflows have owner/title references but do not yet have individual workflow-specific negative-test IDs.
+- CAT-12: 14 exception steps have classification-level CW10-CAT-12 coverage; they are not operational workflow tests.
+- CW10-CAT-01–13 are category-level profile tests, not substitutes for the 146 missing per-workflow designs.
+- The existing 99 design IDs plus 13 CW10-CAT IDs produce 112 registered design IDs; all remain DESIGN / NOT EXECUTED and evidence NOT GENERATED / NOT VERIFIED.
+
+### 33.4 Acceptance boundary
+
+**Disposition:** 13/13 category profiles and 190/190 logical workflow/exception owner/title locators are indexed. Category-level test design is 13/13. Dedicated workflow-specific test design outside CAT-10/CAT-11 remains OPEN. No product category or workflow is implementation-ready solely by virtue of this crosswalk.

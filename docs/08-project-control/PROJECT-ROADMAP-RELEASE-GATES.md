@@ -390,3 +390,37 @@ This addendum supersedes stale “next action” wording in §§5/9 only for cur
 The next authorized documentation-only work item is CW-10 — complete the category-to-M01–M21/workflow/module/entitlement crosswalk for CAT-01–CAT-13. This addendum does not authorize Stage 6 implementation, Stage 5 blanket migration, database/schema changes, CI workflow changes, deployment or Production activity.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 18. CW-10B current category coverage and release-gate reconciliation (20 November 2026)
+
+This addendum updates category coverage after CW-10A/CW-10B. It does not rewrite historical release-gate snapshots.
+
+### 18.1 Category and workflow coverage update
+
+- DOC-02 §20 now records 13 category profiles, including CORE/CONDITIONAL/OUT-OF-BASELINE distinctions and CAT-08/CAT-12/CAT-13 special gates.
+- Category detail pages index 190 logical workflow/exception items with 190/190 primary-owner/title locators.
+- CAT-10/CAT-11 retain their existing 30 dedicated workflow test-design references.
+- CW10-CAT-01–13 add 13 category-level profile/entitlement acceptance designs; they do not replace workflow-specific tests for the remaining 146 operational workflows.
+- CAT-12's 14 exception steps are not counted as operational workflows; CAT-13's 10 RF and 12 FM items remain separate tracks.
+
+### 18.2 Remaining implementation blockers
+
+| Gate | Current status after CW-10 | Release impact |
+|---|---|---|
+| Category profile/index | PASS at project-authored logical design scope: 13/13 profiles, 190/190 owner/title locators | Category-specific requirements and workflow test coverage still incomplete |
+| Dedicated workflow tests | 30/30 CAT-10/CAT-11; 146 other operational workflows OPEN | No full security acceptance for all categories |
+| CAT-08 Pharmacy | REGULATED / NOT READY | Credential/jurisdiction/professional/compliance evidence required |
+| CAT-12 Other | FAIL-CLOSED | No operational module until classification and exception gates approved |
+| CAT-13 Parfum | Two separate tracks indexed | Track-specific numeric/formulation/safety details remain OPEN |
+| Physical ERD/Data Dictionary | NOT ACCEPTED | No canonical physical schema or migration design |
+| Authorization exact grants | OPEN / NOT APPROVED | No production permission matrix |
+| Security enforcement / test execution | NOT VERIFIED / NOT EXECUTED | No runtime evidence |
+| Purchasing/Sales crosswalk | 14→15 / 20→18 incomplete | Affected flows remain blocked |
+| DOC-08/09/10 and Stage 4.9 | DRAFT / NOT ACCEPTED; Stage 4.9 PARTIAL | Release/document control incomplete |
+
+### 18.3 Release disposition
+
+**Implementation readiness remains NOT READY.** CW-10 closes category profile and logical owner/title indexing only. It does not close the 146 workflow-specific test gaps, physical schema, exact authorization grants, technical enforcement, evidence execution, purchasing/sales gaps or Stage 4.9.
+
+Next bounded task: CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only. DB_PUSH_BLOCKED ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
