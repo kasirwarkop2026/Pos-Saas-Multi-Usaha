@@ -950,3 +950,21 @@ DOC-06 §23 is the controlling row-level crosswalk for:
 CW-10 remains PARTIAL until every applicable requirement has a reviewed control mapping and adequate dedicated test design or an explicit accepted rationale for no test, and actual evidence requirements are satisfied where execution is required. The crosswalk is design-only. It does not close REC-08, SEC-OPEN-01–08, REC-OPEN-12–15, TRC-OPEN items, physical field mapping or any implementation dependency.
 
 No test PASS, production verification, remediation, retest, RLS/API enforcement or implementation readiness is claimed. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 37. Append-only coverage-count correction — CW-10 workflow direct versus related references (19 November 2026)
+
+This section corrects the arithmetic and classification wording in §36.2 without deleting the original checkpoint.
+
+Recounting the 30 workflow rows in DOC-06 §23.2–23.3 using the explicit classification in DOC-06 §23.7 yields:
+
+- **16/30** workflows have at least one direct scenario reference.
+- **8/30** workflows have related-only scenario references; these do not satisfy dedicated workflow coverage.
+- **6/30** workflows have no dedicated or related workflow-specific scenario reference.
+- The inventory/warehouse entity count remains 17/17 mapped, with direct test coverage concentrated in adjustment/count, transfer/shipment and reservation/movement paths. Batch/balance and costing exception/layer-specific scenarios remain gaps.
+- Cross-cutting SEC-17/18/21/22/23 remain reusable control tests and are not counted as direct workflow-specific tests.
+
+The prior §36.2 figure of 23/30 was an incorrect aggregate count. It is superseded by the 16 direct / 8 related-only / 6 uncovered breakdown above. This is a documentation count correction only; it does not change any test ID, execute a test, create evidence, close a dependency or claim security acceptance.
+
+All 24 CW09-SEC IDs remain DESIGN / NOT EXECUTED. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
