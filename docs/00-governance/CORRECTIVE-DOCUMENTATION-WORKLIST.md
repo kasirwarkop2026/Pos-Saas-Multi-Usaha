@@ -658,3 +658,10 @@ A set comparison of the permission-key labels in DOC-07 §31 against DOC-05 §§
 Next: rerun exact-token comparison between DOC-05 and DOC-07; inspect the final eight-file diff; verify Documentation CI and POS SaaS CI against the latest PR head. Keep PR #87 OPEN until all checks finish.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+### 15.14 Precision correction — 0/17 field-classification denominator (19 November 2026)
+
+The 0/17 status in DOC-04 §28.2 counts **entities with a complete accepted field-level classification inventory**, not physical fields/columns. DOC-04 §31 now clarifies that 17/17 proposed conceptual attribute sets are enumerated, 0/17 entities have a fully accepted field-level classification, and physical field-to-column mapping remains OPEN without a verified completion count. This supersedes the shorthand in §15.11.1 that described the 0/17 figure as a physical-field-mapping count.
+
+No physical dependency is closed. DOC-04 §29 remains a conceptual proposal, not an accepted physical dictionary. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
