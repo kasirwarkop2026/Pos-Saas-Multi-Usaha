@@ -774,3 +774,27 @@ For each key in §23.4, apply the following resource-specific tuple. The key suf
 6. These tuples do not establish RLS, API/server enforcement, physical event schemas, tests, or Production behavior.
 
 **Disposition:** the 30 Education/Hotel workflow action families and all 17 inventory/warehouse resource families now have project-authored tuple-level actor, scope, condition, data/purpose, SoD and owner-execution baselines. Exact grants and unresolved thresholds remain OPEN. No permission is granted and no implementation/test is claimed. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 26. Append-only reconciliation — G02/G04 scope and platform-key cross-reference (19 November 2026)
+
+This section reconciles historical candidate/gap wording in earlier sections with the project-authored design in §§22–25 and DOC-06 §21.
+
+### 26.1 G02 and G04 disposition
+
+- **G02 logical domain taxonomy: RESOLVED BY PROJECT DESIGN.** M01–M21 are canonical logical domain IDs. CAT-10 Education and CAT-11 Hotel CORE/CONDITIONAL profiles are recorded in DOC-02 §14 and DOC-01 §14. This does not close every legacy source-to-category mapping, every category's exact module eligibility, or subscription entitlement.
+- **G04 logical workflow ownership: RESOLVED AT LOGICAL LEVEL** for EDU-WF-01–14 and HTL-WF-01–16 through DOC-06 §§21.3–21.4. This does not approve every submodule/object/action permission row, actor grant, scope resolver, or technical handoff implementation.
+- Earlier statements that G02/G04 remain OPEN describe the pre-design/source-review state and are superseded only for the logical decisions stated above. Do not reopen those decisions solely because Crosswalk v1.3 or legacy eligibility matrices remain DRAFT/CANDIDATE.
+- Other source-native gaps, including G01/G03/G05–G10 and detailed authorization, scope, SoD, field-classification and evidence criteria, retain their own statuses unless independently resolved in their controlling registers.
+
+### 26.2 Platform permission keys and S0
+
+DOC-05 §24.3 is the controlling platform-key decision for the current design: PLATFORM.access_grant.approve and PLATFORM.access_grant.apply are the exact candidate keys for the two defined platform access-grant actions. They are separate from M01–M21 Business keys, require S0 platform context and dual control, and do not create Business-data access or a wildcard.
+
+The key names are design vocabulary only; they are not approved grants or implemented platform permissions. Other platform actions require their own exact resource/action key. DOC-07 §31's earlier S0.platform_admin text is only a historical namespace marker and must not be treated as the canonical key for these two actions.
+
+### 26.3 Acceptance boundary
+
+The 14 high-risk policy tuples in §24 and the 30 workflow/17 inventory-family tuple baselines in §25 remain candidate policy design, not role grants. Exact remaining actor/action rows, approval thresholds, technical enforcement and test execution retain their stated OPEN/NOT AUTHORIZED/NOT EXECUTED status.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
