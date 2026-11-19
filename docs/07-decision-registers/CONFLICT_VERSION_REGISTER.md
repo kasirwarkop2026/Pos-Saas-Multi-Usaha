@@ -214,3 +214,40 @@ This addendum updates only the current navigation interpretation after the retir
 Dependencies newly closed: 0. FIX decisions changed: 0. CVS dispositions changed: 0. Canonical/final/accepted status: NOT PROMOTED.
 
 Controls remain READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 blanket migration NOT AUTHORIZED; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 13. Append-only CW-11 DOC-08/DOC-09/DOC-10 cross-register reconciliation — 19 November 2026
+
+This addendum records the current publication and interpretation of the three decision registers. It preserves all CVS-001–CVS-041 entries and their historical status snapshots.
+
+### 13.1 DOC-08 publication-state update
+
+- At the audit recorded in §§11–12, the full reconstructed DOC-08 v1.5 master was absent from its proposed path. That statement remains historically correct for that audit checkpoint.
+- A new project-authored reconstructed working register is now proposed/published on the CW-11 branch at `docs/07-decision-registers/MASTER_FIX_REGISTER.md`, revision v0.1, with new local IDs DOC08-FIX-001–DOC08-FIX-017.
+- This is not the unpublished DOC-08 v1.5 master, not a byte-for-byte recovery and not proof that every historical FIX decision has been captured.
+- The focused ST5-11.40 artifact at `docs/07-fix-decision-register/ST5-11-40-AUTHORIZATION-CVS-CROSSWALK-CORRECTION.md` remains a separate scoped correction. Its CVS crosswalk is not broadened.
+
+### 13.2 Three-register authority matrix
+
+| Register | Current responsibility | Must not be used to |
+|---|---|---|
+| DOC-08 — Master FIX Decision Register | Record accepted project decisions and their exact conceptual/logical scope | Close DOC-09 dependencies or determine CVS conflict outcomes |
+| DOC-09 — Master OPEN Register | Preserve unresolved decisions, dependencies, evidence gaps and acceptance criteria | Reopen accepted FIX decisions without a specific contradiction or supersession |
+| DOC-10 — Conflict & Supersession Master | Preserve CVS identity, conflict/version lineage and explicit scoped supersession | Select a winner by timestamp, filename or document presence alone |
+
+### 13.3 FIX versus OPEN is a scope distinction, not an automatic contradiction
+
+A decision may be FIX at product or logical level while its physical, authorization, evidence or implementation detail remains OPEN. Examples include tenant-isolation design versus unverified RLS/backend enforcement; role taxonomy versus unapproved role grants; M01–M21 logical vocabulary versus incomplete category/workflow entitlement mapping; and inventory costing rules versus unverified physical fields and valuation execution.
+
+DOC-09 statuses remain controlling for their exact unresolved items. DOC-08 FIX rows do not supersede them unless a later approved decision explicitly names the item and scope. DOC-10 CVS dispositions remain unchanged unless a specific CVS addendum records a scoped correction.
+
+### 13.4 CVS and supersession integrity
+
+- CVS-001–CVS-041 retain their existing identities and dispositions; this CW-11 reconciliation does not renumber, merge, close or reopen any CVS item.
+- The ST5-11.40 correction remains controlling only for O-01–O-12 → CVS-016 (general context), CR-01–CR-10 → CVS-015 (direct), Q-01–Q-06 → CVS-014 (direct), with CVS-017 and CVS-039 as limited context.
+- The DOC-08 reconstructed register's DOC08-FIX identifiers are new local identifiers and do not supersede historical decision IDs.
+- Supersession remains narrow and explicit. Publication of a working register changes its current locator, not the status of its decisions or unresolved dependencies.
+
+**Disposition:** Cross-register authority and status-layer interpretation are clarified. CVS entries changed: **0**. DOC-09 dependencies closed: **0**. FIX decisions changed or superseded: **0**. DOC-08/DOC-09/DOC-10 canonical/final/accepted status: **NOT PROMOTED**.
+
+Controls remain READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
