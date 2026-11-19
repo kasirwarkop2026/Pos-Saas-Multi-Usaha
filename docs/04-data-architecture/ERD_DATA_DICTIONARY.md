@@ -1542,3 +1542,19 @@ The CW-05 content appended after §31 and originally given the duplicate heading
 This locator correction does not change any FIX decision, conceptual entity owner, attribute proposal, relationship cardinality, tenant rule or implementation status.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 33. CW-08 data-entity-to-requirement traceability crosswalk (20 November 2026)
+
+DOC-04 §28 remains the authoritative 17-entity owner register; DOC-04 §32 supplements relationship/tenant handoffs. DOC-06 §31 is the current requirements/acceptance index.
+
+| Data requirement area | DOC-06 anchor | DOC-04 authority | Acceptance boundary |
+|---|---|---|---|
+| 17 conceptual entity owners | §§21.1, 21.5 | §28 | Logical owner only; no physical schema acceptance |
+| 16 conceptual relationship handoffs | §21.5 | §§18, 32 | Cardinality and command/event interpretation only; exact FK tuple OPEN |
+| Tenant integrity TEN-01–TEN-07 | §21.5.9 | §32 | business_id and same-tenant rule; physical composite FK/RLS OPEN |
+| Logical attribute inventory | §23 and §29–31 | §§29–31 | 17/17 proposed logical attribute groups; physical field classification NOT ACCEPTED |
+| Costing/batch/reservation/transfer | §§21.1, 21.5, 26 | §§28, 32 | M06/M07/M16 boundaries; no DB push |
+| Security evidence | §§25–29 | DOC-07 §§40, 43 | DESIGN / NOT EXECUTED |
+
+**Disposition:** data-to-requirement traceability is explicit at logical design level. DOC-04 physical Data Dictionary remains NOT ACCEPTED; no SQL identifier, key, constraint, index, RLS or migration is authorized.
