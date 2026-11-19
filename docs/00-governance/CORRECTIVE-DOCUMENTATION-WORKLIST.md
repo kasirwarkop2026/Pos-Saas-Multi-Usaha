@@ -1171,3 +1171,43 @@ All CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERAT
 **Next bounded task after verified CW-05 close:** CW-06 — reconcile DOC-05 Authorization Master against DOC-06 requirements, DOC-07 security controls and the now-aligned M01–M21/entity ownership boundaries. Keep exact production grants and technical enforcement separately gated.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.28 CW-05 — PR #98 merge and post-merge readback (20 November 2026)
+
+**PR:** [#98 — complete CW-05 entity ownership and tenant-integrity alignment](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/98)  
+**Branch:** `docs/cw05-erd-ownership-tenant-integrity-2026-11-20`  
+**Head SHA:** `7c0f8f361c89fe7e5e4791b801b749a89036e6f9`  
+**Base SHA:** `4f658186df50c4a65ff1b27afe730f5dc5bee843`  
+**Squash merge commit:** `4843d74699c8ac5bf21aeb615407c8b6e42b958e`
+
+### 15.28.1 CI result at merge
+
+- Documentation CI run `44578377074`: SUCCESS — Documentation structure, Markdown lint and Internal documentation links.
+- POS SaaS CI run `44578376959`: SUCCESS.
+- POS SaaS CI job `Detect application changes`: SUCCESS.
+- ESLint, TypeScript typecheck, Next.js production build and Dependency security audit: SKIPPED by the documented documentation-only condition. SKIPPED is not represented as an executed application test or a pass.
+- PR #98 remained mergeable; its head SHA matched the expected SHA at merge. No review submissions or inline review threads were present.
+
+### 15.28.2 Post-merge readback from main
+
+PR #98 is CLOSED / MERGED. All six changed files were fetched again from `main`; the published blob SHAs are:
+
+| File | Main blob SHA | Readback |
+|---|---|---|
+| `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` | `534df347fdf40f5cba8e4dbf0874654d6b55d81b` | §15.27–§15.28 present |
+| `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md` | `36dc1b61649b41034c5cd80773b3537939c13c8a` | §20 present |
+| `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` | `c83d0139aefd46f6e8f28a6102c94809dcd0ffee` | §27 and 17/17 entity mappings present |
+| `docs/05-authorization/AUTHORIZATION_MASTER.md` | `1b76a6c4c95c431b8d9c449d2031ce27f7793a3d` | §30 present |
+| `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` | `c62ef62e8c4139d5fae69654b94c456b3359f50e` | §26 and CW05-DATA-01–12 present |
+| `docs/06-security-evidence/SECURITY_EVIDENCE.md` | `453bf6fdadaa1227f7a234f8c6bb883db9804897` | §40 and CW05-DATA-01–12 present |
+
+### 15.28.3 Final bounded disposition
+
+**CW-05: PASS / CLOSED — LOGICAL ENTITY-OWNERSHIP / ATTRIBUTE-NAVIGATION / TENANT-INTEGRITY DESIGN SCOPE.** PR #98 merged successfully and all six changed files were verified from `main`. The 17 conceptual entities now have one primary M owner; all 16 conceptual relationships have owner/handoff interpretation; TEN-01–TEN-07 are mapped; and M06/M07/M16/M04/M08 boundaries are explicit.
+
+Physical Data Dictionary remains NOT ACCEPTED. Exact SQL fields/types/defaults, PK/FK/composite-FK tuples, UNIQUE/CHECK/index definitions, referential actions, RLS/server enforcement, concurrency/idempotency implementation and executed evidence remain OPEN / NOT VERIFIED. CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED. `inventory_cost_layer_movements` remains candidate only, not entity #18.
+
+**Next bounded task:** CW-06 — reconcile DOC-05 Authorization Master against DOC-06 requirements, DOC-07 security controls and the aligned M01–M21/entity ownership boundaries. Exact production grants and technical enforcement remain separately gated.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
