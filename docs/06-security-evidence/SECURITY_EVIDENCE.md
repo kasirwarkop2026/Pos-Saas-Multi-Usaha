@@ -701,3 +701,37 @@ DOC-07 §26.1 records blob SHA `1cccd2c0c5d0a4f6e043de6faed0ab7f861fb41d` as the
 **DOC-07 status:** DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Latest explicitly declared working revision remains v0.6; no v0.7 is inferred.
 
 This addendum is documentation-control clarification only. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed.
+
+## 29. Append-only security control and evidence baseline — 19 November 2026
+
+This section adopts DOC-06 §21 and DOC-05 §22 as project-authored security design baselines. Controls below are required design/evidence outcomes; they are not proof of implementation, successful tests, compliance certification or production operation.
+
+### 29.1 Security invariants
+
+1. Deny by default; missing, stale or ambiguous authorization context is DENY.
+2. Tenant isolation is enforced for every business-owned object and relationship; cross-tenant identifier substitution must fail.
+3. Platform and Business principal namespaces remain separate.
+4. Permission is exact-action, scope-, condition-, data-class- and purpose-bound; role names and UI state do not grant access.
+5. D3/D4 data receives least-privilege access, field minimization, restricted export and enhanced audit; D4 secrets are never exposed as ordinary application data.
+6. Domain owners control authoritative writes and lifecycle transitions; projections and event consumers cannot bypass source-owner authorization.
+7. Sensitive actions require SoD and independent approval; break-glass is time-limited, reason-coded and independently reviewed.
+
+### 29.2 Threat and abuse-case register baseline
+
+The documentation threat model must include at least: cross-tenant IDOR; cross-site/property access; stale membership or revoked assignment; role confusion between Platform Super Admin and Manager; privilege escalation through wildcard or implied action; unverified guardian/guest relationship; unauthorized D3 export; D4 secret disclosure; purpose laundering; self-approval; replay/duplicate payment or reservation command; event payload overexposure; projection staleness; audit-log tampering/suppression; break-glass abuse; and unsafe release of a maintenance/safety hold. For each case record asset, actor, precondition, attack path, impact, preventive control, detective evidence, owner and residual risk.
+
+### 29.3 Documentation-level negative test evidence format
+
+Each test specification must include stable test ID, linked workflow ID, domain/resource/action key, principal and role/function, business context, target tenant, scope, data class/purpose, precondition, attempted operation, expected decision, expected denial reason, expected audit record and evidence retention reference. Expected-deny cases are required for cross-tenant, cross-site, unassigned task, unverified relationship, privilege escalation, self-approval, sensitive export, secret access, purpose mismatch, stale membership, disabled module, unsafe lifecycle transition and duplicate command replay. No test is marked PASS without an actual executed run and retained result.
+
+### 29.4 Audit evidence contract
+
+For every protected decision, evidence should capture actor/service identity, business context, permission key, target object reference, decision (allow/deny), denial reason, scope, purpose, data class, approval/SoD reference, timestamp, correlation/idempotency reference and source-domain result. Do not copy secret values or unnecessary D3/D4 payloads into logs. Logs require restricted write access, tamper-evident handling, retention policy and controlled review. Export and break-glass actions receive heightened review.
+
+### 29.5 Incident, retention and response linkage
+
+Security events and incidents must identify severity, affected tenant/domain, containment owner, evidence preservation, notification/escalation path, recovery decision and closure authority. Retention and legal hold must be compatible with the data classification and applicable obligations; no universal retention duration is invented here. Evidence disposal must be authorized and auditable. Security reporting is a read model and does not become authority to mutate source business records.
+
+### 29.6 Cross-document closure gate
+
+DOC-07 security acceptance requires alignment with DOC-03 domain/interaction contracts, DOC-04 object ownership and field classification, DOC-05 exact action/scope/SoD matrix and DOC-06 workflow traceability. Threat cases and negative tests must have stable identifiers and complete expected evidence. All entries must distinguish DESIGNED, IMPLEMENTED, EXECUTED, PASS/FAIL and RETESTED. This append-only design section does not close existing OPEN findings, assert test execution or change DOC-07 working revision. No technical or production change is authorized. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
