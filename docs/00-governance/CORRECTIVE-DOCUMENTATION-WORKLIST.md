@@ -334,3 +334,68 @@ No correction is proposed to DOC-05 from this bounded pass: it already preserves
 - No SQL/DDL/DML, database/schema/migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel configuration, deployment, Supabase Preview/Staging or Production changes.
 - Stage 5 blanket GitHub/archive migration remains **NOT AUTHORIZED**; Stage 6 implementation remains **NOT AUTHORIZED**.
 - This checkpoint is proposed documentation until its PR is reviewed, merged with explicit approval, and read back from `main`.
+
+
+## 14. Permanent work-direction and execution rules (19 November 2026)
+
+This section governs future execution of the corrective documentation worklist. It is an append-only operating rule set and does not replace the source-native acceptance criteria or authorize technical implementation.
+
+### 14.1 Active source of truth and navigation
+
+- This worklist on `main` is the sole active source for corrective-documentation task routing, sequencing and work-item progress.
+- Master Checklist v2.0 is **CLOSED FOR ACTIVE WORKFLOW / SUPERSEDED FOR NAVIGATION**. Preserve it as historical audit evidence; do not use its former sequence to route new work.
+- Domain-specific DOCs, approved FIX registers, OPEN registers and primary evidence remain authoritative for their respective content. This worklist routes work but does not override them.
+- Before resuming any item, read its current-main worklist entry and the current-main controlling documents/registers. Verify whether the reported gap still exists; do not recreate already-completed work.
+
+### 14.2 Required execution cycle
+
+Use the following cycle for each bounded work item:
+
+`VERIFY CURRENT MAIN → AUDIT THE SPECIFIC GAP → REPAIR SUBSTANTIVE DOCUMENT CONTENT → CROSS-CHECK AFFECTED DOCUMENTS → VERIFY ACCEPTANCE CRITERIA → RECORD STATUS/EVIDENCE → PR → REVIEW CHECKS/DIFF → USER MERGE APPROVAL → MERGE → READ BACK MAIN`
+
+- Prioritize actual OPEN, PARTIAL, contradictory, incomplete or stale document content and dependencies that can be resolved from available approved decisions and primary sources.
+- Do not repeat completed audits or create checkpoint-only PRs when a supported substantive repair is available.
+- A bounded audit checkpoint is appropriate only when the audit reveals no safe/source-supported correction, or when the remaining blocker is genuinely evidence- or approval-dependent. State that reason explicitly and route the next actionable step.
+- A repair must address the underlying document gap, not merely restate that the gap exists in another checkpoint.
+- Reconcile affected cross-document references, mappings, identifiers, backlinks and status wording whenever the supported repair requires it. Preserve append-only history and do not silently rewrite historical decisions.
+
+### 14.3 Evidence, acceptance and status integrity
+
+- Every issue must identify the affected document/section, the exact gap, the proposed repair, controlling source/evidence and locator, and its acceptance criteria.
+- Use only evidence actually available and inspected. Do not invent source text, identifiers, locators, approvals, physical schema facts, test executions or implementation results.
+- Where an approved decision or primary source supports a correction, perform the correction and verify it against the source. Where evidence or approval is absent, preserve the item as OPEN/PARTIAL/UNVERIFIED and state exactly what is missing.
+- Never promote OPEN/PARTIAL/UNVERIFIED to FIX/CLOSED/PASS solely because wording was added, a checkpoint was recorded, a PR merged, or an audit was completed.
+- Keep the distinctions DESIGNED, SPECIFIED, IMPLEMENTED, EXECUTED, PASSED, INDEPENDENTLY VERIFIED and APPROVED explicit.
+- Do not reopen approved FIX decisions without a specific, documented, evidence-based conflict or superseding approval.
+
+### 14.4 PR and merge discipline
+
+- One PR at a time. Do not open a second work PR while another work PR remains unresolved.
+- Keep each PR narrowly scoped to one coherent documentation task or governance change; do not mix unrelated audit checkpoints and policy changes.
+- Inspect the complete diff, changed paths, base/head commits, CI results and any external integration checks before merge.
+- A skipped check is not a passed check. A green summary alone does not establish that every relevant check ran.
+- Merge only after the user has explicitly approved the reviewed PR and the change is within the authorized documentation scope. After merge, read the exact changed content back from `main` and record the merge commit and verification result.
+- If an integration could cause database, migration, Preview/Staging, application, deployment or Production effects, do not assume it is harmless because the PR changes documentation only. Establish the exact behavior and confirm it stays within the governance boundary before proceeding.
+
+### 14.5 Priority and sequencing
+
+- Complete supported substantive repairs in the active worklist before generating additional audit-only checkpoints.
+- Follow the dependencies in §6. Verify current-main status before starting the next CW item; do not skip an unmet dependency or duplicate completed work.
+- For Package B, after CW-08's audit checkpoint is merged and read back, continue with the next eligible work item (CW-09) by repairing DOC-06 traceability gaps that can be resolved from existing approved sources. Keep unsupported mappings and missing evidence explicitly OPEN.
+- Package C physical data specification and Package D source/evidence recovery remain gated by actual physical/primary-source availability and provenance. Do not infer missing content to force closure.
+- The final objective is to satisfy the real acceptance criteria for DOC-00 through DOC-12 and conduct a defensible Stage 4.9 readiness review—not to force a predetermined PASS or implementation start.
+
+### 14.6 Governance boundary remains unchanged
+
+- `DB_PUSH_BLOCKED: ACTIVE`.
+- READ-ONLY / APPEND-ONLY documentation work within the specifically authorized scope.
+- No SQL, DDL, DML, database/schema changes, migrations, RLS/Auth, triggers, API/backend, application source, CI workflow/configuration, Vercel configuration, deployment, Supabase Preview/Staging or Production changes without separate explicit authorization for the exact scope.
+- Stage 5 blanket migration remains **NOT AUTHORIZED**.
+- Stage 6 implementation remains **NOT AUTHORIZED**.
+- Documentation readiness, a merged documentation PR, or a green documentation CI result does not grant technical implementation or database authorization.
+
+### 14.7 Status of this operating rule
+
+- This section is proposed until its dedicated PR is reviewed, explicitly approved for merge, merged and read back from `main`.
+- It does not close CW-07 or CW-08, change any DOC acceptance status, or create a permission/technical decision.
+- Future sessions must resume from the latest verified `main` worklist and source-native document states, not from superseded chat summaries or the retired Master Checklist v2.0.
