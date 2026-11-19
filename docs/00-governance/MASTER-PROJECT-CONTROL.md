@@ -701,3 +701,37 @@ The audit did not establish grounds to:
 - Stage 6 implementation: **NOT AUTHORIZED**.
 
 This addendum is an append-only documentation navigation correction. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL, DDL, DML, database/schema mutation, migration, RLS, Auth, triggers, backend/API, application source-code, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are included or authorized.
+
+
+## 29. Append-only active corrective-work navigation transition — 19 November 2026
+
+### 29.1 Control-plane and work-routing separation
+
+This DOC-00 remains the project-control document for governance, authority boundaries, project identity, stage/readiness summaries and control-plane context. It is not the active task checklist and does not independently assign the next corrective-documentation work item.
+
+The active task-routing document is:
+
+- docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md — Corrective Documentation & Closure Worklist, CW-01–CW-22, Packages A–D and subsequent Stage 4.9 acceptance review.
+
+This worklist was merged through PR #81, merge commit 041a75c838b7dc9553552cf56fb42c1d0d826b47, and both the worklist and this DOC-00 were verified by read-back from main.
+
+### 29.2 Master Checklist v2.0 retirement
+
+docs/00-governance/MASTER-CHECKLIST-v2.0.md is CLOSED FOR ACTIVE WORKFLOW / SUPERSEDED FOR NAVIGATION, as recorded in its append-only §58. It remains preserved as historical audit evidence. Its earlier navigation instructions, including §28 of this DOC-00's former reference chain, must not be used to route new work.
+
+The historical statements in §28.1 and §28.4 that Master Checklist v2.0 was the sole active navigation checklist remain preserved as dated records. They are superseded for current task routing by this §29 and the active worklist. No substantive project status or historical checkpoint is rewritten.
+
+### 29.3 Current authority hierarchy
+
+1. This DOC-00 governs project-control context and authorization boundaries.
+2. The Corrective Documentation & Closure Worklist governs the current sequence and status of corrective-documentation tasks.
+3. Domain-specific master documents, source-native registers, primary decisions and evidence govern their respective subject matter and acceptance criteria.
+4. Master Checklist v2.0 remains historical only; it is not an active work-routing source.
+
+### 29.4 Status and governance boundary
+
+This navigation transition does not close any dependency, change any FIX decision, accept DOC-00–DOC-12, pass Stage 4.7.8 or Stage 4.9, or promote implementation readiness.
+
+Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.8 remains 13/13 DRAFTED — NOT ACCEPTED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; A12.40 remains PARTIAL/OPEN; A12.41 remains NOT STARTED/NOT VERIFIED; Implementation Readiness remains NOT READY.
+
+Controls remain READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. Stage 5 blanket migration remains NOT AUTHORIZED; Stage 6 implementation remains NOT AUTHORIZED. No database, application, CI workflow, Vercel, deployment or Production change is authorized or performed by this addendum.
