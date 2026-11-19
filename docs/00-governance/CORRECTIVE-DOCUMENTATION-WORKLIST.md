@@ -181,3 +181,49 @@ The initial bounded review of CW-01–CW-06 was performed against the post-PR #8
 - DOC-01 through DOC-12 retain their existing draft/review/acceptance boundaries.
 - CW-03 remains OPEN; Package B work is not started by this checkpoint.
 - CW-01, CW-05 and CW-06 are not closed until the proposed append-only corrections are reviewed, merged and verified on main.
+
+
+## 11. Package A — CW-03 DOC-02 / DOC-05 / DOC-06 cross-document audit checkpoint (19 November 2026)
+
+A read-only cross-document audit was completed against the current `main` versions of:
+
+- `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` — DOC-02.
+- `docs/05-authorization/AUTHORIZATION_MASTER.md` — DOC-05.
+- `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` — DOC-06.
+
+### 11.1 Audit coverage and findings
+
+| Finding | Audit result | Disposition |
+|---|---|---|
+| CW03-F01 — Category/workflow baseline | CAT-01–CAT-13 and the published workflow counts/baselines agree between DOC-02 §3 and DOC-06 §5. Education, Hotel, Pharmacy, Lainnya and the two Parfum tracks retain matching conceptual boundaries. | PASS — within reviewed baseline; no category decision changed |
+| CW03-F02 — Category/workflow versus authorization | DOC-02 §§2, 6–8 and DOC-05 §§3–9 consistently distinguish category/workflow context, role eligibility, module eligibility, capability/action, scope and authorization. | PASS — conceptual boundary consistent |
+| CW03-F03 — Workflow-to-module mapping | DOC-02 §8 and DOC-05 §14 G01–G04 preserve the M01–M21 catalogue/crosswalk as DRAFT/CANDIDATE/OPEN. DOC-06 §§6 and 12 retain Workflow → M01–M21 as NOT MAPPED/OPEN. | OPEN — no approved mapping established |
+| CW03-F04 — Capability/action and role traceability | DOC-05 §14 G04–G05 and DOC-06 TRC-OPEN-02/03 plus REC-06 AC-06-04/05 retain incomplete workflow/action and role/function mappings; stable permission keys and grants remain unapproved. | OPEN / PARTIAL — no inferred mapping |
+| CW03-F05 — Scope, data, SoD and approval | DOC-05 §§9–11 and DOC-06 §§7–8, TRC-OPEN-04–06 and REC-06 AC-06-06–08 consistently preserve unresolved scope resolver, data/purpose, SoD and approval detail. | OPEN / PARTIAL — source-native statuses unchanged |
+| CW03-F06 — Source provenance and row-level evidence | DOC-02 §§9–10 preserves incomplete category claim locators; DOC-06 REC-06 AC-06-10 remains PARTIAL. DOC-05 §20 is already an explicitly derived crosswalk, not a primary approval or one-to-one acceptance mapping. | PARTIAL — claim-level provenance remains incomplete |
+
+### 11.2 Cross-document consistency disposition
+
+- No substantive contradiction was established in the reviewed category/workflow baseline, conceptual decision boundaries, or distinction between eligibility and authorization.
+- DOC-05 §20 already provides a bounded G01–G10 to REC-06 crosswalk. This audit does not duplicate it or reinterpret its relationship labels.
+- Existing open gaps remain controlling: DOC-02 G01–G10; DOC-05 G01–G10, Scope O01–O10 and SoD A01–A12; DOC-06 TRC-OPEN-01–15 and REC-06 AC-06-01–12; and DOC-09 AUTH-OPEN-01–27.
+- No source-native dependency was closed; no FIX decision, permission key, module assignment, role grant, scope rule, approval, test result or implementation status changed.
+
+### 11.3 CW-03 status and closure gate
+
+**CW-03: AUDIT COMPLETE — CLOSURE BLOCKED BY OPEN MAPPING AND PROVENANCE DEPENDENCIES.**
+
+The audit portion is complete for the stated bounded scope. CW-03 is **not CLOSED** because its closure criteria require source-backed category/workflow references and demonstrated alignment to DOC-05 authorization and DOC-06 traceability. Workflow-to-module/action mapping, role/capability/scope mapping and claim-level provenance remain OPEN/PARTIAL.
+
+No content correction is proposed in DOC-02, DOC-05 or DOC-06 in this checkpoint: the reviewed texts preserve the correct unresolved boundaries, and no new primary evidence was recovered that would justify changing them.
+
+Package B / CW-07 is **not started** by this checkpoint. Route the next task only after this checkpoint is merged and verified on `main`.
+
+### 11.4 Change and governance boundary
+
+- Changed path in this checkpoint: this worklist only.
+- DOC-02, DOC-05 and DOC-06 remain unchanged.
+- READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+- No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
+- Stage 5 blanket GitHub/archive migration remains **NOT AUTHORIZED**; Stage 6 implementation remains **NOT AUTHORIZED**.
+- This checkpoint is proposed documentation until its PR is reviewed, merged with explicit approval, and read back from `main`.
