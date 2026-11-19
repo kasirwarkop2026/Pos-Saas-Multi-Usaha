@@ -1493,3 +1493,44 @@ DOC-01 is product-scope authority, not a complete numeric requirement-ID catalog
 **CW-08 disposition:** product-to-requirement and cross-master logical traceability PASS at documentation-design level. DOC-06 remains DRAFT / RECONSTRUCTED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. This bounded closure does not close provenance, physical schema, exact grants, enforcement, test execution, evidence retention or release readiness.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 32. CW-09 implementation-readiness and release-gate requirements matrix (20 November 2026)
+
+This section maps the release/implementation readiness gates after CW-01–CW-08. It is a requirements/gate definition, not a readiness approval.
+
+| Gate | Requirement | Current status | Controlling documents | Closure evidence required |
+|---|---|---|---|---|
+| RG-01 Product/category scope | Every in-scope category has an accepted M01–M21 CORE/CONDITIONAL profile, workflow index, module entitlement and category-specific owner map | PARTIAL — CAT-10/CAT-11 detailed; other category profiles remain OPEN/CANDIDATE | DOC-01, DOC-02, DOC-06 | CW-10 accepted category/workflow/module crosswalk |
+| RG-02 Workflow ownership | Every in-scope workflow has one primary owner, supporting domains, lifecycle boundary and requirements trace | PASS for 30 CAT-10/CAT-11 workflows only | DOC-02, DOC-03, DOC-06 | Expanded workflow map for all agreed categories |
+| RG-03 Logical architecture | Single owner, command/event/read-model, tenant and authorization handoffs consistent | PASS at logical design scope | DOC-03, DOC-05, DOC-06 | CW-04 cross-reference retained; technical contracts separately approved |
+| RG-04 Physical data design | Exact entities/fields/types/keys/constraints/indexes/tenant integrity and migration design accepted | NOT ACCEPTED | DOC-04, DOC-03, DOC-06 | CW-11 physical Data Dictionary/ERD review; no DB push |
+| RG-05 Authorization design | Exact principal × key × resource × scope × condition × SoD/approver matrix complete | OPEN / NOT APPROVED | DOC-05, DOC-06, DOC-07 | CW-12 complete matrix and decision review |
+| RG-06 Security enforcement | RLS/server/API/backend enforcement model and threat/control mapping accepted | NOT VERIFIED / NOT AUTHORIZED | DOC-03, DOC-05, DOC-07 | Approved technical design and controlled verification plan |
+| RG-07 Requirements coverage | Every in-scope product requirement maps to workflow, owner, control, test and evidence | PARTIAL — CAT-10/CAT-11 logical coverage only | DOC-01, DOC-02, DOC-06, DOC-07 | CW-13 complete in-scope traceability and Purchasing/Sales crosswalk |
+| RG-08 Test/evidence readiness | Test cases, fixtures, non-production environment, evidence metadata, reviewer and retention policy approved | DESIGN ONLY; 99 scenario IDs unexecuted | DOC-06, DOC-07 | CW-14 approved test/evidence plan and separate execution authorization |
+| RG-09 Decision-register acceptance | FIX/OPEN/CVS registers reconciled and accepted for the implementation scope | NOT ACCEPTED | DOC-08, DOC-09, DOC-10 | CW-15 scoped reconciliation, review and acceptance record |
+| RG-10 Release/document control | DOC-00–DOC-12 status, Stage 4.7.8/4.9, roadmap and archive acceptance reconciled | PARTIAL / NOT ACCEPTED | DOC-00, DOC-08–DOC-12 | CW-15 and explicit Stage 4.9 acceptance |
+| RG-11 Environment/operations | Backup/restore, secrets, monitoring, incident, rollback, migration and deployment controls accepted | OPEN / NOT VERIFIED | DOC-03, DOC-05, DOC-07, DOC-11 | Operational runbooks and non-production verification; no Production assumption |
+| RG-12 Authorization to implement | Explicit user approval for Stage 6 and a bounded non-production implementation plan | NOT AUTHORIZED | DOC-00, DOC-11, active Worklist | Separate explicit authorization after RG-01–RG-11 applicable gates pass |
+
+### 32.1 CW09-GATE-01–12 acceptance scenario designs
+
+| ID | Gate invariant | Scenario / attempted interpretation | Expected result |
+|---|---|---|---|
+| CW09-GATE-01 | Category completeness | Treat CAT-10/CAT-11 coverage as proof that all 13 categories are implementation-ready | DENY; other category crosswalks remain OPEN/CANDIDATE |
+| CW09-GATE-02 | Workflow completeness | Treat 30 Education/Hotel workflows as the complete product workflow set | DENY; scope is limited to CAT-10/CAT-11 |
+| CW09-GATE-03 | Physical data acceptance | Treat logical 17-entity owner mapping as accepted physical schema | DENY; exact fields/keys/constraints remain OPEN |
+| CW09-GATE-04 | Tenant enforcement | Treat tenant isolation design as deployed RLS/server enforcement | DENY; technical verification absent |
+| CW09-GATE-05 | Authorization completeness | Treat candidate keys and 12 Business roles as final actor grants | DENY; exact tuples and grants remain OPEN |
+| CW09-GATE-06 | Security verification | Treat 99 test designs or CI success as executed security tests | DENY; 0 scenario executions and 0 evidence accepted |
+| CW09-GATE-07 | Decision-register acceptance | Treat DOC-08/09/10 working drafts as canonical/final decision authority | DENY; all remain review-required |
+| CW09-GATE-08 | Release-gate acceptance | Treat published DOC-11/12 or completed CWs as Stage 4.9 acceptance | DENY; Stage 4.9 remains PARTIAL |
+| CW09-GATE-09 | Archive completeness | Treat 231/231 manifest transcription as 231-file content review | DENY; only M231-223 has a direct content review supplement |
+| CW09-GATE-10 | Cross-domain flow coverage | Treat Purchasing 14→15 and Sales 20→18 gaps as resolved | DENY; crosswalks remain incomplete |
+| CW09-GATE-11 | Operational readiness | Treat design-level architecture as proof of backup/restore, secrets, monitoring, rollback or deployment readiness | DENY; operational controls remain OPEN / NOT VERIFIED |
+| CW09-GATE-12 | Stage 6 authorization | Treat readiness audit completion as permission to implement | DENY; explicit user authorization remains mandatory |
+
+### 32.2 Acceptance boundary
+
+**CW-09 readiness audit result: NOT READY FOR IMPLEMENTATION.** CW09-GATE-01–12 are design-only gate scenarios; 0 executed and 0 evidence generated. The next corrective package is CW-10 category/workflow/module/entitlement crosswalk completion for CAT-01–CAT-13.
