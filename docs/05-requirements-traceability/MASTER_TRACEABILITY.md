@@ -1286,3 +1286,15 @@ This section closes missing dedicated scenario design coverage only. It does not
 4. A conceptual invariant or design review is not an executed database test.
 
 **Disposition:** 12/12 CW05-DATA scenarios specified; 0 executed; 0 evidence generated. Physical dictionary and tenant enforcement remain OPEN / NOT ACCEPTED.
+
+
+## 27. CW-05 DOC-04 owner-register and section-locator correction (20 November 2026)
+
+This addendum corrects the DOC-04 references in CW05-DATA-01–12. DOC-04 §28 is the pre-existing authoritative 17-entity owner register; DOC-04 §32 is the supplemental relationship-owner/handoff and TEN-01–TEN-07 crosswalk. The prior references to DOC-04 §27 in the CW-05 scenario table are superseded for navigation by §§28 and 32.
+
+- CW05-DATA-01 and -12 use DOC-04 §28 for primary entity ownership and DOC-04 §32 for relationship/tenant handoff.
+- CW05-DATA-02–04 use DOC-04 §32.3 for tenant scope and DOC-04 §18 for the conceptual relationship rules.
+- CW05-DATA-05–11 retain their substantive DOC-04 invariant references; use DOC-04 §32 for owner/tenant interpretation where cross-domain handoff is involved.
+- All 12 scenario definitions and expected outcomes remain unchanged.
+
+**Disposition:** this is a locator correction only. CW05-DATA-01–12 remain DESIGN / NOT EXECUTED; no evidence or physical enforcement is claimed.
