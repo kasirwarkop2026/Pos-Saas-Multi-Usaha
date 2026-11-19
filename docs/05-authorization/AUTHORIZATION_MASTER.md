@@ -988,3 +988,17 @@ This section supplements §§22–32 and defines the logical accountability boun
 7. **Retention and legal hold:** DOC-07 may define the evidence contract and retention trigger; actual retention duration, legal basis, storage, access and deletion policy remain OPEN until separately approved.
 
 **Disposition:** DOC-05 authorization-decision ownership and DOC-07 evidence ownership are distinct but linked. No grants, event schema, storage, retention duration or technical audit control is approved.
+
+
+## 34. CW-08 authorization-to-requirement traceability crosswalk (20 November 2026)
+
+DOC-06 §31 is the current requirements acceptance matrix. DOC-05 §§22–34 remain the authorization-design authority.
+
+1. DOC-06 §21.6 key grammar and principal model map to DOC-05 §§22–23 and §32.
+2. DOC-06 §21.7 S0–S5 scope maps to DOC-05 §§9, 22.4, 24–25 and §32.
+3. DOC-06 §21.8 D0–D4/purpose maps to DOC-05 §§10, 24.1, 25.1 and §32.
+4. DOC-06 §21.9 SoD/approval maps to DOC-05 §§11, 24–25 and §32.
+5. DOC-06 §21.10 fail-closed decision sequence maps to DOC-05 §§3, 22.1, 25.1 and §32.
+6. DOC-07 §§32–34 and §43 define policy/evidence references; candidate keys and AUTH-HR tuples remain non-grant design vocabulary.
+
+**Disposition:** authorization requirements and design are cross-referenced; exact actor/key/resource/scope/condition/approval rows, production grants and technical enforcement remain OPEN / NOT AUTHORIZED.
