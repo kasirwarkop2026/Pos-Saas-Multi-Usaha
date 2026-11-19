@@ -1570,3 +1570,43 @@ READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, applicatio
 Post-merge readback confirms DOC-06 §31 now contains the authoritative product-to-requirement matrix and CW08-TRACE-01–12, and DOC-07 §44 contains the evidence register. The misplaced mirror note intended as DOC-07 §45 was not included in PR #107 and requires one additional append-only locator correction. CW-08 remains PARTIAL until that note is published and verified.
 
 No design decision, test status or implementation state changes. CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED. DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 15.38 CW-08 — final section-placement correction merge and post-merge readback (20 November 2026)
+
+**Correction PR:** [#108 — clarify CW-08 DOC-07 traceability mirror locator](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/108)  
+**Branch:** `docs/cw08-doc07-mirror-locator-correction-2026-11-20`  
+**Head SHA:** `f2bbb0d32a6254b7f065e226da76e06f877bc6f3`  
+**Base SHA:** `58fea5c809f8a2afe61c306fa622366e78a3ebde`  
+**Squash merge commit:** `7eb0499131ac340dc72c32814f681244954573eb`
+
+### 15.38.1 CI result
+
+- Documentation structure: SUCCESS.
+- Markdown lint: SUCCESS.
+- Internal documentation links: SUCCESS.
+- POS SaaS CI: SUCCESS; Detect application changes SUCCESS.
+- ESLint, TypeScript, Next.js build and Dependency audit: SKIPPED for documentation-only changes; not claimed as executed tests.
+- PR #108 was mergeable, expected head SHA matched, and no review submissions or inline review threads were present.
+
+### 15.38.2 Final post-merge readback from main
+
+PR #108 is CLOSED / MERGED. The corrected files were fetched again from `main`:
+
+| File | Main blob SHA | Verified content |
+|---|---|---|
+| `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` | `046bdc0ae64a96af79186eb652d2a82a4a993111` | §15.37 present |
+| `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` | `8b9b82389fc3b4d2ab741f1df3a66a38404585a9` | DOC-06 §30 numbering note and authoritative §31 matrix with CW08-TRACE-01–12 |
+| `docs/06-security-evidence/SECURITY_EVIDENCE.md` | `f0545061d054e5ff2bf145c9408f1805baef68d0` | DOC-07 §44 evidence register with CW08-TRACE-01–12 and §45 mirror-locator correction |
+
+The misplaced matrix copy is now clearly designated as a DOC-07 mirror (§45); DOC-06 §31 is authoritative and DOC-07 §44 is the evidence register. Original DOC-07 §31 remains unchanged.
+
+### 15.38.3 Final bounded disposition
+
+**CW-08: PASS / CLOSED — PRODUCT-TO-REQUIREMENT / CROSS-MASTER LOGICAL TRACEABILITY SCOPE.** PR #106, correction PR #107 and locator follow-up PR #108 are merged. DOC-06 §31 now contains the authoritative product-to-requirement/cross-master acceptance matrix and 12 CW08-TRACE designs; DOC-07 §44 contains their evidence contracts; DOC-07 §45 disambiguates the retained mirror copy. All corrected content was verified from `main`.
+
+CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED. The consolidated register contains 99 design IDs, all unexecuted. Physical schema, exact production grants, RLS/Auth/API/backend enforcement, runtime tests, evidence retention, provenance completion and Production readiness remain OPEN / NOT AUTHORIZED.
+
+**Next bounded task:** CW-09 — final requirements-to-release-gate and implementation-readiness audit across DOC-00–DOC-12. The audit may prepare the implementation gate but cannot authorize Stage 6. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED pending separate explicit user authorization.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
