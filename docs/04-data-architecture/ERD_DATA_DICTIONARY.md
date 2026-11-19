@@ -1381,3 +1381,37 @@ Every business-owned entity must carry or safely derive one immutable business c
 - The 17/17 conceptual entity attribute proposals are now enumerated for design review. This does not promote physical Data Dictionary acceptance, close A12/GAP/ERD-OPEN findings, or imply that any field exists in the database.
 
 **Disposition:** conceptual attribute inventory drafted for 17/17 entities; field-level policy proposals are now available for cross-document review. Physical mapping/verification remains OPEN; no database or implementation work is authorized. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 30. Append-only reconciliation — logical attribute proposals, classification and purpose vocabulary (19 November 2026)
+
+This section reconciles §§28.2 and 29 without changing the physical-schema acceptance boundary.
+
+### 30.1 Attribute inventory status
+
+- DOC-04 §28.2's **0/17 field-level classification complete** means no verified field-by-field classification had been accepted at that checkpoint; the 17 conceptual entity names did not themselves supply an accepted field list.
+- DOC-04 §29 subsequently enumerates proposed conceptual attributes for **17/17 entities**. This is a completed proposal inventory for design review, not an accepted field dictionary and not proof that any physical column exists.
+- Therefore the counts describe different acceptance layers and are not contradictory: **17/17 conceptual attribute proposals enumerated; 0/17 physical field mappings verified/accepted**. Field-specific D0–D4, purpose, audience and retention decisions remain proposed until reviewed and mapped. Physical mapping remains OPEN.
+- D0–D4 classification is inherited from DOC-06 §21.8. For completeness: **D0 Public**; D1 Internal; D2 Confidential; D3 Restricted; D4 Critical Secret. D0 does not make tenant-owned records universally accessible; tenant, purpose and resource authorization still apply.
+
+### 30.2 Canonical purpose vocabulary for this design set
+
+The project purpose vocabulary used across DOC-05 §§24–25, DOC-06 §21.9 and DOC-04 §29 is:
+
+- SERVICE_DELIVERY
+- BOOKING_FULFILLMENT
+- EDUCATION_ADMIN
+- FINANCIAL_PROCESSING
+- CUSTOMER_SUPPORT
+- SAFETY_RESPONSE
+- COMPLIANCE_AUDIT
+- INTEGRATION_SYNC
+- LEGAL_RETENTION
+
+A given action/attribute must use only the purpose(s) applicable to its documented context. This list is a controlled design vocabulary, not a universal allowlist; it does not replace legal-basis, jurisdiction or field-level review. Earlier §29.1's shorter list is incomplete and is clarified by this addendum.
+
+### 30.3 Boundary
+
+The conceptual proposal inventory does not close GAP-04/A38/ERD-OPEN physical dependencies, approve physical columns/types/constraints, establish database classification controls, or prove RLS/server enforcement. Retention durations remain OPEN; legal hold suspends disposal. No SQL/DDL/DML, migration or database change is authorized.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
