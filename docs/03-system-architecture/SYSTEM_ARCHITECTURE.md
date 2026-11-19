@@ -403,3 +403,15 @@ DOC-04 §27 is the current logical entity-to-owner and tenant-integrity matrix f
 - The 17-entity baseline and candidate-only status of `inventory_cost_layer_movements` remain unchanged.
 
 **Disposition:** DOC-04 logical ownership and tenant-integrity navigation is aligned to DOC-03 §19, DOC-06 §21 and DOC-05 §§25, 28–30. Physical Data Dictionary acceptance and tenant enforcement remain OPEN / NOT ACCEPTED. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+
+## 21. CW-05 DOC-04 owner-register and locator clarification (20 November 2026)
+
+This section corrects the DOC-04 locator used in DOC-03 §20 without changing the architecture decision.
+
+- DOC-04 §28 is the pre-existing authoritative register assigning one primary M-domain owner to all 17 conceptual inventory/costing entities.
+- DOC-04 §32 is the CW-05 supplemental relationship-owner/handoff and TEN-01–TEN-07 crosswalk. The appended block previously misnumbered as §27 is referenced as §32; its owner table is navigational and does not replace §28.
+- DOC-04 §§29–31 remain the pre-existing logical attribute proposal and classification-status clarifications. They do not establish physical SQL columns or accepted field-level classification.
+- DOC-03 §§19–21 and DOC-06 §21 remain the logical domain/interaction authorities. Physical field/key definitions and enforcement remain DOC-04 OPEN dependencies.
+
+**Disposition:** DOC-03 §20's reference to DOC-04 §27 as the entity/tenant matrix is superseded for navigation by DOC-04 §§28 and 32. No owner, M-domain, FIX decision or technical status changes.
