@@ -706,3 +706,41 @@ The first CW-10 crosswalk draft contained an incorrect aggregate workflow refere
 
 DOC-06 §23.7 and DOC-07 §37 now contain the controlling classification and corrected count. All test IDs remain DESIGN / NOT EXECUTED. CW-10 remains PARTIAL; no dependency closure or security PASS is claimed.
 
+
+
+### 15.17 CW-11 — DOC-08 / DOC-09 / DOC-10 FIX-OPEN-conflict-supersession reconciliation (19 November 2026)
+
+**Scope:** Package B / CW-11 as defined in §5: FIX/OPEN/conflict/supersession consistency. This is not a new test-coverage work item.
+
+#### 15.17.1 Current-main audit findings
+
+| Finding | Current-main observation | Disposition |
+|---|---|---|
+| CW11-F01 — DOC-08 full master locator absent | The expected `docs/07-decision-registers/MASTER_FIX_REGISTER.md` was absent. Only the focused ST5-11.40 correction was published. | Reconstruct a project-authored DOC-08 v0.1 working register at the expected path; explicitly do not claim recovery of the unpublished v1.5 master. |
+| CW11-F02 — FIX versus OPEN scope layering | DOC-09 preserves authorization, physical data, costing, evidence and implementation dependencies while project design decisions exist at conceptual/logical level. | Add a row-level family crosswalk: conceptual/logical FIX does not close physical, authorization, evidence or implementation OPEN items. |
+| CW11-F03 — CVS scope | DOC-10 preserves CVS-001–CVS-041 and the narrow ST5-11.40 O/CR/Q correction. | Reaffirm the exact O/CR/Q mapping and preserve all other CVS identities/dispositions. |
+| CW11-F04 — historical publication wording | DOC-10 §§11–12 accurately record that the full DOC-08 v1.5 master was not published at that earlier checkpoint. | Preserve the historical statement and append a current-state clarification for the new v0.1 reconstruction only. |
+
+#### 15.17.2 Proposed append-only package
+
+The CW-11 branch contains four documentation paths:
+
+1. New `docs/07-decision-registers/MASTER_FIX_REGISTER.md` — DOC-08 v0.1 reconstructed project-authored working register, DOC08-FIX-001–DOC08-FIX-017.
+2. `docs/07-decision-registers/MASTER_OPEN_REGISTER.md` — DOC-09 §11 FIX-to-OPEN scope reconciliation.
+3. `docs/07-decision-registers/CONFLICT_VERSION_REGISTER.md` — DOC-10 §13 three-register authority, CVS and supersession reconciliation.
+4. This Worklist — current-main audit, bounded disposition and PR routing.
+
+#### 15.17.3 Acceptance boundary
+
+- The 17 DOC08-FIX identifiers are new register-local IDs, not recovered historical DOC-08 numbering.
+- DOC-08 v0.1 is DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL / NOT ACCEPTED; complete historical FIX coverage remains to be checked.
+- DOC-09 remains DRAFT v0.2 / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- DOC-10 remains DRAFT v0.2 / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- DOC-09 dependencies newly closed: **0**. CVS dispositions changed: **0**. FIX decisions changed or superseded: **0**. No technical, database, security-test or implementation acceptance is claimed.
+- CW-11 is **AUDIT COMPLETE / DOCUMENTATION RECONCILIATION PROPOSED — PARTIAL PENDING PR REVIEW, MERGE APPROVAL AND POST-MERGE READBACK**. It is not closed by drafting alone.
+
+#### 15.17.4 Governance and next action
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes.
+
+Next: review the complete four-file PR diff, confirm only these documentation paths changed, verify applicable CI and preserve the user approval gate before merge.
