@@ -735,3 +735,49 @@ Security events and incidents must identify severity, affected tenant/domain, co
 ### 29.6 Cross-document closure gate
 
 DOC-07 security acceptance requires alignment with DOC-03 domain/interaction contracts, DOC-04 object ownership and field classification, DOC-05 exact action/scope/SoD matrix and DOC-06 workflow traceability. Threat cases and negative tests must have stable identifiers and complete expected evidence. All entries must distinguish DESIGNED, IMPLEMENTED, EXECUTED, PASS/FAIL and RETESTED. This append-only design section does not close existing OPEN findings, assert test execution or change DOC-07 working revision. No technical or production change is authorized. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+## 30. Append-only CW-09 stable threat and negative-test traceability register — 19 November 2026
+
+**Status: TEST SPECIFICATIONS ONLY — NOT EXECUTED.** This register assigns stable project-owned identifiers to security abuse cases and expected-deny tests. It links to DOC-06 workflow IDs and DOC-05 action families. It does not claim test code, test runs, PASS, remediation or current Production state.
+
+| Stable ID | Workflow / domain | Threat or negative scenario | Expected decision | Evidence required for a future executed test |
+|---|---|---|---|---|
+| CW09-SEC-01 | EDU-WF-03 / M04 | Guardian/sponsor or payer attempts to read unrelated student D3 identity/accommodation data | DENY | Principal/relationship, target business/object, attempted key, purpose, decision log, test run artifact |
+| CW09-SEC-02 | EDU-WF-07 / M13 | Instructor/assessor attempts to approve own attendance correction | DENY where independent review applies | Actor pair, assignment, correction state, approval decision and audit event |
+| CW09-SEC-03 | EDU-WF-09 / M13 | Grade author attempts moderation/finalization/publication without independent authority | DENY | Author/reviewer identities, grade lifecycle, key/scope, result artifact |
+| CW09-SEC-04 | EDU-WF-10 / M16 | Cashier or transaction initiator attempts own refund/write-off approval or settlement close | DENY | Initiator/approver/executor identities, amount policy, decision and financial audit trail |
+| CW09-SEC-05 | EDU-WF-13 / M18 | General Manager/report user attempts restricted safeguarding case access or export | DENY absent explicit case authority | Case assignment, D3 field access, purpose, export decision and audit evidence |
+| CW09-SEC-06 | HTL-WF-05 / M04 | Front Desk/worker accesses guest identity fields outside minimum-necessary booking/stay purpose | DENY | Role/function, guest relationship, field allowlist, purpose and decision record |
+| CW09-SEC-07 | HTL-WF-08 / M12 | Assigned housekeeper attempts to read guest folio/payment or unrelated guest details | DENY | Assignment, target field, key, purpose and denied-access evidence |
+| CW09-SEC-08 | HTL-WF-09 / M20 | Maintenance operator releases own safety hold or returns room to service without independent approval | DENY | Hold owner, release actor, approver, inspection evidence and lifecycle audit |
+| CW09-SEC-09 | HTL-WF-02 / M02 | Rate author attempts own exceptional rate override approval/publication | DENY | Rate change, author/approver, scope, threshold policy and publication event |
+| CW09-SEC-10 | HTL-WF-10/11 / M16 | Cashier/Front Desk initiator performs refund, write-off or settlement close outside separate authority | DENY | Transaction lifecycle, role/key, independent approval and financial audit |
+| CW09-SEC-11 | HTL-WF-12 / M05 | Corporate/agency relationship attempts to enumerate unrelated guest identity or bookings | DENY | Relationship proof, target tenant, object ownership and denied decision |
+| CW09-SEC-12 | HTL-WF-14/15 / M17/M18 | Shift/cash operator exports broad staff/guest/financial reports beyond assignment and purpose | DENY | Export request, fields, purpose, scope, approver and audit event |
+| CW09-SEC-13 | HTL-WF-01/07 / M12 | Manager or staff uses one property's assignment to access another property's stay/room | DENY | Actor assignment, property IDs, business context, scope resolver output |
+| CW09-SEC-14 | Inventory entities 1–17 / M06/M07 | Inventory or warehouse operator posts material adjustment and approves own variance | DENY absent an explicitly approved low-risk exception | Adjustment/count, actor identities, approval state, ledger event and audit trail |
+| CW09-SEC-15 | Stock transfer / M07 | Operator closes transfer while shipment quantities remain unresolved or loss disposition is incomplete | DENY | Transfer/shipment/item state, reconciliation calculation and decision log |
+| CW09-SEC-16 | Reservation / M06 | Duplicate/replayed reservation fulfillment causes over-consumption or duplicate movement | DENY duplicate effect; idempotent replay returns prior outcome | Idempotency key, command hash, aggregate version, movement lineage and replay run |
+| CW09-SEC-17 | Tenant boundary / all workflows | Authenticated actor substitutes another Business's object ID in read or mutation request | DENY | Actor business, target business, attempted key, resource ID and tenant decision evidence |
+| CW09-SEC-18 | Scope boundary / all workflows | Actor uses sibling outlet/property/warehouse assignment to access an unassigned sibling | DENY | Active assignment set, target location, scope decision and audit record |
+| CW09-SEC-19 | Privilege boundary / all workflows | Business Manager or partner principal attempts S0 platform administration | DENY | Principal namespace, attempted platform key, target and decision evidence |
+| CW09-SEC-20 | Data classification / all workflows | User requests D4 secret value through ordinary read/export endpoint | DENY; return only protected secret reference/metadata where permitted | Field classification, key, purpose, secret-store access record and response capture |
+| CW09-SEC-21 | Purpose limitation / EDU-WF-03, HTL-WF-05 | Valid read key used for incompatible purpose or unrelated case | DENY | Declared purpose, object relationship, policy result and audit event |
+| CW09-SEC-22 | Membership lifecycle / all workflows | Expired/revoked membership or assignment continues to access resource using stale session | DENY | Membership/assignment state, session timestamp, authorization decision and revocation evidence |
+| CW09-SEC-23 | Module entitlement / all workflows | Actor accesses conditional module when category/business entitlement is inactive | DENY | Category, module state, subscription entitlement, key and decision record |
+| CW09-SEC-24 | Event boundary / M06/M07/M16/M21 | Duplicate or out-of-order domain event causes duplicate posting or cross-domain unauthorized mutation | DENY invalid transition; idempotent consumer preserves one effect | Event ID/version, consumer state, command authorization, reconciliation and replay output |
+
+### 30.1 Evidence and lifecycle requirements
+
+Each future run must record test ID, test-code revision, build/commit, environment, timestamp, actor/principal, business and target resource, scope, exact permission key, purpose/data class, preconditions, request, expected and actual result, audit/event reference, artifact URI/hash, reviewer and retest linkage. A written expected-deny scenario is DESIGN only. A test is EXECUTED only when an actual run and retained artifact exist; PASS requires the actual result to match the expected result and independent review where required.
+
+### 30.2 Cross-document links
+
+- Workflow IDs and primary/supporting domain ownership: DOC-06 §§21.3–21.4.
+- Entity ownership and field-classification inventory requirements: DOC-04 §28.
+- Action catalogue and role namespace: DOC-05 §23.
+- Security gates and evidence provenance: DOC-07 §§7, 10–12 and §29.
+
+### 30.3 Closure boundary
+
+This register does not close REC-08, SEC-OPEN-01–07, REC-OPEN-12–15, historical tenant/security findings or any implementation/test dependency. No live test, database access, RLS change, API/backend change, CI workflow change, Production verification or penetration test is authorized or claimed. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
