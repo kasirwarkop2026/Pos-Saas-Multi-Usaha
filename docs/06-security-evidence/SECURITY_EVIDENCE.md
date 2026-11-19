@@ -781,3 +781,53 @@ Each future run must record test ID, test-code revision, build/commit, environme
 ### 30.3 Closure boundary
 
 This register does not close REC-08, SEC-OPEN-01–07, REC-OPEN-12–15, historical tenant/security findings or any implementation/test dependency. No live test, database access, RLS change, API/backend change, CI workflow change, Production verification or penetration test is authorized or claimed. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 31. Append-only CW-09 exact permission-key and audit-event cross-reference — 19 November 2026
+
+**Status: DESIGN CROSS-REFERENCE — CANDIDATE KEYS, NOT GRANTS; TESTS NOT EXECUTED.** This section tightens the traceability between the stable test IDs in §30 and the permission-key grammar/catalogue in DOC-05 §§22–23. Keys below are candidate exact-action identifiers derived from the documented resource/action families. They are not approved grants or a complete actor allowlist. Before authorization acceptance, each key must receive its own actor/function, membership, module entitlement, scope, state condition, data/purpose, SoD/approver and execution-owner row in DOC-05.
+
+| Test ID | Candidate permission key(s) to exercise | Expected audit evidence/event family |
+|---|---|---|
+| CW09-SEC-01 | `M04.student_record.read`; `M04.student_record.export` | authorization.denied; relationship_verification.denied; restricted_field_access |
+| CW09-SEC-02 | `M13.attendance_correction.approve` | authorization.denied; attendance_correction.review; sod_conflict |
+| CW09-SEC-03 | `M13.grade.moderate`; `M13.grade.finalize`; `M13.grade.publish` | authorization.denied; grade_lifecycle.transition_denied; sod_conflict |
+| CW09-SEC-04 | `M16.payment.refund`; `M16.payment.write_off`; `M16.settlement.close` | authorization.denied; financial_approval.denied; sod_conflict |
+| CW09-SEC-05 | `M18.safeguarding_case.read`; `M18.safeguarding_case.export` | authorization.denied; restricted_case_access; restricted_export.denied |
+| CW09-SEC-06 | `M04.guest_identity.read` | authorization.denied; purpose_check.denied; field_minimization |
+| CW09-SEC-07 | `M12.housekeeping_task.read`; `M16.guest_folio.read` | authorization.denied; scope_check.denied; cross_domain_access.denied |
+| CW09-SEC-08 | `M20.safety_hold.release`; `M20.room.return_to_service` | authorization.denied; safety_hold.release_denied; sod_conflict |
+| CW09-SEC-09 | `M02.rate_plan.override`; `M02.rate_plan.approve`; `M02.rate_plan.publish` | authorization.denied; rate_override.denied; sod_conflict |
+| CW09-SEC-10 | `M16.folio.adjust`; `M16.payment.refund`; `M16.settlement.close` | authorization.denied; financial_adjustment.denied; sod_conflict |
+| CW09-SEC-11 | `M05.group_booking.read`; `M04.guest_identity.read` | authorization.denied; relationship_scope.denied; cross_tenant_enumeration.denied |
+| CW09-SEC-12 | `M18.report.export`; `M17.staff_report.export`; `M16.financial_report.export` | authorization.denied; restricted_export.denied; purpose_check.denied |
+| CW09-SEC-13 | `M12.property_stay.read`; `M12.room_task.read` | authorization.denied; site_scope.denied; cross_property_access.denied |
+| CW09-SEC-14 | `M06.inventory_adjustment.create`; `M06.inventory_adjustment.approve`; `M06.inventory_adjustment.post` | authorization.denied; inventory_adjustment.approval_denied; sod_conflict |
+| CW09-SEC-15 | `M07.stock_transfer.close`; `M07.stock_transfer_shipment.reconcile` | authorization.denied; transfer_closure.denied; unresolved_disposition |
+| CW09-SEC-16 | `M06.inventory_reservation.fulfill`; `M06.inventory_movement.record` | idempotency.replay_detected; duplicate_effect.prevented; authorization.decision |
+| CW09-SEC-17 | Representative exact read/write key for the target resource, including `M06.inventory_balance.read` and `M05.reservation.read` where applicable | tenant_isolation.denied; authorization.denied; target_business_mismatch |
+| CW09-SEC-18 | `M12.property_stay.read`; `M06.inventory_balance.read`; `M07.stock_transfer.read` | scope_check.denied; assignment_scope.denied; authorization.denied |
+| CW09-SEC-19 | `S0.platform_admin` action namespace (platform policy key to be defined in platform catalogue; no Business key substitutes) | principal_namespace.denied; platform_privilege.denied |
+| CW09-SEC-20 | `M21.integration_secret.read`; ordinary report/export key attempting D4 value | secret_access.denied; restricted_data_access.denied |
+| CW09-SEC-21 | `M04.student_record.read`; `M04.guest_identity.read` with incompatible purpose | purpose_check.denied; authorization.denied |
+| CW09-SEC-22 | Any previously eligible key after membership/assignment revocation, e.g. `M12.housekeeping_task.read` | membership_revocation.enforced; stale_session.denied; authorization.denied |
+| CW09-SEC-23 | Conditional-module key while entitlement inactive, e.g. `M06.inventory_balance.read` for an inactive conditional module | module_entitlement.denied; authorization.denied |
+| CW09-SEC-24 | `M06.inventory_movement.record`; `M07.stock_transfer_shipment.receive`; `M16.payment.capture`; `M21.integration.run_sync` | event_replay.detected; invalid_transition.denied; idempotency.single_effect |
+
+### 31.1 Key and event semantics
+
+1. Keys in this table are candidate vocabulary for negative-test targeting. A row does not assert that the key has been approved, assigned to a role or implemented.
+2. The `S0.platform_admin` entry is a namespace marker only, not a final permission key. DOC-05's separate platform authorization catalogue must define the exact resource/action key before any executable test is authored.
+3. Where a key is marked representative, the test harness must substitute the exact key for the actual target resource and preserve the attempted key in the evidence record; it must not treat the representative example as an exhaustive key list.
+4. Audit-event labels are required semantic evidence families, not approved physical event names or table/column names. DOC-03/DOC-04 implementation design must later define canonical event schemas and retention.
+5. A DENY result must not leak protected field values. Idempotent replay may return the prior authorized outcome while guaranteeing no duplicate side effect; the event record must make that distinction explicit.
+6. DOC-05 completion remains OPEN until every candidate key is expanded into the full policy tuple and reviewed against the existing FIX/OPEN registers. DOC-07 test execution remains NOT AUTHORIZED and NOT EXECUTED.
+
+### 31.2 Cross-document acceptance links
+
+- DOC-05 §23.3 supplies Education/Hotel action families; §23.4 supplies inventory/warehouse candidate keys; §23.5 defines the per-key completion rule.
+- DOC-06 §§21.3–21.4 supplies workflow ownership; §21.6–21.10 supplies permission, scope, data/purpose and SoD baselines.
+- DOC-04 §28 supplies the 17-entity logical owner map; physical field inventory remains a separate specification gate.
+- DOC-07 §30 remains the stable test register; this section supplies candidate key and audit-event cross-references only.
+
+**Disposition:** 24/24 stable test IDs now have candidate permission-key and expected audit-event references. Exact policy tuples remain incomplete; tests remain DESIGN / NOT EXECUTED; no dependency is closed. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
