@@ -42,3 +42,27 @@ The earlier statements above that the direct RMD-69 v1.1 locator was not recover
 Controlling source: `/Arsip Proyek POS SaaS/RMD/RMD-69_v1.1_R69-D01_to_R69-D12_Conceptual_FIX_Addendum.docx` (manifest M231-223; zero-based index 222; 16 November 2026 SHA-256 manifest v1.0). Verified locators: p.1 §§1–2; p.2 §§2–5; p.3 §§6–8.
 
 This clarification changes no CAT-12 decision or technical status. Safe-mode function list, lifecycle, SLA/expiry, reviewer authority and other residual details remain OPEN; no specialist role/module/capability is enabled by classification. Schema, RLS, API/backend enforcement and implementation remain NOT VERIFIED / NOT AUTHORIZED as applicable.
+
+
+## CW-10 project-authored exception/classification index — CAT-12 Other / Unclassified (20 November 2026)
+
+CAT-12 is a temporary classification/exception path, not a permanent operating category. The 14 items below are exception/classification steps, not operational workflows. M01/M18 references identify the accountable classification/control owner only; they do not activate an operational module or specialist capability.
+
+| ID | Project-authored exception/classification step | Control owner | Supporting handoff |
+|---|---|---|---|
+| EXC-01 | Business Activity Declaration | M01 | Business Owner |
+| EXC-02 | Existing Category Match Search | M01 | DOC-02 taxonomy |
+| EXC-03 | Unmapped Activity Capture | M01 | Platform classification review |
+| EXC-04 | Multi-activity Profile Review | M01 | M18 compliance screening |
+| EXC-05 | Specialist Module Dependency Check | M18 | Relevant specialist owner, no activation |
+| EXC-06 | Regulated Activity Flag | M18 | Credential/jurisdiction gate |
+| EXC-07 | Business and Owner Confirmation | M01 | Identity/membership controls |
+| EXC-08 | Supporting Evidence Collection | M18 | Evidence register |
+| EXC-09 | Reviewer Assignment and Conflict Check | M01 | Independent reviewer; authority remains OPEN |
+| EXC-10 | Temporary Safe-mode Decision Record | M01 | Fail-closed policy |
+| EXC-11 | Provisional Classification Status | M01 | No specialist entitlement |
+| EXC-12 | Review Status and Due-date Capture | M01 | SLA/expiry values remain OPEN |
+| EXC-13 | Reclassification and Category Change | M01 | Re-run entitlement and scope review |
+| EXC-14 | Exception Closure and Entitlement Re-evaluation | M01 | No automatic specialist module activation |
+
+**Status:** 14/14 exception steps indexed for design navigation. Safe-mode function list, lifecycle, SLA/expiry and reviewer authority remain OPEN. Unknown/ambiguous activity remains fail-closed.

@@ -1697,3 +1697,48 @@ PR #110 is CLOSED / MERGED. All five changed files were fetched again from `main
 The prioritized next package is CW-10 — category-to-M01–M21/workflow/module/entitlement crosswalk for CAT-01–CAT-13. Physical Data Dictionary, exact authorization grants, technical enforcement, test execution/evidence, Purchasing/Sales crosswalks, DOC-08/09/10 acceptance, DOC-11/12 acceptance and Stage 4.9 remain OPEN/PARTIAL as recorded. DB_PUSH_BLOCKED ACTIVE; Stage 5 and Stage 6 NOT AUTHORIZED.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.41 CW-10 — category-to-domain/workflow/module crosswalk for CAT-01–CAT-13 (20 November 2026)
+
+**Objective:** extend the bounded CAT-10/CAT-11 category profile and workflow-owner design to all 13 business categories, preserving existing category FIX decisions, the CAT-12 fail-closed exception path and the CAT-13 dual-track boundary. This is project-authored logical design; it does not claim source-native title recovery or authorize module activation/permissions.
+
+### 15.41.1 Current-main findings
+
+| Finding | Observation | Correction |
+|---|---|---|
+| CW10-F01 — category profile coverage | DOC-01/DOC-02 list 13 categories, but explicit M01–M21 CORE/CONDITIONAL profiles are detailed only for CAT-10/CAT-11. | Add project-authored conceptual profile for CAT-01–09 and CAT-13; preserve CAT-10/11 FIX; CAT-12 remains no-operational-module fail-closed exception. |
+| CW10-F02 — workflow title coverage | CAT-01 has 12 title names; CAT-02–09 and CAT-12 retain 14-item counts with incomplete title indexes; CAT-13 has RF-01–10 and FM-01–12 tracks. | Publish project-authored logical title/owner indexes without claiming source-native recovery. |
+| CW10-F03 — single primary owner | DOC-03/DOC-06 owner model exists for CAT-10/11 only. | Assign exactly one primary M01–M21 owner to each workflow item; supporting domains remain handoff only. |
+| CW10-F04 — conditional activation | Existing DOC-01/DOC-02 status says category/workflow eligibility is not a grant; crosswalk v1.3 remains DRAFT/CANDIDATE. | Define CORE/CONDITIONAL/OUT-OF-BASELINE; conditional requires explicit package entitlement and Business configuration. |
+| CW10-F05 — regulated/exception tracks | CAT-08 regulated gate, CAT-12 exception path and CAT-13 two tracks have special status. | Preserve pharmacy NOT READY until credential/jurisdiction/compliance evidence; CAT-12 activates no specialist module; CAT-13 tracks never collapse. |
+
+### 15.41.2 Project-authored baseline
+
+- 13 category profiles are published in DOC-02 §20.
+- 190 logical workflow/exception items are indexed across the 13 categories: CAT-01 12; CAT-02–09 14 each; CAT-10 14; CAT-11 16; CAT-12 14 exception/classification items; CAT-13 10 Retail/Refill + 12 Formulation/Manufacturing.
+- CAT-10 and CAT-11 profiles and workflow titles are preserved; no prior FIX decision is reopened.
+- CAT-01–09 and CAT-13 titles are project-authored logical labels, not source-native transcriptions. CAT-12 items are exception/classification steps, not an operational category workflow.
+- Every workflow/exception item has one primary logical owner. Supporting domains are not co-owners and do not gain write authority.
+- Category CORE/CONDITIONAL is product eligibility only. Subscription/package, module activation, role, exact action key, scope and authorization remain independent gates.
+
+### 15.41.3 CW-10A append-only correction package
+
+| Document | New content | Purpose |
+|---|---|---|
+| DOC-02 CATEGORY_WORKFLOW_MASTER.md | §20 | 13 category CORE/CONDITIONAL profiles, track/gate rules and 190-item index authority |
+| CAT-01 detail | owner crosswalk | Retain 12 existing titles; add primary owners |
+| CAT-02–CAT-09 detail | project-authored title/owner indexes | Complete 14-item logical indexes per category |
+| CAT-12 detail | exception-step/owner index | 14 fail-closed classification steps; no operational modules |
+| CAT-13 detail | two separate project-authored track indexes | 10 Retail/Refill and 12 Formulation/Manufacturing items |
+| This Worklist | §15.41 | Audit, scope and next CW10B cross-document acceptance |
+
+### 15.41.4 Acceptance boundary
+
+**CW-10A: CATEGORY PROFILE AND WORKFLOW INDEX — READY FOR DOCUMENTATION ACCEPTANCE, PENDING PR REVIEW, CI AND POST-MERGE READBACK.** This package establishes project-authored logical category profiles and single-owner workflow indexes for the 13-category scope.
+
+It does not approve role grants, exact permission keys, regulated pharmacy operation, CAT-12 specialist activation, physical schema, runtime workflows, test execution or evidence. CAT-08 remains REGULATED / NOT READY pending its gates. CAT-12 remains fail-closed. CAT-13 tracks remain separate.
+
+**Next CW10B:** cross-reference all 13 profiles and 190 workflow owners into DOC-03, DOC-05, DOC-06, DOC-07 and DOC-11; define test/evidence design coverage and release acceptance.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No database, application, CI workflow, deployment or Production change.
