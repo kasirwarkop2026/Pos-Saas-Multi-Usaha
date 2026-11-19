@@ -180,3 +180,25 @@ This §13 addendum supersedes only the stale current-status wording identified i
 DOC-02 remains DRAFT — SOURCE-ALIGNED RECONSTRUCTED WORKING MASTER; REVIEW REQUIRED; NOT CANONICAL / NOT FINAL. This correction does not establish technical authorization or implementation readiness.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+## 14. Append-only category-to-domain baseline reconciliation — 19 November 2026
+
+This section adopts the project-authored domain and category decisions in DOC-06 §21. It supplements the existing category descriptions; it does not silently rewrite historical category status or approve runtime module entitlement.
+
+### 14.1 CAT-10 Education
+
+CORE domains: M04 Customer / Guest / Student / CRM; M05 Booking, Reservation & Appointment; M13 Education Operations; M17 Workforce & Scheduling. CONDITIONAL domains: M02 Catalog, Product & Pricing; M06 Inventory & Material Ledger; M08 Procurement & Supplier; M16 Finance, Billing & Payment; M18 Quality, Inspection & Compliance; M21 Integration & Channel.
+
+### 14.2 CAT-11 Hotel
+
+CORE domains: M02 Catalog, Product & Pricing; M05 Booking, Reservation & Appointment; M12 Hospitality Operations; M16 Finance, Billing & Payment; M18 Quality, Inspection & Compliance; M20 Maintenance & Safety. CONDITIONAL domains: M03 POS, Sales & Order (onsite POS only); M04 Customer / Guest / Student / CRM; M06 Inventory & Material Ledger; M07 Warehouse & Custody; M08 Procurement & Supplier; M17 Workforce & Scheduling; M19 Delivery & Fulfillment; M21 Integration & Channel.
+
+### 14.3 Workflow ownership rule
+
+The primary domain listed for each EDU-WF and HTL-WF in DOC-06 §§21.3–21.4 owns its authoritative lifecycle and write operations. Supporting domains retain ownership of their own records and accept explicit commands/events; they do not become subordinate tables or implicit write extensions of the primary workflow. Category workflow presentation may combine domains but must not collapse ownership.
+
+### 14.4 Conditional activation and change gate
+
+A conditional domain is enabled only by explicit category/business configuration and applicable subscription entitlement, followed by independently evaluated permission. Extension workflows require defined owner, objects, actions, scope, data/purpose, SoD and acceptance scenarios. No role, Manager status or workflow label automatically grants access. DOC-06 §21 is the controlling logical baseline; contradictions must be logged and reconciled rather than resolved by local reinterpretation.
+
+Status: project-authored logical category design recorded; no permission grants, technical configuration, physical schema, implementation or test execution is implied. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
