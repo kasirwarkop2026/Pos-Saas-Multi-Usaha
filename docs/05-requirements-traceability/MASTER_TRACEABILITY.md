@@ -735,3 +735,132 @@ Dependencies newly closed: **0**. FIX decisions changed: **0**. New permission k
 DOC-06 remains Version 0.2 / working Revision 0.2.2; DRAFT / RECONCILED WORKING MASTER / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. REC-06 remains PARTIAL / OPEN / CANDIDATE. Stage 4.7.8 and Stage 4.9 remain PARTIAL — ACCEPTANCE NOT MET. Implementation readiness remains NOT READY.
 
 Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket GitHub/archive migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed by this documentation repair.
+
+
+## 20. Source-backed category module crosswalk and workflow decomposition overlay (CW-09 repair continuation, 19 November 2026)
+
+This section performs the source-supported part of the CW-09 repair using the inspected REC-06 Permission Catalogue Overlay §§3.3, 4.3, 3.4 and 4.4; REC-06 Workflow-to-Capability Traceability Matrix §§2, 5–7; and Category → Workflow → Module Crosswalk v1.3 §§1–5. It improves the category-level candidate crosswalk and decomposes the workflow handoffs for review. It does **not** approve M01–M21, assign workflow-level M-IDs, create permissions/grants, or close G02/G04.
+
+### 20.1 M01–M21 domain-name reference
+
+The following names are transcribed from Crosswalk v1.3 §2. They are the Shared Core v1.0 proposed domain labels, not a canonical approval:
+
+| M-ID | Proposed Shared Core domain label | CW-09 use |
+|---|---|---|
+| M01 | Business Profile & Organization | Reference only; no CAT-10/CAT-11 assignment evidenced |
+| M02 | Catalog, Product & Pricing | Education conditional candidate; Hotel core candidate |
+| M03 | POS, Sales & Order | Hotel conditional candidate (onsite POS only) |
+| M04 | Customer / Guest / Student / CRM | Education core candidate; Hotel conditional candidate |
+| M05 | Booking, Reservation & Appointment | Education core candidate; Hotel core candidate |
+| M06 | Inventory & Material Ledger | Education conditional candidate (learning assets); Hotel conditional candidate (minibar/linen/supplies) |
+| M07 | Warehouse & Custody | No Education candidate listed; Hotel conditional candidate |
+| M08 | Procurement & Supplier | Education conditional candidate; Hotel conditional candidate |
+| M09 | Service & Work Order Operations | No CAT-10/CAT-11 candidate listed in the inspected crosswalk |
+| M10 | Production, Recipe & Formulation | No CAT-10/CAT-11 candidate listed in the inspected crosswalk |
+| M11 | Asset, Fleet & Capacity | No CAT-10/CAT-11 candidate listed in the inspected crosswalk |
+| M12 | Hospitality Operations | No Education candidate listed; Hotel core candidate |
+| M13 | Education Operations | Education core candidate; no Hotel candidate listed |
+| M14 | Pharmacy & Regulated Product Operations | No CAT-10/CAT-11 candidate listed in the inspected crosswalk |
+| M15 | Laundry & Item Processing | No CAT-10/CAT-11 candidate listed in the inspected crosswalk |
+| M16 | Finance, Billing & Payment | Education conditional candidate; Hotel core candidate |
+| M17 | Workforce & Scheduling | Education core candidate; Hotel conditional candidate |
+| M18 | Quality, Inspection & Compliance | Education conditional candidate; Hotel core candidate |
+| M19 | Delivery & Fulfillment | No Education candidate listed; Hotel conditional candidate |
+| M20 | Maintenance & Safety | No Education candidate listed; Hotel core candidate |
+| M21 | Integration & Channel | Education conditional candidate; Hotel conditional candidate |
+
+“Tidak tercantum sebagai kandidat” means only that the inspected category crosswalk does not list that M-ID for the category; it is not a prohibition or a new NOT-ELIGIBLE decision. All M-domain labels and alignments remain DRAFT/CANDIDATE.
+
+### 20.2 Category-level candidate alignment (source-reconciled, not workflow assignment)
+
+| Category | Candidate class | Candidate M-IDs and domain labels | Source-supported interpretation / limit |
+|---|---|---|---|
+| CAT-10 Education | CORE candidate | M04 Customer/Guest/Student/CRM; M05 Booking/Reservation/Appointment; M13 Education Operations; M17 Workforce/Scheduling | Category-level alignment only. Student/minor data, class/session assignment and qualification safeguards remain independently applicable |
+| CAT-10 Education | CONDITIONAL candidate | M02 Catalog/Product/Pricing; M06 Inventory/Material Ledger (learning assets); M08 Procurement/Supplier; M16 Finance/Billing/Payment; M18 Quality/Inspection/Compliance; M21 Integration/Channel | Conditional on institution operating model and applicable workflow; not blanket eligibility or access |
+| CAT-10 Education | Workflow-specific extension | LMS/Online Learning; formal school/university; childcare; boarding/residential; regulated vocational; specialized certification | Conditional extension audit and applicable qualification/compliance review required |
+| CAT-11 Hotel | CORE candidate | M02 Catalog/Product/Pricing; M05 Booking/Reservation/Appointment; M12 Hospitality Operations; M16 Finance/Billing/Payment; M18 Quality/Inspection/Compliance; M20 Maintenance/Safety | Category-level alignment only; sensitive actions require separate authorization and assigned property/unit scope |
+| CAT-11 Hotel | CONDITIONAL candidate | M03 POS/Sales/Order (onsite POS); M04 Customer/Guest/Student/CRM; M06 Inventory/Material Ledger (minibar/linen/supplies); M07 Warehouse/Custody; M08 Procurement/Supplier; M17 Workforce/Scheduling; M19 Delivery/Fulfillment; M21 Integration/Channel | Conditional on actual property operating model, workflow and assigned scope |
+| CAT-11 Hotel | Workflow-specific extension | Group/Corporate/Agency; channel/OTA integrations; property-specific guest identity; regulated obligations | Conditional review of relationship, purpose, property scope and jurisdiction required |
+
+The approved 14 module groups per category in RMD-66/RMD-68 are not replaced by this candidate M-ID list. Crosswalk v1.3 §§1, 3–5 explicitly states that Shared Core is PROPOSED/CANDIDATE, that these M-ID alignments are inherited candidate alignments, and that G02/G04 plus explicit approval are required before promotion. Therefore this repair closes the category-level *source navigation and transcription gap only*; it does not close G02.
+
+### 20.3 Workflow decomposition and handoff boundaries
+
+The following is a source-grounded decomposition of the resource/action clusters already described in §19.2 and REC-06 matrix §§5–6. “Candidate domain” is a category-level reference from §20.2, not a specific workflow assignment. The exact submodule owner, action-to-object lifecycle, and inter-module contract remain OPEN under G04.
+
+| Workflow family / IDs | Source-described submodule or object clusters | Candidate domain reference (category-level only) | Handoff / control boundary retained |
+|---|---|---|---|
+| Education catalog & intake — EDU-WF-01–02 | Program/course/curriculum/prerequisite/version/publication; inquiry/application/applicant/guardian/consent/admission decision | M13, M04, M05; M02 conditional | Catalog publication is distinct from admission decision; guardian relationship/consent must be verified |
+| Education learner & enrollment — EDU-WF-03–04 | Student/participant profile and history; guardian link; enrollment/class/batch/capacity/waitlist/transfer/withdrawal | M04, M05, M13 | Minimum necessary student fields; enrollment and cancellation/transfer decisions require explicit lifecycle authority |
+| Education schedule & workforce — EDU-WF-05–06 | Session/room/facility/capacity/instructor assignment; instructor profile/credential/availability/evaluation | M13, M17; M18 conditional | Instructor assignment scope is separate from credential validation; schedule/resource conflicts remain governed by E-04 OPEN details |
+| Education delivery & learning assets — EDU-WF-07–08 | Class/session/attendance/correction; learning content/material/equipment/issue-loan/return/access | M13; M06 conditional; M17 candidate | Attendance recording vs correction approval separated; asset custody does not grant student-record access |
+| Education assessment & finance — EDU-WF-09–10 | Assessment/exam/question/rubric/submission/grade/moderation/appeal/result; fee/invoice/installment/discount/scholarship/payment/refund/arrears | M13; M16 conditional; M18 conditional | Exam authoring/grading/moderation/finalization/publication separated by risk; fee/discount/payment/refund/write-off/reconciliation distinct |
+| Education relationships, completion & safeguarding — EDU-WF-11–13 | Guardian/sponsor/corporate billing relationship; completion/certificate/serial/correction/revocation; complaint/safeguarding/incident/evidence/escalation | M04, M13; M16 conditional; M18 conditional | Payment relationship alone does not expose student records; certificate issue/correction/revocation separated; safeguarding case access restricted |
+| Education reporting & retention — EDU-WF-14 | Report/dataset/audit event/export/archive/retention | M13; M18 conditional; M21 conditional | Report/field scope, export purpose and retention/jurisdiction rules remain OPEN |
+| Hotel property & commercial setup — HTL-WF-01–02 | Property/building/floor/room/unit/bed/type/capacity/amenity/status; rate plan/price/occupancy restriction/blackout/cancellation/tax/fee | M12, M02; M20 candidate | Property/unit administration scope distinct from rate authoring, approval, publication and override |
+| Hotel availability & booking — HTL-WF-03–04 | Availability/allotment/date-range/hold/out-of-order/overbooking; inquiry/quote/reservation/booking/deposit/guarantee/modification/cancellation/no-show | M12, M05; M16 candidate | Availability/readiness and overbooking authority remain OPEN; reservation/payment and cancellation fee policy remain distinct |
+| Hotel guest & arrival/stay — HTL-WF-05–07 | Guest/co-guest/identity/contact/consent/preference/history/restricted note; verification/room assignment/registration/deposit/key/check-in; stay/room move/extension/departure/request/incident | M12, M04; M05; M16 conditional | Minimum necessary identity; relationship and property scope required; deposit/key/check-in authority separately controlled |
+| Hotel housekeeping & maintenance — HTL-WF-08–09 | Room task/cleaning/inspection/linen/minibar/readiness; work order/defect/asset/safety hold/repair/inspection/return-to-service | M12, M20, M18; M06 conditional | Housekeeping task scope does not imply folio/full identity access; maintenance cannot self-release safety hold or independently authorize return-to-service |
+| Hotel folio, checkout & payment — HTL-WF-10–11 | Folio/room charge/incidental/source transaction/posting/adjustment/split; checkout/invoice/payment/deposit/refund/receipt/settlement | M12, M16; M03 conditional (onsite POS) | Posting/adjustment/refund/write-off/settlement/reconciliation remain separate; no threshold or approver inferred |
+| Hotel group, service & cash — HTL-WF-12–14 | Group block/corporate/agency/rate/rooming list/billing/commission; guest request/complaint/lost-found/recovery/compensation; shift/drawer/handover/cash count/variance/close | M12, M04, M17; M16; M18 conditional | Corporate/agency data limited to booking/billing relationship; compensation and cash variance approval remain separately controlled |
+| Hotel reporting & integration — HTL-WF-15–16 | Occupancy/revenue/audit/export/retention; connector/account/sync job/external reference/webhook/credential/secret/reconciliation | M12, M18; M21 conditional | Report dataset/field scope and export purpose OPEN; credentials/secrets restricted and activation authority separate |
+
+This decomposition records submodule/resource clusters and control handoffs at the level supported by the inspected working matrix and overlay. It does not claim a final submodule taxonomy, M-ID ownership per workflow, stable permission key, API contract, RLS policy or implementation.
+
+### 20.4 Role-function and control overlays
+
+| Function / work context | Source-backed mapping rule | Access boundary |
+|---|---|---|
+| Instructor/Tutor | Function mapped to existing standard roles/capabilities or credential/assignment context; not a new standard role | Assigned class/session/relevant student scope; qualification validation separate |
+| Examiner/Assessor | Function label only; mapped to existing roles/capabilities or assignment context | Assessment, grading, moderation, appeal and finalization separated by risk |
+| Admissions Officer | Function label only; mapped to existing standard roles/capabilities | Applicant/admission workflow scope; guardian consent/relationship verified |
+| Housekeeping | Mapped to Production / Service Operator under Hotel overlay | Assigned room/task/property/shift; no default folio/payment/full guest identity |
+| Reservation Agent | Function label only; existing standard-role/capability mapping | Reservation and necessary guest subset; not blanket identity/payment access |
+| Night Auditor | Function label only; existing standard-role/capability mapping | Night audit does not bypass correction/reversal controls or authorize arbitrary final-transaction edits |
+| Guest Service | Function label only; existing standard-role/capability mapping | Guest request/service context; complaint/incident and compensation authority restricted |
+| Sales / Corporate Account | Function label only; existing standard-role/capability mapping | Relevant booking/billing relationship and necessary subset; no cross-property or full guest-record grant |
+
+The 12 standard roles and 14 module groups per category have conceptual approval in RMD-66/RMD-68. This function overlay does not recreate the full 12-row role matrices, create roles, or grant access. Manager eligibility remains coordination/supervision/monitoring/review within assigned Business/program/outlet/class/resource/team (Education) or Business/property/building/outlet/team (Hotel) scope; it is not unrestricted operational authority.
+
+### 20.5 Negative-test specification candidates (not executed)
+
+The following expected-deny cases are derived from the inspected overlay guardrails. They are proposed traceability specifications only; they do not establish stable test IDs, executable tests, execution, PASS, or retained evidence.
+
+| Proposed scenario | Workflow/object anchor | Expected deny / control assertion | Source basis |
+|---|---|---|---|
+| EDU-NEG-01 | EDU-WF-03 student profile / accommodation / identity | Deny access to accommodation or identity fields without explicit need-to-know and purpose | REC-06 overlay §3.4 |
+| EDU-NEG-02 | EDU-WF-06 instructor / class / session / student | Deny access outside assigned class/session/student scope; do not treat role eligibility as assignment | REC-06 overlay §3.4 |
+| EDU-NEG-03 | EDU-WF-07 attendance correction | Deny self-approval or same-actor correction approval where separation is required | REC-06 overlay §3.4 and DOC-06 §8 |
+| EDU-NEG-04 | EDU-WF-09 exam / grade / appeal / publication | Deny incompatible combined grading, moderation, finalization or publication authority where risk separation applies | REC-06 overlay §3.4 |
+| EDU-NEG-05 | EDU-WF-10 fee / payment / refund / write-off | Deny treating fee creation, discount approval, payment capture, refund, write-off and reconciliation as one implicit grant | REC-06 overlay §3.4 |
+| EDU-NEG-06 | EDU-WF-11 guardian / sponsor / student relationship | Deny full student-record access based solely on payer/sponsor relationship | REC-06 overlay §3.4 |
+| EDU-NEG-07 | EDU-WF-13 safeguarding / incident | Deny general Manager/report access to restricted safeguarding details absent explicit case authority | REC-06 overlay §3.4 |
+| HTL-NEG-01 | HTL-WF-05 guest identity / ID / restricted note | Deny full identity/ID access outside minimum-necessary Front Desk or separately authorized purpose | REC-06 overlay §4.4 |
+| HTL-NEG-02 | HTL-WF-08 housekeeping room task / folio | Deny folio/payment/full guest identity access based only on assigned housekeeping task | REC-06 overlay §4.4 |
+| HTL-NEG-03 | HTL-WF-09 safety hold / return-to-service | Deny unilateral safety-hold removal or self-authorized return-to-service by maintenance actor | REC-06 overlay §4.4 |
+| HTL-NEG-04 | HTL-WF-02 rate plan / override | Deny one actor's implicit authority to author, approve, publish and override rates as a single undifferentiated action | REC-06 overlay §4.4 |
+| HTL-NEG-05 | HTL-WF-10–11 folio / payment / refund / settlement | Deny implicit combination of payment capture, refund/void/write-off, cash variance and settlement close | REC-06 overlay §4.4 |
+| HTL-NEG-06 | HTL-WF-12 corporate/agency relationship | Deny access to guest identity beyond the relevant booking/billing relationship and necessary subset | REC-06 overlay §4.4 |
+| HTL-NEG-07 | HTL-WF-14–15 cash variance / report / export | Deny unrestricted cash variance approval or report/export access without separately defined authority, scope and purpose | REC-06 overlay §4.4 and DOC-06 §§7–8 |
+| HTL-NEG-08 | HTL-WF-01/07 property and stay data | Deny cross-property access based only on Manager or standard-role label | REC-06 overlay §4.4 |
+
+### 20.6 Repair disposition and exact remaining blockers
+
+Completed by this continuation:
+1. Transcribed all 21 Shared Core M-domain labels from Crosswalk v1.3 §2.
+2. Reconciled the Education and Hotel category-level CORE/CONDITIONAL/extension candidate lists against REC-06 overlay §§3.3 and 4.3 and Crosswalk v1.3 §3.
+3. Added source-grounded submodule/resource/action-cluster and handoff decomposition for all 30 workflow IDs without asserting workflow-level M-ID ownership.
+4. Added the existing function-label guardrails and proposed expected-deny specifications from the inspected overlay; explicitly marked them not executed.
+
+Still OPEN / PARTIAL and not safely closable from the inspected evidence:
+- **G02:** explicit approval of canonical M01–M21 domain labels and category candidate baseline, plus source-to-M-ID trace for each named module group. Crosswalk v1.3 §5 states this decision and trace are unresolved; the overlay preserves all M-IDs as CANDIDATE.
+- **G04:** approved workflow → submodule → resource/object → action ownership and cross-module handoff map. The available REC-06 matrix is a working audit draft; the overlay does not approve workflow-level M-ID assignments.
+- **Primary claim provenance:** the named RMD-66/RMD-68 Deep Audit Brief files are cited by REC-06 as SRC-01/SRC-03 but were not present among the three inspected REC-06 artifacts in this repair pass; do not treat the working matrix as the missing primary briefs.
+- **Permission and authorization:** stable permission keys, final capability/action grants, per-action scope, field-level D0–D4/purpose, final SoD/approver thresholds, and technical server authorization remain OPEN/NOT APPROVED/NOT VERIFIED.
+- **Testing:** proposed expected-deny cases above are specifications only. Stable approved test IDs, executable test implementation, execution runs, results, retained artifacts and retest evidence remain NOT ESTABLISHED.
+
+**CW-09 disposition remains PARTIAL — substantive source-backed repair expanded; closure gate not met.** This is not a refusal to complete the work: the remaining items require an explicit policy decision (G02), approved submodule ownership/handoff (G04), unavailable primary-source provenance, or technical/test evidence that cannot be invented from the current documents. Do not mark CW-09 CLOSED or DOC-06 final on the basis of this section.
+
+Source locators: REC-06 Permission Catalogue Overlay §§2, 3.3–3.5, 4.3–4.5, 5–8; REC-06 Workflow-to-Capability Traceability Matrix §§2, 5–7; Category → Workflow → Module Crosswalk v1.3 §§1–5. The page/section locator for each underlying RMD review/addendum remains in DOC-06 §19.1.
+
+Controls remain unchanged: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration **NOT AUTHORIZED**; Stage 6 implementation **NOT AUTHORIZED**. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes are authorized or performed by this documentation repair.
