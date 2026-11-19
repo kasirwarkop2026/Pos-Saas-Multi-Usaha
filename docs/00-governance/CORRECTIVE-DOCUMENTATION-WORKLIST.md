@@ -780,3 +780,40 @@ PR #89 merge and four-file post-merge readback are complete. The CW-11 documenta
 This merge does not authorize blanket Stage 5 migration or Stage 6 implementation. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no database, application, CI workflow, deployment or Production changes were made.
 
 **Next:** Continue with the next bounded corrective item in this Worklist only after the post-merge record is published and verified.
+
+
+### 15.19 CW-01 — DOC-00 document-control navigation and status-reference audit (19 November 2026)
+
+**Audit scope:** DOC-00 `docs/00-governance/MASTER-PROJECT-CONTROL.md` against the active corrective-work routing source and the current `main` repository tree. This is a read-only verification checkpoint; no DOC-00 content rewrite was necessary.
+
+#### 15.19.1 Findings and verified controls
+
+| Check | Current-main finding | Result |
+|---|---|---|
+| Active task-routing locator | DOC-00 §29.1 identifies `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` as the active task-routing document. | PASS |
+| Authority hierarchy | DOC-00 §29.3 separates DOC-00 project-control context, Worklist task sequence, and domain-specific source/register authority. | PASS |
+| Retired checklist navigation | DOC-00 §29.2 explicitly retires Master Checklist v2.0 for active navigation and preserves it as historical evidence. | PASS |
+| Historical status snapshots | DOC-00 §23.5 explicitly limits the old Stage 5 header label; §24 preserves named package-specific exceptions; §29.4 states current stage/readiness and authorization boundaries. | PASS — historical text retained and current interpretation explicit |
+| Current Worklist reference | The Worklist exists on `main` and is the controlling sequence for CW-01–CW-22. | PASS |
+| Referenced document paths | All 18 distinct `docs/...` file paths found in DOC-00 were checked against the recursive `main` tree; all 18 exist. | PASS — 0 missing |
+| Append-only history | The existing dated navigation/status addenda remain intact; no historical section was rewritten or deleted. | PASS |
+
+#### 15.19.2 Interpretation and disposition
+
+The broad Stage 5 wording in DOC-00's opening header and §3 is retained as a historical authorization snapshot, not current blanket authority. DOC-00 §23.5 already clarifies that boundary, and §29.4 states the current rule: Stage 5 blanket migration **NOT AUTHORIZED** and Stage 6 implementation **NOT AUTHORIZED**. The current active task-routing authority is the Corrective Documentation & Closure Worklist, not Master Checklist v2.0.
+
+The prior historical references to Master Checklist v2.0 and earlier work sequences are not broken current navigation links: DOC-00 §29.2 and §29.3 explicitly supersede them for present routing while preserving their historical record.
+
+**Disposition:** CW-01 is **PASS / CLOSED at DOC-00 document-control navigation and locator scope**. No DOC-00 source edit is required. This disposition does not accept DOC-00 as canonical/final, close unrelated dependencies, change Stage 4.7.8/4.8/4.9, or authorize technical work.
+
+#### 15.19.3 Evidence and governance
+
+- DOC-00 main blob SHA reviewed: `20aeb5f2c1dd1292481da0f7a87cd0c7095433df`.
+- Worklist is the active routing authority under DOC-00 §29.
+- Recursive `main` tree check: 18/18 referenced document paths exist.
+- Exact paths changed by this CW-01 checkpoint: Worklist only; DOC-00 unchanged.
+- No dependencies closed outside CW-01's document-control navigation criterion.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database/schema/migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production changes. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+**Next bounded task:** CW-02 — audit DOC-01 terminology and references against the controlling FIX register and current cross-document anchors. Verify current-main first; do not recreate already-completed design work.
