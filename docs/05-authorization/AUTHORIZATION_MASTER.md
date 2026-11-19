@@ -921,3 +921,55 @@ DOC-04 §28 is the pre-existing authoritative 17-entity owner register; DOC-04 �
 4. Candidate keys remain candidate vocabulary; exact production actor/key/resource/scope/condition/approval grants remain OPEN / NOT APPROVED.
 
 **Disposition:** this section corrects only the DOC-04 locator; no authorization grant or technical control is created.
+
+
+## 32. CW-06 authorization-design cross-document consistency and precedence (20 November 2026)
+
+This section supplements §§22–31 and reconciles DOC-05 with DOC-06 §§21.6–21.10, DOC-07 §§31–41 and the resource-owner boundaries in DOC-03/DOC-04.
+
+### 32.1 Controlling role and principal precedence
+
+1. DOC-05 §23.1 and DOC-05 §4.2 are the controlling role namespace: exactly 12 standard Business roles; Owner is outside the 12; SUPER_ADMIN and PLATFORM_ADMIN are separate platform roles under S0.
+2. Mitra/Pekerja, Mitra Fisik and Pelanggan are principal/relationship classifications, not additional standard Business roles. They require authenticated identity plus the relevant active membership, capability, assignment or verified relationship.
+3. The older generic wording in §22.2 is interpreted under §23.1 and does not create a new role family or permission. Where the exact role/function, membership, scope or relationship is unresolved, DENY.
+4. A role title, relationship, category profile, UI visibility or module entitlement alone is never a permission grant.
+
+### 32.2 DOC-05 ↔ DOC-06 authorization-clause crosswalk
+
+| Normative rule | DOC-06 authority | DOC-05 authority | Reconciliation |
+|---|---|---|---|
+| Authorization tuple and exact key grammar | §21.6 | §§22.1, 23.2 | Principal + Business + Module + Resource + Action + Scope + Conditions + Data class + Purpose + SoD/approval; exact lowercase key; no action inheritance |
+| Role/principal namespace | §21.6 | §§22.2, 23.1 | 12 Business roles; Owner outside 12; platform roles separate; partner/customer classifications are not roles |
+| Scope hierarchy | §21.7 | §§22.4, 24–25 | S0 Platform and S1–S5 Business/resource scopes are conjunctive; current assignment/verified relationship required |
+| Field classification and purpose | §21.8 | §§24.1, 25.1 | D0–D4 applies at field/document level; purpose narrows permission and cannot create it |
+| SoD and independent approval | §21.9 | §§22.5, 24–25 | Initiator, reviewer/approver and executor remain distinct for high-risk actions; no invented thresholds |
+| Default authorization sequence | §21.10 | §§22.1, 25.1 | Authenticate → tenant/membership → entitlement → exact key → target/tenant → scope → state → data/purpose → conditions → SoD → owner execution/audit → minimum response |
+| Acceptance and closure criteria | §21.11 | §§23.5–23.6, 25.4, 26.3–27.2 | Exact actor/key/resource/scope/condition/approval rows remain OPEN until individually reviewed; missing row means DENY |
+
+### 32.3 Candidate-key reconciliation and non-key exceptions
+
+A bounded token comparison of DOC-07 §31 against DOC-05 §§23–27 found 43 distinct permission-like tokens; all 43 are present in the authorization master.
+
+- 42 tokens are candidate exact-action keys used by the negative-test design catalogue.
+- M21.integration_secret.read is the single prohibited attempted-action label. It is not a candidate permission key, must never be granted and is expected to DENY.
+- S0.platform_admin is a namespace marker, not a permission key. For the defined CW09-SEC-19 platform access-grant scenario, DOC-05 §24.3 and DOC-07 §33 use the separate candidate keys PLATFORM.access_grant.approve and PLATFORM.access_grant.apply.
+- Candidate-key presence in DOC-05 means the key name is catalogued for design/negative-test traceability. It does not mean actor eligibility is approved, a role has been granted the key or a technical guard exists.
+
+### 32.4 High-risk policy tuple and owner-domain boundaries
+
+1. AUTH-HR-01–14 in §24 remain design tuples. DOC-07 §32 maps the 24 CW09-SEC scenarios to relevant high-risk/ordinary policy anchors; DOC-07 §33 clarifies platform S0 candidate keys; DOC-07 §34 preserves the prohibited D4 secret-read label.
+2. AUTH-HR-12/13 define separate platform grant approval/application actions under S0 and dual control. They do not grant Business data access or create a wildcard platform role.
+3. The target resource owner evaluates its own exact action: M06 inventory ledger/costing; M07 warehouse/custody; M16 financial posting; M18 restricted compliance/report export; M21 integration/secret-reference rotation. Supporting domains do not inherit mutation authority.
+4. DOC-04 §28 remains the authoritative 17-entity owner register; DOC-04 §32 supplements relationship/tenant handoff. DOC-06 §§21.3–21.5 remain the workflow owner/interaction authority.
+
+### 32.5 Coverage and acceptance boundary
+
+- 30 Education/Hotel workflow action-family rows remain design catalogue entries, not grants.
+- 17 inventory/warehouse entity-family action groups remain candidate vocabulary, not a complete per-actor allowlist.
+- 14 AUTH-HR tuples remain design-only.
+- DOC-07's 24 CW09-SEC, 14 CW03-SEC, 12 CW04-ARCH and 12 CW05-DATA IDs remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED.
+- Exact actor/key/resource/scope/condition/approver tuples, platform grant catalogue beyond the two defined candidate actions, RLS/Auth/API/backend enforcement and runtime evidence remain OPEN / NOT AUTHORIZED.
+
+**Disposition:** cross-document authorization-design consistency PASS for the bounded vocabulary, precedence and traceability review. DOC-05 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL; no grants or implementation are authorized.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
