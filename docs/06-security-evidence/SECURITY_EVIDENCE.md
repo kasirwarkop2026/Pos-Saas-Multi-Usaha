@@ -889,3 +889,15 @@ This section reconciles the historical S0 marker in §31 with the exact candidat
 **Disposition:** CW09-SEC-19 now has explicit candidate key references for its defined platform access-grant scenario; remaining key/action details are subject to the owner-domain catalogue. All 24 tests remain DESIGN / NOT EXECUTED. No PASS, permission grant, dependency closure or implementation is claimed.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 34. Append-only clarification — prohibited D4 secret-read test token (19 November 2026)
+
+DOC-07 §31 lists M21.integration_secret.read in CW09-SEC-20 as an attempted action for a negative scenario. DOC-05 §24.2 AUTH-HR-11 explicitly states that no secret read/display permission is created. These statements are reconciled as follows:
+
+- M21.integration_secret.read is a **prohibited attempted-action label used only to express the attack scenario**. It is not a canonical permission key, approved candidate grant, or action to be added to the M21 permission catalogue.
+- The expected behavior is DENY for any ordinary application/API/report/export attempt to retrieve a D4 secret value. The attempted token may be retained in negative-test evidence as the rejected request label; it must not be registered as an allow-capable permission key.
+- M21.integration_secret.rotate_secret_ref remains the distinct candidate action for protected rotation of an opaque secret reference/metadata under DOC-05 §24.2 AUTH-HR-11. It does not expose or return the secret value.
+- Test CW09-SEC-20 remains DESIGN / NOT EXECUTED. This clarification creates no permission, key grant, secret access path, implementation or test result.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
