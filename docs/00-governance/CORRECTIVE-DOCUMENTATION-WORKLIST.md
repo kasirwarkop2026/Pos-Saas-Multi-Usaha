@@ -2575,3 +2575,50 @@ READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migrati
 DOC-04 §42.14 adds same Product/Location FK tuples for balance watermarks, adjustment posting movements, reservation fulfillment movements, cost exceptions, cost-layer source movements and cost-layer consumptions. It also adds the candidate Variant relation for cost-layer consumption and keeps nullable Variant equality explicitly OPEN.
 
 The tuple refinement is documentation-only. Physical FK acceptance, null-safe Variant enforcement and runtime evidence remain OPEN. PR #140 remains OPEN and merge-held under §15.70 because merge-to-main has an observed Vercel Production deployment effect.
+
+
+## 15.72 Current documentation remediation workflow — Stage 5 clarification and closure standard (20 November 2026)
+
+**CURRENT EXECUTION POSITION: STAGE 5 — GITHUB DOCUMENTATION REMEDIATION, FINALIZATION AND CLOSURE BEFORE IMPLEMENTATION.**
+
+This section establishes the current operating meaning of Stage 5 for the active project workflow. The older phrase “Stage 5 blanket migration” in historical entries records a prior stage taxonomy and must not be interpreted as the current work phase. Current Stage 5 is the controlled completion of project-authored documentation in GitHub until each document/work package meets its acceptance criteria and is FIXED and CLOSED. This clarification changes stage naming and work sequencing only; it does not authorize database, application, infrastructure, migration or Production changes.
+
+### 15.72.1 Stage 5 work sequence
+
+1. **5.1 — Audit current-main documentation:** read the relevant files from GitHub `main`; identify concrete gaps, conflicts, incomplete definitions and unmet acceptance criteria.
+2. **5.2 — Remediation:** correct the authored documentation directly. Do not stop at recording findings when the required correction can be completed within the authorized documentation scope.
+3. **5.3 — Cross-document consistency:** reconcile references, terminology, decisions, ownership, workflows, requirements and dependencies across affected documents.
+4. **5.4 — Technical completeness:** verify required entities, fields, types, keys, relationships, constraints, lifecycle rules, security boundaries, examples and decision status to the level required by the document's acceptance criteria.
+5. **5.5 — Independent review:** re-audit the corrected content against its source-of-truth project decisions and all relevant related documents; record residual issues explicitly.
+6. **5.6 — PR validation:** inspect the complete diff, append-only integrity, required CI checks, review feedback and unresolved threads. A skipped check is never reported as passed.
+7. **5.7 — Merge and post-merge verification:** merge only when the PR satisfies acceptance and current governance permits the merge; fetch the affected files again from `main` and verify the merged content.
+8. **5.8 — Closure:** mark the work package/document CLOSED only after post-merge verification and all applicable acceptance criteria are satisfied. If any criterion remains unmet, retain IN PROGRESS, READY FOR REVIEW or BLOCKED as appropriate.
+
+### 15.72.2 Required status semantics
+
+- **OPEN:** work identified but not started.
+- **IN PROGRESS:** audit or remediation is underway.
+- **READY FOR REVIEW:** proposed correction is complete and awaiting independent review.
+- **FIXED:** the identified issue has been corrected in the reviewed documentation; this status alone does not mean the work package is closed.
+- **CLOSED:** all applicable acceptance criteria passed, required review completed, merge permitted and post-merge `main` read-back verified.
+- **BLOCKED:** progress is prevented by an unresolved dependency, missing decision or governance/authorization boundary.
+
+FIXED and CLOSED are distinct. A PR being drafted, CI passing, or a PR being merged does not by itself establish CLOSED. Any skipped CI job must remain identified as SKIPPED, not PASS.
+
+### 15.72.3 Operating rules for all Stage 5 work packages
+
+- Work package by work package; keep one active PR at a time.
+- Continue remediation until the acceptance criteria are met; do not repeatedly reopen already completed work without a concrete new finding.
+- Preserve FIX decisions unless a documented material technical conflict justifies review.
+- Keep unresolved dependencies OPEN; never manufacture approval or close a dependency solely to make a gate pass.
+- Maintain READ-ONLY / APPEND-ONLY discipline for the authorized documentation scope.
+- After each merge, verify the exact files from `main` before recording CLOSED.
+- If merge may trigger a prohibited Production deployment, keep the PR unmerged and record the governance blocker; do not bypass it by changing Vercel, CI or deployment configuration.
+- Do not begin implementation until the documentation closure and separate implementation-readiness gates are explicitly satisfied and implementation is authorized.
+
+### 15.72.4 Current boundary and checkpoint
+
+The active work is **Stage 5 documentation remediation/finalization/closure**. CW-11 Package E remains in PR #140 and is not yet merged into `main`; it must complete independent review, required checks, governance-safe merge and post-merge verification before it can be called CLOSED. CW-11 as a whole remains IN PROGRESS / ACCEPTANCE NOT MET.
+
+The legacy Stage 5 blanket migration label is superseded for current workflow tracking by the Stage 5 definition in this section. This does not authorize GitHub/archive migration beyond the documentation PR workflow, and it does not authorize Stage 6 implementation. `DB_PUSH_BLOCKED: ACTIVE` remains in force. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, deployment, Supabase Preview/Staging or Production change is authorized by this clarification.
+
