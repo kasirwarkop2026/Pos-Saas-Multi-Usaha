@@ -2659,3 +2659,14 @@ DOC-04 §42.15 now adds candidate parent-key prerequisites and exact tuple propo
 **Next action:** re-read DOC-04 §§35–42.15 and the relevant cross-document authorities after the addendum; verify the corrected tuples and absence of contradictions; update PR acceptance notes. Do not mark Package E FIXED/CLOSED until review is complete, merge is governance-permitted, and post-merge current-main read-back succeeds.
 
 PR #140 remains OPEN. The Production deployment governance hold in §15.70 remains controlling. No Vercel, CI, database, application, RLS/Auth, API/backend, Supabase Preview/Staging or Production change was made. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.74 CW-11 Package E — reservation fulfillment atomicity cross-document correction (20 November 2026)
+
+The independent cross-document review identified that DOC-03 §6 requires stock fulfillment and reservation state to update consistently/atomically, while DOC-04 §42.7 did not yet state the required atomic commit boundary with sufficient precision.
+
+DOC-04 §42.16 now specifies that a committed FULFILLED reservation event and its linked posted inventory movement are one atomic business posting outcome; neither durable side may exist as a completed fulfillment without the other. The event and movement must reconcile on Business, Product, applicable Variant, Location and quantity. Idempotent retry must not create duplicate reservation or physical decrements. An asynchronous recoverable protocol is not selected and would require separate design review.
+
+Allocation/release/expiry/reallocation remain availability-only events and do not create physical movement rows. Transaction isolation, lock ordering, deadlock retry, crash recovery and executed concurrency tests remain OPEN under DOC-09 ERD-OPEN-09/10/13. DOC08-FIX-005 and DOC08-FIX-009 remain unchanged; no physical or runtime implementation is approved.
+
+**Audit status:** this is an additional documentation correction; final independent re-review of the consolidated §42.15–§42.16 package is still required. PR #140 remains OPEN and merge-held under §15.70. No Production, database, application, CI, RLS/Auth or deployment change was made. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
