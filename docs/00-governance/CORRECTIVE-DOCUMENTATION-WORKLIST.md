@@ -2479,3 +2479,353 @@ DOC-04 and Worklist were fetched from `main` after merge. DOC-04 §41 and Workli
 No FIX, physical acceptance or DOC-09 dependency is promoted/closed by this merge. Candidate coverage remains 17/17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.66 CW-11 Package E — F41-01 through F41-07 corrective candidate drafting (20 November 2026)
+
+**Status: CORRECTIVE CANDIDATE DRAFT COMPLETE FOR INDEPENDENT REVIEW — NOT APPROVED / NOT PHYSICAL ACCEPTANCE.**
+
+DOC-04 §42 was appended to address all seven independent design-review findings from §41. Package E establishes:
+
+- A uniform candidate surrogate `id` PK for all 17 entities, distinct alternate business grains, and candidate `id` fields for `inventory_balances` and `inventory_batch_balances`.
+- Deterministic projection rebuild/upsert rules that preserve row identity by business grain.
+- Parent ownership classes (tenant-owned, shared/global, platform-owned, actor/membership-scoped), referenced parent UNIQUE-key prerequisites and a per-entity candidate FK tuple matrix.
+- Explicit nullable Variant/Batch compatibility limitations; no unsupported claim that an ordinary composite FK proves null-safe equality.
+- A01 alternatives: explicit source-specific references versus a bounded inventory-posting source-event registry. A01 remains OPEN; no universal registry or extra entity is approved.
+- Immutable stock-count attempt rows, accepted-attempt identity, NULL-versus-zero semantics and candidate location posting watermark.
+- Distinct movement-backed dispatch, partial receipt, loss, damage and return events, transit stock and a non-double-counting quantity invariant.
+- `inventory_reservation_items` as a candidate immutable lifecycle event ledger; reservation remains an availability effect, not a physical on-hand movement.
+- Separate FIFO layer and MWA pool transfer-cost flows, with fees, landed cost, FX, timing and reversal gates retained OPEN.
+
+**F41 disposition:** all seven findings have revised candidate proposals; independent design review and physical acceptance remain outstanding. No FIX is promoted and no DOC-09 dependency is closed.
+
+**Unchanged project gates:** candidate coverage 17/17; physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY; `inventory_cost_layer_movements` remains unapproved entity #18.
+
+**Next action:** independent audit of DOC-04 §42 against §§35–41, DOC-03, DOC-05, DOC-08 and DOC-09; verify all 17 PK/grain rows, every candidate FK tuple and referenced parent key, the seven correction criteria, append-only integrity, and Worklist consistency. Only after the audit passes should the documentation-only PR be opened for review.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.67 CW-11 Package E — exact FK tuple and field-completeness audit addendum (20 November 2026)
+
+DOC-04 §42.11 was appended to remove shorthand from the first FK matrix and state the candidate child tuple → parent tuple for every one of the 17 entities. It also records the additional candidate fields needed for same-location, same-transfer, shipment-item and cost-consumption tuple checks.
+
+Audit boundary:
+- Every inventory entity references the Business root through candidate `(business_id) → Business(id)`.
+- Tenant-owned parents require candidate `(business_id, id)` referenced keys.
+- Product Variant requires `(business_id, product_id, id)`.
+- Inventory Batch requires Business/Product/Location-compatible parent keys; nullable Variant equality remains an explicit OPEN physical gate.
+- Global Unit uses `(unit_id) → Unit(id)` without an artificial tenant key; Business-defined Unit remains an unselected alternative.
+- Actor references resolve through Business Actor Context/Membership, not raw authentication identity.
+- The exact matrix does not assert that any named physical parent table/key currently exists.
+
+Package E remains **DRAFT COMPLETE FOR INDEPENDENT REVIEW — NOT APPROVED / NOT PHYSICAL ACCEPTANCE**. All F41 findings have revised candidate proposals; physical acceptance remains 0/17, canonical physical ERD NOT ACCEPTED and implementation readiness NOT READY. No DOC-09 dependency or FIX decision is closed/changed.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.68 CW-11 Package E — source-dependent key and same-pool FK precision (20 November 2026)
+
+DOC-04 §42.12 narrows the candidate FK/key claims after internal consistency review:
+
+- Movement alternate grain remains unresolved until A01 selects explicit source-specific links or the bounded inventory posting registry.
+- Cost-exception alternate grain remains unresolved until source identity and duplicate-event semantics are selected.
+- Cost-layer source movement and cost-exception movement/layer references now require same Product/Location candidate tuples.
+- Shipment-item movement lineage is through A01 source-event identity; no direct movement FK is implied on shipment items.
+- Additional denormalized candidate fields needed for adjustment/count/shipment/cost-consumption tuple checks are explicitly identified.
+- Global Unit and optional Business-defined Unit ownership paths remain separate.
+
+These are candidate design clarifications only. No physical FK, key, source registry, event table, FIX decision or implementation gate is accepted or closed.
+
+
+## 15.69 CW-11 Package E — count-attempt and shipment-location control clarification (20 November 2026)
+
+DOC-04 §42.13 clarifies that recounts preserve immutable measurement facts while acceptance status is a controlled current selection with audit evidence; a later attempt never overwrites a prior counted value. The count cutoff sequence is nullable only before snapshot freeze and immutable after freeze. Shipment-item source Location now has an explicit candidate tenant FK plus Batch/header consistency requirement.
+
+Acceptance-transition audit representation, sequence allocation and physical enforcement remain OPEN. No new entity or implementation scope is authorized.
+
+
+## 15.70 PR #140 acceptance result and Production deployment governance hold (20 November 2026)
+
+**PR #140: OPEN — DOCUMENTATION ACCEPTANCE CHECKS PASS; MERGE HELD BY DEPLOYMENT GOVERNANCE.**
+
+PR #140 (`docs: complete CW-11 Package E corrective candidate design`) contains only the two documentation files recorded in §§15.66–15.69. GitHub Actions completed:
+- Documentation structure: SUCCESS.
+- Markdown lint: SUCCESS.
+- Internal documentation links: SUCCESS.
+- Detect application changes: SUCCESS.
+- ESLint, TypeScript, Next.js build and dependency security: SKIPPED for documentation-only changes; not claimed as passed.
+- Review submissions: none reported.
+- Inline review threads: none reported.
+- PR is open and GitHub reports mergeable.
+
+A read-only Vercel deployment-history check found that the merge commit of PR #139 (`2f55d0e0af5ec714dcd7fef6771f3cd8e3c6f966`) has a Vercel deployment with target `production` and state `READY`. No Vercel deployment record was returned for PR #140's current head SHA at the time of this check. The repository GitHub Actions workflows are read-only CI; the Vercel Git integration is a separate deployment path.
+
+**Merge hold:** merging PR #140 into `main` may automatically trigger another Production deployment. Because Production deployment is explicitly prohibited by current project governance, PR #140 is NOT MERGED despite its documentation acceptance checks passing. Keep the PR open until the user explicitly changes/authorizes the deployment boundary or a separately authorized safe merge path is established. Do not alter Vercel configuration, GitHub workflows, Supabase configuration, deployment settings, or Production to bypass this hold.
+
+No deployment was manually initiated in this step. No rollback, cancellation, promotion or deployment mutation was performed. The observed PR #139 Production deployment remains untouched. Supabase external check suite was observed queued; no Supabase Preview/Staging action was initiated.
+
+Package E remains documented on the PR branch and is not yet part of `main`. Candidate coverage remains 17/17; physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. No FIX or DOC-09 dependency is promoted/closed.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.71 CW-11 Package E — same-grain movement/cost FK precision (20 November 2026)
+
+DOC-04 §42.14 adds same Product/Location FK tuples for balance watermarks, adjustment posting movements, reservation fulfillment movements, cost exceptions, cost-layer source movements and cost-layer consumptions. It also adds the candidate Variant relation for cost-layer consumption and keeps nullable Variant equality explicitly OPEN.
+
+The tuple refinement is documentation-only. Physical FK acceptance, null-safe Variant enforcement and runtime evidence remain OPEN. PR #140 remains OPEN and merge-held under §15.70 because merge-to-main has an observed Vercel Production deployment effect.
+
+
+## 15.72 Current documentation remediation workflow — Stage 5 clarification and closure standard (20 November 2026)
+
+**CURRENT EXECUTION POSITION: STAGE 5 — GITHUB DOCUMENTATION REMEDIATION, FINALIZATION AND CLOSURE BEFORE IMPLEMENTATION.**
+
+This section establishes the current operating meaning of Stage 5 for the active project workflow. The older phrase “Stage 5 blanket migration” in historical entries records a prior stage taxonomy and must not be interpreted as the current work phase. Current Stage 5 is the controlled completion of project-authored documentation in GitHub until each document/work package meets its acceptance criteria and is FIXED and CLOSED. This clarification changes stage naming and work sequencing only; it does not authorize database, application, infrastructure, migration or Production changes.
+
+### 15.72.1 Stage 5 work sequence
+
+1. **5.1 — Audit current-main documentation:** read the relevant files from GitHub `main`; identify concrete gaps, conflicts, incomplete definitions and unmet acceptance criteria.
+2. **5.2 — Remediation:** correct the authored documentation directly. Do not stop at recording findings when the required correction can be completed within the authorized documentation scope.
+3. **5.3 — Cross-document consistency:** reconcile references, terminology, decisions, ownership, workflows, requirements and dependencies across affected documents.
+4. **5.4 — Technical completeness:** verify required entities, fields, types, keys, relationships, constraints, lifecycle rules, security boundaries, examples and decision status to the level required by the document's acceptance criteria.
+5. **5.5 — Independent review:** re-audit the corrected content against its source-of-truth project decisions and all relevant related documents; record residual issues explicitly.
+6. **5.6 — PR validation:** inspect the complete diff, append-only integrity, required CI checks, review feedback and unresolved threads. A skipped check is never reported as passed.
+7. **5.7 — Merge and post-merge verification:** merge only when the PR satisfies acceptance and current governance permits the merge; fetch the affected files again from `main` and verify the merged content.
+8. **5.8 — Closure:** mark the work package/document CLOSED only after post-merge verification and all applicable acceptance criteria are satisfied. If any criterion remains unmet, retain IN PROGRESS, READY FOR REVIEW or BLOCKED as appropriate.
+
+### 15.72.2 Required status semantics
+
+- **OPEN:** work identified but not started.
+- **IN PROGRESS:** audit or remediation is underway.
+- **READY FOR REVIEW:** proposed correction is complete and awaiting independent review.
+- **FIXED:** the identified issue has been corrected in the reviewed documentation; this status alone does not mean the work package is closed.
+- **CLOSED:** all applicable acceptance criteria passed, required review completed, merge permitted and post-merge `main` read-back verified.
+- **BLOCKED:** progress is prevented by an unresolved dependency, missing decision or governance/authorization boundary.
+
+FIXED and CLOSED are distinct. A PR being drafted, CI passing, or a PR being merged does not by itself establish CLOSED. Any skipped CI job must remain identified as SKIPPED, not PASS.
+
+### 15.72.3 Operating rules for all Stage 5 work packages
+
+- Work package by work package; keep one active PR at a time.
+- Continue remediation until the acceptance criteria are met; do not repeatedly reopen already completed work without a concrete new finding.
+- Preserve FIX decisions unless a documented material technical conflict justifies review.
+- Keep unresolved dependencies OPEN; never manufacture approval or close a dependency solely to make a gate pass.
+- Maintain READ-ONLY / APPEND-ONLY discipline for the authorized documentation scope.
+- After each merge, verify the exact files from `main` before recording CLOSED.
+- If merge may trigger a prohibited Production deployment, keep the PR unmerged and record the governance blocker; do not bypass it by changing Vercel, CI or deployment configuration.
+- Do not begin implementation until the documentation closure and separate implementation-readiness gates are explicitly satisfied and implementation is authorized.
+
+### 15.72.4 Current boundary and checkpoint
+
+The active work is **Stage 5 documentation remediation/finalization/closure**. CW-11 Package E remains in PR #140 and is not yet merged into `main`; it must complete independent review, required checks, governance-safe merge and post-merge verification before it can be called CLOSED. CW-11 as a whole remains IN PROGRESS / ACCEPTANCE NOT MET.
+
+The legacy Stage 5 blanket migration label is superseded for current workflow tracking by the Stage 5 definition in this section. This does not authorize GitHub/archive migration beyond the documentation PR workflow, and it does not authorize Stage 6 implementation. `DB_PUSH_BLOCKED: ACTIVE` remains in force. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, deployment, Supabase Preview/Staging or Production change is authorized by this clarification.
+
+
+
+## 15.73 CW-11 Package E independent audit — cross-parent tuple gaps corrected (20 November 2026)
+
+**Audit result: FOUR DOCUMENTATION-LEVEL CROSS-PARENT PRECISION GAPS IDENTIFIED AND CORRECTED IN DOC-04 §42.15. PACKAGE E REMAINS CANDIDATE / NOT APPROVED; FINAL INDEPENDENT RE-REVIEW AND ACCEPTANCE GATES REMAIN.**
+
+The independent audit compared DOC-04 §42 (including §§42.11–42.14) with DOC-03 §§6 and 12–13, DOC-05 §§22–25 and 30–35, DOC-08 DOC08-FIX-004–011, and DOC-09 ERD-OPEN-01–15. It confirmed that all seven F41 findings have explicit candidate corrections, the PK/alternate-grain matrix covers all 17 entities, and the exact FK matrix enumerates all 17 child entities. It also found four cross-parent invariants that were described but not fully expressed as candidate exact tuples:
+
+1. Stock-count cutoff movement was tenant-bound but did not explicitly prove that the referenced movement belongs to the counted Location.
+2. Movement reversal self-reference was Business-bound but did not explicitly prove same Product and Location as the original movement.
+3. Cost-consumption reversal self-reference was Business-bound but did not explicitly prove the original cost layer and Product/Location pool.
+4. Shipment item was linked to the same transfer header and transfer item but did not fully prove same Product as the demand line or same source Location as the transfer header.
+
+DOC-04 §42.15 now adds candidate parent-key prerequisites and exact tuple proposals for these relations, plus explicit null-safe Variant equality and base-unit/quantity-cap boundaries. All remain candidate-only; no physical key or enforcement mechanism is approved.
+
+### 15.73.1 Cross-document audit disposition
+
+- **DOC-03:** Package E preserves the immutable movement ledger, rebuildable projections, reservation availability-only effect, MWA/FIFO distinction, transit ownership and A11 separate shipment-event principles. Physical transaction boundaries, concurrency, locking and execution remain OPEN.
+- **DOC-05:** actor references resolve through Business Actor Context/membership; actor FK validity is not permission. Exact action grants, SoD/approval, RLS and server enforcement remain separate and unapproved.
+- **DOC-08:** DOC08-FIX-004–011 remain unchanged at their existing conceptual/logical scope. No FIX decision is promoted or reinterpreted as physical acceptance.
+- **DOC-09:** ERD-OPEN-01–15 and related AUTH-OPEN dependencies remain owned by DOC-09 and are not closed by this candidate correction. ERD-OPEN-16 onward retain their existing source/provenance status.
+
+### 15.73.2 Remaining acceptance gates
+
+- A01 source catalogue, identity model selection, source ownership, fan-out and idempotency remain OPEN.
+- A02 source catalogue, tenant validation and cardinality remain OPEN.
+- Nullable Variant/Batch equality and uniqueness mechanism remain OPEN.
+- Count-attempt acceptance transition, watermark allocation/freeze and variance-posting idempotency remain OPEN.
+- Shipment event/A01 linkage, location-policy, quantity disposition and over/under-shipment rules remain OPEN.
+- Reservation event vocabulary, fulfillment atomicity, concurrency and idempotency acceptance remain OPEN.
+- Transfer costing fees, landed-cost allocation, currency/FX, timing and reversal policy remain OPEN.
+- Numeric precision/capacity, referential actions, query-driven indexes, RLS/server authorization and executed negative-test evidence remain OPEN or NOT EXECUTED.
+- All candidate keys/FKs/constraints remain NOT APPROVED; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
+
+**Next action:** re-read DOC-04 §§35–42.15 and the relevant cross-document authorities after the addendum; verify the corrected tuples and absence of contradictions; update PR acceptance notes. Do not mark Package E FIXED/CLOSED until review is complete, merge is governance-permitted, and post-merge current-main read-back succeeds.
+
+PR #140 remains OPEN. The Production deployment governance hold in §15.70 remains controlling. No Vercel, CI, database, application, RLS/Auth, API/backend, Supabase Preview/Staging or Production change was made. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.74 CW-11 Package E — reservation fulfillment atomicity cross-document correction (20 November 2026)
+
+The independent cross-document review identified that DOC-03 §6 requires stock fulfillment and reservation state to update consistently/atomically, while DOC-04 §42.7 did not yet state the required atomic commit boundary with sufficient precision.
+
+DOC-04 §42.16 now specifies that a committed FULFILLED reservation event and its linked posted inventory movement are one atomic business posting outcome; neither durable side may exist as a completed fulfillment without the other. The event and movement must reconcile on Business, Product, applicable Variant, Location and quantity. Idempotent retry must not create duplicate reservation or physical decrements. An asynchronous recoverable protocol is not selected and would require separate design review.
+
+Allocation/release/expiry/reallocation remain availability-only events and do not create physical movement rows. Transaction isolation, lock ordering, deadlock retry, crash recovery and executed concurrency tests remain OPEN under DOC-09 ERD-OPEN-09/10/13. DOC08-FIX-005 and DOC08-FIX-009 remain unchanged; no physical or runtime implementation is approved.
+
+**Audit status:** this is an additional documentation correction; final independent re-review of the consolidated §42.15–§42.16 package is still required. PR #140 remains OPEN and merge-held under §15.70. No Production, database, application, CI, RLS/Auth or deployment change was made. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.75 CW-11 Package E — A01/A02 source identity contracts drafted (20 November 2026)
+
+**STATUS: CANDIDATE DESIGN DRAFTED / REVIEW REQUIRED. A01 and A02 remain OPEN; no source model is FIXED or physically approved.**
+
+The next Stage 5 remediation step was to define the two unresolved source-identity contracts independently, using the existing DOC-04 design history and DOC-03/DOC-05 boundaries.
+
+### 15.75.1 A01 movement posting source-event identity — preferred candidate
+
+DOC-04 §42.17 recommends a bounded Inventory Posting Source Event Registry (Path B) for further review. The reason is the breadth of inventory posting source families and the ability of one source event to fan out into multiple immutable movement rows. The registry is strictly limited to inventory posting identity; it is not a universal event bus and is not shared with payments, webhooks, offline synchronization or A02.
+
+The candidate contract specifies tenant identity, controlled source domain/event type, authoritative source-record identity, event sequence/version, idempotency key, canonical payload digest, actor/time evidence, stable movement fan-out sequence and reversal lineage. Source adapters must independently validate source existence, Business ownership, lifecycle, quantity and event eligibility. Posting fan-out is all-or-nothing unless a separately approved recoverable protocol is designed.
+
+The supporting registry would sit outside the historical 17 inventory entities. It is not `inventory_cost_layer_movements` and does not become entity #18. Path B remains REVIEW REQUIRED / NOT APPROVED; Path A explicit source-specific references remains a valid alternative until the project explicitly accepts the recommendation.
+
+### 15.75.2 A02 reservation source validation — independent contract
+
+DOC-04 §42.18 retains A02 Alternative A: `source_type` + `source_id` on the reservation header, resolved through a finite server-owned source adapter allowlist. The candidate source catalogue covers M03 sales demand, conditional M05 inventory-consuming booking demand, M09 work-order material demand, M10 production material demand and controlled M06 internal reservation requests. These are candidate families only; no family is enabled by this draft.
+
+A reservation source should resolve to an atomic demand line/material requirement, not a multi-line parent document unless the parent is truly indivisible. Multiple allocation slices may serve one reservation demand; multiple reservation headers for one demand require an explicit source-specific wave/purpose identity and uniqueness rule. The resolver must verify source existence, same-Business ownership, reservable lifecycle, Product/Variant/unit/quantity, remaining demand, concurrency-safe commit and idempotent replay. Unknown source types fail closed.
+
+A02 is not an A01 registry reference. No A02 generic registry is selected. The polymorphic source pair alone is not a physical FK and does not prove enforcement.
+
+### 15.75.3 Cross-document and status disposition
+
+- DOC-03 movement source-of-truth and immutable-ledger rules remain unchanged; source domains remain authoritative for their own source records.
+- DOC-03 reservation effect remains availability-only until fulfillment, which must atomically reconcile the reservation event and posted movement under §42.16.
+- DOC-05 authorization, active Business membership, exact action key, scope, SoD and audit evaluation remain independent; a valid source relation does not grant permission.
+- DOC-08 FIX decisions remain unchanged.
+- DOC-09 ERD-OPEN-05 (A01) and ERD-OPEN-06 (A02) remain OPEN. A01/A02 physical FKs/resolver, source catalog approval, cardinality, idempotency, lifecycle, TTL, RLS/server enforcement and executed tenant-negative tests remain separate acceptance gates.
+
+**Next action:** independent review of DOC-04 §§42.17–42.19 against DOC-03, DOC-05, DOC-08 and DOC-09; inspect the full PR diff and checks; record residual design gaps. Do not close A01/A02 or Package E merely because the candidate contracts are drafted. PR #140 remains subject to the Production merge hold in §15.70. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.76 CW-11 Package E — referenced parent-key prerequisites completed (20 November 2026)
+
+The independent consistency check of the A01/A02 candidate contracts and the preceding cross-parent audit found that the newly stated tuples in DOC-04 §42.15 needed explicit referenced-parent UNIQUE-key prerequisites. DOC-04 §42.20 now adds candidate parent keys for:
+
+1. InventoryMovement `(business_id, id, inventory_location_id)` for stock-count cutoff-to-Location.
+2. InventoryMovement `(business_id, id, product_id, inventory_location_id)` for same-grain movement references and reversal.
+3. StockTransfer `(business_id, id, source_location_id)` for shipment-item source-Location consistency.
+4. StockTransferItem `(business_id, id, stock_transfer_id, product_id)` for shipment-item demand-line Product consistency.
+5. InventoryCostLayerConsumption `(business_id, id, cost_layer_id, product_id, inventory_location_id)` for reversal-to-original cost layer/pool.
+
+A01 registry and A02 polymorphic source pairs remain separate. No guessed registry FK has been added to the 17-entity matrix. A02 strict source resolution remains a logical validation contract, not a conventional FK. Any later explicit-FK alternative must specify source-family parent keys and atomic demand-line grain.
+
+**Status:** candidate parent-key prerequisites documented; physical UNIQUE/FK/index definitions remain NOT APPROVED. A01/A02 remain OPEN. Nullable Variant equality, source lifecycle/cardinality, idempotency, transaction/concurrency, RLS/server authorization and executed negative tests remain OPEN. No FIX or DOC-09 closure is claimed. PR #140 remains unmerged under the Production merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.77 CW-11 Package E — A01/A02 alternate-key and idempotency grain completed (20 November 2026)
+
+The technical-completeness pass found that the A01/A02 recommendations in DOC-04 §§42.17–42.18 described event/request idempotency but needed exact candidate alternate-key grains. DOC-04 §42.21 now distinguishes:
+
+- **A01 event identity:** `(business_id, source_domain, source_event_type, source_record_id, source_event_sequence)`.
+- **A01 request replay key:** `(business_id, source_domain, source_event_type, idempotency_key)`.
+- **A01 movement fan-out key:** `(business_id, source_reference_id, source_event_movement_sequence)` only if Path B is accepted.
+- **A02 request replay key:** `(business_id, request_idempotency_key)`, with a canonical request payload digest.
+- **A02 source-demand cardinality:** default single active header per `(business_id, source_type, source_id, reservation_purpose)` only for source adapters declaring that rule; source-specific multi-wave reservations require controlled purpose and atomic aggregate remaining-demand validation.
+
+The candidate reservation header now proposes `request_idempotency_key`, `request_payload_digest` and controlled `reservation_purpose`. These are candidate field additions, not existing schema claims or approved physical constraints. A01 posting replay and A02 reservation-request replay remain separate; A02 fulfillment creates a distinct A01 posting event under the atomicity boundary in §42.16.
+
+**Status:** candidate key grains and replay boundaries are now explicit in documentation. Digest canonicalization/version, retention, physical uniqueness, concurrency, source-specific cardinality and resolver enforcement remain OPEN. A01/A02 and DOC-09 ERD-OPEN-05/06 are not closed. No FIX, physical acceptance or implementation authorization is claimed. PR #140 remains under the Production merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.78 CW-11 Package E — A01/A02 candidate contracts and CI revalidation (20 November 2026)
+
+**RESULT: CANDIDATE CONTRACT DRAFTING COMPLETE FOR THIS PASS; INTERNAL CONSISTENCY CHECKS PASS; READY FOR INDEPENDENT DESIGN REVIEW, NOT CLOSED.**
+
+DOC-04 §§42.17–42.21 now contain the bounded A01 registry recommendation, independent A02 source resolver contract, source catalogue candidates, source-line granularity, cardinality controls, tenant/lifecycle validation, replay semantics, exact candidate idempotency keys and referenced-parent key prerequisites. The work is recorded in §§15.75–15.77. The final re-read verified all five new sections, the A01/A02 separation, fail-closed unknown source types, candidate key tuples, parent-key additions and preservation of the 17-entity boundary.
+
+### 15.78.1 Cross-document audit
+
+- DOC-03 inventory source-of-truth and reservation/fulfillment atomicity boundaries remain preserved.
+- DOC-05 authorization remains independent from source validity; membership, exact permission, scope, SoD and audit requirements are not bypassed.
+- DOC-08 FIX decisions are not changed or promoted.
+- DOC-09 ERD-OPEN-05 and ERD-OPEN-06 remain OPEN; the candidate contracts do not close physical source integrity, schema or test requirements.
+- A01 Path B is recommended for review, not approved. Path A remains a valid alternative pending explicit design acceptance.
+- A02 Alternative A is recommended for review, not approved. The source allowlist is candidate-only and no source family is enabled by this document.
+
+### 15.78.2 PR and CI revalidation
+
+PR #140 latest head: `4f2f8813dae915e79e6b1cb0558b4285915f85e6`.
+
+- Documentation CI run `44778125076`: Markdown lint SUCCESS; Internal documentation links SUCCESS; Documentation structure SUCCESS.
+- POS SaaS CI run `44778125133`: Detect application changes SUCCESS; ESLint SKIPPED; TypeScript typecheck SKIPPED; Next.js production build SKIPPED; Dependency security audit SKIPPED. Skipped application jobs are not reported as passed.
+- PR state OPEN; mergeable true; merged false; no submitted reviews and no unresolved review threads at this check.
+- Diff against `main`: 2 files, 919 additions, 0 deletions; Worklist +254 and DOC-04 +665. Append-only integrity confirmed.
+
+### 15.78.3 Current disposition and next gate
+
+A01/A02 candidate drafting is ready for independent design review. Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate coverage is 17/17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. No candidate key/FK/constraint or source resolver is physically approved.
+
+PR #140 remains unmerged because the documented Vercel Production deployment risk prohibits merge under current governance. The next gate is independent review of §§42.15–42.21 and a decision on whether the recommended A01/A02 directions are accepted, revised or rejected. Do not mark FIXED/CLOSED or bypass the Production merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.79 CW-11 Package E — latest-head PR and CI verification (20 November 2026)
+
+The follow-up Worklist update changed the PR head after the prior §15.78 record. This section supersedes only the latest-head/CI metadata in §15.78; the prior audit findings and dispositions remain unchanged.
+
+- Latest branch head at this verification: `586b226608e6f0ac9439041cb605a78435cd76f9`.
+- Documentation CI run `44778256361`: Markdown lint SUCCESS; Internal documentation links SUCCESS; Documentation structure SUCCESS; overall SUCCESS.
+- POS SaaS CI run `44778256337`: Detect application changes SUCCESS; ESLint SKIPPED; TypeScript typecheck SKIPPED; Next.js production build SKIPPED; Dependency security audit SKIPPED; overall workflow SUCCESS. Skipped application checks are not passes.
+- PR #140 remains OPEN, unmerged and technically mergeable. No submitted reviews and no unresolved review threads were present at this verification.
+- Compare against `main`: 2 files changed; Worklist +285; DOC-04 +665; total +950 additions and 0 deletions. Append-only check passes.
+- No application source, CI workflow, database, Vercel configuration or deployment file is part of the diff.
+
+**Disposition:** PR validation checks pass for the latest head, subject to independent design review and the existing Production deployment merge hold. PR #140 is not merged; no post-merge verification or CLOSED status is claimed. A01/A02 remain candidate/review-required; DOC-09 ERD-OPEN-05/06 remain OPEN. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+## 15.80 CW-11 Package E — owner acceptance of A01/A02 logical directions (21 November 2026)
+
+The project owner explicitly accepted the recommendations after the independent design-direction review:
+
+1. **A01 — Path B accepted:** bounded Inventory Posting Source Event Registry for inventory-posting source event identity, idempotency and movement fan-out. It is not a universal event bus and is not a new entity within the historical 17-entity inventory set.
+2. **A02 — Alternative A accepted:** retain reservation-header `source_type` + `source_id`, resolved through a strict server-owned finite source-domain adapter allowlist. Unknown or invalid source types fail closed.
+3. **Separation retained:** A01 posting-event replay and A02 reservation-request replay remain independent. A02 fulfillment creates a distinct A01 posting event.
+
+DOC-04 §42.22 records the accepted scope; DOC-08 adds DOC08-FIX-018/019 as conceptual/logical FIX decisions; DOC-09 records the remaining physical and enforcement dependencies as OPEN.
+
+### 15.80.1 Acceptance boundary
+
+This is explicit acceptance of conceptual/logical design direction only. It does not approve physical tables/columns/indexes/UNIQUE/FK constraints, source-family activation, digest algorithm/version, retention/TTL, physical resolver implementation, transaction/concurrency protocol, RLS/API/backend enforcement, or executed test evidence. It does not authorize SQL/DDL/DML, migrations, DB push, Production changes or Stage 6 implementation.
+
+### 15.80.2 Updated disposition
+
+- A01/A02 direction selection: **ACCEPTED**.
+- A01/A02 physical schema and enforcement: **OPEN / NOT APPROVED**.
+- DOC-09 ERD-OPEN-05 and ERD-OPEN-06: **remain OPEN**; direction-selection subquestion resolved, acceptance criteria not met.
+- Physical Data Dictionary acceptance: **0/17**; canonical physical ERD: **NOT ACCEPTED**; implementation readiness: **NOT READY**.
+- PR #140: remains subject to its existing Production deployment merge hold; this decision does not authorize merge or deployment.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 NOT AUTHORIZED.
+
+## 15.81 CW-11 Package E — A01/A02 logical execution contract and status reconciliation (21 November 2026)
+
+After the owner accepted A01 Path B and A02 Alternative A, the next technical-completeness pass appended DOC-04 §§42.23–42.24.
+
+- §42.23 establishes status precedence: §42.22 owner acceptance supersedes prior direction-selection-only labels in §§42.17–42.21. The accepted conceptual direction is FIX at logical scope; physical schema and implementation remain OPEN / NOT APPROVED.
+- §42.24 defines technology-neutral execution contracts for server-derived tenant context, independent DOC-05 authorization, commit-boundary validation, A01 immutable posting and atomic movement fan-out, replay/conflict behavior, reversal limits, A02 atomic source-line resolution, aggregate remaining-demand calculation, concurrency serialization, explicit lifecycle events and fulfillment-to-A01 handoff.
+- The failure/retry matrix defines expected logical outcomes and prohibited outcomes for unknown sources, tenant mismatch, idempotent replay, payload conflict, duplicate posting, oversubscription, uncertain commit and over-reversal.
+- DOC-09 §11.5 enumerates remaining A01/A02 physical, source catalogue, digest/version/retention, transaction/concurrency, security and test-evidence dependencies. ERD-OPEN-05/06 remain OPEN.
+
+### 15.81.1 Acceptance boundary and audit result
+
+This pass clarifies logical behavior only. It does not choose a physical schema, digest algorithm, retention duration, source-family activation, transaction/distributed-consistency mechanism, locking implementation, RLS/API behavior or partial-reservation policy. No SQL/DDL/DML, database introspection, migration, source code, CI workflow, Vercel configuration or deployment was changed.
+
+**Status:** A01/A02 conceptual direction ACCEPTED; logical execution contract SPECIFIED; physical/security/operational/test dependencies OPEN; Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. PR #140 remains unmerged under the Production deployment merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 NOT AUTHORIZED.
+
+## 15.82 CW-11 Package E — latest-head CI verification for logical execution contract (21 November 2026)
+
+Latest head at this verification: a611abbabde777b3e3b9f319f59d0669e6eaeef4.
+
+- Documentation CI run 44789538651: SUCCESS. Markdown lint SUCCESS; Internal documentation links SUCCESS; Documentation structure SUCCESS.
+- POS SaaS CI run 44789538749: overall SUCCESS. Detect application changes SUCCESS; ESLint SKIPPED; TypeScript typecheck SKIPPED; Next.js production build SKIPPED; dependency security audit SKIPPED. Skipped application jobs are not passes.
+- PR #140 remains OPEN and unmerged; mergeable at the time of verification. No Production deployment, Vercel configuration, CI workflow, application source or database changes were made by this documentation pass.
+- Append-only compare against main at the time of verification: 4 documentation files changed; Worklist +338, DOC-04 +770, DOC-08 +10, DOC-09 +25; 1,143 additions and 0 deletions.
+
+**Disposition:** logical execution contract documentation passes the available documentation CI. POS SaaS CI workflow is successful for its applicable path, but application validation jobs were skipped because no application changes were detected. A01/A02 physical, security, concurrency implementation and test-evidence dependencies remain OPEN; Package E is not CLOSED. The Production deployment merge hold remains in force. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 NOT AUTHORIZED.
+
