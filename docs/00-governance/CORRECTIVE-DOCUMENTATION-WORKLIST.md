@@ -2371,3 +2371,31 @@ The proposals now give a recommended direction and acceptance artifact for every
 Candidate inventory_cost_layer_movements remains unapproved as entity #18. Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.62 PR #134 merge verification and CW-11 XD proposal checkpoint (20 November 2026)
+
+PR #134 (docs: record PR #133 merge and XD proposal status) was squash-merged into main after successful acceptance checks.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/134
+- Reviewed head SHA: a790e00a337e44d8039eacd810efebe60fd34aee
+- Merge commit: 32e998d86bc21caaf711581394aebda9c340d022
+- Result: MERGED.
+- Documentation CI run 44758925076: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS CI run 44758924982: SUCCESS — application-change detection. ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: one Worklist file, 30 additions, 0 deletions.
+
+### 15.62.1 Post-merge read-back
+
+Worklist and DOC-04 were fetched again from main:
+- Worklist §15.61 present; current-main blob SHA: 29b67e4531599cc25df37a8255e14453d96c5d05.
+- DOC-04 §40 present; current-main blob SHA: 09c752250e1f91df5949e07ea77905a8dcd7d82a.
+
+### 15.62.2 CW-11 checkpoint
+
+**PR #134: MERGED AND POST-MERGE VERIFIED.** XD-01–XD-14 proposal pack is recorded in DOC-04 §40 and is COMPLETE FOR REVIEW / NOT APPROVED. Candidate design coverage 17/17; physical acceptance 0/17; canonical physical ERD NOT ACCEPTED. No FIX decision or DOC-09 dependency was newly closed.
+
+Next work: conduct explicit design review of each proposed direction and record approve/revise/reject dispositions. After review, produce the final per-entity PK/FK/constraint matrix and physical ERD candidate. Do not treat the proposal pack as user approval or as current physical schema evidence.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
