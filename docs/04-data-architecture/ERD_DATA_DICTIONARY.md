@@ -1670,3 +1670,131 @@ DOC-09 IDs and statuses remain owned by DOC-09. This crosswalk does not close, m
 Next work inside CW-11 may develop a project-authored candidate physical specification for review, but each proposed field/key/constraint must be explicitly labelled CANDIDATE / NOT APPROVED and must not be represented as existing schema or approved implementation. Separate user/design approval is required before promoting proposals to FIX/APPROVED. Runtime/schema verification and test execution remain distinct later gates.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 35. CW-11 candidate physical specification — Package A: ledger and balance foundation (20 November 2026)
+
+### 35.1 Status and drafting convention
+
+**PACKAGE A STATUS: CANDIDATE DESIGN — NOT APPROVED / NOT PHYSICAL-SCHEMA EVIDENCE.** This is a project-authored proposal derived from the conceptual rules already documented in DOC-04. It is not a claim about an existing database, deployed table, migration, or approved schema. Every identifier, type, nullability choice, and key below is a candidate for design review only.
+
+Candidate type conventions for this package:
+- `uuid` identifiers are proposed, not established physical types.
+- `numeric` is proposed for quantities; precision/scale and rounding are intentionally left OPEN pending a separate numeric-capacity decision.
+- `timestamptz` is proposed for event/audit instants; exact timezone and event-time policy remain OPEN.
+- `date` is proposed for calendar-only production/expiry values.
+- `text` plus an explicit controlled-value design is proposed for lifecycle/source vocabularies; final enum/check representation remains OPEN.
+- External logical targets (Business, Product, Variant, Inventory Location, Unit, Supplier, Actor) are placeholders. Their physical table names, key types and FK tuples are not approved by this package.
+
+### 35.2 Entity A-01 — `inventory_batches`
+
+**Purpose:** identify a physical lot/batch independently from cost-layer identity. FEFO selects eligible physical batches. Quantity state belongs in the batch-balance projection, not as mutable stock totals on the batch identity record.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate batch identity / PK; key type not approved |
+| `business_id` | uuid | NOT NULL | Candidate tenant owner; exact composite FK strategy OPEN |
+| `product_id` | uuid | NOT NULL | Logical product reference; physical target/key OPEN |
+| `variant_id` | uuid | NULL | Optional variant; nullable uniqueness strategy OPEN |
+| `inventory_location_id` | uuid | NOT NULL | Logical storage location; physical target/key OPEN |
+| `batch_code` | text | NOT NULL | Business-facing lot/batch identifier; uniqueness scope OPEN |
+| `manufactured_on` | date | NULL | Optional production date; source/validation OPEN |
+| `expires_on` | date | NULL | Optional expiry date; FEFO eligibility policy remains separately specified |
+| `supplier_id` | uuid | NULL | Optional logical supplier reference; FK and source semantics OPEN |
+| `received_at` | timestamptz | NULL | Candidate receipt instant; relation to posted receipt event must be finalized |
+| `batch_status` | text | NOT NULL | Candidate controlled lifecycle value; allowed values and transitions OPEN |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant; retention/time policy OPEN |
+| `created_by` | uuid | NULL | Candidate actor reference; actor identity source OPEN |
+
+Candidate constraints to review (NOT APPROVED): identity PK; same-business references for product/variant/location/supplier; date ordering where both dates exist; batch-code uniqueness scope and null-variant handling. Do not add an index or uniqueness expression until the exact lookup/FEFO query and duplicate policy are agreed. No batch quantity column is proposed here; quantities are projected in `inventory_batch_balances`.
+
+### 35.3 Entity A-02 — `inventory_movements`
+
+**Purpose:** immutable posted quantity-change ledger and source of truth for physical quantity changes. Each posted record carries a signed base-quantity delta. Corrections use reversal/compensating records, not mutation/deletion.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate movement identity / PK; key type not approved |
+| `business_id` | uuid | NOT NULL | Candidate tenant owner; exact composite FK strategy OPEN |
+| `inventory_location_id` | uuid | NOT NULL | Logical affected location; physical target/key OPEN |
+| `product_id` | uuid | NOT NULL | Logical affected product; physical target/key OPEN |
+| `variant_id` | uuid | NULL | Optional product variant; nullable-key strategy OPEN |
+| `batch_id` | uuid | NULL | Optional physical batch reference; FK/tenant tuple OPEN |
+| `movement_kind` | text | NOT NULL | Candidate movement classification; vocabulary and transition rules OPEN |
+| `quantity_delta_base` | numeric | NOT NULL | Signed base-quantity delta; precision/scale and sign validation OPEN |
+| `base_unit_id` | uuid | NOT NULL | Unit identity for the base quantity; physical target/key OPEN |
+| `source_reference_id` | uuid | NULL | Candidate reference to A01 source/event registry; registry and FK structure OPEN |
+| `reversal_of_movement_id` | uuid | NULL | Candidate self-reference to original movement; one-to-one/partial reversal policy must follow approved correction rules |
+| `occurred_at` | timestamptz | NOT NULL | Business event time; source and timezone policy OPEN |
+| `posted_at` | timestamptz | NOT NULL | Candidate posting instant; posted-ledger immutability boundary |
+| `actor_id` | uuid | NULL | Candidate posting actor; service/system actor model OPEN |
+
+Candidate constraints to review (NOT APPROVED): PK; tenant-safe FK tuples for product/variant/location/batch/unit/source; movement sign and zero-value policy; reversal lineage and cumulative reversal caps; append-only update/delete denial; idempotency key and canonical-payload linkage. The A01 source registry is not replaced by a generic `source_type/source_id` pair here. Exact registry representation remains OPEN. Draft workflow state, if needed, must not be confused with posted ledger rows.
+
+### 35.4 Entity A-03 — `inventory_balances`
+
+**Purpose:** rebuildable projection at Business + Product/Variant + Inventory Location grain. It is not the source of truth; it must reconcile to posted `inventory_movements` and active reservation state. Conceptual available quantity is on-hand minus reserved.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `business_id` | uuid | NOT NULL | Candidate tenant scope; exact key strategy OPEN |
+| `inventory_location_id` | uuid | NOT NULL | Candidate location grain |
+| `product_id` | uuid | NOT NULL | Candidate product grain |
+| `variant_id` | uuid | NULL | Optional variant grain; null-safe unique key strategy OPEN |
+| `quantity_on_hand_base` | numeric | NOT NULL | Candidate physical on-hand projection; precision/scale OPEN |
+| `quantity_reserved_base` | numeric | NOT NULL | Candidate active reservation projection; reconciliation source OPEN |
+| `last_movement_id` | uuid | NULL | Candidate high-watermark/reference; ordering and replay semantics OPEN |
+| `reconciled_at` | timestamptz | NULL | Candidate last successful reconciliation instant |
+| `updated_at` | timestamptz | NOT NULL | Candidate projection refresh instant |
+
+No independent surrogate `id` is selected for this projection in this proposal; candidate grain is the natural composite of business, location, product and optional variant. Whether to use a surrogate PK plus a unique grain or a composite PK remains OPEN. `quantity_available_base` is intentionally not stored in this first proposal: it is derived as on-hand minus reserved unless a later performance design explicitly approves a stored/generated projection with reconciliation safeguards.
+
+Candidate constraints to review (NOT APPROVED): one row per logical grain; tenant-safe references; non-negative reservation and any permitted negative on-hand policy; consistency of `last_movement_id`; deterministic rebuild and concurrency-safe upsert. Nullable-variant uniqueness cannot be assumed from a conventional UNIQUE constraint.
+
+### 35.5 Entity A-04 — `inventory_batch_balances`
+
+**Purpose:** rebuildable physical-batch projection. Batch-level quantities must reconcile to the parent product/variant/location balance and must not become a second source of truth.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `inventory_location_id` | uuid | NOT NULL | Candidate location grain |
+| `product_id` | uuid | NOT NULL | Candidate product grain |
+| `variant_id` | uuid | NULL | Optional variant grain; null-safe uniqueness OPEN |
+| `batch_id` | uuid | NOT NULL | Physical batch identity; exact same-tenant FK OPEN |
+| `quantity_on_hand_base` | numeric | NOT NULL | Candidate batch on-hand projection; precision/scale OPEN |
+| `quantity_reserved_base` | numeric | NOT NULL | Candidate reserved quantity for this batch; allocation reconciliation OPEN |
+| `reconciled_at` | timestamptz | NULL | Candidate last successful reconciliation instant |
+| `updated_at` | timestamptz | NOT NULL | Candidate projection refresh instant |
+
+Candidate grain is Business + Inventory Location + Product/Variant + Batch. Candidate PK strategy (composite versus surrogate plus unique grain) remains OPEN. The batch's product, variant, business and location must agree with this projection; exact composite-FK or equivalent enforcement is not selected here.
+
+Candidate constraints to review (NOT APPROVED): one row per batch grain; batch belongs to the same business/product/variant/location; batch balances aggregate to the parent inventory balance; reservation allocation cannot exceed eligible batch quantity under the approved reservation rules; projection rebuild is deterministic and concurrency-safe.
+
+### 35.6 Package A cross-entity review matrix
+
+| Review ID | Candidate relationship/invariant | Required decision before approval |
+|---|---|---|
+| CA-01 | Batch → product/variant/location/business/supplier | Exact physical targets, key types, optionality and tenant-safe FK tuples |
+| CA-02 | Movement → product/variant/location/batch/unit/source registry | Exact FK tuples, source-registry structure, event/source uniqueness and tenant enforcement |
+| CA-03 | Movement reversal lineage | Whether reversals are one-to-one or partial, cumulative cap and correction event semantics |
+| CA-04 | Movement → balance projection refresh | Transaction boundary, replay/watermark, locking and failure recovery |
+| CA-05 | Inventory balance grain | Composite versus surrogate PK and null-safe variant uniqueness mechanism |
+| CA-06 | Batch balance grain | Batch-to-parent grain integrity and batch-level reconciliation invariant |
+| CA-07 | Numeric fields | Approved precision/scale, rounding, unit conversion and maximum quantity/cost capacity |
+| CA-08 | Audit/event timestamps | Event-time versus posting-time semantics, timezone, actor identity and retention |
+| CA-09 | Index design | Exact FEFO selection, movement replay, reconciliation and operational query patterns; no speculative indexes |
+| CA-10 | Security | RLS and server/API enforcement contract, tenant-negative tests and independent evidence |
+
+### 35.7 Package A disposition
+
+- Candidate entity coverage: **4/17 drafted** (entities 1–4); remaining 13 entities are not drafted in this package.
+- Candidate field/type proposals: **NOT APPROVED**; no proposal is an assertion of current physical schema.
+- Candidate PK/FK/UNIQUE/CHECK/index/referential actions: **OPEN / NOT APPROVED**.
+- Physical Data Dictionary acceptance: remains **0/17**.
+- Conceptual 17-entity baseline and all approved FIX decisions remain unchanged.
+- Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
+
+Next Package B: adjustment and stock-count entities 5–8. Package C: transfer/shipment entities 9–10 and 16–17. Package D: cost exception, reservation and costing entities 11–15. After all candidate packages, perform a cross-entity key/relationship/tenant/constraint reconciliation before any design approval. Runtime schema, RLS, application implementation and tests remain separate later gates.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.

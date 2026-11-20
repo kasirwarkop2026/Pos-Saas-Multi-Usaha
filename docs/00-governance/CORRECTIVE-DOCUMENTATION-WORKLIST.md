@@ -2115,3 +2115,31 @@ Both changed files were fetched again from `main` after merge:
 Next CW-11 action: develop the project-authored candidate physical specification for the 17 conceptual entities as a clearly labelled design proposal, with field/key/constraint choices separated from established FIX decisions and unresolved items. Each candidate must remain NOT APPROVED until explicit design review; no schema or implementation change is authorized. The candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.52 PR #124 merge verification and CW-11 Package A continuation (20 November 2026)
+
+PR #124 (`docs: record PR #123 merge and CW-11 continuation`) was squash-merged into `main` after successful acceptance checks.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/124
+- Reviewed head SHA: `9839aa569efdf14c4bb502ef8585bf5a7b9b08f3`
+- Merge commit: `6b6cd1e9d207105e950c0b845096b630d388e89b`
+- Result: MERGED.
+- Documentation CI run `44756745887`: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS CI run `44756745763`: SUCCESS — application-change detection. ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: one Worklist file, 31 additions, 0 deletions.
+
+### 15.52.1 Post-merge read-back
+
+The Worklist was fetched from `main` after PR #124 merge; §15.51 is present. Current-main Worklist blob SHA at read-back: `6f885b8fc9fc9aa5d7b94b65e2a106fd02c198ef`.
+
+### 15.52.2 CW-11 Package A routing
+
+CW-11 remains **IN PROGRESS — PARTIAL / ACCEPTANCE NOT MET**. DOC-04 §34 establishes the P01–P10 physical acceptance gates. The next candidate-design package is DOC-04 §35, Package A, covering conceptual entities 1–4: `inventory_batches`, `inventory_movements`, `inventory_balances` and `inventory_batch_balances`.
+
+Package A is a project-authored **CANDIDATE / NOT APPROVED** proposal, not an existing-schema assertion. All proposed field names, UUID/Numeric/time types, nullability, keys and constraints require design review. In particular, nullable-variant uniqueness, exact tenant-safe FK tuples, A01 source registry, reversal lineage, projection grain, precision/scale, locking and index choices remain OPEN. Candidate coverage is 4/17; physical acceptance remains 0/17.
+
+Continue with Packages B–D and then perform cross-entity reconciliation. No implementation or database authorization is implied.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
