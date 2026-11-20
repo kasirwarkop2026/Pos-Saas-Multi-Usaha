@@ -121,3 +121,13 @@ This reconstruction does not claim that all historical DOC-08 v1.5 decisions hav
 - Stage 5 blanket migration remains NOT AUTHORIZED. This single bounded documentation correction does not authorize repository-wide or archive migration.
 - Stage 6 implementation remains NOT AUTHORIZED.
 - A conceptual FIX is not implementation evidence, test evidence, security acceptance or Production readiness.
+
+## 8. Accepted logical design directions — A01 and A02 (21 November 2026)
+
+The project owner explicitly approved the following bounded conceptual decisions after review of DOC-04 §§42.17–42.22:
+
+- **DOC08-FIX-018 — A01 inventory posting source-event identity:** adopt Path B, a bounded Inventory Posting Source Event Registry, as the logical direction for source-event identity, idempotent posting and movement fan-out. The registry is limited to inventory posting and is not a universal event bus or an addition to the historical 17 inventory entities.
+- **DOC08-FIX-019 — A02 reservation source identity:** retain `source_type` + `source_id` on the reservation header and resolve it through a strict server-owned, finite source-domain adapter allowlist. Unknown or invalid source types fail closed. Source ownership, lifecycle, atomic demand-line identity, remaining quantity, concurrency and idempotent replay must be validated.
+- A01 and A02 remain separate domains and replay boundaries. Reservation fulfillment creates a distinct A01 posting event; A02 request replay is not interchangeable with A01 posting replay.
+
+**Decision scope limitation:** these are accepted conceptual/logical design directions only. They do not approve physical schema, columns, indexes, constraints, FK strategy, enabled source families, digest/retention choices, RLS/API enforcement, runtime behavior, test evidence or implementation. Corresponding DOC-09 physical/security/evidence dependencies remain OPEN. This entry does not promote any physical or implementation gate and does not authorize Stage 6.
