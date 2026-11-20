@@ -2670,3 +2670,36 @@ DOC-04 §42.16 now specifies that a committed FULFILLED reservation event and it
 Allocation/release/expiry/reallocation remain availability-only events and do not create physical movement rows. Transaction isolation, lock ordering, deadlock retry, crash recovery and executed concurrency tests remain OPEN under DOC-09 ERD-OPEN-09/10/13. DOC08-FIX-005 and DOC08-FIX-009 remain unchanged; no physical or runtime implementation is approved.
 
 **Audit status:** this is an additional documentation correction; final independent re-review of the consolidated §42.15–§42.16 package is still required. PR #140 remains OPEN and merge-held under §15.70. No Production, database, application, CI, RLS/Auth or deployment change was made. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.75 CW-11 Package E — A01/A02 source identity contracts drafted (20 November 2026)
+
+**STATUS: CANDIDATE DESIGN DRAFTED / REVIEW REQUIRED. A01 and A02 remain OPEN; no source model is FIXED or physically approved.**
+
+The next Stage 5 remediation step was to define the two unresolved source-identity contracts independently, using the existing DOC-04 design history and DOC-03/DOC-05 boundaries.
+
+### 15.75.1 A01 movement posting source-event identity — preferred candidate
+
+DOC-04 §42.17 recommends a bounded Inventory Posting Source Event Registry (Path B) for further review. The reason is the breadth of inventory posting source families and the ability of one source event to fan out into multiple immutable movement rows. The registry is strictly limited to inventory posting identity; it is not a universal event bus and is not shared with payments, webhooks, offline synchronization or A02.
+
+The candidate contract specifies tenant identity, controlled source domain/event type, authoritative source-record identity, event sequence/version, idempotency key, canonical payload digest, actor/time evidence, stable movement fan-out sequence and reversal lineage. Source adapters must independently validate source existence, Business ownership, lifecycle, quantity and event eligibility. Posting fan-out is all-or-nothing unless a separately approved recoverable protocol is designed.
+
+The supporting registry would sit outside the historical 17 inventory entities. It is not `inventory_cost_layer_movements` and does not become entity #18. Path B remains REVIEW REQUIRED / NOT APPROVED; Path A explicit source-specific references remains a valid alternative until the project explicitly accepts the recommendation.
+
+### 15.75.2 A02 reservation source validation — independent contract
+
+DOC-04 §42.18 retains A02 Alternative A: `source_type` + `source_id` on the reservation header, resolved through a finite server-owned source adapter allowlist. The candidate source catalogue covers M03 sales demand, conditional M05 inventory-consuming booking demand, M09 work-order material demand, M10 production material demand and controlled M06 internal reservation requests. These are candidate families only; no family is enabled by this draft.
+
+A reservation source should resolve to an atomic demand line/material requirement, not a multi-line parent document unless the parent is truly indivisible. Multiple allocation slices may serve one reservation demand; multiple reservation headers for one demand require an explicit source-specific wave/purpose identity and uniqueness rule. The resolver must verify source existence, same-Business ownership, reservable lifecycle, Product/Variant/unit/quantity, remaining demand, concurrency-safe commit and idempotent replay. Unknown source types fail closed.
+
+A02 is not an A01 registry reference. No A02 generic registry is selected. The polymorphic source pair alone is not a physical FK and does not prove enforcement.
+
+### 15.75.3 Cross-document and status disposition
+
+- DOC-03 movement source-of-truth and immutable-ledger rules remain unchanged; source domains remain authoritative for their own source records.
+- DOC-03 reservation effect remains availability-only until fulfillment, which must atomically reconcile the reservation event and posted movement under §42.16.
+- DOC-05 authorization, active Business membership, exact action key, scope, SoD and audit evaluation remain independent; a valid source relation does not grant permission.
+- DOC-08 FIX decisions remain unchanged.
+- DOC-09 ERD-OPEN-05 (A01) and ERD-OPEN-06 (A02) remain OPEN. A01/A02 physical FKs/resolver, source catalog approval, cardinality, idempotency, lifecycle, TTL, RLS/server enforcement and executed tenant-negative tests remain separate acceptance gates.
+
+**Next action:** independent review of DOC-04 §§42.17–42.19 against DOC-03, DOC-05, DOC-08 and DOC-09; inspect the full PR diff and checks; record residual design gaps. Do not close A01/A02 or Package E merely because the candidate contracts are drafted. PR #140 remains subject to the Production merge hold in §15.70. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
