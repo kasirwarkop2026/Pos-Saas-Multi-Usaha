@@ -2718,3 +2718,18 @@ The independent consistency check of the A01/A02 candidate contracts and the pre
 A01 registry and A02 polymorphic source pairs remain separate. No guessed registry FK has been added to the 17-entity matrix. A02 strict source resolution remains a logical validation contract, not a conventional FK. Any later explicit-FK alternative must specify source-family parent keys and atomic demand-line grain.
 
 **Status:** candidate parent-key prerequisites documented; physical UNIQUE/FK/index definitions remain NOT APPROVED. A01/A02 remain OPEN. Nullable Variant equality, source lifecycle/cardinality, idempotency, transaction/concurrency, RLS/server authorization and executed negative tests remain OPEN. No FIX or DOC-09 closure is claimed. PR #140 remains unmerged under the Production merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.77 CW-11 Package E — A01/A02 alternate-key and idempotency grain completed (20 November 2026)
+
+The technical-completeness pass found that the A01/A02 recommendations in DOC-04 §§42.17–42.18 described event/request idempotency but needed exact candidate alternate-key grains. DOC-04 §42.21 now distinguishes:
+
+- **A01 event identity:** `(business_id, source_domain, source_event_type, source_record_id, source_event_sequence)`.
+- **A01 request replay key:** `(business_id, source_domain, source_event_type, idempotency_key)`.
+- **A01 movement fan-out key:** `(business_id, source_reference_id, source_event_movement_sequence)` only if Path B is accepted.
+- **A02 request replay key:** `(business_id, request_idempotency_key)`, with a canonical request payload digest.
+- **A02 source-demand cardinality:** default single active header per `(business_id, source_type, source_id, reservation_purpose)` only for source adapters declaring that rule; source-specific multi-wave reservations require controlled purpose and atomic aggregate remaining-demand validation.
+
+The candidate reservation header now proposes `request_idempotency_key`, `request_payload_digest` and controlled `reservation_purpose`. These are candidate field additions, not existing schema claims or approved physical constraints. A01 posting replay and A02 reservation-request replay remain separate; A02 fulfillment creates a distinct A01 posting event under the atomicity boundary in §42.16.
+
+**Status:** candidate key grains and replay boundaries are now explicit in documentation. Digest canonicalization/version, retention, physical uniqueness, concurrency, source-specific cardinality and resolver enforcement remain OPEN. A01/A02 and DOC-09 ERD-OPEN-05/06 are not closed. No FIX, physical acceptance or implementation authorization is claimed. PR #140 remains under the Production merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
