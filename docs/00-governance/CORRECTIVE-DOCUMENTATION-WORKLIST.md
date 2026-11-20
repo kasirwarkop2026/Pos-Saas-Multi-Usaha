@@ -2200,3 +2200,29 @@ Both changed files were fetched from `main` after PR #126 merge:
 Next: Package C — transfer/shipment entities 9–10 and 16–17. Package D — cost exception, reservation and costing entities 11–15. After Packages A–D, perform cross-entity reconciliation and explicit design review before any candidate is promoted to FIX/APPROVED. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.55 PR #127 merge verification and CW-11 Package C routing (20 November 2026)
+
+PR #127 (`docs: record PR #126 merge and CW-11 package B`) was squash-merged into `main` after successful acceptance checks.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/127
+- Reviewed head SHA: `fff8864a1e2ef26b2fd4f1c1d78ebd29cee33ace`
+- Merge commit: `595e1f93d2e817008bbc4896ee786c13dd0cd1c1`
+- Result: MERGED.
+- Documentation CI run `44757327949`: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS CI run `44757327911`: SUCCESS — application-change detection. ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: one Worklist file, 31 additions, 0 deletions.
+
+### 15.55.1 Post-merge read-back
+
+The Worklist was fetched from `main` after PR #127 merge; §15.54 is present. Current-main Worklist blob SHA at read-back: `59b2046714f409ba0ec56fb92c6a64f6e329e217`.
+
+### 15.55.2 CW-11 Package B disposition and next action
+
+**PR #127: MERGED AND POST-MERGE VERIFIED. CW-11 remains IN PROGRESS.** Candidate design coverage is **8/17 entities** (Packages A and B), all NOT APPROVED; physical acceptance remains 0/17.
+
+Next: **Package C — transfer/shipment entities 9–10 and 16–17**. Package C must preserve multi-shipment and partial dispatch/receipt semantics, tenant-safe transfer/batch relations, movement lineage, and explicit receipt/return/loss/damage event decisions. Package D follows for entities 11–15. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
