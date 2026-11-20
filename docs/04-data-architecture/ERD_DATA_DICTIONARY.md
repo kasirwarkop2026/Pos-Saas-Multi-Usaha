@@ -1921,3 +1921,125 @@ Candidate constraints to review (NOT APPROVED): count-line grain and uniqueness;
 Next Package C: transfer/shipment entities 9–10 and 16–17. Package D: cost exception, reservation and costing entities 11–15. After Packages A–D, perform cross-entity key/relationship/tenant/constraint reconciliation. Runtime schema, RLS, application implementation and tests remain separate gates.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 37. CW-11 candidate physical specification — Package C: transfers and shipments (20 November 2026)
+
+### 37.1 Status and shared conventions
+
+**PACKAGE C STATUS: CANDIDATE DESIGN — NOT APPROVED.** Candidate type conventions in §35.1 apply. This package does not assert that any proposed field, type, table, key, index, status or FK exists in the current database. Transfer and shipment event semantics remain subject to explicit design review.
+
+### 37.2 Entity C-09 — `stock_transfers`
+
+**Purpose:** transfer header between source and destination inventory locations. The header owns the overall transfer request/approval lifecycle; shipment records represent one or more dispatch/receipt legs. Header-level status must not erase partial shipment or exception history.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate transfer identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant owner |
+| `source_location_id` | uuid | NOT NULL | Candidate source inventory location |
+| `destination_location_id` | uuid | NOT NULL | Candidate destination inventory location |
+| `transfer_reference` | text | NOT NULL | Candidate business-visible reference; uniqueness scope OPEN |
+| `transfer_status` | text | NOT NULL | Candidate overall lifecycle state; transition map OPEN |
+| `requested_by` | uuid | NULL | Candidate requester actor |
+| `requested_at` | timestamptz | NOT NULL | Candidate request instant |
+| `approved_by` | uuid | NULL | Candidate approver actor; authorization rules owned by DOC-05 |
+| `approved_at` | timestamptz | NULL | Candidate approval instant |
+| `completed_at` | timestamptz | NULL | Candidate final completion instant; partial completion rule OPEN |
+| `cancelled_at` | timestamptz | NULL | Candidate cancellation instant; cancellation after dispatch restrictions OPEN |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+| `created_by` | uuid | NULL | Candidate creator actor |
+
+Candidate constraints to review (NOT APPROVED): source and destination must be distinct and in the same business; both locations must be tenant-safe; reference uniqueness; lifecycle transitions; cancellation/rejection after dispatch; aggregate shipped/received quantities derived from shipment records rather than duplicated as mutable header totals.
+
+### 37.3 Entity C-10 — `stock_transfer_items`
+
+**Purpose:** requested product/variant quantity per transfer. Actual batch allocation and shipment quantities are represented by shipment items, allowing multiple shipments and partial dispatches.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate transfer-line identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `stock_transfer_id` | uuid | NOT NULL | Candidate parent transfer reference |
+| `line_number` | integer | NOT NULL | Candidate stable line sequence; uniqueness scope OPEN |
+| `product_id` | uuid | NOT NULL | Candidate product reference |
+| `variant_id` | uuid | NULL | Optional variant reference |
+| `requested_quantity_base` | numeric | NOT NULL | Candidate requested base quantity; precision/scale OPEN |
+| `base_unit_id` | uuid | NOT NULL | Candidate base unit reference |
+| `line_note` | text | NULL | Optional line note |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+
+Candidate constraints to review (NOT APPROVED): parent/product/variant/unit tenant-safe relations; unique line number per transfer; positive quantity policy; whether transfer item edits are permitted after approval or after first dispatch; shipment aggregate caps cannot exceed approved/requested quantity except under an explicit over/under-shipment exception policy.
+
+### 37.4 Entity C-16 — `stock_transfer_shipments`
+
+**Purpose:** one dispatch/receipt shipment leg under a transfer. A transfer may contain multiple shipments; sequence identity must remain stable and partial shipment history must be preserved.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate shipment identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `stock_transfer_id` | uuid | NOT NULL | Candidate parent transfer reference |
+| `shipment_reference` | text | NOT NULL | Candidate shipment reference; uniqueness scope OPEN |
+| `shipment_sequence` | integer | NOT NULL | Candidate sequence within transfer; stable allocation policy OPEN |
+| `shipment_status` | text | NOT NULL | Candidate shipment lifecycle state; vocabulary/transitions OPEN |
+| `dispatched_at` | timestamptz | NULL | Candidate dispatch instant |
+| `dispatched_by` | uuid | NULL | Candidate dispatch actor |
+| `received_at` | timestamptz | NULL | Candidate receipt completion instant; partial receipt policy OPEN |
+| `received_by` | uuid | NULL | Candidate receiving actor |
+| `tracking_reference` | text | NULL | Optional external/internal tracking reference; privacy/uniqueness OPEN |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+| `created_by` | uuid | NULL | Candidate creator actor |
+
+Candidate constraints to review (NOT APPROVED): same-business parent relation; unique shipment sequence/reference within approved scope; dispatch only from approved transfer; receipt only against dispatched quantities; no status overwrite that loses per-line receipt/exception events; whether shipment header is immutable after dispatch and how cancellations/returns are represented.
+
+### 37.5 Entity C-17 — `stock_transfer_shipment_items`
+
+**Purpose:** batch-specific quantity allocation for a shipment line, linking transfer demand to physical batch and recording dispatch/receipt/exception quantities. This candidate deliberately keeps event decomposition OPEN because receipt, return, loss and damage may require append-only event rows rather than mutable totals.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate shipment-line identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `shipment_id` | uuid | NOT NULL | Candidate parent shipment reference |
+| `stock_transfer_item_id` | uuid | NOT NULL | Candidate transfer demand line reference |
+| `batch_id` | uuid | NOT NULL | Candidate source physical batch reference |
+| `quantity_dispatched_base` | numeric | NOT NULL | Candidate dispatch quantity; precision/scale OPEN |
+| `quantity_received_base` | numeric | NULL | Candidate received quantity; NULL means receipt not recorded, zero is a recorded zero |
+| `quantity_lost_base` | numeric | NULL | Candidate loss quantity; event and posting semantics OPEN |
+| `quantity_damaged_base` | numeric | NULL | Candidate damaged quantity; disposition and posting semantics OPEN |
+| `dispatch_movement_id` | uuid | NULL | Candidate source-location movement reference |
+| `receipt_movement_id` | uuid | NULL | Candidate destination-location movement reference |
+| `exception_movement_id` | uuid | NULL | Candidate exception/loss movement reference; one-to-many event handling OPEN |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+
+Candidate constraints to review (NOT APPROVED): shipment and transfer item must belong to the same transfer/business; batch must match product/variant and source location; dispatched quantity cannot exceed approved remaining demand absent an explicit exception; received/lost/damaged quantities cannot exceed dispatched quantity under the approved disposition model; movement links must be idempotent and tenant-safe. Return flows must not be represented by silently decrementing a received total; they require explicit return semantics and movement lineage.
+
+### 37.6 Package C cross-entity review matrix
+
+| Review ID | Candidate relationship/invariant | Required decision before approval |
+|---|---|---|
+| CC-01 | Transfer source/destination location | Same-business rule, distinct-location rule and physical FK tuple |
+| CC-02 | Transfer → transfer items | Tenant-safe parent key, line identity and post-approval edit policy |
+| CC-03 | Transfer → multiple shipments | Shipment sequence, partial dispatch, cancellation and completion semantics |
+| CC-04 | Shipment item → transfer item | Same-transfer integrity and remaining-demand allocation |
+| CC-05 | Shipment item → batch | Batch/source-location/product/variant consistency |
+| CC-06 | Dispatch movement | Source-location quantity decrement and batch/cost lineage |
+| CC-07 | Receipt movement | Destination-location quantity increment, partial receipt and idempotency |
+| CC-08 | Loss/damage/return | Separate event model, disposition codes, actor/time evidence and movement treatment |
+| CC-09 | Shipment line quantities | NULL-versus-zero semantics, precision, rounding and aggregate caps |
+| CC-10 | Transfer lifecycle | Header/line/shipment state machines and authorization/SoD alignment |
+| CC-11 | Shipment identifiers | Stable sequence and reference uniqueness scope |
+| CC-12 | Indexes/concurrency | Dispatch/receipt replay, outstanding demand, FEFO batch allocation and concurrent shipments |
+
+### 37.7 Package C disposition
+
+- Candidate entity coverage: **4/17 additional entities drafted** (entities 9–10 and 16–17); cumulative candidate coverage **12/17**.
+- Candidate field/type proposals: **NOT APPROVED**; no current-schema assertion.
+- Physical FK/key/UNIQUE/CHECK/index/referential actions: **OPEN / NOT APPROVED**.
+- Shipment receipt/return/loss/damage event model remains OPEN; candidate fields do not close DOC-09 event dependencies.
+- Physical Data Dictionary acceptance remains **0/17**.
+
+Next Package D: cost exception, reservation and costing entities 11–15. After Packages A–D, perform cross-entity key/relationship/tenant/constraint reconciliation and explicit design review. Runtime schema, RLS, application implementation and tests remain separate gates.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
