@@ -3088,3 +3088,25 @@ The candidate `attempt_status` and `accepted_for_posting` fields represent the c
 `stock_counts.cutoff_location_posting_sequence` may be NULL while the count is a draft and the snapshot is not frozen. It must be populated before the count snapshot becomes active/available for counting or variance acceptance. After freeze, the cutoff is immutable. The movement sequence allocator and snapshot transaction boundary remain OPEN physical design gates.
 
 For `stock_transfer_shipment_items`, add the direct candidate FK `(business_id, source_location_id) → InventoryLocation(business_id, id)` in addition to the Batch tuple. The source Location must equal the Batch's recorded inventory Location and the transfer header's source Location. This consistency rule remains a candidate cross-parent invariant pending physical enforcement design.
+
+
+### 42.14 Same-grain movement and cost-reference FK precision
+
+The following candidate relations must use same Product/Location tuples rather than Business-only identity links:
+
+| Child relation | Candidate child tuple → parent tuple | Rule |
+|---|---|---|
+| Balance last-movement locator | `(business_id, last_movement_id, product_id, inventory_location_id) → InventoryMovement(business_id, id, product_id, inventory_location_id)` | The watermark movement must belong to the same Product and Location projection grain |
+| Adjustment item generated movement | `(business_id, movement_id, product_id, inventory_location_id) → InventoryMovement(business_id, id, product_id, inventory_location_id)` | The posted movement must match the adjustment line Product and header Location |
+| Reservation fulfillment movement | `(business_id, inventory_movement_id, product_id, inventory_location_id) → InventoryMovement(business_id, id, product_id, inventory_location_id)` | The fulfillment movement must match the allocation Product and Location |
+| Cost exception movement subject | `(business_id, movement_id, product_id, inventory_location_id) → InventoryMovement(business_id, id, product_id, inventory_location_id)` | The exception subject movement must match the exception Product and Location |
+| Cost exception layer subject | `(business_id, cost_layer_id, product_id, inventory_location_id) → InventoryCostLayer(business_id, id, product_id, inventory_location_id)` | The exception subject layer must match the exception Product and Location |
+| Cost layer source movement | `(business_id, source_movement_id, product_id, inventory_location_id) → InventoryMovement(business_id, id, product_id, inventory_location_id)` | A created layer must inherit the source movement Product and Location |
+| Cost consumption movement | `(business_id, inventory_movement_id, product_id, inventory_location_id) → InventoryMovement(business_id, id, product_id, inventory_location_id)` | Consumption belongs to the same Product and Location as its consuming movement |
+| Cost consumption layer | `(business_id, cost_layer_id, product_id, inventory_location_id) → InventoryCostLayer(business_id, id, product_id, inventory_location_id)` | Consumed layer belongs to the same Product and Location as the consumption |
+
+For `inventory_cost_layer_consumptions`, add the separate optional Variant FK `(business_id, product_id, variant_id) → ProductVariant(business_id, product_id, id)`. For movement/layer, exception/movement, exception/layer and consumption/movement pairs, equality of nullable Variant identifiers remains subject to the null-safe compatibility control in §42.3.4; the Product/Location tuples alone do not claim to prove Variant equality.
+
+For `inventory_reservation_items`, the fulfillment movement FK above is present only on FULFILLED events. Allocation, release, expiry and reallocation events do not create physical movement rows.
+
+This precision addendum supersedes any shorter Business-only movement/layer tuple for the specific same-grain relations listed above. It does not select physical enforcement, trigger behavior, indexes or runtime validation.
