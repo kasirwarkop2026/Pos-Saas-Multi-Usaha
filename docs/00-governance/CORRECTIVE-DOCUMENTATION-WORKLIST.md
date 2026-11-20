@@ -2450,3 +2450,32 @@ No FIX or DOC-09 dependency is changed/closed. No candidate field/type/key/const
 Next package: correct the seven findings, normalize the 17-entity PK/alternate-grain matrix, classify FK parent ownership and draft exact candidate FK tuples, while preserving all unresolved source/event/number/costing gates.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.65 PR #137 merge verification and CW-11 design-review checkpoint (20 November 2026)
+
+PR #137 (docs: review CW-11 XD proposals and record design findings) is confirmed **MERGED** into `main`.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/137
+- Reviewed head SHA: `9da7475afc6582d0beb27945b3fea3ee864c1b5f`
+- Base SHA: `e447a758ea7d91cb488c0d48452c6f8dcf28360d`
+- Merge commit: `8f214ccf4038b5695b3f5309856cec2a35009626`
+- Result: MERGED.
+- Scope: DOC-04 §41 and Worklist §15.64; 2 files, 175 additions, 0 deletions.
+- Documentation CI run `44759765970`: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS application-change detection run `44759765868`: SUCCESS. App-only ESLint, dependency security, TypeScript and Next.js build jobs were skipped for this documentation-only change; no application-test pass is claimed.
+- No review submissions or inline review threads were reported in the final pre-merge review.
+
+### 15.65.1 Post-merge current-main read-back
+
+DOC-04 and Worklist were fetched from `main` after merge. DOC-04 §41 and Worklist §15.64 are present. Current-main blob SHAs at read-back:
+- DOC-04: `75e365fd3df2f9fdb579222b70844b427d17fd11`.
+- Worklist: `dd50255369e55e397566f8ddbc0b03a04c18f199`.
+
+### 15.65.2 CW-11 next package
+
+**PR #137: MERGED AND POST-MERGE VERIFIED.** The independent review findings are now recorded in `main`. CW-11 remains IN PROGRESS — ACCEPTANCE NOT MET. The next documentation-only package is Package E: address F41-01 through F41-07, normalize the 17-entity candidate PK/alternate-grain matrix, classify FK parent ownership and draft exact candidate FK tuples. A01/A02 source contracts, count attempts, shipment event identity, reservation event/projection, transfer costing, numeric/currency rules and other unresolved gates must remain explicitly open until their own criteria are met.
+
+No FIX, physical acceptance or DOC-09 dependency is promoted/closed by this merge. Candidate coverage remains 17/17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
