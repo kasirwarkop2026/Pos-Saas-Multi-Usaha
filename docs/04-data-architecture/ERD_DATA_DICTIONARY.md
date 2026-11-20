@@ -3274,3 +3274,24 @@ The polymorphic `(source_type, source_id)` pair does not provide a conventional 
 | Cross-use | Must not be used as a generic demand registry | Must not be used as movement posting-event identity |
 
 Both recommendations remain CANDIDATE / REVIEW REQUIRED. Neither closes DOC-09 ERD-OPEN-05 or ERD-OPEN-06, neither promotes any FIX decision, and neither authorizes a physical schema or implementation. Candidate inventory entity count remains 17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
+
+
+### 42.20 Referenced parent-key prerequisites for A01/A02 and §42.15 cross-parent tuples
+
+The independent review of §§42.15–42.19 found that some new cross-parent tuples require explicit referenced-parent UNIQUE prerequisites beyond the initial list in §42.3.2. Add the following candidate parent keys to that list. These are prerequisites for a possible physical FK design, not claims that the referenced physical objects or constraints exist:
+
+| Referenced logical parent | Additional candidate referenced key | Child relation(s) relying on it |
+|---|---|---|
+| InventoryMovement | `(business_id, id, inventory_location_id)` | Stock-count cutoff movement → counted Location |
+| InventoryMovement | `(business_id, id, product_id, inventory_location_id)` | Movement reversal, balance watermark, adjustment posting, reservation fulfillment, cost exception, cost-layer source, cost consumption and other same-grain references |
+| StockTransfer | `(business_id, id, source_location_id)` | Shipment item → transfer source Location |
+| StockTransferItem | `(business_id, id, stock_transfer_id, product_id)` | Shipment item → same transfer demand Product |
+| InventoryCostLayerConsumption | `(business_id, id, cost_layer_id, product_id, inventory_location_id)` | Consumption reversal → original cost layer and Product/Location pool |
+
+The candidate child tuples remain as specified in §§42.15.1–42.15.4. Each additional parent key must be backed by the exact same values on the referenced row. The key is not a substitute for further null-safe Variant equality, cumulative reversal caps, quantity/unit compatibility, event sequencing or lifecycle checks.
+
+For A01, if Path B is later approved, its registry requires a tenant-bound stable `id` and candidate uniqueness for the source event identity and idempotency scope. The exact registry parent key and movement FK tuple must be designed only after the registry source catalogue, event identity and Business ownership are approved. Do not insert a guessed registry FK into the 17-entity matrix now.
+
+For A02, the recommended strict source adapter does not itself create a conventional relational FK for `(source_type, source_id)`. If a future finite source catalogue permits explicit FK relations, each source family must state its exact tenant-safe parent key and source-line grain. Until then, treat source existence/ownership/lifecycle validation as a separate logical resolver gate; do not claim referential integrity from the polymorphic pair.
+
+**Disposition:** this addendum completes the candidate referenced-parent prerequisite list needed by the newly stated cross-parent relations. Physical UNIQUE/FK definitions, indexes, source registry, source adapters, null-safe Variant equality and runtime enforcement remain NOT APPROVED / OPEN. No FIX decision or DOC-09 item is closed.
