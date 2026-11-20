@@ -1997,7 +1997,7 @@ PR #119 (`docs: record PR #118 merge and post-merge verification`) was squash-me
 - Merge commit: `63e5b3eda5ff0d2ef8085d2d4558197b12396e8c`
 - Result: MERGED.
 - Pre-merge CI: Documentation CI SUCCESS (internal documentation links, Markdown lint, documentation structure); POS SaaS CI SUCCESS (application-change detection). ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
-- Scope: one file, append-only Worklist update; 25 additions, 0 deletions.
+- Scope: one file, append-only Worklist update; 22 additions, 0 deletions.
 
 ### 15.47.1 Post-merge current-main read-back
 
