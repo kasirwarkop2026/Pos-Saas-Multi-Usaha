@@ -2169,3 +2169,34 @@ Both changed files were fetched from `main` after PR #125 merge. DOC-04 §35 (Pa
 Next: **Package B — adjustment and stock-count entities 5–8**, with explicit candidate treatment of posting lifecycle, conversion snapshot, stock-count snapshot/cutoff, NULL-versus-zero count semantics and recount history. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.54 PR #126 merge verification and CW-11 Package B disposition (20 November 2026)
+
+PR #126 (`docs: draft CW-11 candidate physical specification package B`) was squash-merged into `main` after successful acceptance checks.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/126
+- Reviewed head SHA: `9bc18df627ecbe3c4965c689477df1fad4a99cac`
+- Merge commit: `0bddf3a4bfd38170c3dd0b40e317239e7dda13f6`
+- Result: MERGED.
+- Documentation CI run `44757189868`: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS CI run `44757190032`: SUCCESS — application-change detection. ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: two documentation files; Worklist 26 additions, DOC-04 123 additions; 149 additions, 0 deletions total.
+
+### 15.54.1 Post-merge current-main read-back
+
+Both changed files were fetched from `main` after PR #126 merge:
+
+| File | Current-main blob SHA | Read-back |
+|---|---|---|
+| `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` | `72010e445aea2c8ba646e7cbdc9c1820adf4a5bb` | §15.53 present; PR #125 merge and Package B routing recorded |
+| `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` | `015455ab3ae7e7a48fb6ea7c505a344df34a7e70` | §§35–36 present; candidate Packages A and B cover entities 1–8 |
+
+### 15.54.2 CW-11 Package B disposition and next action
+
+**PR #126: MERGED AND POST-MERGE VERIFIED. CW-11 remains IN PROGRESS.** Candidate design coverage is now **8/17 entities** (Packages A and B). All candidate field/type proposals remain NOT APPROVED; physical Data Dictionary acceptance remains **0/17**. No key, constraint, index, referential action or enforcement design is approved by these packages.
+
+Next: Package C — transfer/shipment entities 9–10 and 16–17. Package D — cost exception, reservation and costing entities 11–15. After Packages A–D, perform cross-entity reconciliation and explicit design review before any candidate is promoted to FIX/APPROVED. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
