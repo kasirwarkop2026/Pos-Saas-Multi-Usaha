@@ -2450,3 +2450,31 @@ No FIX or DOC-09 dependency is changed/closed. No candidate field/type/key/const
 Next package: correct the seven findings, normalize the 17-entity PK/alternate-grain matrix, classify FK parent ownership and draft exact candidate FK tuples, while preserving all unresolved source/event/number/costing gates.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.65 PR #137 merge verification — CW-11 independent design review (20 November 2026)
+
+PR #137 (docs: review CW-11 XD proposals and record design findings) was squash-merged into main after all required documentation acceptance checks passed.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/137
+- Reviewed head SHA: 9da7475afc6582d0beb27945b3fea3ee864c1b5f
+- Merge commit: 8f214ccf4038b5695b3f5309856cec2a35009626
+- Result: MERGED.
+- Documentation CI run 44759765970: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS CI run 44759765868: SUCCESS — application-change detection. Dependency security audit, ESLint, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Reviews and inline review threads: none reported at final pre-merge check.
+- Scope: DOC-04 and Worklist only; 175 additions, 0 deletions.
+
+### 15.65.1 Post-merge read-back
+
+DOC-04 and Worklist were fetched again from main:
+- DOC-04 §41 present; current-main blob SHA: 75e365fd3df2f9fdb579222b70844b427d17fd11.
+- Worklist §15.64 present; current-main blob SHA: dd50255369e55e397566f8ddbc0b03a04c18f199.
+
+### 15.65.2 CW-11 disposition
+
+**PR #137: MERGED AND POST-MERGE VERIFIED.** Independent design review findings are now recorded in main. XD-02, XD-09, XD-12, XD-13 and XD-14 pass at principle level only; XD-01, XD-04, XD-06, XD-07, XD-08 and XD-10 require revision; XD-03, XD-05 and XD-11 remain conditional/open.
+
+Physical acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. The next package is correction of F41-01 through F41-07, normalization of the 17-entity PK/alternate-grain matrix, parent ownership classification and candidate FK tuples. No FIX or DOC-09 dependency was closed by PR #137.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
