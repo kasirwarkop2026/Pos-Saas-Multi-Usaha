@@ -3295,3 +3295,42 @@ For A01, if Path B is later approved, its registry requires a tenant-bound stabl
 For A02, the recommended strict source adapter does not itself create a conventional relational FK for `(source_type, source_id)`. If a future finite source catalogue permits explicit FK relations, each source family must state its exact tenant-safe parent key and source-line grain. Until then, treat source existence/ownership/lifecycle validation as a separate logical resolver gate; do not claim referential integrity from the polymorphic pair.
 
 **Disposition:** this addendum completes the candidate referenced-parent prerequisite list needed by the newly stated cross-parent relations. Physical UNIQUE/FK definitions, indexes, source registry, source adapters, null-safe Variant equality and runtime enforcement remain NOT APPROVED / OPEN. No FIX decision or DOC-09 item is closed.
+
+
+### 42.21 A01 event identity and A02 request idempotency — candidate alternate-key precision
+
+The independent technical-completeness pass found that §§42.17–42.18 described idempotency and source-event identity but did not yet state their candidate alternate-key grains precisely. The following additions are required if the recommendations are accepted. They remain CANDIDATE / NOT APPROVED.
+
+#### 42.21.1 A01 source-event registry candidate identity keys
+
+For the bounded registry recommendation in §42.17, distinguish source-event identity from request idempotency:
+
+- Candidate event identity: `(business_id, source_domain, source_event_type, source_record_id, source_event_sequence)`.
+- Candidate request replay key: `(business_id, source_domain, source_event_type, idempotency_key)`.
+- Candidate movement fan-out identity: `(business_id, source_reference_id, source_event_movement_sequence)` on `inventory_movements`, only after Path B and the source registry are approved.
+
+`source_event_sequence` must be stable for the authoritative source event and cannot be assigned from an arbitrary client retry. If a source emits exactly one event of a given type for its source record, the adapter must use a stable explicit first-event sequence/value; NULL is not an escape from uniqueness. If the source system already provides an immutable event ID, the registry may use that identity as a mapped source-event key, but the canonical mapping and uniqueness contract must still be documented. A new retry must resolve to the original registry event, not allocate a new event sequence.
+
+The canonical payload digest is used to detect whether a replay is semantically identical. Same key + same digest returns the original result; same key + different digest is a conflict. Digest canonicalization/version, retention period and collision handling remain OPEN. The registry does not own the source business fact; it records the validated posting identity and outcome.
+
+#### 42.21.2 A02 reservation request idempotency and source cardinality keys
+
+The `inventory_reservations` candidate header must include the following request identity fields:
+
+| Candidate field | Candidate type | Nullability | Purpose |
+|---|---|---|---|
+| `request_idempotency_key` | text | NOT NULL | Stable tenant-scoped identity of the client/server reservation request |
+| `request_payload_digest` | text | NOT NULL | Canonical request identity for replay collision detection; digest algorithm/version OPEN |
+| `reservation_purpose` | text | NOT NULL | Controlled purpose/wave identity used only if a source demand is intentionally split into multiple reservation headers; vocabulary OPEN |
+
+Candidate unique request key: `(business_id, request_idempotency_key)`. A repeated request with the same key and same canonical digest resolves to the same reservation; same key with a different digest is rejected. The request key does not itself prove that the source demand has sufficient remaining quantity.
+
+Source-demand uniqueness is a separate, source-specific candidate rule. Default recommendation: at most one active reservation header per `(business_id, source_type, source_id, reservation_purpose)` for a source adapter that declares single-header cardinality. If an adapter explicitly supports multiple active waves/purposes, the purpose/wave value must be controlled and the adapter must calculate remaining demand across all active reservations atomically. No global uniqueness constraint on `(business_id, source_type, source_id)` is approved because it would incorrectly prohibit legitimate source-specific waves; no unconstrained duplication is permitted either.
+
+`reservation_purpose` is not a permission, role or module entitlement. It cannot be freely supplied by the client to bypass source cardinality; the source adapter must validate the purpose against its enabled workflow contract. Source-type allowlist, source line identity and request idempotency remain independent validations.
+
+#### 42.21.3 A01/A02 replay boundary
+
+A01 replay deduplicates a source posting event and its movement fan-out. A02 replay deduplicates a reservation request and protects the source demand's remaining reservable quantity. The same UUID or idempotency token must not be treated as interchangeable across the two domains. A02 reservation fulfillment still creates the separately identified A01 inventory posting event and the atomic reservation/movement outcome required by §42.16.
+
+The candidate field additions do not establish physical uniqueness, payload hashing, retention, concurrency or runtime enforcement. A01 and A02 remain REVIEW REQUIRED / OPEN; DOC-09 ERD-OPEN-05 and ERD-OPEN-06 remain OPEN. No candidate entity is added to the 17-entity inventory count; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
