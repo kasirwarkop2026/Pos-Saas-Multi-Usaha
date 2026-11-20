@@ -2568,3 +2568,10 @@ No deployment was manually initiated in this step. No rollback, cancellation, pr
 Package E remains documented on the PR branch and is not yet part of `main`. Candidate coverage remains 17/17; physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. No FIX or DOC-09 dependency is promoted/closed.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.71 CW-11 Package E — same-grain movement/cost FK precision (20 November 2026)
+
+DOC-04 §42.14 adds same Product/Location FK tuples for balance watermarks, adjustment posting movements, reservation fulfillment movements, cost exceptions, cost-layer source movements and cost-layer consumptions. It also adds the candidate Variant relation for cost-layer consumption and keeps nullable Variant equality explicitly OPEN.
+
+The tuple refinement is documentation-only. Physical FK acceptance, null-safe Variant enforcement and runtime evidence remain OPEN. PR #140 remains OPEN and merge-held under §15.70 because merge-to-main has an observed Vercel Production deployment effect.
