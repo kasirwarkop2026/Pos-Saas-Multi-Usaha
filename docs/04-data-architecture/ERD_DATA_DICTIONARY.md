@@ -2669,3 +2669,347 @@ The next package must:
 - Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 42. CW-11 Package E — F41-01 through F41-07 corrective candidate specification (20 November 2026)
+
+### 42.1 Status, scope and decision boundary
+
+**PACKAGE E STATUS: CORRECTIVE CANDIDATE DRAFT COMPLETE FOR INDEPENDENT REVIEW — NOT APPROVED / NOT PHYSICAL ACCEPTANCE.** This append-only section corrects the seven findings in §41 against the 17 candidate entities in §§35–38. It is project-authored candidate design, not a claim about current database objects or runtime behavior. It does not create a new approved entity, promote a candidate to FIX, close DOC-09, approve a physical ERD, or authorize implementation.
+
+- Candidate entity inventory remains exactly 17.
+- Candidate field/type coverage remains 17/17; revised fields below are proposals only.
+- Physical Data Dictionary acceptance remains 0/17.
+- Canonical physical ERD remains NOT ACCEPTED.
+- Implementation readiness remains NOT READY.
+- `inventory_cost_layer_movements` remains an unapproved candidate entity #18 and is not included in this package.
+- Names for external parents below are logical target labels, not assertions that named physical tables currently exist.
+
+### 42.2 F41-01 — normalized PK identity and alternate business grain
+
+The candidate direction is normalized to **surrogate row identity plus a separately declared alternate business grain for all 17 entities**. Each entity receives candidate `id uuid NOT NULL` as its primary key. The `id` is row identity only; it does not replace business uniqueness, tenant ownership or domain-specific grain. Every tenant-owned parent must expose candidate alternate key `(business_id, id)` even where `id` is globally unique.
+
+| # | Candidate entity | Candidate PK | Candidate alternate business grain / uniqueness proposal | Status and unresolved point |
+|---:|---|---|---|---|
+| 1 | `inventory_batches` | `id` | `(business_id, inventory_location_id, product_id, variant_id, batch_code)` | CANDIDATE; batch-code scope, duplicate lots and NULL-variant uniqueness OPEN |
+| 2 | `inventory_movements` | `id` | `(business_id, source_reference_id, source_event_movement_sequence)` after A01 selection | CANDIDATE; A01 identity, fan-out and idempotency OPEN; no uniqueness claim while source reference is unresolved |
+| 3 | `inventory_balances` | `id` — ADD candidate field | `(business_id, inventory_location_id, product_id, variant_id)` | CANDIDATE; NULL-safe Variant uniqueness OPEN |
+| 4 | `inventory_batch_balances` | `id` — ADD candidate field | `(business_id, inventory_location_id, product_id, variant_id, batch_id)` | CANDIDATE; NULL-safe Variant uniqueness and batch compatibility OPEN |
+| 5 | `inventory_adjustments` | `id` | `(business_id, adjustment_reference)` | CANDIDATE; reference reuse/numbering lifecycle OPEN |
+| 6 | `inventory_adjustment_items` | `id` | `(business_id, adjustment_id, line_number)` | CANDIDATE; ADD `line_number integer NOT NULL`; line ordering/revision policy OPEN |
+| 7 | `stock_counts` | `id` | `(business_id, count_reference)` | CANDIDATE; reference reuse/numbering lifecycle OPEN |
+| 8 | `stock_count_items` | `id` — one immutable attempt row | `(business_id, stock_count_id, count_line_id, attempt_sequence)` | CANDIDATE; ADD `count_line_id uuid`, `attempt_sequence bigint`, `attempt_status text`, `accepted_for_posting boolean`; accepted-attempt uniqueness OPEN |
+| 9 | `stock_transfers` | `id` | `(business_id, transfer_reference)` | CANDIDATE; reference reuse/numbering lifecycle OPEN |
+| 10 | `stock_transfer_items` | `id` | `(business_id, stock_transfer_id, line_number)` | CANDIDATE; line edit/freeze policy OPEN |
+| 11 | `inventory_cost_exceptions` | `id` | Source-event grain only after A01; candidate form `(business_id, source_reference_id, exception_code, exception_sequence)` | CANDIDATE; duplicate detection and source identity OPEN; no uniqueness accepted |
+| 12 | `inventory_reservations` | `id` | `(business_id, reservation_reference)` | CANDIDATE; A02 source cardinality/idempotency OPEN |
+| 13 | `inventory_reservation_items` | `id` — one immutable lifecycle event row | `(business_id, reservation_id, allocation_id, event_sequence)` plus `(business_id, idempotency_key)` | CANDIDATE; event-ledger semantics and idempotency enforcement OPEN |
+| 14 | `inventory_cost_layers` | `id` | `(business_id, product_id, variant_id, inventory_location_id, layer_sequence)` when FIFO is selected | CANDIDATE; NULL-safe Variant uniqueness and FIFO ordering OPEN; no per-batch MWA layer |
+| 15 | `inventory_cost_layer_consumptions` | `id` | `(business_id, inventory_movement_id, cost_layer_id, consumption_sequence)` | CANDIDATE; ADD `consumption_sequence bigint NOT NULL`; partial reversal and locking OPEN |
+| 16 | `stock_transfer_shipments` | `id` | `(business_id, stock_transfer_id, shipment_sequence)`; optional reference uniqueness `(business_id, shipment_reference)` | CANDIDATE; stable sequence and transit-location policy OPEN |
+| 17 | `stock_transfer_shipment_items` | `id` | `(business_id, shipment_id, stock_transfer_item_id, batch_id, shipment_item_sequence)` | CANDIDATE; ADD `shipment_item_sequence bigint NOT NULL`; batch/transfer compatibility OPEN |
+
+The alternate grains above are proposals, not approved UNIQUE constraints. A business-visible reference is not automatically globally unique. Event-backed grains remain unresolved until the relevant source contract exists. For all nullable Variant grains, a plain PostgreSQL UNIQUE constraint is not assumed to provide NULL-safe uniqueness. `NULLS NOT DISTINCT`, paired partial unique indexes, or another normalized identity strategy remain alternatives requiring compatibility and negative-case review.
+
+#### 42.2.1 Projection identity and deterministic rebuild/upsert
+
+`inventory_balances` and `inventory_batch_balances` remain rebuildable projections, never authoritative ledgers.
+
+1. Projection identity is `id`; projection uniqueness is the separately defined business grain above.
+2. Rebuild input is the immutable posted movement ledger plus the applicable reservation-event projection. Rebuild ordering must use an approved deterministic posting watermark, not UUID ordering or wall-clock timestamps alone.
+3. Upsert matches by the complete null-safe business grain, not by a newly generated `id`. If the grain exists, preserve its existing `id`; if first materialized, assign a new candidate `id`.
+4. Recalculation updates projection values and reconciliation metadata atomically within the authorized implementation design. A failed rebuild must not expose a partially refreshed projection.
+5. A grain with historical movement/allocation history may legitimately have zero on-hand and zero reserved quantity. Zero is a valid projection value and is not a missing row.
+6. Stale-row cleanup, generation swapping, concurrency control and rebuild recovery require later physical design. No destructive rebuild procedure is approved here.
+7. `quantity_available_base` remains derived as `quantity_on_hand_base - quantity_reserved_base`; it is not an independent source of truth.
+8. Batch projection totals must reconcile to the corresponding Product/Variant/Location projection. A batch row cannot be counted twice or assigned to another Product/Location.
+
+#### 42.2.2 Candidate field amendments required
+
+| Entity | Candidate amendment | Reason |
+|---|---|---|
+| `inventory_balances` | Add `id uuid NOT NULL` | Separate row identity from projection grain |
+| `inventory_batch_balances` | Add `id uuid NOT NULL` | Separate row identity from batch projection grain |
+| `inventory_adjustment_items` | Add `line_number integer NOT NULL` | Stable line grain independent of surrogate identity |
+| `inventory_movements` | Add `source_event_movement_sequence bigint NOT NULL` after A01 selection; add `location_posting_sequence bigint NOT NULL` as candidate ordering/watermark | Distinguish source-event fan-out from location posting order |
+| `stock_counts` | Add `cutoff_location_posting_sequence bigint NULL` | Record reproducible inclusive movement high-watermark alongside cutoff movement locator |
+| `stock_count_items` | Add `count_line_id uuid NOT NULL`, `attempt_sequence bigint NOT NULL`, `attempt_status text NOT NULL`, `accepted_for_posting boolean NOT NULL` | Preserve recount attempts and identify accepted attempt |
+| `stock_transfer_shipments` | Add `transit_location_id uuid NOT NULL` once dispatched | Identify Business-owned in-transit inventory location |
+| `stock_transfer_shipment_items` | Add `stock_transfer_id`, `product_id`, `variant_id`, `source_location_id` and `shipment_item_sequence` | Permit explicit same-transfer and batch/product/source-location tuple checks |
+| `inventory_reservation_items` | Replace mutable allocation totals/status as authoritative data with event fields in §42.8 | Make lifecycle history append-only and replayable |
+| `inventory_cost_layer_consumptions` | Add `consumption_sequence bigint NOT NULL` | Distinguish multiple consumption slices for one movement/layer pair |
+
+These additions are candidate fields only. They do not authorize new tables, database changes, migrations or application implementation.
+
+### 42.3 F41-02 — parent ownership classification and tenant-safe candidate FK matrix
+
+#### 42.3.1 Parent ownership classes
+
+| Logical parent | Ownership class | Candidate integrity rule |
+|---|---|---|
+| Business root | PLATFORM-OWNED / TENANT ROOT | Tenant-owned rows reference Business by `business_id`; root is not itself a tenant-owned child |
+| Product | TENANT-OWNED candidate | Parent key `(business_id, id)`; if shared catalogue is selected later, use explicit Business catalogue association, not a forced tenant FK to global parent |
+| Product Variant | TENANT-OWNED candidate, subordinate to Product | Parent key `(business_id, product_id, id)` proves Variant belongs to referenced Product |
+| Inventory Location | TENANT-OWNED | Parent key `(business_id, id)`; source, destination, transit and quality-hold roles are distinct |
+| Inventory Batch | TENANT-OWNED, Product/Variant/Location-bound | Parent keys `(business_id, id)` and `(business_id, id, product_id, inventory_location_id)`; Variant compatibility needs an additional null-safe rule |
+| Canonical Unit of Measure | SHARED/GLOBAL candidate | Candidate FK `(unit_id) → Unit(id)`; do not force `business_id` into a genuinely global parent |
+| Business-defined Unit, if supported | TENANT-OWNED alternative | Candidate FK `(business_id, unit_id) → BusinessUnit(business_id, id)`; not selected |
+| Supplier relationship | TENANT-OWNED candidate | Reference Business supplier relationship, not an unqualified global supplier identity |
+| Human actor / member | ACTOR/MEMBERSHIP-SCOPED | Resolve through active Business membership/actor context; raw authentication principal identity is not proof of Business membership |
+| Platform/system actor | PLATFORM-OWNED actor mapped to Business execution context | Must be explicitly represented in actor context; no implicit membership or broad platform-data access |
+| Shared vocabularies/currencies | SHARED/GLOBAL | Reference global identity or controlled vocabulary; no artificial `business_id` FK |
+| A01 movement source | TENANT-OWNED source event, source-domain dependent | Source ownership validated by source adapter or separately reviewed bounded registry |
+| A02 reservation source | TENANT-OWNED source record, source-domain dependent | Separate allowlist and tenant validation; A02 is not A01 |
+
+For the current candidate, Product and Variant are treated as Business-owned catalogue records. A later shared/global Product catalogue is a separate architecture decision and must introduce an explicit Business-to-catalogue association. Location and Batch remain Business-owned. Canonical Units are treated as shared/global; Business-defined units remain an alternative, not an implicit extension.
+
+#### 42.3.2 Referenced parent UNIQUE keys required
+
+These referenced keys are prerequisites, not claims that the parent schema currently exposes them:
+
+- Business root: `(id)`.
+- Every tenant-owned parent: `(business_id, id)`.
+- Product Variant: `(business_id, product_id, id)`.
+- Inventory Location: `(business_id, id)`.
+- Inventory Batch: `(business_id, id, product_id, inventory_location_id)`; a separate Variant-compatible key/strategy is still required.
+- Adjustment header: `(business_id, id, inventory_location_id)`.
+- Stock Count header: `(business_id, id, inventory_location_id)`.
+- Transfer item: `(business_id, id, stock_transfer_id)`.
+- Transfer Shipment: `(business_id, id, stock_transfer_id)`.
+- Inventory Movement: `(business_id, id)` and `(business_id, id, product_id, inventory_location_id)`.
+- Inventory Cost Layer: `(business_id, id, product_id, inventory_location_id)`.
+- Business Actor Context / Membership: `(business_id, id)`.
+- Global Unit: `(id)`.
+
+A surrogate `id` PK does not remove the need for the tenant-bound alternate key. All candidate child references to tenant-owned parents carry `business_id` in the FK tuple.
+
+#### 42.3.3 Candidate FK tuple matrix by entity
+
+Parent labels are logical design targets; physical names and actual key availability remain unverified.
+
+| Child entity | Candidate child → parent tuple(s) | Required parent key / compatibility condition |
+|---|---|---|
+| `inventory_batches` | `(business_id) → Business(id)`; `(business_id, product_id) → Product(business_id, id)`; `(business_id, product_id, variant_id) → ProductVariant(business_id, product_id, id)`; `(business_id, inventory_location_id) → InventoryLocation(business_id, id)`; `(business_id, supplier_id) → BusinessSupplier(business_id, id)`; creator → BusinessActorContext | Variant tuple optional when Variant NULL; Supplier and actor target identities conditional on ownership model |
+| `inventory_movements` | Business; Product; ProductVariant; InventoryLocation; `(business_id, batch_id, product_id, inventory_location_id) → InventoryBatch(business_id, id, product_id, inventory_location_id)`; `(base_unit_id) → GlobalUnit(id)`; `(business_id, reversal_of_movement_id) → InventoryMovement(business_id, id)`; actor context; A01 source placeholder | Batch must match movement Product and Location; Variant-to-Batch null-safe equality OPEN; A01 target not selected |
+| `inventory_balances` | Business; Product; ProductVariant; InventoryLocation; `(business_id, last_movement_id) → InventoryMovement(business_id, id)` | Full null-safe grain uniqueness; movement watermark ordering OPEN |
+| `inventory_batch_balances` | Business; Product; ProductVariant; InventoryLocation; `(business_id, batch_id, product_id, inventory_location_id) → InventoryBatch(business_id, id, product_id, inventory_location_id)` | Batch must match Business/Product/Location; Variant compatibility OPEN |
+| `inventory_adjustments` | Business; `(business_id, inventory_location_id) → InventoryLocation`; requester, approver and creator → BusinessActorContext | Actor references require membership/SoD validation in DOC-05; FK is not authorization |
+| `inventory_adjustment_items` | Business; `(business_id, adjustment_id, inventory_location_id) → InventoryAdjustment(business_id, id, inventory_location_id)`; Product; ProductVariant; Batch tuple; input/base Unit → GlobalUnit; `(business_id, movement_id) → InventoryMovement(business_id, id)` | Add candidate `inventory_location_id` from header for tuple validation; optional Batch/Variant require null-safe compatibility |
+| `stock_counts` | Business; InventoryLocation; `(business_id, cutoff_movement_id) → InventoryMovement(business_id, id)`; creator → BusinessActorContext | Cutoff sequence must agree with referenced movement and Location |
+| `stock_count_items` | Business; `(business_id, stock_count_id, inventory_location_id) → StockCount(business_id, id, inventory_location_id)`; Product; ProductVariant; Batch tuple; counter → BusinessActorContext | Add candidate `inventory_location_id`; all attempts for one `count_line_id` retain same Product/Variant/Batch identity |
+| `stock_transfers` | Business; `(business_id, source_location_id) → InventoryLocation`; `(business_id, destination_location_id) → InventoryLocation`; requester, approver and creator → BusinessActorContext | Source and destination are distinct same-Business locations |
+| `stock_transfer_items` | Business; `(business_id, stock_transfer_id) → StockTransfer`; Product; ProductVariant; `(base_unit_id) → GlobalUnit(id)` | Line number unique within transfer |
+| `inventory_cost_exceptions` | Business; `(business_id, movement_id) → InventoryMovement`; `(business_id, cost_layer_id) → InventoryCostLayer`; A01 source placeholder; detector/resolver → BusinessActorContext | Movement/layer compatibility and at-least-one-subject rule OPEN |
+| `inventory_reservations` | Business; A02 source placeholder; creator → BusinessActorContext | A02 source allowlist, existence, ownership and cardinality OPEN |
+| `inventory_reservation_items` | Business; `(business_id, reservation_id) → InventoryReservation`; Product; ProductVariant; InventoryLocation; Batch tuple; optional fulfillment movement → InventoryMovement; actor context | Batch must match Product/Location/Variant; movement required only for fulfillment event |
+| `inventory_cost_layers` | Business; Product; ProductVariant; InventoryLocation; optional Batch tuple; `(business_id, source_movement_id) → InventoryMovement(business_id, id)` | FIFO layer Product/Variant/Location matches source movement; MWA creates no per-batch cost layer |
+| `inventory_cost_layer_consumptions` | Business; `(business_id, inventory_movement_id, product_id, inventory_location_id) → InventoryMovement(business_id, id, product_id, inventory_location_id)`; `(business_id, cost_layer_id, product_id, inventory_location_id) → InventoryCostLayer(business_id, id, product_id, inventory_location_id)`; optional self-reversal | Add candidate Product and Location fields; Variant compatibility and cumulative reversal cap OPEN |
+| `stock_transfer_shipments` | Business; `(business_id, stock_transfer_id) → StockTransfer`; `(business_id, transit_location_id) → InventoryLocation`; dispatch/receipt actors → BusinessActorContext | Transit location is Business-owned and designated IN_TRANSIT; not source/destination or saleable stock |
+| `stock_transfer_shipment_items` | Business; `(business_id, shipment_id, stock_transfer_id) → StockTransferShipment(business_id, id, stock_transfer_id)`; `(business_id, stock_transfer_item_id, stock_transfer_id) → StockTransferItem(business_id, id, stock_transfer_id)`; `(business_id, batch_id, product_id, source_location_id) → InventoryBatch(business_id, id, product_id, inventory_location_id)`; optional movement event links | Add candidate transfer, Product, Variant and source Location fields; Batch matches transfer demand and source Location |
+
+#### 42.3.4 Nullable Variant and Batch compatibility control
+
+A composite FK containing nullable `variant_id` can be bypassed under ordinary MATCH SIMPLE semantics when that component is NULL. Therefore, a composite FK containing nullable Variant is not by itself proof that a Batch has the same Variant as its child movement/allocation.
+
+Candidate controls, still OPEN for physical selection:
+
+1. Enforce Business/Product/Location/Batch identity through non-null tuple `(business_id, batch_id, product_id, inventory_location_id)`.
+2. Enforce Product-to-Variant through `(business_id, product_id, variant_id) → ProductVariant(business_id, product_id, id)` when Variant is present.
+3. Add a separately approved null-safe equality strategy proving `child.variant_id IS NOT DISTINCT FROM batch.variant_id`; a normalized non-null variant-scope identity or equivalent reviewed relational mechanism must be evaluated.
+4. Do not assume an ordinary CHECK can validate another table. Do not select a trigger or runtime workaround in this documentation package.
+5. For non-batch stock, `batch_id` is NULL and the Batch FK is inapplicable; Product/Variant/Location references still apply independently.
+
+This is an unresolved physical enforcement gate, not an accepted shortcut.
+
+### 42.4 F41-03 — A01 inventory posting source-event identity
+
+A01 is limited to **inventory posting sources**. It is not a universal event bus for all POS SaaS domains. A01 remains distinct from A02 reservation-source validation and from payment/webhook/offline synchronization identity.
+
+Candidate source domains to inventory before final selection include purchase/receipt, sales/fulfillment, adjustment, stock count, transfer dispatch, transfer receipt, loss, damage disposition, return, production/consumption, write-off and approved correction. This list is a design inventory, not a final workflow allowlist.
+
+| Design option | Strength | Cost / risk | Current disposition |
+|---|---|---|---|
+| Explicit source-specific references on movement | Direct FK to each source table; source ownership and lifecycle visible | Many nullable columns and source-specific schema expansion; fan-out and common idempotency still need rules | VALID ALTERNATIVE / NOT SELECTED |
+| Bounded canonical Inventory Posting Source Event Registry | One tenant-scoped event identity for inventory-posting sources; common event sequence, idempotency, reversal and movement fan-out | Requires separately scoped registry and source adapters validating real source row and tenant; registry must not become unchecked generic UUID pointer | PREFERRED CANDIDATE FOR FURTHER REVIEW / NOT SELECTED |
+| Generic cross-domain event registry | Broad reuse | Conflicts with DOC-03 source-of-truth boundaries and risks collapsing unrelated event identities | NOT RECOMMENDED |
+
+If the bounded registry is selected after separate review, its candidate contract must include:
+
+- Stable registry identity and `business_id`.
+- Source domain and controlled source-event type.
+- Source record identity plus source event identity; these are not interchangeable.
+- Source event sequence/version where a source record can emit repeated events.
+- Unique tenant-scoped idempotency key and canonical payload/hash comparison for replay collision handling.
+- One source event may fan out to multiple inventory movements; each movement has stable `source_event_movement_sequence`.
+- Source adapter validates source existence, source ownership and allowed lifecycle before movement can post.
+- Reversal/correction points to original source event and/or original movement without rewriting it.
+- Event time, posting time, actor context and replay outcome are traceable.
+- A source event cannot replay into a second Business or be silently reinterpreted under another source type.
+
+For explicit source-specific references, the same event identity, sequence, idempotency, fan-out and reversal requirements still apply per source relation.
+
+`inventory_movements.source_reference_id` remains an unresolved placeholder until the model is selected. A canonical registry, if approved, is a separately reviewed supporting component; it is not silently added to the 17 inventory entities and is not `inventory_cost_layer_movements` entity #18. A01 remains OPEN pending source catalogue, ownership/cardinality review, physical FK decision and idempotency/reversal acceptance.
+
+### 42.5 F41-04 — immutable stock-count attempts and accepted variance
+
+`stock_count_items` is revised as an **attempt-row structure within the existing entity**, not as one mutable current-value row. No new entity is added.
+
+Candidate identity and fields:
+
+- `id`: immutable identity of one count attempt.
+- `count_line_id`: stable logical count line shared by attempts for the same stock-count/Product/Variant/Batch target.
+- `attempt_sequence`: monotonically increasing sequence within `(business_id, stock_count_id, count_line_id)`.
+- `attempt_status`: candidate lifecycle label; vocabulary and transitions remain OPEN.
+- `accepted_for_posting`: candidate marker for the single attempt accepted for variance posting.
+- Existing Product/Variant/Batch and system snapshot fields remain tied to the same logical count line; attempt values are never overwritten by a later recount.
+
+Candidate invariants:
+
+1. Every recount creates a new row with a new `id` and next `attempt_sequence`. Earlier attempts remain visible and immutable.
+2. At most one attempt per count line may be accepted for posting. Candidate partial unique key: `(business_id, stock_count_id, count_line_id) WHERE accepted_for_posting = true`; physical partial-index and concurrency behavior remain OPEN.
+3. The accepted attempt is explicit. Rejected and superseded attempts remain queryable and cannot post.
+4. `counted_quantity_base IS NULL` means not yet counted. `counted_quantity_base = 0` is a valid recorded physical count.
+5. `snapshot_at` and `cutoff_location_posting_sequence` define the inclusive snapshot boundary. `cutoff_movement_id` is a locator, not a substitute for deterministic order. Movements after cutoff must be replayed/reconciled before variance posting.
+6. `inventory_movements.location_posting_sequence` is a candidate monotonic order within `(business_id, inventory_location_id)`. Sequence allocation, transaction serialization and recovery remain physical design gates.
+7. Variance is calculated from the accepted attempt and snapshot adjusted for post-cutoff movements. Whether variance is stored or derived remains OPEN.
+8. Posting idempotency is bound to accepted attempt identity and a fixed posting purpose. A retry cannot create a second variance movement. A01 must carry this identity before the posting gate can close.
+9. Adjustment posting must specify all-or-nothing versus item-level partial posting, with an explicit accepted-attempt set and compensation rules. This package does not choose the policy.
+
+### 42.6 F41-05 — shipment events, transit stock and quantity reconciliation
+
+`inventory_movements` is the candidate immutable event ledger for physical shipment quantity changes, provided the A01 source-event contract can identify every shipment event. Movement `id` is the stable movement identity. A source event may produce multiple movements, distinguished by `source_event_movement_sequence`.
+
+The singular `dispatch_movement_id`, `receipt_movement_id` and `exception_movement_id` fields in the earlier shipment-item draft are **not accepted as the complete event history**. They may only be reconsidered as optional convenience pointers; they must never replace event-level movement/source references. Shipment-item quantity columns are derived/reconciled summaries, not the sole record of partial events.
+
+| Event | Candidate movement effect | Required identity / reconciliation |
+|---|---|---|
+| Dispatch | Source Location -Q; Transit Location +Q | One dispatch event identity; paired movements reconcile exactly |
+| Partial receipt | Transit -Q; Destination +Q | Each receipt has its own identity and sequence; repeated receipts never overwrite prior events |
+| Physical loss in transit | Transit -Q once | One loss disposition event; do not also subtract the same loss through a second exception movement |
+| Damaged but still physically held | Transit -Q; quality-hold Location +Q | Physical on-hand preserved; available quantity blocked by location/quality policy |
+| Damaged and destroyed/write-off | Transit -Q once | One destruction/loss movement plus cost/exception lineage; no second quantity decrement |
+| Return before receipt | Transit -Q; source/return Location +Q | Separate return event; original dispatch/receipt facts unchanged |
+| Return after receipt | Destination -Q; Transit +Q, then Transit -Q; Source +Q when received | New reverse-flow events; original receipt never mutated |
+
+`stock_transfer_shipments.transit_location_id` is a candidate reference to a Business-owned Inventory Location designated `IN_TRANSIT`. Transit inventory remains owned by the same Business during internal transfer; custody/location changes, not Business ownership. Transit stock is physical on-hand at transit location but is not saleable/available for ordinary reservation. Whether the Business uses one shared transit location or a dedicated transit location per shipment remains OPEN.
+
+Candidate quantity invariant for each shipment item, measured in the same base unit and transfer scope:
+
+`dispatched = good_received + damaged_received + lost + returned_before_receipt + still_in_transit`
+
+A post-receipt return is a separate reverse transfer and is not subtracted from the original received quantity. The invariant must be evaluated from immutable events, with mutually exclusive dispositions. Damaged goods moved to quality hold remain physical stock; destroyed goods are loss. A single quantity cannot be both lost and damaged or be decremented twice.
+
+Transfer closure requires zero unexplained transit quantity and reconciled disposition of all dispatched quantities. Partial dispatch and partial receipt remain valid intermediate states. Loss/damage, return, over/under-shipment and cancellation after dispatch require explicit event and authorization rules.
+
+If the 17 existing entities plus movement ledger and A01 event identity cannot represent this lineage without ambiguity, raise a separately reviewed scope-change proposal. Do not add an entity silently.
+
+### 42.7 F41-06 — reservation items as immutable allocation/lifecycle event ledger
+
+The selected **candidate direction for review** is that `inventory_reservation_items` is an immutable event ledger, not a mutable allocation projection. This uses the existing 17-entity inventory scope; no additional reservation event entity is added in Package E.
+
+The earlier mutable fields `quantity_reserved_base`, `quantity_fulfilled_base`, `quantity_released_base` and `allocation_status` are superseded as authoritative event storage. The revised candidate event row contains:
+
+- `id uuid`: immutable event identity / PK.
+- `business_id`, `reservation_id`.
+- `allocation_id uuid`: stable identity for one allocation slice; multiple events may refer to the same allocation.
+- `event_sequence bigint`: monotonic sequence within the allocation.
+- `event_kind text`: candidate controlled event type.
+- `product_id`, optional `variant_id`, `inventory_location_id`, optional `batch_id`: allocation target snapshot.
+- `reserved_quantity_delta_base numeric`: signed change to active reserved quantity; positive for allocation, negative for fulfillment, release or expiry.
+- `idempotency_key text`: tenant-scoped replay key.
+- `correlation_id uuid NULL`: links paired reallocation-out/reallocation-in events.
+- `inventory_movement_id uuid NULL`: required for fulfillment when physical movement has posted; absent for allocation/release/expiry.
+- `occurred_at`, `posted_at`, `actor_id`, `created_at`.
+
+Candidate event semantics:
+
+| Event | Reserved quantity delta | Physical on-hand effect |
+|---|---:|---|
+| ALLOCATED | Positive | None |
+| FULFILLED | Negative | Separate posted inventory movement decreases physical stock |
+| RELEASED | Negative | None |
+| EXPIRED | Negative | None |
+| REALLOCATED_OUT | Negative | None |
+| REALLOCATED_IN | Positive | None |
+
+Reallocation is a paired release from the old allocation and allocation to the new target with one correlation identity. It does not mutate the old allocation row. Partial fulfillment and partial release create separate events. Expiry is an explicit idempotent event; merely passing `expires_at` does not silently rewrite a row.
+
+Candidate unique keys are `(business_id, reservation_id, allocation_id, event_sequence)` and `(business_id, idempotency_key)`. An event retry with the same key and same canonical payload is idempotent; the same key with a different payload is a conflict requiring explicit resolution.
+
+`inventory_reservations` remains the source-linked reservation request/header. Its current `reservation_status` and `released_at` are derived summary fields if retained; they are not authoritative lifecycle history. Header `expires_at` is the requested expiry boundary. Current allocation and lifecycle state are deterministically derived from the immutable item-event ledger.
+
+Projection rule: sum signed reservation deltas by Business + Product/Variant + Location + optional Batch, apply only valid posted events in deterministic event order, and reconcile against physical on-hand. Active reservation may not exceed eligible available stock under the approved concurrency/allocation policy. Reservation reduces available quantity, never physical on-hand. Fulfillment links to its posted movement and must not be counted as a second physical decrement.
+
+A02 `source_type/source_id` validation remains a separate open contract: allowed source catalogue, source existence, Business ownership, source lifecycle, cardinality, uniqueness and idempotency are not closed by this candidate event model.
+
+### 42.8 F41-07 — transfer costing: transit, FIFO, MWA and landed cost
+
+Internal transfer does not create a purchase receipt or a new external source cost. The same Business retains inventory ownership through dispatch, transit and receipt. Cost treatment follows the Business costing method already selected: MWA default; FIFO alternative.
+
+#### 42.8.1 Shared quantity and ownership flow
+
+- Dispatch removes quantity from source Location and places the same quantity in the Business-owned transit Location.
+- Partial receipt moves only received quantity from transit to destination; the unreceived remainder stays in transit.
+- Loss removes quantity from transit once and records a cost/exception disposition.
+- Damaged but retained quantity moves to a quality-hold location and remains physical on-hand; destroyed quantity is removed once.
+- Return is a new reverse flow and never edits original dispatch or receipt.
+- Transfer closure is blocked while unexplained quantity or cost remains in transit.
+
+#### 42.8.2 FIFO candidate flow
+
+1. At dispatch, consume source Location's eligible FIFO cost layers in deterministic order. Each consumption row records source movement, layer, consumed quantity, unit-cost snapshot and extended-cost snapshot.
+2. Preserve source consumption lineage by shipment event and allocation sequence. A source layer may be partially consumed; cumulative consumption and reversals cannot exceed eligible layer quantity.
+3. Create transit cost-layer value from exact source-layer consumption slices. If dispatch consumes multiple source layers, transit representation preserves each slice and source-layer lineage.
+4. At partial receipt, consume corresponding transit cost-layer quantity and create destination FIFO layer(s) carrying the same cost basis. Destination layer identity is new; physical Batch identity remains separate.
+5. Loss/damage disposition removes or transfers relevant transit cost once. Damaged stock moved to quality hold retains cost basis until later approved disposition.
+6. Return after receipt consumes relevant destination layer(s) and creates a new transit/source-side layer with traceable compensating lineage. Historical source consumption and receipt snapshots are not rewritten.
+7. `inventory_cost_layer_consumptions` is sufficient only if its movement/layer/source lineage and sequence represent each slice. If not, raise a separately reviewed scope-change proposal; do not assume entity #18.
+
+#### 42.8.3 MWA candidate flow
+
+1. At dispatch, reduce source MWA pool quantity and carrying value for dispatched quantity.
+2. Increase transit MWA pool by same quantity and carried value; preserve transfer-event linkage.
+3. At partial receipt, reduce transit pool and increase destination MWA pool by received quantity and carried value.
+4. Outstanding quantity/value remains in transit pool until receipt or explicit loss/damage/return disposition.
+5. MWA remains pooled by Business + Product/Variant + Inventory Location. Do not create cost layers per physical Batch for MWA.
+6. Loss/write-off reduces relevant transit pool once. Damage held in a quality location transfers quantity/value to that location or remains blocked under an approved pool policy; it is not simultaneously written off.
+7. Reallocation between source/transit/destination pools preserves total carrying value except separately identified approved fees, FX differences or loss adjustments.
+
+#### 42.8.4 Fees, landed cost, currency and timing
+
+The following rules are required but remain OPEN until a separate numeric/currency/accounting decision:
+
+- Identify which transfer fees are eligible for capitalization into inventory versus expensed; do not assume all freight/handling is capitalizable.
+- Define fee source identity and immutable evidence; fees cannot silently rewrite historical consumption.
+- Select allocation basis for eligible fees (for example received quantity, weight, volume or value) using a documented business rule; no basis is selected here.
+- Define whether fee allocation occurs at dispatch, receipt, final shipment closure or approved later adjustment; partial receipts must not allocate full fee twice.
+- Define transaction currency, Business functional currency, FX source, rate timestamp, quote direction, precision and rounding point. No currency conversion rate is invented or approved here.
+- Define treatment of FX differences and late fee adjustments through compensating cost records.
+- Preserve original unit-cost and extended-cost snapshots. A later correction creates new adjustment/reversal lineage; it never overwrites historical FIFO consumption or posted movement cost.
+- Cost transfer reconciliation must prove source value = transit value + received destination value + explicit loss/damage disposition, adjusted only by separately identified eligible fees/FX and approved rounding.
+
+### 42.9 Cross-document consistency and unresolved gates
+
+- DOC-08 FIX decisions remain unchanged. Tenant isolation, immutable posted movement ledger, rebuildable balances, batch/cost-layer distinction, FEFO, FIFO, reservation availability effect and MWA pool grain remain at their existing approved scope.
+- DOC-05 remains the authority for actor eligibility, membership, approval, SoD and authorization. Actor FK validity is not a permission grant.
+- DOC-03 source-of-truth boundaries remain unchanged. A01 is inventory-posting scoped, not a universal cross-domain event registry.
+- DOC-09 ERD-OPEN-01–15 and related AUTH-OPEN dependencies remain OPEN/REVIEW/TODO/UNVERIFIED as previously recorded. Package E closes none.
+- XD-03 nullable-Variant uniqueness, XD-05 A02 source contract and XD-11 numeric/currency capacity remain CONDITIONAL / OPEN.
+- XD-12 referential-action matrix, XD-13 query-driven indexes and XD-14 RLS/server authorization evidence remain separate gates.
+- No `inventory_cost_layer_movements` entity is added or approved.
+
+### 42.10 F41 corrective acceptance matrix
+
+| Finding | Package E correction | Candidate design disposition | Remaining acceptance blocker |
+|---|---|---|---|
+| F41-01 PK strategy | Uniform surrogate `id` PK for all 17; distinct alternate grain; add IDs to both projections; deterministic projection upsert/rebuild | REVISED CANDIDATE | Null-safe uniqueness, physical parent keys and explicit design approval |
+| F41-02 Tenant-safe FK | Ownership classes, parent UNIQUE prerequisites and per-entity candidate FK tuple matrix | REVISED CANDIDATE | Actual parent models/key types, Variant/Batch null-safe compatibility and physical FK acceptance |
+| F41-03 A01 registry | Explicit-source-reference vs bounded inventory source-event registry comparison; event identity/fan-out/idempotency/reversal contract | REVISED CANDIDATE / A01 OPEN | Source catalogue and separate selection/approval |
+| F41-04 Count recount | Immutable attempt rows, stable count-line identity, attempt sequence, accepted attempt and cutoff watermark | REVISED CANDIDATE | Attempt state/acceptance policy, watermark ordering and posting idempotency |
+| F41-05 Shipment event | Movement-backed distinct dispatch/receipt/loss/damage/return events; transit location; quantity invariant | REVISED CANDIDATE | A01 event source, location policy, exception disposition and separate scope-change if 17 entities prove insufficient |
+| F41-06 Reservation | `inventory_reservation_items` candidate immutable event ledger; deterministic reserved projection; no physical on-hand effect | REVISED CANDIDATE | A02 source contract, event vocabulary, concurrency and idempotency acceptance |
+| F41-07 Transfer costing | Separate FIFO layer flow and MWA pool flow through transit; fees/FX/landed-cost/reversal gates | REVISED CANDIDATE | Numeric/currency/accounting decisions and transfer costing acceptance |
+
+**Package E drafting result:** F41-01 through F41-07 have explicit revised candidate designs and cross-entity controls. This is not a claim that their physical acceptance criteria are met. Independent review is required before any candidate is promoted. Candidate field/type coverage remains 17/17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
