@@ -2802,3 +2802,18 @@ This is explicit acceptance of conceptual/logical design direction only. It does
 - PR #140: remains subject to its existing Production deployment merge hold; this decision does not authorize merge or deployment.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 NOT AUTHORIZED.
+
+## 15.81 CW-11 Package E — A01/A02 logical execution contract and status reconciliation (21 November 2026)
+
+After the owner accepted A01 Path B and A02 Alternative A, the next technical-completeness pass appended DOC-04 §§42.23–42.24.
+
+- §42.23 establishes status precedence: §42.22 owner acceptance supersedes prior direction-selection-only labels in §§42.17–42.21. The accepted conceptual direction is FIX at logical scope; physical schema and implementation remain OPEN / NOT APPROVED.
+- §42.24 defines technology-neutral execution contracts for server-derived tenant context, independent DOC-05 authorization, commit-boundary validation, A01 immutable posting and atomic movement fan-out, replay/conflict behavior, reversal limits, A02 atomic source-line resolution, aggregate remaining-demand calculation, concurrency serialization, explicit lifecycle events and fulfillment-to-A01 handoff.
+- The failure/retry matrix defines expected logical outcomes and prohibited outcomes for unknown sources, tenant mismatch, idempotent replay, payload conflict, duplicate posting, oversubscription, uncertain commit and over-reversal.
+- DOC-09 §11.5 enumerates remaining A01/A02 physical, source catalogue, digest/version/retention, transaction/concurrency, security and test-evidence dependencies. ERD-OPEN-05/06 remain OPEN.
+
+### 15.81.1 Acceptance boundary and audit result
+
+This pass clarifies logical behavior only. It does not choose a physical schema, digest algorithm, retention duration, source-family activation, transaction/distributed-consistency mechanism, locking implementation, RLS/API behavior or partial-reservation policy. No SQL/DDL/DML, database introspection, migration, source code, CI workflow, Vercel configuration or deployment was changed.
+
+**Status:** A01/A02 conceptual direction ACCEPTED; logical execution contract SPECIFIED; physical/security/operational/test dependencies OPEN; Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. PR #140 remains unmerged under the Production deployment merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 NOT AUTHORIZED.
