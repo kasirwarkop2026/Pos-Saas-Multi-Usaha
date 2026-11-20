@@ -2829,3 +2829,85 @@ Latest head at this verification: a611abbabde777b3e3b9f319f59d0669e6eaeef4.
 
 **Disposition:** logical execution contract documentation passes the available documentation CI. POS SaaS CI workflow is successful for its applicable path, but application validation jobs were skipped because no application changes were detected. A01/A02 physical, security, concurrency implementation and test-evidence dependencies remain OPEN; Package E is not CLOSED. The Production deployment merge hold remains in force. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 NOT AUTHORIZED.
 
+
+
+## 15.83 CW-11 Package E — PR #140 merge verification and shared Variant/unit normalization remediation started (21 November 2026)
+
+### 15.83.1 PR #140 merge and post-merge verification
+
+PR #140 (\`docs: complete CW-11 Package E corrective candidate design\`) was merged into \`main\`.
+
+- Merge commit: \`8f0ca26435da54cc31292d9ee3cd05aa02189e09\`.
+- PR state: CLOSED / MERGED.
+- The four changed documentation files were fetched again from GitHub \`main\` after merge.
+- DOC-04 §§42.22–42.24 are present in \`main\`; DOC-08 DOC08-FIX-018/019 are present; DOC-09 §11.5 and ERD-OPEN-05/06 are present.
+- PR #140's changed-file set was limited to DOC-04, DOC-08, DOC-09 and this Worklist. No application source, database, migration, CI workflow or Vercel configuration file was changed.
+- The merge commit automatically triggered the repository's linked Vercel Production deployment. Deployment \`dpl_Bm1FzS3RiwAcLXemfHZqPmH9K9KM\`, for commit \`8f0ca26435da54cc31292d9ee3cd05aa02189e09\`, reached state **READY**. The Next.js production build completed; build output included existing unused-import ESLint warnings, not a build failure. No deployment was manually created, promoted, cancelled or rolled back.
+- Documentation CI on PR head \`90e56db27966ba18e0a9fa36e26da05551167a05\`: SUCCESS (Markdown lint, Documentation structure, Internal documentation links). POS SaaS CI: overall SUCCESS; Detect application changes SUCCESS; ESLint, TypeScript, Next.js build and dependency security SKIPPED because no application changes were detected. Skipped jobs are not PASS.
+
+The merge supersedes the earlier PR #140 merge-hold statements in §§15.70–15.82. Those entries remain as historical snapshots; the present section is the current disposition.
+
+### 15.83.2 Next shared cross-cutting correction
+
+Following PR #140 post-merge verification, the next CW-11 Package E correction is shared nullable Variant equality and unit/quantity normalization. DOC-04 §42.25 and DOC-09 §11.6 define the logical contract:
+
+- NULL/NULL Variant equality is the permitted no-Variant scope only within the same Business + Product; NULL/non-NULL is unequal; unknown/unresolved Variant is not NULL and fails closed.
+- Variant equality is required alongside the applicable Product, Location, Batch, parent, source-line and lifecycle grain checks.
+- Input/source unit is distinct from Product base unit. Inventory comparisons and aggregations use normalized base-unit quantities after an explicit, valid Product/Variant-compatible conversion.
+- Conversion direction is \`quantity_base = quantity_input × conversion_factor_base_per_input\`; conversion provenance/version and normalized quantity must be reproducible.
+- Invalid or ambiguous conversions fail closed; silent rounding, guessed factors and implicit conversion chains are prohibited.
+
+Exact precision/scale/capacity, factor precision/versioning, conversion graph, rounding boundary/tolerance, physical null-safe enforcement and test evidence remain OPEN. NUM-01/NUM-02 principles are retained without inventing numeric values or physical implementation.
+
+### 15.83.3 Current status and governance
+
+PR #140 is MERGED and its post-merge documentation read-back is verified. The Vercel Production deployment for the merge commit is READY. The next documentation correction is being prepared on branch \`docs/cw11-package-e-variant-unit-normalization-2026-11-21\`; it is not yet merged.
+
+CW-11 Package E remains **IN PROGRESS / ACCEPTANCE NOT MET**. Logical semantics are specified, but physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. \`DB_PUSH_BLOCKED: ACTIVE\`; no SQL/DDL/DML, database introspection, migration, application source, CI workflow, Vercel configuration, manual deployment action, Supabase Preview/Staging or further Production change is authorized. Stage 6 implementation remains NOT AUTHORIZED.
+
+
+## 15.84 CW-11 Package E — PR #141 independent cross-entity review and unit-entry gap refinement (21 November 2026)
+
+### 15.84.1 PR #141 review result
+
+A documentation-only technical review of PR #141 head \`eccb0396e48cb99e6c3ef49359263da8fdc0c4cb\` inspected the full unified diff and reconciled the new logical rules against the existing 17-entity candidate field definitions, NUM-01/NUM-02 principles and the A01/A02 source ownership boundaries.
+
+The review found that the general rule was sound but needed an explicit entity-by-entity application matrix and a precise statement for input-unit capture. The original candidate \`stock_count_items\` fields contain \`system_quantity_snapshot_base\`, \`counted_quantity_base\` and \`variance_quantity_base\`, but no raw entered quantity, input unit or conversion snapshot. The documentation must not silently assume non-base-unit count entry is supported.
+
+### 15.84.2 Append-only refinement
+
+- DOC-04 §42.25.7 now maps all 17 candidate entities to their Variant identity relationship and quantity/unit semantics.
+- DOC-04 §42.25.8 explicitly leaves stock-count entry policy OPEN: either count entry is restricted to Product base units, or non-base entry requires raw input quantity/unit and reproducible conversion provenance in the candidate design.
+- §42.25.8 also clarifies upstream source ownership: any non-base quantity accepted by a source workflow must be normalized by that source domain and supplied to A01/A02 as a validated base-unit context. Inventory does not infer or recreate mutable source conversions.
+- DOC-04 §42.25.9 adds logical acceptance cases for null-safe Variant identity, conversion eligibility, immutable historical quantity, like-for-like base-unit comparisons and unresolved count-entry handling.
+- DOC-09 §11.7 records the new crosswalk and keeps the input-boundary, numeric, physical, security and test-evidence dependencies OPEN.
+
+### 15.84.3 CI and PR state at this checkpoint
+
+- PR #141 head before this refinement: \`eccb0396e48cb99e6c3ef49359263da8fdc0c4cb\`.
+- Documentation CI run 44790839316: SUCCESS — Markdown lint, Documentation structure and Internal documentation links SUCCESS.
+- POS SaaS CI run 44790839376: overall SUCCESS — Detect application changes SUCCESS; ESLint, TypeScript, Next.js production build and dependency security SKIPPED because no application changes were detected. Skipped jobs are not PASS.
+- The refinement is append-only and limited to DOC-04, DOC-09 and Worklist. New checks must be verified against the updated PR head before acceptance.
+- PR #141 remains OPEN; no merge is performed by this refinement.
+
+### 15.84.4 Current disposition and controls
+
+PR #140 remains MERGED; its linked Production deployment reached READY. PR #141's logical semantics are now crosswalked to all 17 candidate entities, but the stock-count entry policy, source-domain conversion ownership, numeric precision/rounding, physical enforcement and executed evidence remain OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET; physical Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; no SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel configuration or deployment action. Stage 6 implementation NOT AUTHORIZED.
+
+
+## 15.85 CW-11 Package E — PR #141 cross-entity refinement CI verification and merge-readiness snapshot (21 November 2026)
+
+Latest verified PR #141 head for this snapshot: \`23358aa931f077a0b4a8088fd9db32394cb82641\`.
+
+- Documentation CI run 44801688630: **SUCCESS** — Markdown lint SUCCESS; Documentation structure SUCCESS; Internal documentation links SUCCESS.
+- POS SaaS CI run 44801688662: **SUCCESS** — Detect application changes SUCCESS; ESLint, TypeScript typecheck, Next.js production build and dependency security SKIPPED because no application changes were detected. Skipped checks are not PASS.
+- Append-only compare against \`main\`: 3 documentation files changed (DOC-04, DOC-09 and Worklist); 263 additions; 0 deletions; branch ahead by 6 commits and behind by 0.
+- PR #141 is OPEN and mergeable; no review submissions or inline review threads were present at this snapshot.
+- The diff remains documentation-only. No application, database, CI workflow or Vercel configuration files are changed.
+- DOC-04 §42.25.7 crosswalks all 17 candidate entities; §42.25.8 records stock-count and upstream source-unit entry boundaries; §42.25.9 defines logical validation cases. DOC-09 §11.7 retains the corresponding open decisions and evidence gates.
+
+**Merge boundary:** PR #141 is technically mergeable as a documentation-only change, but this snapshot does not execute a merge. The repository's Git integration automatically triggers a Vercel Production deployment on merge; any merge must remain subject to explicit user authorization for that Production side effect. No manual deployment or Vercel configuration action is authorized.
+
+**Disposition:** PR #141 documentation refinement and applicable CI PASS; application checks SKIPPED; stock-count entry policy, source-domain conversion contract, exact numeric/rounding policy, physical enforcement and executed evidence remain OPEN. CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Physical Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; Stage 6 implementation NOT AUTHORIZED.

@@ -494,3 +494,39 @@ This resolves ambiguity in expected logical behavior, not the physical mechanism
 The §42.24 failure matrix is a logical acceptance oracle for later design and tests, not evidence that tests exist or pass. No physical constraint, implementation, security enforcement or test PASS is inferred. ERD-OPEN-05/06 remain OPEN; no dependency is closed by this addendum.
 
 **Disposition:** logical behavior specification advanced; physical design, security and execution evidence remain OPEN. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.6 Shared Variant identity and unit/quantity normalization contract refined; physical/numeric gates remain OPEN (21 November 2026)
+
+DOC-04 §42.25 now defines the shared logical semantics that were explicitly left unresolved in §11.5:
+
+- Nullable Variant equality is exact and null-safe within the same Business + Product: NULL/NULL identifies the permitted no-Variant scope; NULL/non-NULL is not equal; non-NULL values must resolve to the same ProductVariant. NULL is never a wildcard or a substitute for unknown/unresolved data.
+- The rule applies across the relevant movement, Batch, reversal, cost-layer, consumption, reservation-fulfillment, transfer/shipment, adjustment and count relationships, together with their other Business/Product/Location/parent grain requirements.
+- Source/input unit and Product base unit are distinct. All inventory comparisons and aggregations use the Product base unit after an explicit, valid, product/variant-compatible conversion.
+- Conversion direction is fixed conceptually as \`quantity_base = quantity_input × conversion_factor_base_per_input\`. Conversion identity/version/provenance and the normalized base quantity must remain reproducible and must not be retroactively changed by later conversion edits.
+- Missing, ambiguous, incompatible, unknown or unapproved conversions fail closed. No guessed factor, implicit chain, label-based match or silent rounding is permitted.
+
+This is a logical-contract clarification only. The following remain OPEN: physical null-safe Variant enforcement; exact FK/UNIQUE/CHECK/index strategy; numeric type, precision, scale, capacity and overflow; per-Product fractional/discrete policy; factor precision/provenance/effective-version model; conversion graph/reciprocal rules; exact rounding boundary and tolerance; physical conversion snapshot representation; and executed boundary, negative, tenant-isolation, concurrency and historical-reproducibility evidence.
+
+NUM-01/NUM-02 principles remain conceptually retained; their physical/operational acceptance is not implied. ERD-OPEN-05/06 remain OPEN where physical identity, enforcement, security and test evidence are required. No dependency is closed, no FIX is newly promoted, and no physical Data Dictionary or canonical ERD acceptance is claimed.
+
+**Disposition:** shared logical semantics SPECIFIED; physical and numeric decisions/evidence OPEN. READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.7 Candidate entity crosswalk and unit-entry boundary gaps identified (21 November 2026)
+
+DOC-04 §42.25.7 maps Variant identity and quantity/unit semantics across all 17 candidate inventory entities. The crosswalk distinguishes:
+- Entities with no owned quantity (identity/header records) from movement, projection, reservation, transfer, batch and costing quantity records.
+- Quantities already defined in Product base units from source/input quantities that require explicit conversion before posting.
+- Variant identity carried directly by an entity from identity inherited through a parent, movement, source-demand resolver or cost-layer relationship.
+- Monetary unit cost from physical stock quantity; its denominator follows the linked Product base-unit context, while currency/precision/rounding remain separately OPEN.
+
+DOC-04 §42.25.8 identifies two unresolved input boundaries:
+1. \`stock_count_items\` currently stores count values in base units but has no candidate raw entered quantity, input unit or conversion snapshot. The owner must decide whether physical count entry is base-unit-only or may use another unit with retained conversion provenance.
+2. Upstream source/transfer workflows may accept non-base units. The source domain must preserve its own input quantity/unit/conversion context and expose a validated base-unit demand context; the inventory adapter must not guess or rebuild it.
+
+DOC-04 §42.25.9 lists logical acceptance cases for Variant identity, conversion eligibility, historical reproducibility, base-unit comparison and the unresolved stock-count entry boundary. These are a future test oracle, not executed evidence.
+
+**OPEN:** stock-count entry-unit policy and required provenance; upstream source-domain conversion contract/ownership; exact conversion factor/version/effective-time policy; precision/scale/capacity/overflow; rounding/tolerance; physical null-safe Variant enforcement; physical conversion snapshot representation; and executable test evidence. No dependency is closed and no physical or implementation acceptance is implied.
+
+**Disposition:** 17-entity logical crosswalk SPECIFIED; two input-boundary gaps and all physical/numeric/evidence gates remain OPEN. READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; Stage 6 implementation NOT AUTHORIZED.
