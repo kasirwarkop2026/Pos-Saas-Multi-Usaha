@@ -2864,3 +2864,34 @@ Exact precision/scale/capacity, factor precision/versioning, conversion graph, r
 PR #140 is MERGED and its post-merge documentation read-back is verified. The Vercel Production deployment for the merge commit is READY. The next documentation correction is being prepared on branch \`docs/cw11-package-e-variant-unit-normalization-2026-11-21\`; it is not yet merged.
 
 CW-11 Package E remains **IN PROGRESS / ACCEPTANCE NOT MET**. Logical semantics are specified, but physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. \`DB_PUSH_BLOCKED: ACTIVE\`; no SQL/DDL/DML, database introspection, migration, application source, CI workflow, Vercel configuration, manual deployment action, Supabase Preview/Staging or further Production change is authorized. Stage 6 implementation remains NOT AUTHORIZED.
+
+
+## 15.84 CW-11 Package E — PR #141 independent cross-entity review and unit-entry gap refinement (21 November 2026)
+
+### 15.84.1 PR #141 review result
+
+A documentation-only technical review of PR #141 head \`eccb0396e48cb99e6c3ef49359263da8fdc0c4cb\` inspected the full unified diff and reconciled the new logical rules against the existing 17-entity candidate field definitions, NUM-01/NUM-02 principles and the A01/A02 source ownership boundaries.
+
+The review found that the general rule was sound but needed an explicit entity-by-entity application matrix and a precise statement for input-unit capture. The original candidate \`stock_count_items\` fields contain \`system_quantity_snapshot_base\`, \`counted_quantity_base\` and \`variance_quantity_base\`, but no raw entered quantity, input unit or conversion snapshot. The documentation must not silently assume non-base-unit count entry is supported.
+
+### 15.84.2 Append-only refinement
+
+- DOC-04 §42.25.7 now maps all 17 candidate entities to their Variant identity relationship and quantity/unit semantics.
+- DOC-04 §42.25.8 explicitly leaves stock-count entry policy OPEN: either count entry is restricted to Product base units, or non-base entry requires raw input quantity/unit and reproducible conversion provenance in the candidate design.
+- §42.25.8 also clarifies upstream source ownership: any non-base quantity accepted by a source workflow must be normalized by that source domain and supplied to A01/A02 as a validated base-unit context. Inventory does not infer or recreate mutable source conversions.
+- DOC-04 §42.25.9 adds logical acceptance cases for null-safe Variant identity, conversion eligibility, immutable historical quantity, like-for-like base-unit comparisons and unresolved count-entry handling.
+- DOC-09 §11.7 records the new crosswalk and keeps the input-boundary, numeric, physical, security and test-evidence dependencies OPEN.
+
+### 15.84.3 CI and PR state at this checkpoint
+
+- PR #141 head before this refinement: \`eccb0396e48cb99e6c3ef49359263da8fdc0c4cb\`.
+- Documentation CI run 44790839316: SUCCESS — Markdown lint, Documentation structure and Internal documentation links SUCCESS.
+- POS SaaS CI run 44790839376: overall SUCCESS — Detect application changes SUCCESS; ESLint, TypeScript, Next.js production build and dependency security SKIPPED because no application changes were detected. Skipped jobs are not PASS.
+- The refinement is append-only and limited to DOC-04, DOC-09 and Worklist. New checks must be verified against the updated PR head before acceptance.
+- PR #141 remains OPEN; no merge is performed by this refinement.
+
+### 15.84.4 Current disposition and controls
+
+PR #140 remains MERGED; its linked Production deployment reached READY. PR #141's logical semantics are now crosswalked to all 17 candidate entities, but the stock-count entry policy, source-domain conversion ownership, numeric precision/rounding, physical enforcement and executed evidence remain OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET; physical Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; no SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel configuration or deployment action. Stage 6 implementation NOT AUTHORIZED.
