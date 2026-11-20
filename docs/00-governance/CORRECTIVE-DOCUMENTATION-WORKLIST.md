@@ -2703,3 +2703,18 @@ A02 is not an A01 registry reference. No A02 generic registry is selected. The p
 - DOC-09 ERD-OPEN-05 (A01) and ERD-OPEN-06 (A02) remain OPEN. A01/A02 physical FKs/resolver, source catalog approval, cardinality, idempotency, lifecycle, TTL, RLS/server enforcement and executed tenant-negative tests remain separate acceptance gates.
 
 **Next action:** independent review of DOC-04 §§42.17–42.19 against DOC-03, DOC-05, DOC-08 and DOC-09; inspect the full PR diff and checks; record residual design gaps. Do not close A01/A02 or Package E merely because the candidate contracts are drafted. PR #140 remains subject to the Production merge hold in §15.70. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.76 CW-11 Package E — referenced parent-key prerequisites completed (20 November 2026)
+
+The independent consistency check of the A01/A02 candidate contracts and the preceding cross-parent audit found that the newly stated tuples in DOC-04 §42.15 needed explicit referenced-parent UNIQUE-key prerequisites. DOC-04 §42.20 now adds candidate parent keys for:
+
+1. InventoryMovement `(business_id, id, inventory_location_id)` for stock-count cutoff-to-Location.
+2. InventoryMovement `(business_id, id, product_id, inventory_location_id)` for same-grain movement references and reversal.
+3. StockTransfer `(business_id, id, source_location_id)` for shipment-item source-Location consistency.
+4. StockTransferItem `(business_id, id, stock_transfer_id, product_id)` for shipment-item demand-line Product consistency.
+5. InventoryCostLayerConsumption `(business_id, id, cost_layer_id, product_id, inventory_location_id)` for reversal-to-original cost layer/pool.
+
+A01 registry and A02 polymorphic source pairs remain separate. No guessed registry FK has been added to the 17-entity matrix. A02 strict source resolution remains a logical validation contract, not a conventional FK. Any later explicit-FK alternative must specify source-family parent keys and atomic demand-line grain.
+
+**Status:** candidate parent-key prerequisites documented; physical UNIQUE/FK/index definitions remain NOT APPROVED. A01/A02 remain OPEN. Nullable Variant equality, source lifecycle/cardinality, idempotency, transaction/concurrency, RLS/server authorization and executed negative tests remain OPEN. No FIX or DOC-09 closure is claimed. PR #140 remains unmerged under the Production merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
