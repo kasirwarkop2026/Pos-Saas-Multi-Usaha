@@ -2733,3 +2733,34 @@ The technical-completeness pass found that the A01/A02 recommendations in DOC-04
 The candidate reservation header now proposes `request_idempotency_key`, `request_payload_digest` and controlled `reservation_purpose`. These are candidate field additions, not existing schema claims or approved physical constraints. A01 posting replay and A02 reservation-request replay remain separate; A02 fulfillment creates a distinct A01 posting event under the atomicity boundary in §42.16.
 
 **Status:** candidate key grains and replay boundaries are now explicit in documentation. Digest canonicalization/version, retention, physical uniqueness, concurrency, source-specific cardinality and resolver enforcement remain OPEN. A01/A02 and DOC-09 ERD-OPEN-05/06 are not closed. No FIX, physical acceptance or implementation authorization is claimed. PR #140 remains under the Production merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+
+## 15.78 CW-11 Package E — A01/A02 candidate contracts and CI revalidation (20 November 2026)
+
+**RESULT: CANDIDATE CONTRACT DRAFTING COMPLETE FOR THIS PASS; INTERNAL CONSISTENCY CHECKS PASS; READY FOR INDEPENDENT DESIGN REVIEW, NOT CLOSED.**
+
+DOC-04 §§42.17–42.21 now contain the bounded A01 registry recommendation, independent A02 source resolver contract, source catalogue candidates, source-line granularity, cardinality controls, tenant/lifecycle validation, replay semantics, exact candidate idempotency keys and referenced-parent key prerequisites. The work is recorded in §§15.75–15.77. The final re-read verified all five new sections, the A01/A02 separation, fail-closed unknown source types, candidate key tuples, parent-key additions and preservation of the 17-entity boundary.
+
+### 15.78.1 Cross-document audit
+
+- DOC-03 inventory source-of-truth and reservation/fulfillment atomicity boundaries remain preserved.
+- DOC-05 authorization remains independent from source validity; membership, exact permission, scope, SoD and audit requirements are not bypassed.
+- DOC-08 FIX decisions are not changed or promoted.
+- DOC-09 ERD-OPEN-05 and ERD-OPEN-06 remain OPEN; the candidate contracts do not close physical source integrity, schema or test requirements.
+- A01 Path B is recommended for review, not approved. Path A remains a valid alternative pending explicit design acceptance.
+- A02 Alternative A is recommended for review, not approved. The source allowlist is candidate-only and no source family is enabled by this document.
+
+### 15.78.2 PR and CI revalidation
+
+PR #140 latest head: `4f2f8813dae915e79e6b1cb0558b4285915f85e6`.
+
+- Documentation CI run `44778125076`: Markdown lint SUCCESS; Internal documentation links SUCCESS; Documentation structure SUCCESS.
+- POS SaaS CI run `44778125133`: Detect application changes SUCCESS; ESLint SKIPPED; TypeScript typecheck SKIPPED; Next.js production build SKIPPED; Dependency security audit SKIPPED. Skipped application jobs are not reported as passed.
+- PR state OPEN; mergeable true; merged false; no submitted reviews and no unresolved review threads at this check.
+- Diff against `main`: 2 files, 919 additions, 0 deletions; Worklist +254 and DOC-04 +665. Append-only integrity confirmed.
+
+### 15.78.3 Current disposition and next gate
+
+A01/A02 candidate drafting is ready for independent design review. Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate coverage is 17/17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. No candidate key/FK/constraint or source resolver is physically approved.
+
+PR #140 remains unmerged because the documented Vercel Production deployment risk prohibits merge under current governance. The next gate is independent review of §§42.15–42.21 and a decision on whether the recommended A01/A02 directions are accepted, revised or rejected. Do not mark FIXED/CLOSED or bypass the Production merge hold. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
