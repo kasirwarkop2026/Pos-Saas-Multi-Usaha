@@ -3439,3 +3439,107 @@ Release, expiry, cancellation, source amendment and fulfillment must be explicit
 The following remain OPEN and require separate decisions/evidence before physical acceptance: canonical digest algorithm and version lifecycle; idempotency-key entropy/format and retention; registry event outcome retention/archive; source adapter catalogue governance and activation authority; source-version strategy; physical locking/isolation/deadlock/retry policy; source-domain/M06 transaction boundary or distributed consistency mechanism; partial reservation policy; source amendment policy per family; exact null-safe Variant equality; physical polymorphic-source integrity strategy; RLS/server enforcement; and tenant-negative, replay, concurrency, crash-recovery and reversal test evidence.
 
 **Disposition:** A01/A02 logical execution contracts are specified at behavior/invariant level. This is documentation progress only. DOC-09 ERD-OPEN-05 and ERD-OPEN-06 remain OPEN pending resolution of the explicit decisions above, physical strategy, security review and executed evidence. No physical schema or implementation is approved; physical Data Dictionary remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+
+### 42.25 Shared cross-cutting contract — null-safe Variant identity and unit/quantity normalization
+
+This section closes the **logical-definition gap** identified in §§42.3.4, 42.15, 42.24.7 and DOC-09 §11.5. It does not select physical enforcement, numeric precision, schema, or implementation. It is a candidate semantic contract for consistent review across inventory, reservation, transfer, batch and costing relationships.
+
+#### 42.25.1 Nullable Variant equality is an exact identity comparison, not a wildcard
+
+For two records that are already proven to belong to the same Business and Product, nullable Variant equality is defined as follows:
+
+| Left Variant | Right Variant | Logical result |
+|---|---|---|
+| NULL | NULL | EQUAL: both identify the Product's no-Variant scope |
+| NULL | non-NULL | NOT EQUAL |
+| non-NULL | NULL | NOT EQUAL |
+| non-NULL X | non-NULL X | EQUAL only if X resolves to the same ProductVariant under the same Business and Product |
+| non-NULL X | non-NULL Y | NOT EQUAL when X and Y differ |
+
+The NULL/NULL result is valid only when the Product's model permits a no-Variant scope. It does not mean “any Variant,” “Variant not checked,” “unknown Variant,” or “not yet resolved.” An unknown, malformed, inaccessible or unresolved Variant must fail validation; it must never be converted to NULL to make two records appear compatible.
+
+The logical predicate is null-safe equality (often written as \`IS NOT DISTINCT FROM\` in SQL terminology). That notation describes the intended semantics only; it does not approve a SQL expression, CHECK, trigger, generated column, index, or physical enforcement mechanism.
+
+Apply this rule whenever two records must describe the same inventory identity, including, where applicable:
+
+- Movement ↔ Batch and Batch balance ↔ Batch.
+- Original movement ↔ reversal movement.
+- Source movement ↔ cost layer and cost exception.
+- Cost layer ↔ cost-layer consumption and its linked movement.
+- Reservation item ↔ fulfillment movement.
+- Transfer demand item ↔ shipment item and dispatched/received movement.
+- Adjustment/count item ↔ posted movement.
+- Any balance, projection, reservation, transfer or costing comparison whose declared grain includes Product + Variant.
+
+Variant equality is only one part of the composite identity. The comparison must also enforce the applicable same-Business, same-Product, same-Location, same-Batch, same-parent, source-line and lifecycle constraints. A matching Variant ID alone never establishes those other relationships. The candidate ProductVariant relation remains \`(business_id, product_id, variant_id) → ProductVariant(business_id, product_id, id)\` when Variant is non-NULL.
+
+A nullable composite FK remains insufficient to prove NULL/NULL or NULL/non-NULL compatibility under ordinary nullable-FK behavior. The physical null-safe enforcement strategy remains OPEN and must be reviewed independently; no trigger or application-only workaround is selected here.
+
+#### 42.25.2 Input/source unit and inventory base unit are distinct concepts
+
+- **Input/source unit** is the unit in which a user, source document, supplier, customer, count or operational event expresses a quantity.
+- **Product base unit** is the canonical unit for that Product's inventory quantity, balance, availability, reservation, movement and inventory reconciliation.
+- A source quantity must not be compared, summed, reserved, fulfilled, transferred or posted against a base-unit quantity until it has been validated and normalized into the same Product base-unit context.
+- Existing candidate references to \`input_unit_id\` and \`base_unit_id\` remain distinct. The current candidate global-unit reference direction is retained; a Business-defined Unit ownership model is not selected by this section.
+
+For a permitted direct conversion, the semantic direction is:
+
+\`quantity_base = quantity_input × conversion_factor_base_per_input\`
+
+The conversion factor therefore means “how many Product base units correspond to one input unit.” It must not be applied in the opposite direction. If input and base unit are identical, identity conversion is valid only when the resolved unit identity is the same; equality of display labels or abbreviations is insufficient.
+
+#### 42.25.3 Conversion eligibility and immutable conversion context
+
+A conversion is valid only when all of the following hold:
+
+1. Business, Product and nullable Variant identity have been resolved and validated before conversion.
+2. Input and base units are valid unit identities and dimensionally compatible for the intended quantity.
+3. A permitted conversion exists for the Product and applicable Variant scope, with a valid effective/version context for the source event time or the project's separately approved determination point.
+4. The factor direction, factor value, provenance and version are unambiguous. No guessed factor, label-based conversion, cross-Product conversion or implicit conversion chain is allowed.
+5. If a Product-specific or Variant-specific conversion override exists, its precedence and fallback must be explicit. A missing Variant override must not silently inherit or fall back unless that inheritance rule has been approved for the Product model.
+6. The resulting base quantity is valid for the event's quantity semantics and all source-demand, inventory, reservation, transfer, batch and costing caps.
+
+The committed business event must preserve enough immutable conversion context to reproduce its normalized quantity: source/input quantity and unit, Product base unit, applied factor and its identity/version/provenance, and the normalized base quantity. Exact physical fields and snapshot representation remain OPEN. A later change to a conversion definition must not rewrite previously posted quantity facts or silently change historical reconciliation.
+
+No multi-hop conversion graph, reciprocal-factor inference, tolerance, or fallback rule is selected. A direct approved conversion is the only assumed path until a separate project decision explicitly approves more.
+
+#### 42.25.4 Quantity normalization and comparison order
+
+For every inventory-affecting operation, the logical order is:
+
+1. Resolve authoritative Business, Product, Variant and relevant Location/parent/source-line context.
+2. Resolve the source/input unit and the Product base unit.
+3. Validate unit compatibility and the applicable approved conversion/version.
+4. Convert to the Product base unit using the stated factor direction and retain the conversion context.
+5. Validate normalized quantity against event-specific sign, source-demand, reservation, available-stock, transfer, batch, count and costing invariants.
+6. Compare and aggregate only quantities expressed in the same Product base unit and the same Product/Variant/Location grain.
+7. Commit the source facts, normalized quantity and required ledger/projection outcome atomically under the applicable posting contract.
+
+This applies to receipt, sale/fulfillment, adjustment, stock count, reservation, reservation fulfillment/release, transfer dispatch/receipt, loss/damage/return, batch movement, cost-layer creation/consumption and inventory balance projection. A source-demand unit and an inventory base unit may differ; the conversion must be explicit before remaining-demand or physical-stock arithmetic combines them.
+
+Invalid, incompatible, missing or ambiguous conversions fail closed. A conversion or quantity must not be silently rounded, truncated, clamped, treated as zero, or accepted using a display-unit match. Event-specific rules determine whether zero, positive or signed quantities are valid; no universal sign or maximum quantity is invented here.
+
+#### 42.25.5 Precision, rounding and physical enforcement remain OPEN
+
+The existing NUM-01/NUM-02 principles remain controlling at conceptual level: Product base unit is the canonical stock reference; precision follows Product/base-unit operational needs; conversion uses high internal precision; invalid quantities are rejected; quantities are reconciled in base units; and silent rounding is prohibited.
+
+The following are deliberately NOT selected by this section:
+
+- Numeric type, precision, scale, capacity and overflow behavior.
+- Per-Product or per-Variant fractional/discrete quantity policy.
+- Exact factor precision, factor source, effective-date/version model and reciprocal consistency.
+- Whether any multi-step conversion graph is allowed.
+- Exact rounding mode and the permitted rounding boundary for conversion, movement, reservation, transfer, cost, sales, tax or accounting.
+- Validation tolerance and treatment of irreducible fractional quantities.
+- Exact physical storage of source quantity, factor snapshot, base quantity and conversion provenance.
+- Physical null-safe Variant enforcement, candidate FK/UNIQUE/CHECK/index strategy and cross-parent enforcement.
+- Executed positive, negative, boundary, replay, concurrency, cross-tenant and historical-reproducibility tests.
+
+Largest Remainder Method remains limited to its previously defined proportional-allocation scope; it is not a general quantity-conversion or rounding policy. No numeric precision, scale, tolerance or rounding rule is inferred from that method.
+
+#### 42.25.6 Acceptance boundary and disposition
+
+The logical semantics for nullable Variant identity and unit/quantity normalization are now explicit enough to serve as a common review contract. This resolves ambiguity in how candidate records compare and how source quantities become comparable base quantities; it does not establish physical acceptance or evidence.
+
+DOC-09 ERD-OPEN-05/06 and NUM-01/02 physical/operational dependencies remain OPEN where their acceptance criteria require physical strategy, exact numeric policy, security enforcement or executed evidence. No dependency is closed by this section. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. No SQL/DDL/DML, database introspection, migration, source code, CI workflow, Vercel configuration or deployment is authorized or performed by this documentation correction.
