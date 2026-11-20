@@ -2084,3 +2084,34 @@ The initial review confirms 17/17 conceptual entities, documented conceptual rel
 The first CW-11 append-only acceptance audit is proposed in DOC-04 §34. It formalizes per-entity P01–P10 gates and keeps conceptual, logical, physical and implementation/evidence statuses separate. Its status remains PARTIAL / ACCEPTANCE NOT MET until the subsequent candidate-specification/design review and any required explicit approvals are completed.
 
 Governance remains READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.51 PR #123 merge and post-merge read-back verification (20 November 2026)
+
+PR #123 (`docs: start CW-11 physical data dictionary and ERD acceptance`) was squash-merged into `main` following the user's instruction to continue merging and proceed with CW-11.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/123
+- Reviewed head SHA: `20656b13d7104deb27206e293d09548e78bdf825`
+- Merge commit: `b54bd6042b71cd8398fefbcefd7bd020ce8c804c`
+- Result: MERGED.
+- Documentation CI run `44756574769`: SUCCESS — Markdown lint, documentation structure and internal documentation links.
+- POS SaaS CI run `44756574685`: SUCCESS — application-change detection. ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: two documentation files; Worklist 30 additions, DOC-04 112 additions; 142 additions, 0 deletions total.
+
+### 15.51.1 Post-merge current-main read-back
+
+Both changed files were fetched again from `main` after merge:
+
+| File | Current-main blob SHA | Read-back |
+|---|---|---|
+| `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` | `d97fa7a80379c44cd309751c24ea604dc19dde1f` | §15.50 present; PR #122 merge/read-back and CW-11 commencement recorded |
+| `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` | `60ef962d59c2a1b1d154452a8cdd0f06ca49e3d0` | §34 present; P01–P10 acceptance gates and 17-entity disposition index present |
+
+### 15.51.2 CW-11 bounded disposition and next action
+
+**PR #123: MERGED AND POST-MERGE VERIFIED. CW-11 remains IN PROGRESS — PARTIAL / ACCEPTANCE NOT MET.** This first CW-11 pass consolidates the physical acceptance contract and entity-level disposition index. It does not accept any physical entity, close A38-G01–G04 or DOC-09 ERD-OPEN dependencies, or promote DOC-04 to canonical/final.
+
+Next CW-11 action: develop the project-authored candidate physical specification for the 17 conceptual entities as a clearly labelled design proposal, with field/key/constraint choices separated from established FIX decisions and unresolved items. Each candidate must remain NOT APPROVED until explicit design review; no schema or implementation change is authorized. The candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
