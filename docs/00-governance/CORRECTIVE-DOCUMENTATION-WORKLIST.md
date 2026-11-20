@@ -1931,3 +1931,33 @@ Still open: DOC-04 physical field/key/constraint acceptance; DOC-05 exact grants
 No FIX decision is changed; no dependency is closed by this reconciliation; no document is promoted to canonical/final/accepted; and no technical or implementation authority is granted.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, Supabase, CI workflow, deployment or Production change is included.
+
+
+
+## 15.45 PR #117 merge and post-merge read-back verification (20 November 2026)
+
+PR #117 (\`docs: reconcile current CW-09 and CW-10B status\`) was merged into \`main\` after the requested conditional approval (“Bila semua sudah fix lanjut merge”). GitHub reports successful squash merge.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/117
+- Head SHA reviewed/merged: \`a2f16bd5bd95bbec93c068fc772595f9b0c4f8b2\`
+- Merge commit: \`bc0cb07e4f5b76b9050f2430237155743d334f82\`
+- Result: MERGED.
+- CI recorded before merge: Documentation CI SUCCESS; POS SaaS CI SUCCESS. The POS SaaS CI application-change detector skipped application lint/typecheck/build/security steps because this PR contained documentation-only changes; these are not represented as application test passes.
+
+### 15.45.1 Post-merge current-main read-back
+
+The following files were fetched from \`main\` after the merge. Each contains the PR #117 addendum:
+
+| File | Current-main blob SHA | Verification |
+|---|---|---|
+| \`docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md\` | \`9a4edf46c346c598b62a5236b27495fa65e3259a\` | §15.44 present; prior CW-08–CW-10B reconciliation and CW-11 routing intact |
+| \`docs/00-governance/MASTER-PROJECT-CONTROL.md\` | \`348843325b68ef2202dc611d0deec64f796c49bb\` | §31 present; readiness NOT READY and governance boundary intact |
+| \`docs/08-project-control/PROJECT-ROADMAP-RELEASE-GATES.md\` | \`b62347c9b756dc53e0d93a986614272c1b264717\` | §19 present; blockers and CW-11 routing intact |
+
+### 15.45.2 Closure disposition
+
+**PR #117: MERGED AND POST-MERGE VERIFIED. CW-09/CW-10 status reconciliation: PASS / CLOSED.** This closes only the bounded documentation reconciliation package. It does not close CW-11, any physical schema or authorization/security/testing dependency, Stage 4.7.8, Stage 4.9, or implementation readiness.
+
+**Next bounded task remains CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only.** Do not invent physical schema details. Candidate \`inventory_cost_layer_movements\` remains unapproved as entity #18.
+
+READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
