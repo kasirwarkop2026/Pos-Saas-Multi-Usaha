@@ -2778,3 +2778,27 @@ The follow-up Worklist update changed the PR head after the prior §15.78 record
 - No application source, CI workflow, database, Vercel configuration or deployment file is part of the diff.
 
 **Disposition:** PR validation checks pass for the latest head, subject to independent design review and the existing Production deployment merge hold. PR #140 is not merged; no post-merge verification or CLOSED status is claimed. A01/A02 remain candidate/review-required; DOC-09 ERD-OPEN-05/06 remain OPEN. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
+
+## 15.80 CW-11 Package E — owner acceptance of A01/A02 logical directions (21 November 2026)
+
+The project owner explicitly accepted the recommendations after the independent design-direction review:
+
+1. **A01 — Path B accepted:** bounded Inventory Posting Source Event Registry for inventory-posting source event identity, idempotency and movement fan-out. It is not a universal event bus and is not a new entity within the historical 17-entity inventory set.
+2. **A02 — Alternative A accepted:** retain reservation-header `source_type` + `source_id`, resolved through a strict server-owned finite source-domain adapter allowlist. Unknown or invalid source types fail closed.
+3. **Separation retained:** A01 posting-event replay and A02 reservation-request replay remain independent. A02 fulfillment creates a distinct A01 posting event.
+
+DOC-04 §42.22 records the accepted scope; DOC-08 adds DOC08-FIX-018/019 as conceptual/logical FIX decisions; DOC-09 records the remaining physical and enforcement dependencies as OPEN.
+
+### 15.80.1 Acceptance boundary
+
+This is explicit acceptance of conceptual/logical design direction only. It does not approve physical tables/columns/indexes/UNIQUE/FK constraints, source-family activation, digest algorithm/version, retention/TTL, physical resolver implementation, transaction/concurrency protocol, RLS/API/backend enforcement, or executed test evidence. It does not authorize SQL/DDL/DML, migrations, DB push, Production changes or Stage 6 implementation.
+
+### 15.80.2 Updated disposition
+
+- A01/A02 direction selection: **ACCEPTED**.
+- A01/A02 physical schema and enforcement: **OPEN / NOT APPROVED**.
+- DOC-09 ERD-OPEN-05 and ERD-OPEN-06: **remain OPEN**; direction-selection subquestion resolved, acceptance criteria not met.
+- Physical Data Dictionary acceptance: **0/17**; canonical physical ERD: **NOT ACCEPTED**; implementation readiness: **NOT READY**.
+- PR #140: remains subject to its existing Production deployment merge hold; this decision does not authorize merge or deployment.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 NOT AUTHORIZED.
