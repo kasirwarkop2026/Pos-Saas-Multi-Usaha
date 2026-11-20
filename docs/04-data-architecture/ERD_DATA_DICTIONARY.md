@@ -3344,3 +3344,98 @@ The project owner explicitly accepts the recommended directions recorded in §§
 - A01 and A02 remain independent contracts. A02 fulfillment produces a distinct A01 posting event; their idempotency domains must not be conflated.
 
 **Acceptance scope:** conceptual/logical direction only. This acceptance does not approve physical columns, tables, indexes, UNIQUE/FK constraints, source-family activation, digest algorithm/version, retention/TTL, RLS or API/backend enforcement, concurrency protocol, transaction implementation, or test evidence. Those remain explicit DOC-09 dependencies. Nullable Variant equality, source-specific cardinality and lifecycle details remain open. No physical schema or implementation is authorized. Physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
+
+### 42.23 Status precedence and accepted-direction clarification for §§42.17–42.21 (21 November 2026)
+
+This section is an append-only status clarification. It does not rewrite historical review snapshots in §§42.17–42.21.
+
+1. Owner acceptance in §42.22 supersedes earlier direction-selection labels such as “REVIEW REQUIRED / NOT APPROVED” and “CANDIDATE / REVIEW REQUIRED” only where those labels refer to whether A01 Path B or A02 Alternative A is selected.
+2. Current logical direction: A01 Path B and A02 Alternative A are ACCEPTED at conceptual/logical level, recorded as DOC08-FIX-018 and DOC08-FIX-019.
+3. Current technical/physical status: A01 and A02 remain OPEN for technical contract completion, physical data-integrity strategy, tenant enforcement, concurrency and evidence. Statements that physical schema and implementation are not approved remain effective.
+4. DOC-09 ERD-OPEN-05 and ERD-OPEN-06 are not closed. Their direction-selection subquestion is resolved; remaining acceptance criteria are not.
+5. No physical registry table, FK, unique/index/check constraint, source-family activation, RLS/API implementation, transaction code, migration or test execution is approved by §42.22.
+
+If a historical status phrase in §§42.17–42.21 conflicts with this section, §42.22 and this §42.23 control current conceptual decision status; the stricter OPEN / NOT APPROVED physical and implementation boundary continues to control.
+
+### 42.24 A01/A02 technical execution contracts — logical invariants (21 November 2026)
+
+This section advances the accepted directions into technology-neutral logical execution contracts. It defines expected behavior, not a physical schema or implementation. Unresolved storage, isolation, retention, distributed-transaction or runtime mechanisms remain later approval gates.
+
+#### 42.24.1 Shared request and tenant invariants
+
+- Business context is derived from authenticated server-side actor/membership context and independently verified against the authoritative source object. A client-supplied business_id, source_type, source UUID or actor identifier is never trusted as proof of ownership or authorization.
+- Every operation is scoped to one Business. Cross-Business source resolution, replay lookup, reservation aggregation, posting fan-out and reversal lookup fail closed without disclosing whether another Business's source exists.
+- DOC-05 authorization is evaluated independently for the exact action and scope before mutation. Valid source ownership is not permission; permission is not source ownership.
+- Validation is repeated at the commit boundary or protected by a concurrency-safe version/lock mechanism. A check performed only before the mutation transaction is insufficient.
+- Rejected requests create no committed inventory movement or reservation effect. Any retained security/audit rejection record is not a committed domain event.
+
+#### 42.24.2 A01 posting event — logical state and atomicity
+
+The bounded registry follows a one-way posting lifecycle: UNCLAIMED → VALIDATED → COMMITTED, with terminal REJECTED for a request that fails validation before commit. A committed event is immutable. Corrections use a new reversal/compensation event; a committed event is never reopened or rewritten.
+
+Required processing order:
+
+1. Resolve the finite (source_domain, source_event_type) adapter from a server-owned catalogue; reject unknown or disabled mappings.
+2. Resolve the authoritative source record and stable event identity; verify same-Business ownership, source lifecycle, event eligibility, source version and all Product/Variant/Location/unit/quantity facts required by the posting contract.
+3. Compute canonical request identity and compare the tenant-scoped request replay key. Same key + same canonical payload returns the prior committed outcome; same key + different payload is a conflict. A retry must not create a new source-event sequence.
+4. Establish one concurrency-safe claim for event identity and posting request. Competing requests for the same event serialize to one winner; losers resolve to the committed result or a deterministic conflict, never duplicate movement fan-out.
+5. Construct the complete deterministic movement set, assign stable per-event movement sequence values, and validate all cross-parent, Product/Variant/Location, quantity, unit, batch and cost-layer invariants before commit.
+6. Commit the source-event outcome and its complete movement fan-out as one atomic posting outcome. No visible partial fan-out is allowed under the selected baseline.
+7. On retry after an uncertain client response, resolve the original outcome by idempotency identity; do not infer failure from a timeout and do not repost blindly.
+
+A source event that legitimately has no stock effect must carry an explicit source-event outcome/reason and produce zero movements by contract. Zero movements must never hide a failed or partially generated posting.
+
+Boundary not yet selected: whether source-domain mutation and M06 inventory posting share one physical transaction or communicate across service/database boundaries is not established. No distributed transaction, outbox/inbox, saga or compensating workflow is selected here. If the source fact can change independently between validation and inventory commit, the eventual design must provide an immutable source event/version and a recoverable consistency protocol before physical acceptance.
+
+#### 42.24.3 A01 reversal, replay and payload identity
+
+- Reversal is a new event with an explicit reference to the original committed event and the exact movement(s)/quantities being compensated. It cannot exceed the unreversed quantity/value of the original posting.
+- Reversal of a reversal is a new, explicitly authorized correction event; no history is deleted or overwritten.
+- Identical key + identical canonical payload returns the original result, including original movement identities. A key collision with a different canonical payload is rejected and audited as a conflict.
+- Canonical payload identity must include a declared schema/canonicalization version and all business-significant fields affecting the source event or generated movement set. Object-key ordering and equivalent primitive representation must normalize deterministically. Volatile transport metadata, retry counters and request arrival timestamps must not alter business identity unless explicitly part of the source event contract.
+- Digest algorithm, canonical serialization standard, version migration/dual-read policy, collision response detail, retention and purge/archive policy remain OPEN. No algorithm, duration or retention value is inferred here.
+
+#### 42.24.4 A02 reservation request — logical state and concurrency
+
+A02 resolves one atomic source demand line/material requirement. Its source adapter owns the mapping from the finite enabled source_type to the authoritative parent and line identity. The resolver returns a normalized source-demand context containing Business, stable source-line identity, Product, Variant, base unit, authorized Location constraints, ordered demand quantity, already fulfilled quantity, active committed reservation quantity, source version and lifecycle eligibility.
+
+Required processing order:
+
+1. Derive actor Business and authorization context server-side; resolve only an enabled source adapter and the exact atomic demand line.
+2. Validate source Business, lifecycle, Product/Variant, base unit, demand quantity, Location restrictions and source version against authoritative data.
+3. Resolve the tenant-scoped reservation request idempotency key. Same key + same canonical payload returns the original reservation outcome; same key + different payload is a conflict.
+4. Serialize competing reserve/increase/release/fulfill operations for the same atomic source demand, or use an equivalently proven concurrency-safe protocol. All active reservation waves for that source line must be included in the remaining-demand calculation.
+5. Calculate remaining reservable quantity = eligible demand quantity − fulfilled quantity − active committed reservation quantity, using one consistent quantity/unit basis and the source adapter's approved rounding rules. Requested quantity must be positive and not exceed the calculated remainder.
+6. Validate eligible inventory availability and allocation rules independently of source demand eligibility. A valid demand does not prove stock availability; stock availability does not prove source demand eligibility.
+7. Commit the reservation request, header and allocation/lifecycle events as one logical outcome. No partial allocation may be reported as fully committed unless an explicit partial-reservation policy is later approved.
+8. Re-read/verify the committed outcome for safe retry. Same request replay returns the same reservation identity and allocations; changed payload under the same key is rejected.
+
+Release, expiry, cancellation, source amendment and fulfillment must be explicit immutable lifecycle events. An expired or cancelled reservation cannot silently restore availability until the release/expiry effect is committed. Fulfillment must satisfy the atomic reservation/inventory-posting outcome required by §42.16 and emit its own distinct A01 posting event. No double subtraction or premature availability restoration is allowed.
+
+#### 42.24.5 A02 source cardinality and wave controls
+
+- Each source adapter declares whether a demand line permits one active reservation header or multiple controlled waves. No global assumption is applied to every source family.
+- For single-header adapters, one active logical reservation per source line/purpose is the target invariant. For multi-wave adapters, each wave/purpose must be server-issued or server-validated, stable, auditable and included in the aggregate remaining-demand calculation.
+- Two different idempotency keys do not authorize two reservations against the same demand. Source-demand cardinality and remaining quantity are checked separately from request replay identity.
+- A source-line amendment that reduces demand below active reservations must not silently mutate reservations. It must block the amendment or invoke an explicit, authorized reconciliation/release workflow; the exact policy is source-family-specific and remains OPEN until approved.
+
+#### 42.24.6 Failure, retry and observability matrix
+
+| Condition | Required logical outcome | Prohibited outcome |
+|---|---|---|
+| Unknown/disabled source adapter | Fail closed; no domain mutation | Fallback to generic UUID lookup |
+| Source Business mismatch | Deny without cross-tenant disclosure | Return another tenant's source details |
+| Same idempotency key, same canonical payload | Return original committed outcome | Create duplicate event/reservation |
+| Same idempotency key, different payload | Deterministic conflict; retain audit context | Overwrite original request |
+| Concurrent duplicate A01 posting | One committed fan-out; other callers resolve to it/conflict | Duplicate movements |
+| Concurrent A02 reservation attempts | Serialize or prove safe aggregate cap; never exceed demand | Oversubscribe source demand |
+| Failure before commit | No committed partial domain outcome; safe retry | Partial visible movement/reservation effect |
+| Timeout after uncertain commit | Resolve by replay identity before retrying mutation | Blind repost/re-reserve |
+| Source cancelled/amended after reservation | Explicit authorized release/reconciliation policy | Silent deletion or untracked availability change |
+| Reversal exceeds original unreversed quantity | Reject and retain audit context | Over-reversal |
+
+#### 42.24.7 Explicitly unresolved implementation decisions
+
+The following remain OPEN and require separate decisions/evidence before physical acceptance: canonical digest algorithm and version lifecycle; idempotency-key entropy/format and retention; registry event outcome retention/archive; source adapter catalogue governance and activation authority; source-version strategy; physical locking/isolation/deadlock/retry policy; source-domain/M06 transaction boundary or distributed consistency mechanism; partial reservation policy; source amendment policy per family; exact null-safe Variant equality; physical polymorphic-source integrity strategy; RLS/server enforcement; and tenant-negative, replay, concurrency, crash-recovery and reversal test evidence.
+
+**Disposition:** A01/A02 logical execution contracts are specified at behavior/invariant level. This is documentation progress only. DOC-09 ERD-OPEN-05 and ERD-OPEN-06 remain OPEN pending resolution of the explicit decisions above, physical strategy, security review and executed evidence. No physical schema or implementation is approved; physical Data Dictionary remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
