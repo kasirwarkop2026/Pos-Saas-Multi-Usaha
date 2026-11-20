@@ -469,3 +469,14 @@ This addendum records the bounded CW-11 reconciliation against the reconstructed
 **Disposition:** FIX-to-OPEN consistency is reconciled for the 17 newly registered conceptual/logical decisions at the stated scope. DOC-09 remains DRAFT v0.2 / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL. Dependencies newly closed: **0**. Status promotions: **0**.
 
 Controls remain READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+## 11.4 A01/A02 direction accepted; physical and enforcement dependencies remain OPEN (21 November 2026)
+
+The project owner has explicitly accepted A01 Path B and A02 Alternative A as conceptual/logical design directions, as recorded in DOC-04 §42.22 and DOC-08 DOC08-FIX-018/019. This resolves the direction-selection question only; it does not close the underlying dependency groups.
+
+- **ERD-OPEN-05 / A01:** direction selected (bounded Inventory Posting Source Event Registry). Physical identity/keys, FK strategy, source adapter contract, digest canonicalization/version, retention, transaction/fan-out behavior, concurrency, reversal/replay enforcement, tenant isolation and negative-test evidence remain OPEN.
+- **ERD-OPEN-06 / A02:** direction selected (`source_type` + `source_id` with strict server-owned resolver). Source-family catalogue/activation, atomic demand-line mapping, source-specific cardinality/waves, physical integrity strategy, lifecycle/remaining-demand validation, concurrency, idempotency digest/retention, tenant isolation and negative-test evidence remain OPEN.
+- A01 and A02 remain separate replay domains. The accepted logical direction does not create a physical FK for a polymorphic source pair and does not approve a generic registry for reservations.
+- No dependency is closed by this acceptance; no physical schema, RLS/API/backend enforcement, test PASS or implementation authorization is inferred.
+
+**Disposition:** conceptual direction selection COMPLETE; physical/data-integrity/security/evidence dependencies remain OPEN. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
