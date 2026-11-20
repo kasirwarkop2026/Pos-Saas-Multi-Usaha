@@ -480,3 +480,17 @@ The project owner has explicitly accepted A01 Path B and A02 Alternative A as co
 - No dependency is closed by this acceptance; no physical schema, RLS/API/backend enforcement, test PASS or implementation authorization is inferred.
 
 **Disposition:** conceptual direction selection COMPLETE; physical/data-integrity/security/evidence dependencies remain OPEN. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+## 11.5 A01/A02 logical execution contract refined; implementation dependencies remain OPEN (21 November 2026)
+
+DOC-04 §42.24 now defines technology-neutral logical execution order and invariants for the accepted A01/A02 directions: server-derived Business context; independent authorization and source validation; commit-boundary validation; A01 immutable posting lifecycle and all-or-nothing movement fan-out; deterministic replay/conflict outcomes; A02 atomic demand-line resolution, aggregate remaining-demand cap and concurrency serialization; explicit reservation lifecycle events; and A02 fulfillment as a distinct A01 posting event.
+
+This resolves ambiguity in expected logical behavior, not the physical mechanism. The following remain OPEN:
+
+- **A01 / ERD-OPEN-05:** source-event catalogue and activation governance; source-version contract; canonical payload serialization/digest algorithm and version lifecycle; idempotency-key format/entropy and retention; physical identity/UNIQUE/FK/index strategy; transaction boundary between source domain and M06; distributed consistency mechanism if they do not share a transaction; locking/isolation/deadlock/retry; event archive/retention; RLS/server authorization; and replay, duplicate, crash-recovery, reversal and tenant-negative test evidence.
+- **A02 / ERD-OPEN-06:** enabled source-family catalogue and owner approval; exact source-line mapping; per-adapter single-header/multi-wave cardinality; purpose/wave governance; source amendment/cancellation policy; source-version strategy; canonical request serialization/digest and key retention; physical polymorphic-source integrity strategy; locking/isolation and aggregate reservation cap; partial-reservation policy; RLS/server enforcement; and concurrency, replay, lifecycle and tenant-negative test evidence.
+- **Shared cross-cutting:** exact null-safe Variant equality and unit/quantity normalization remain OPEN and must be consistent with DOC-04 cross-parent tuples and inventory ledger/costing invariants.
+
+The §42.24 failure matrix is a logical acceptance oracle for later design and tests, not evidence that tests exist or pass. No physical constraint, implementation, security enforcement or test PASS is inferred. ERD-OPEN-05/06 remain OPEN; no dependency is closed by this addendum.
+
+**Disposition:** logical behavior specification advanced; physical design, security and execution evidence remain OPEN. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
