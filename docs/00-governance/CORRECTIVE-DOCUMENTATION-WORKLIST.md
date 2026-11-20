@@ -2479,3 +2479,28 @@ DOC-04 and Worklist were fetched from `main` after merge. DOC-04 §41 and Workli
 No FIX, physical acceptance or DOC-09 dependency is promoted/closed by this merge. Candidate coverage remains 17/17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.66 CW-11 Package E — F41-01 through F41-07 corrective candidate drafting (20 November 2026)
+
+**Status: CORRECTIVE CANDIDATE DRAFT COMPLETE FOR INDEPENDENT REVIEW — NOT APPROVED / NOT PHYSICAL ACCEPTANCE.**
+
+DOC-04 §42 was appended to address all seven independent design-review findings from §41. Package E establishes:
+
+- A uniform candidate surrogate `id` PK for all 17 entities, distinct alternate business grains, and candidate `id` fields for `inventory_balances` and `inventory_batch_balances`.
+- Deterministic projection rebuild/upsert rules that preserve row identity by business grain.
+- Parent ownership classes (tenant-owned, shared/global, platform-owned, actor/membership-scoped), referenced parent UNIQUE-key prerequisites and a per-entity candidate FK tuple matrix.
+- Explicit nullable Variant/Batch compatibility limitations; no unsupported claim that an ordinary composite FK proves null-safe equality.
+- A01 alternatives: explicit source-specific references versus a bounded inventory-posting source-event registry. A01 remains OPEN; no universal registry or extra entity is approved.
+- Immutable stock-count attempt rows, accepted-attempt identity, NULL-versus-zero semantics and candidate location posting watermark.
+- Distinct movement-backed dispatch, partial receipt, loss, damage and return events, transit stock and a non-double-counting quantity invariant.
+- `inventory_reservation_items` as a candidate immutable lifecycle event ledger; reservation remains an availability effect, not a physical on-hand movement.
+- Separate FIFO layer and MWA pool transfer-cost flows, with fees, landed cost, FX, timing and reversal gates retained OPEN.
+
+**F41 disposition:** all seven findings have revised candidate proposals; independent design review and physical acceptance remain outstanding. No FIX is promoted and no DOC-09 dependency is closed.
+
+**Unchanged project gates:** candidate coverage 17/17; physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY; `inventory_cost_layer_movements` remains unapproved entity #18.
+
+**Next action:** independent audit of DOC-04 §42 against §§35–41, DOC-03, DOC-05, DOC-08 and DOC-09; verify all 17 PK/grain rows, every candidate FK tuple and referenced parent key, the seven correction criteria, append-only integrity, and Worklist consistency. Only after the audit passes should the documentation-only PR be opened for review.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
