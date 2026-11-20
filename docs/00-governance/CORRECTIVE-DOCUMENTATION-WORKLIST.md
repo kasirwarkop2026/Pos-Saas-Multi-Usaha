@@ -2522,3 +2522,17 @@ Audit boundary:
 Package E remains **DRAFT COMPLETE FOR INDEPENDENT REVIEW — NOT APPROVED / NOT PHYSICAL ACCEPTANCE**. All F41 findings have revised candidate proposals; physical acceptance remains 0/17, canonical physical ERD NOT ACCEPTED and implementation readiness NOT READY. No DOC-09 dependency or FIX decision is closed/changed.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.68 CW-11 Package E — source-dependent key and same-pool FK precision (20 November 2026)
+
+DOC-04 §42.12 narrows the candidate FK/key claims after internal consistency review:
+
+- Movement alternate grain remains unresolved until A01 selects explicit source-specific links or the bounded inventory posting registry.
+- Cost-exception alternate grain remains unresolved until source identity and duplicate-event semantics are selected.
+- Cost-layer source movement and cost-exception movement/layer references now require same Product/Location candidate tuples.
+- Shipment-item movement lineage is through A01 source-event identity; no direct movement FK is implied on shipment items.
+- Additional denormalized candidate fields needed for adjustment/count/shipment/cost-consumption tuple checks are explicitly identified.
+- Global Unit and optional Business-defined Unit ownership paths remain separate.
+
+These are candidate design clarifications only. No physical FK, key, source registry, event table, FIX decision or implementation gate is accepted or closed.
