@@ -1558,3 +1558,115 @@ DOC-04 §28 remains the authoritative 17-entity owner register; DOC-04 §32 supp
 | Security evidence | §§25–29 | DOC-07 §§40, 43 | DESIGN / NOT EXECUTED |
 
 **Disposition:** data-to-requirement traceability is explicit at logical design level. DOC-04 physical Data Dictionary remains NOT ACCEPTED; no SQL identifier, key, constraint, index, RLS or migration is authorized.
+
+
+## 34. CW-11 — physical Data Dictionary and ERD specification acceptance audit (20 November 2026)
+
+### 34.1 Audit identity and boundary
+
+- Work package: **CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance**.
+- Repository baseline: `main` after PR #122 merge commit `a41ea9d6c949cb6187f801885c1da3dae2cdcd24`.
+- DOC-04 baseline blob SHA: `45a98b556e2fd3cde4a1cf1cbe97d003d2aaafa0`.
+- Reviewed DOC-04 scope: §§1–33, with focused acceptance review of §§3, 8–13, 16–25, 27–33.
+- Cross-document control references reviewed: current Worklist §§15.44–15.49 and DOC-09 §3C (ERD-OPEN-01–27). This is a documentation-design audit only; no live database introspection or runtime verification was performed.
+- Governance: READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`.
+
+This pass distinguishes four acceptance layers that must not be collapsed: (1) conceptual entity and domain baseline; (2) logical attributes, relationships and tenant-scope design; (3) physical schema specification; and (4) implemented/enforced/tested behavior. Passing an earlier layer does not imply acceptance of a later layer.
+
+### 34.2 Current DOC-04 acceptance baseline
+
+| Layer | Current evidence in DOC-04 | Disposition |
+|---|---|---|
+| Conceptual entity inventory | §3 and A12.38 conceptual baseline | 17/17 reviewed; historical baseline retained |
+| Conceptual relationship/cardinality | §§8, 18 and 32; A12.39 scope | Conceptual specification documented; A12.39 closure is conceptual only |
+| Logical attributes and data handling | §§17, 27–31 | 17/17 entity-level logical inventories proposed; not SQL column names or approved physical fields |
+| Entity/domain ownership and tenant rules | §§28 and 32 | 17/17 logical owner mapping and TEN-01–TEN-07 conceptual rules; exact physical keys/enforcement OPEN |
+| Candidate constraints, numeric policy and event/concurrency rules | §§19–21 | Design candidates/invariants documented; exact physical definitions and executed evidence OPEN |
+| Physical Data Dictionary | §§9, 22–24 | 0/17 entities accepted; authoritative physical field/key locators 0/17 in the bounded source recovery recorded in §23 |
+| Canonical physical ERD | §§22–26 and DOC-09 §3C | NOT ACCEPTED / NOT CANONICAL; no approval to promote ERD v9.6.9 or this reconstructed working master |
+| Runtime enforcement and tests | §§10, 21–24 | NOT VERIFIED / NOT EXECUTED; no RLS, server authorization, concurrency or application test evidence created by this audit |
+
+**Finding CW11-F01 — layer conflation risk.** The existing conceptual and logical matrices are materially developed, but they do not satisfy physical dictionary or canonical physical ERD acceptance. Any document status or readiness statement that treats 17/17 conceptual/logical coverage as physical acceptance is incorrect and must remain unpromoted.
+
+### 34.3 Physical acceptance gate — required per entity
+
+The following gate applies independently to each of the 17 historical conceptual entities. The entity-specific findings in §22.3 remain the detailed gap record; this table establishes the common acceptance contract and does not replace those findings.
+
+| Gate | Required content for each entity | Current evidence status | Acceptance rule |
+|---|---|---|---|
+| P01 — physical identity | Approved physical table/entity name, schema/namespace and entity lifecycle | OPEN / NOT VERIFIED | No conceptual name is presumed to be a final physical table name |
+| P02 — complete fields | Every physical field, purpose, SQL type, precision/scale where relevant, nullability, default and generated/computed behavior | OPEN / NOT VERIFIED | No field may be inferred from logical labels or generic conventions |
+| P03 — keys | Exact PK and candidate/alternate key definitions | OPEN / NOT VERIFIED | Exact columns and uniqueness semantics must be explicitly specified |
+| P04 — relationships | Exact FK/composite-FK tuples, referenced keys, cardinality, optionality and tenant-safe relation | OPEN / NOT VERIFIED | Conceptual cardinality alone is insufficient |
+| P05 — integrity | Exact UNIQUE/CHECK/exclusion constraints and index expressions/predicates | OPEN / NOT VERIFIED | Candidate matrices in §19 are not physical definitions |
+| P06 — lifecycle | Delete/update/restrict/cascade/set-null behavior, immutability, retention and audit treatment | OPEN / NOT VERIFIED | Must be specified per entity/relationship; never inferred |
+| P07 — tenant/security | business/parent scope, composite tenant integrity, RLS policy and server/API authorization contract | OPEN / NOT VERIFIED | Design rule is not enforcement evidence; tests remain separate |
+| P08 — operations | Numeric capacity/rounding, transaction/locking/idempotency/reconciliation behavior where applicable | OPEN / NOT VERIFIED | Each invariant needs an explicit physical/technical mechanism or a recorded unresolved disposition |
+| P09 — provenance | Decision owner/approval, source/version, exact locator, supersession and scope | PARTIAL / OPEN | Project-authored proposals must be labelled CANDIDATE until explicitly approved |
+| P10 — verification | Schema review evidence and separately identified executable tests/results | NOT GENERATED / NOT VERIFIED | A design document cannot claim implementation, execution or PASS |
+
+**Acceptance rule:** an entity is physically accepted only when all applicable P01–P10 gates are satisfied with explicit evidence and review. A blank, candidate, inferred or merely cross-referenced value is not a pass. The aggregate DOC-04 physical acceptance count remains **0/17** until entity-level acceptance records are complete.
+
+### 34.4 Entity-level disposition index
+
+The following index preserves the 17-entity baseline and points to the existing detailed per-entity review in §22.3. It is not a new physical definition.
+
+| # | Historical conceptual entity | Current physical disposition | Controlling detailed review |
+|---:|---|---|---|
+| 1 | `inventory_batches` | NOT ACCEPTED — fields, keys, uniqueness, status domain and delete/update behavior unresolved | §22.3 row 1 |
+| 2 | `inventory_movements` | NOT ACCEPTED — fields, source registry/FK, tenant keys, reversal linkage and numeric/index definitions unresolved | §22.3 row 2 |
+| 3 | `inventory_balances` | NOT ACCEPTED — grain/key, nullable-variant semantics, fields, uniqueness and concurrency unresolved | §22.3 row 3 |
+| 4 | `inventory_batch_balances` | NOT ACCEPTED — parent relation/key, nullable uniqueness, reconciliation and repair evidence unresolved | §22.3 row 4 |
+| 5 | `inventory_adjustments` | NOT ACCEPTED — fields, workflow/approval representation, actor/source, FK and lifecycle unresolved | §22.3 row 5 |
+| 6 | `inventory_adjustment_items` | NOT ACCEPTED — conversion snapshot, field types/nullability, movement linkage and row constraints unresolved | §22.3 row 6 |
+| 7 | `stock_counts` | NOT ACCEPTED — snapshot/watermark fields, lifecycle, partial posting and recount history unresolved | §22.3 row 7 |
+| 8 | `stock_count_items` | NOT ACCEPTED — count fields, numeric capacity, cutoff linkage, recount history and constraints unresolved | §22.3 row 8 |
+| 9 | `stock_transfers` | NOT ACCEPTED — state/outcome fields, transition enforcement, authorization and tenant-safe location keys unresolved | §22.3 row 9 |
+| 10 | `stock_transfer_items` | NOT ACCEPTED — item identity, FK, quantity caps, nullable uniqueness and aggregate enforcement unresolved | §22.3 row 10 |
+| 11 | `inventory_cost_exceptions` | NOT ACCEPTED — exception code/status, source/layer references, resolved-cost and lifecycle fields unresolved | §22.3 row 11 |
+| 12 | `inventory_reservations` | NOT ACCEPTED — source validation, tenant scope, expiry/TTL, lifecycle, keys and indexes unresolved | §22.3 row 12 |
+| 13 | `inventory_reservation_items` | NOT ACCEPTED — allocation/event structure, batch FK, quantity caps, fulfillment history and concurrency unresolved | §22.3 row 13 |
+| 14 | `inventory_cost_layers` | NOT ACCEPTED — layer source identity, transfer mapping, landed-cost correction, numeric capacity, keys and lifecycle unresolved | §22.3 row 14 |
+| 15 | `inventory_cost_layer_consumptions` | NOT ACCEPTED — allocation/consumption/compensation keys, caps, idempotency, locking and fields unresolved | §22.3 row 15 |
+| 16 | `stock_transfer_shipments` | NOT ACCEPTED — shipment identity/sequence, status/outcome, dispatch evidence, lifecycle and uniqueness unresolved | §22.3 row 16 |
+| 17 | `stock_transfer_shipment_items` | NOT ACCEPTED — receipt-event structure, movement FK, quantity caps, idempotency and fields unresolved | §22.3 row 17 |
+
+### 34.5 ERD-specific acceptance and relationship rules
+
+1. The conceptual relationship set in §§8 and 18 remains a design baseline only. Each relationship must be promoted to physical form only after its exact FK/composite-FK columns, referenced key, optionality, uniqueness and tenant behavior are explicitly designed and approved.
+2. The logical owner and tenant mappings in §§28 and 32 do not prove that the corresponding physical key tuples or RLS/server controls exist.
+3. M:N or allocation relationships require an explicit bridge representation. A12.17 cardinality rules do not by themselves select a physical bridge table or prove its constraints.
+4. The candidate `inventory_cost_layer_movements` remains **CANDIDATE / NOT APPROVED**. It is not entity #18 and must not be inserted into the 17-entity count absent a separate explicit decision.
+5. ERD v9.6.9 remains a working reference, not an approved canonical physical ERD. DOC-04 remains a reconstructed working master, DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+6. No cascade/restrict/set-null action, index, numeric precision, enum, generated field, timestamp, tenant column or SQL type is established merely by convention or by a conceptual invariant.
+
+### 34.6 Cross-document dependency reconciliation
+
+| Dependency | DOC-04 reference | DOC-09 reference | CW-11 treatment |
+|---|---|---|---|
+| Canonical ERD and physical schema authority | §§22–26 | ERD-OPEN-01–03 | OPEN; approval and physical specification are separate gates |
+| Candidate bridge entity | §§3, 22–25, 34.5 | ERD-OPEN-04 | REVIEW / CANDIDATE; no entity #18 approval |
+| A01 source registry | §§5, 9, 13, 21–22 | ERD-OPEN-05 | OPEN; source identity and FK mechanism unresolved |
+| A02 reservation source | §§5, 9, 13, 21–22 | ERD-OPEN-06 | OPEN; do not conflate with A01 |
+| Shipment receipt/return/loss events | §§7–8, 18, 21–22 | ERD-OPEN-07, 14–15 | OPEN; event model and movement links unresolved |
+| Concurrency/projection/idempotency | §§19–21 | ERD-OPEN-09–13, 27 | OPEN / REVIEW; no executed evidence |
+| A12.18–A12.28 and A12.40–A12.41 provenance/gates | §§11, 13, 23–25 | ERD-OPEN-16–22 | UNRECOVERED / PARTIAL / NOT STARTED as source-native; no reconstruction |
+| Purchasing 14→15 and Sales 20→18 | §25 | ERD-OPEN-24–25 | OPEN; outside this bounded physical inventory pass |
+
+DOC-09 IDs and statuses remain owned by DOC-09. This crosswalk does not close, merge or reassign any dependency.
+
+### 34.7 CW-11 findings and bounded disposition
+
+| Finding | Result | Required action |
+|---|---|---|
+| CW11-F01 — conceptual/logical coverage mistaken for physical acceptance | CONFIRMED RISK | Maintain separate acceptance layers and explicit 0/17 physical status |
+| CW11-F02 — per-entity physical gate criteria dispersed across §§9, 16–24 | CONFIRMED | Consolidate common P01–P10 acceptance contract in this section; preserve detailed row findings in §22.3 |
+| CW11-F03 — ERD canonicality and candidate bridge could be misread | CONTROLLED OPEN | Reaffirm ERD v9.6.9 working-reference status and candidate #18 prohibition |
+| CW11-F04 — cross-document dependency closure could be overstated | CONTROLLED OPEN | Keep DOC-09 ERD-OPEN statuses source-native and unchanged |
+| CW11-F05 — physical field/key evidence unavailable in the bounded source set | OPEN / BLOCKING | Do not fabricate physical values; proceed only with clearly labelled project-authored CANDIDATE design proposals or newly approved physical evidence |
+
+**CW-11 current disposition: PARTIAL — ACCEPTANCE NOT MET / PHYSICAL EVIDENCE GATE BLOCKED.** The acceptance contract and entity-level disposition index are now consolidated; this does not accept any physical entity, close A38-G01–G04, close DOC-09 ERD-OPEN items, or promote DOC-04 to canonical/final.
+
+Next work inside CW-11 may develop a project-authored candidate physical specification for review, but each proposed field/key/constraint must be explicitly labelled CANDIDATE / NOT APPROVED and must not be represented as existing schema or approved implementation. Separate user/design approval is required before promoting proposals to FIX/APPROVED. Runtime/schema verification and test execution remain distinct later gates.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
