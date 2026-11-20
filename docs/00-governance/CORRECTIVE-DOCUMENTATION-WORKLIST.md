@@ -2330,3 +2330,14 @@ The Worklist was fetched from `main` after PR #131 merge. §15.58 is present. Cu
 Next action remains XD-01–XD-14 cross-entity decisions and explicit design review. Only after these decisions are resolved can the candidate specification be promoted for approval. Schema/runtime implementation and test evidence remain separate later gates.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.60 CW-11 XD-01–XD-14 proposal pack — documentation PR initiated (20 November 2026)
+
+Current-main review reread DOC-04, DOC-05, DOC-08 and DOC-09 before continuation. DOC-04 §40 is appended as a project-authored proposal pack for all 14 unresolved design decisions. It specifies recommended directions and acceptance artifacts for PK/alternate grain, tenant-safe FK tuples, nullable-Variant uniqueness, A01/A02 source contracts, adjustment/count lifecycle, shipment event lineage, reservation allocation grain, MWA/FIFO separation, transfer costing, numeric/currency rules, referential actions, query-driven indexes and RLS/server authorization negative-test design.
+
+**Status: COMPLETE FOR REVIEW / NOT APPROVED.** No new FIX decision is created and no DOC-09 dependency is closed. Candidate design coverage remains 17/17; physical acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED. Candidate inventory_cost_layer_movements remains unapproved as entity #18.
+
+The next gate is explicit design review and acceptance/revision, followed by a per-entity PK/FK/constraint matrix and physical ERD candidate. Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.

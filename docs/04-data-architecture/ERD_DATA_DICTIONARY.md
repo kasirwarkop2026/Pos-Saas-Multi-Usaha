@@ -2294,3 +2294,228 @@ No precision/scale or rounding mode is promoted from a candidate field list to a
 This section does not close the DOC-09 ERD-OPEN register, A38 physical acceptance gates, Stage 4.7.8, Stage 4.9 or implementation readiness. No candidate is promoted to FIX/APPROVED. `inventory_cost_layer_movements` remains unapproved as entity #18.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 40. CW-11 XD-01–XD-14 resolution proposals — controlled design decision pack (20 November 2026)
+
+### 40.1 Status and authority
+
+**STATUS: DESIGN PROPOSALS COMPLETE FOR REVIEW — NOT APPROVED / NOT PHYSICAL ACCEPTANCE.** This section converts §39.7 into explicit recommended design directions and acceptance criteria. It is project-authored design work, not evidence of an existing physical schema. No proposal is promoted to FIX, canonical, final or implementation-authorized status.
+
+Current-main references reviewed:
+- DOC-04 §§28, 32 and 35–39: conceptual entity owner register, candidate specifications and cross-entity reconciliation.
+- DOC-05 §§22–35: principal/key grammar, S0–S5 scope, D0–D4 purpose, SoD, high-risk policy tuples and category entitlement boundaries.
+- DOC-08 DOC08-FIX-001–017: current conceptual/logical FIX register.
+- DOC-09: unresolved dependency register. This pack does not close source-native dependencies or make DOC-08/09 canonical/final.
+
+Status terms: RETAINED FIX means an existing decision remains binding only at its documented scope; RECOMMENDED / REVIEW REQUIRED means proposal only; OPEN means explicit design decision/evidence is still required; NOT EXECUTED means no runtime test was performed.
+
+### 40.2 XD-01 — Primary keys and alternate business grain
+
+**Recommended direction: surrogate immutable row identity for all 17 entities, including projections, plus separately declared unique business grain. REVIEW REQUIRED.** This avoids nullable-Variant composite-PK ambiguity and supports stable event/audit references.
+
+| Entity | Candidate alternate/business grain |
+|---|---|
+| inventory_batches | Business + Location + Product + Variant identity + batch_code |
+| inventory_movements | Business + source-event allocation/idempotency identity |
+| inventory_balances | Business + Location + Product + Variant identity |
+| inventory_batch_balances | Business + Location + Product + Variant identity + Batch |
+| inventory_adjustments | Business + adjustment_reference |
+| inventory_adjustment_items | Business + adjustment + line_number |
+| stock_counts | Business + count_reference |
+| stock_count_items | Business + stock_count + product/variant/batch + attempt_sequence |
+| stock_transfers | Business + transfer_reference |
+| stock_transfer_items | Business + transfer + line_number |
+| inventory_cost_exceptions | Business + subject/source + exception/detection identity |
+| inventory_reservations | Business + reservation_reference and A02 source identity |
+| inventory_reservation_items | Business + reservation + allocation_sequence |
+| inventory_cost_layers | Business + source_movement + layer_sequence |
+| inventory_cost_layer_consumptions | Business + consuming_movement + cost_layer + allocation_sequence |
+| stock_transfer_shipments | Business + transfer + shipment_sequence |
+| stock_transfer_shipment_items | Business + shipment + transfer_item + batch + allocation_sequence |
+
+Acceptance: one PK per entity; documented key type and nullability; alternate-key uniqueness scope; stable idempotency distinct from human-readable references; deterministic projection grain; null-safe Variant uniqueness. Candidate UUID types are not accepted merely because earlier packages proposed them.
+
+### 40.3 XD-02 — Tenant-safe composite foreign keys
+
+**Recommended direction: every tenant-owned child-to-parent FK must include Business identity in its referential integrity boundary. REVIEW REQUIRED.** A plain FK to parent id alone does not prove same-Business ownership.
+
+Candidate pattern: parent exposes a unique (business_id, id); child references (business_id, parent_id) to that tuple. Where needed, further composite relations must prove:
+- Variant belongs to the same Business and Product;
+- Batch belongs to the same Business, Product/Variant and Location;
+- Product, Location, Unit, Supplier and Actor belong to the same Business/principal context;
+- transfer source and destination Locations belong to the transfer Business and are distinct;
+- shipment item, transfer item and shipment share the same parent transfer;
+- cost layer and consuming movement share Business, Product/Variant and compatible Location/currency.
+
+Acceptance: complete FK matrix listing child tuple, parent unique tuple, optionality, referenced key and ON DELETE/UPDATE behavior; same-tenant and cross-tenant negative cases for every relationship class. Exact physical tuples remain OPEN until table/key targets are reviewed.
+
+### 40.4 XD-03 — Nullable Variant uniqueness
+
+**Recommended direction: null-safe uniqueness; do not rely on conventional UNIQUE for nullable Variant grains and do not use a synthetic sentinel Variant. REVIEW REQUIRED.**
+
+Alternatives:
+1. PostgreSQL UNIQUE NULLS NOT DISTINCT, only after actual server-version compatibility is verified at a separately authorized physical gate.
+2. Paired partial unique indexes for NULL and non-NULL Variant rows.
+3. A normalized variant identity model, only if separately justified and approved.
+
+Apply consistently to inventory_balances, inventory_batch_balances, batch-code scope and other Product/Variant grains. Acceptance: one non-variant row per Business/Product/Location; no duplicate variant grain; wrong-product and cross-tenant Variant negative cases; concurrent duplicate-insert test design. Final mechanism remains OPEN; no SQL/index is approved.
+
+### 40.5 XD-04 — A01 movement/source registry
+
+**OPEN — two design paths retained for review.**
+- Path A: explicit source-specific FK/link references. Stronger native referential integrity, but requires an exactly-one-source rule and a manageable source catalogue.
+- Path B: canonical immutable source-event registry carrying Business, source domain/type, source record identity, event identity/version, idempotency key and payload/reference digest. Domain-specific source ownership must still be validated.
+
+Recommended selection rule: use A where source types are stable and limited; use B only where cross-domain event/idempotency requirements justify a shared registry. One source event may fan out into multiple movements only with deterministic allocation identities. A movement cannot post twice for the same allocation key. Reversals must reference the original movement. No generic unvalidated source_type/source_id pair is accepted as referential integrity. No registry entity is added to the 17-entity baseline by this proposal.
+
+Acceptance: chosen model, source-event catalogue, cardinality, idempotency, tenant validation and reversal crosswalk.
+
+### 40.6 XD-05 — A02 reservation source validation
+
+**Recommended direction: independent A02 source contract; do not conflate it with A01. REVIEW REQUIRED.** Source type must be allowlisted; source record must exist, belong to the same Business and be reservable; server-side resolution must verify current demand and quantity; duplicate/retry requests must be idempotent; source cancellation, expiry and fulfillment must trigger explicit lifecycle transitions. Source identity does not grant permission or bypass DOC-05 authorization.
+
+Acceptance: source allowlist, source-to-reservation cardinality, uniqueness scope, ownership validation, lifecycle and cross-tenant negative cases. Physical FK/registry choice remains OPEN.
+
+### 40.7 XD-06 — Adjustment posting and stock-count/recount
+
+**Recommended direction:**
+- Draft adjustment has no stock effect.
+- Approval/SoD is an explicit transition with actor/time evidence aligned to DOC-05.
+- Posting creates exactly one immutable movement per posted adjustment item, with idempotency; define all-or-nothing versus explicitly modeled partial posting.
+- Corrections use compensating movements, never edits to posted movements.
+- Count snapshot and cutoff watermark become immutable at session start.
+- Each count attempt is append-only and distinguishable by attempt sequence; NULL means not counted, zero is a valid count.
+- Recount creates a new attempt, not an overwrite.
+- Variance reconciles snapshot with post-snapshot movements before posting; accepted variance posts movement exactly once.
+
+The existing 17-entity baseline may store multiple stock_count_items attempts distinguished by attempt sequence only if stable identity and history are preserved. Otherwise a new entity proposal requires separate scope approval. Acceptance: state machine, posting atomicity, cutoff algorithm, recount key, partial-posting rule and duplicate-posting tests. Exact rules remain OPEN.
+
+### 40.8 XD-07 — Shipment receipt/return/loss/damage events
+
+**Recommended direction: each dispatch, partial receipt, loss/damage disposition and return must be separately traceable; mutable shipment-item totals alone are insufficient. REVIEW REQUIRED.**
+- Dispatch creates source-location negative movement(s) linked to shipment item and batch.
+- Each partial receipt creates a distinct destination-location positive movement; repeated receipt never overwrites prior receipt.
+- Loss/damage has distinct disposition and stock/cost treatment; damaged stock is not silently treated as saleable.
+- Return after receipt is a new reverse-direction transfer/return flow, not a mutation of the original receipt.
+- Every event has stable idempotency and lineage to transfer → shipment → shipment item.
+- Shipment totals are derived/reconciled projections, not the only event record.
+
+The 17-entity baseline may use inventory_movements as immutable event ledger only if movement kind, source identity, batch, location and reference fields represent every event unambiguously. Otherwise propose a new event entity separately; do not silently add it. Event catalogue and movement lineage remain OPEN.
+
+### 40.9 XD-08 — Reservation demand versus allocation grain
+
+**Recommended direction: inventory_reservation_items represents allocation slices at Business + Product/Variant + Location + optional Batch grain; header source identity represents originating demand. REVIEW REQUIRED.**
+
+Invariants: sum of active allocation slices equals active reserved amount; batch allocation satisfies FEFO and tenant/product/location eligibility; allocation cannot exceed available stock under concurrency; fulfilled plus released never exceeds reserved; fulfillment changes on-hand only through the underlying physical movement; release restores availability but does not create on-hand movement; expiry is server-evaluated and idempotent.
+
+OPEN choice: reservation item as mutable allocation projection or immutable allocation-event history with rebuildable active projection. Recommended principle is immutable event history plus rebuildable projection, but any additional structure requires explicit review. Acceptance: demand/allocation relationship, key, batch/non-batch policy, FEFO, concurrency, expiry, partial fulfill/release and reconciliation.
+
+### 40.10 XD-09 — MWA/FIFO separation
+
+**RETAINED FIX, unchanged:**
+- MWA default; FIFO alternative.
+- MWA pool grain = Business + Product/Variant + Inventory Location.
+- Cost-layer identity differs from physical batch identity.
+- FEFO selects physical batches; FIFO selects cost layers.
+- Reservation reduces available, not on-hand.
+
+**Recommended physical direction, REVIEW REQUIRED:** MWA is valued at pool grain and must not create one cost layer per batch. FIFO consumes ordered cost layers through immutable allocations tied to inventory movements. Method selection belongs to Business/Product costing configuration, not batch identity. Quantity balance and cost valuation remain separately reconcilable projections. Acceptance: method selection scope, MWA formula/timing/rounding, FIFO order, transfer treatment, negative stock, landed-cost and reversal tests.
+
+### 40.11 XD-10 — Cost-layer transfer and landed-cost correction
+
+**Recommended direction, REVIEW REQUIRED:** dispatch consumes source quantity and applicable cost basis; receipt establishes destination quantity and traceable cost basis. FIFO may create a destination layer linked to source consumption; MWA updates the destination pool under its retained pool rule. Batch may remain the same physical identity where batch policy permits, but cost layer remains distinct. Landed-cost corrections create traceable valuation corrections; they do not overwrite historical unit-cost snapshots or posted consumption. Returns/reversals compensate original events. Exact algorithm, partial receipt and late-cost allocation remain OPEN.
+
+### 40.12 XD-11 — Numeric precision, currency and rounding
+
+**Recommended principle: exact decimal arithmetic for authoritative quantity and cost; prohibit floating-point authority. REVIEW REQUIRED.** Do not select precision/scale until maximum quantities, unit fractions, cost range and currency needs are established.
+
+Acceptance requires: numeric capacity table per domain; smallest supported quantity fraction; maximum quantity; unit-cost and extended-cost precision; currency policy (Business/location/multi-currency); FX source/time if applicable; rounding mode and point; MWA residual treatment; FIFO immutable cost snapshots and reversal; conversion factor/version; overflow behavior and boundary tests. Event time, posting time, snapshot time, expiry and audit time remain distinct; timezone-aware instants for event timestamps. No precision, scale or SQL type is approved here.
+
+### 40.13 XD-12 — Lifecycle, immutability and referential actions
+
+**Recommended default, REVIEW REQUIRED:** immutable posted movement and finalized cost-consumption history; corrections via compensating records; restrictive references for posted history; no cascade-delete of inventory/cost/transfer/count/reservation history; controlled lifecycle/cancellation instead of deleting posted documents; projections rebuildable but never authoritative.
+
+| Relation class | Candidate behavior | Open decision |
+|---|---|---|
+| Posted movement and reversal lineage | RESTRICT / immutable | exact physical enforcement |
+| Cost consumption and reversal lineage | RESTRICT / immutable | exact physical enforcement |
+| Headers/items with posted effects | RESTRICT; cancel/close by lifecycle | state transition and retention |
+| Draft-only rows with no downstream references | controlled delete may be considered | audit requirements |
+| Balance projections | controlled rebuild/replace | deterministic rebuild and concurrency |
+| Optional actor/source reference | RESTRICT or SET NULL plus immutable snapshot | identity retention/legal basis |
+| Business/Product/Location parent | RESTRICT while referenced | tenant lifecycle/retention |
+
+Acceptance: per-FK ON DELETE/UPDATE matrix, draft-versus-posted policy, soft delete, legal hold, identity retention and negative tests. No CASCADE is assumed.
+
+### 40.14 XD-13 — Query-driven indexes and concurrency
+
+**Recommended direction: indexes must map to named access paths; no speculative index. REVIEW REQUIRED.**
+
+| Access path | Candidate index intent | Evidence needed |
+|---|---|---|
+| FEFO batch selection | Business + Location + Product/Variant + expiry/status + stable tie-breaker | eligibility, expiry NULL policy, lock/concurrency |
+| Movement history/replay | Business + resource dimensions + event/post time; source idempotency key | replay ordering and deduplication |
+| Balance lookup | unique null-safe Business/Location/Product/Variant grain | point lookup and concurrent upsert |
+| Batch balance | unique grain plus Batch | aggregate reconciliation |
+| Active reservations | Business + status/expiry and allocation grain | expiry, FEFO, active reservation sum |
+| Adjustment/count workflow | Business + status/time; parent item lookup | queue and cutoff reconstruction |
+| Transfer/shipment | Business + transfer/status; shipment sequence | outstanding and partial quantities |
+| Cost layers | Business + costing pool + FIFO order/status | deterministic layer selection and locking |
+| Cost consumption | Business + movement + layer + idempotency/reversal | replay and cumulative cap |
+| Cost exceptions | Business + status + detected time/code | triage and duplicate detection |
+
+Acceptance: each index maps to a named query, tenant prefix, ordering/selectivity and write-amplification consideration. EXPLAIN/benchmark only in a later authorized implementation/performance stage. No physical index is approved.
+
+### 40.15 XD-14 — RLS, server authorization and tenant-negative tests
+
+**Retained authority:** DOC-05 governs principal/key grammar, S0–S5 scope, D0–D4 purpose, SoD/approval and fail-closed authorization. Conceptual tenant isolation is a FIX principle, not proof of RLS/API enforcement.
+
+**Recommended defense in depth, REVIEW REQUIRED:**
+1. RLS is the database row boundary and fails closed without valid tenant context.
+2. Server/API independently resolves authenticated principal, active Business membership, exact action key, resource owner, scope, purpose, conditions and approval/SoD.
+3. Client-supplied business_id, role labels, owner or permission claims are never trusted.
+4. Privileged service paths are explicit, narrow, audited and not general tenant bypasses.
+5. Platform S0 grant actions remain separate from Business M-domain data access.
+6. Sessions, caches and async workers bind authority to actor and Business; revocation invalidates stale context.
+7. Authorization-decision evidence and business-event evidence remain distinct per DOC-07.
+
+Minimum negative-test design — DESIGN ONLY / NOT EXECUTED: unauthenticated access; no active membership; Business A accessing Business B by guessed ID; child referencing cross-tenant parent; Product/Variant mismatch; wrong Batch/Product/Location; cross-tenant reservation source; transfer location mismatch; missing tenant context; direct API bypassing UI restrictions; stale session after revocation; background/service worker without tenant binding; platform S0 attempting Business inventory mutation; restricted cost/compliance export without exact key/purpose/scope; prohibited integration-secret read must DENY.
+
+Evidence acceptance: test ID, principal, Business, action, resource, scope, purpose, expected/actual result, environment/build, correlation ID, timestamp, artifact integrity and independent reviewer. A skipped CI job or test design is not execution evidence. RLS policies, API enforcement and runtime tests remain NOT AUTHORIZED / NOT EXECUTED.
+
+### 40.16 Decision acceptance matrix
+
+| ID | Proposed outcome | Status | Required artifact |
+|---|---|---|---|
+| XD-01 | Surrogate identity + alternate business grain | REVIEW REQUIRED | 17-entity PK/alternate-key matrix |
+| XD-02 | Business-bound composite FK tuples | REVIEW REQUIRED | complete FK/reference-key matrix |
+| XD-03 | Null-safe Variant uniqueness | OPEN | compatible uniqueness decision and negative cases |
+| XD-04 | Explicit source refs or canonical A01 registry | OPEN | source model and event/idempotency crosswalk |
+| XD-05 | Independent A02 source contract | REVIEW REQUIRED | source allowlist/ownership/lifecycle |
+| XD-06 | Atomic adjustment posting and append-only count attempts | REVIEW REQUIRED | transitions, cutoff, posting/idempotency |
+| XD-07 | Distinct traceable shipment events | REVIEW REQUIRED | event catalogue and movement lineage |
+| XD-08 | Reservation allocation-slice grain | REVIEW REQUIRED | demand/allocation reconciliation |
+| XD-09 | Retain MWA/FIFO and batch/layer FIX separation | RETAINED FIX; physical flow OPEN | method-specific valuation flow |
+| XD-10 | Transfer cost lineage and compensating corrections | REVIEW REQUIRED | source/destination costing matrix |
+| XD-11 | Exact decimal principle; precision/currency OPEN | OPEN | numeric capacity/currency standard |
+| XD-12 | Immutable posted history and restrictive references | REVIEW REQUIRED | per-relation referential-action matrix |
+| XD-13 | Query-driven index selection | REVIEW REQUIRED | query-to-index matrix |
+| XD-14 | RLS + independent server/API authorization | REVIEW REQUIRED / NOT EXECUTED | policy matrix, negative tests and evidence plan |
+
+### 40.17 Cross-document consistency and CW-11 disposition
+
+- DOC08-FIX-004 remains conceptual tenant-isolation principle; no physical FK or RLS enforcement is promoted to FIX.
+- DOC08-FIX-005–009 retain immutable movement ledger, projection, batch/cost-layer distinction, FEFO, FIFO and reservation availability semantics.
+- DOC08-FIX-010–011 retain MWA default/FIFO alternative and MWA pool identity.
+- DOC-05 remains authorization-design authority; no role/key grant, actor eligibility or technical enforcement is created.
+- DOC-07 evidence ownership remains distinct from business-event and authorization-decision ownership.
+- DOC-09 source-native dependencies remain OPEN unless their own acceptance criteria are separately satisfied.
+- DOC-08 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL / NOT ACCEPTED; DOC-09 remains DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL.
+- Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+**XD-01–XD-14 proposal pack COMPLETE FOR REVIEW / NOT APPROVED.** Candidate design coverage remains 17/17; physical acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED. Source models, exact FK tuples, null-safe uniqueness mechanism, numeric/currency standard, referential actions, indexes and enforcement/evidence still require explicit acceptance. Candidate inventory_cost_layer_movements remains unapproved as entity #18.
+
+Next gate: review/revise/approve these proposal directions, then create the final per-entity PK/FK/constraint matrix and physical ERD candidate. No database introspection or implementation is included.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
