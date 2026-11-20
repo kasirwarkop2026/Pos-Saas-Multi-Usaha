@@ -2504,3 +2504,21 @@ DOC-04 §42 was appended to address all seven independent design-review findings
 **Next action:** independent audit of DOC-04 §42 against §§35–41, DOC-03, DOC-05, DOC-08 and DOC-09; verify all 17 PK/grain rows, every candidate FK tuple and referenced parent key, the seven correction criteria, append-only integrity, and Worklist consistency. Only after the audit passes should the documentation-only PR be opened for review.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.67 CW-11 Package E — exact FK tuple and field-completeness audit addendum (20 November 2026)
+
+DOC-04 §42.11 was appended to remove shorthand from the first FK matrix and state the candidate child tuple → parent tuple for every one of the 17 entities. It also records the additional candidate fields needed for same-location, same-transfer, shipment-item and cost-consumption tuple checks.
+
+Audit boundary:
+- Every inventory entity references the Business root through candidate `(business_id) → Business(id)`.
+- Tenant-owned parents require candidate `(business_id, id)` referenced keys.
+- Product Variant requires `(business_id, product_id, id)`.
+- Inventory Batch requires Business/Product/Location-compatible parent keys; nullable Variant equality remains an explicit OPEN physical gate.
+- Global Unit uses `(unit_id) → Unit(id)` without an artificial tenant key; Business-defined Unit remains an unselected alternative.
+- Actor references resolve through Business Actor Context/Membership, not raw authentication identity.
+- The exact matrix does not assert that any named physical parent table/key currently exists.
+
+Package E remains **DRAFT COMPLETE FOR INDEPENDENT REVIEW — NOT APPROVED / NOT PHYSICAL ACCEPTANCE**. All F41 findings have revised candidate proposals; physical acceptance remains 0/17, canonical physical ERD NOT ACCEPTED and implementation readiness NOT READY. No DOC-09 dependency or FIX decision is closed/changed.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
