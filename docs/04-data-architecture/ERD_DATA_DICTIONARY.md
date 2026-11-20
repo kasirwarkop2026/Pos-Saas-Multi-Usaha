@@ -3077,3 +3077,14 @@ This addendum controls any shorthand or premature implication in §§42.2–42.1
 7. Global Unit references remain `(input_unit_id) → GlobalUnit(id)` and `(base_unit_id) → GlobalUnit(id)`. If Business-defined units are later required, they must use an explicit Business-unit association and the tenant tuple, not a fabricated Business key on a global Unit row.
 
 These clarifications narrow the candidate claims; they do not close A01, XD-03, XD-05, XD-11 or the physical FK acceptance gate.
+
+
+### 42.13 Count-attempt immutability and shipment-location FK clarification
+
+For stock counts, immutability applies to attempt identity and recorded measurement facts: `id`, `count_line_id`, `attempt_sequence`, `counted_quantity_base`, `counted_at` and `counted_by` are never overwritten by a recount. A recount always creates a new attempt row.
+
+The candidate `attempt_status` and `accepted_for_posting` fields represent the current controlled disposition/selection of an existing immutable measurement; they are not the attempt-history source. Candidate `accepted_at timestamptz NULL` and `accepted_by uuid NULL` record the current acceptance decision. If a later recount supersedes an accepted attempt, the earlier measurement remains intact and its disposition changes only through an auditable decision. DOC-07 evidence/audit ownership remains applicable; exact audit event representation and acceptance-transition enforcement remain OPEN. The partial unique candidate key still permits at most one currently accepted attempt per count line. Posting idempotency remains bound to the accepted attempt identity.
+
+`stock_counts.cutoff_location_posting_sequence` may be NULL while the count is a draft and the snapshot is not frozen. It must be populated before the count snapshot becomes active/available for counting or variance acceptance. After freeze, the cutoff is immutable. The movement sequence allocator and snapshot transaction boundary remain OPEN physical design gates.
+
+For `stock_transfer_shipment_items`, add the direct candidate FK `(business_id, source_location_id) → InventoryLocation(business_id, id)` in addition to the Batch tuple. The source Location must equal the Batch's recorded inventory Location and the transfer header's source Location. This consistency rule remains a candidate cross-parent invariant pending physical enforcement design.
