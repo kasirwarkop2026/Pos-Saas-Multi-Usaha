@@ -2226,3 +2226,29 @@ The Worklist was fetched from `main` after PR #127 merge; §15.54 is present. Cu
 Next: **Package C — transfer/shipment entities 9–10 and 16–17**. Package C must preserve multi-shipment and partial dispatch/receipt semantics, tenant-safe transfer/batch relations, movement lineage, and explicit receipt/return/loss/damage event decisions. Package D follows for entities 11–15. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.56 PR #128 merge verification and CW-11 Package D routing (20 November 2026)
+
+PR #128 (`docs: draft CW-11 candidate physical specification package C`) was squash-merged into `main` after successful acceptance checks.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/128
+- Reviewed head SHA: `fa76164d08563e30972bfcae438a4f167d441f66`
+- Merge commit: `a305b5ed656f9611c09b62347a7da344d8a97e3b`
+- Result: MERGED.
+- Documentation CI run `44757523676`: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS CI run `44757523729`: SUCCESS — application-change detection. ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: two documentation files; Worklist 26 additions, DOC-04 122 additions; 148 additions, 0 deletions total.
+
+### 15.56.1 Post-merge read-back
+
+Both changed files were fetched from `main` after PR #128 merge. DOC-04 §37 (Package C) and Worklist §15.55 are present. Current-main blob SHAs at read-back: Worklist `cefc5195ed71982ac707d634e57141b9cee0f448`; DOC-04 `017f7a9b6b3812bcd4448bc590828e685521a689`.
+
+### 15.56.2 CW-11 Package C disposition and next action
+
+**PR #128: MERGED AND POST-MERGE VERIFIED. CW-11 remains IN PROGRESS.** Candidate design coverage is **12/17 entities** (Packages A–C); all proposals remain NOT APPROVED and physical acceptance remains **0/17**. Shipment return/loss/damage event model remains OPEN.
+
+Next: **Package D — entities 11–15** covering cost exceptions, reservations, cost layers and FIFO cost-layer consumptions. Preserve the FIX decisions: MWA default pool by Business + Product/Variant + Inventory Location; FIFO as alternative; cost-layer identity separate from physical batch identity; reservation reduces available, not on-hand. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
