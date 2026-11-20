@@ -3110,3 +3110,52 @@ For `inventory_cost_layer_consumptions`, add the separate optional Variant FK `(
 For `inventory_reservation_items`, the fulfillment movement FK above is present only on FULFILLED events. Allocation, release, expiry and reallocation events do not create physical movement rows.
 
 This precision addendum supersedes any shorter Business-only movement/layer tuple for the specific same-grain relations listed above. It does not select physical enforcement, trigger behavior, indexes or runtime validation.
+
+
+### 42.15 Independent audit addendum — remaining cross-parent grain and reversal precision
+
+The independent review of §42 against DOC-03 §§6 and 12–13, DOC-05 §§22–25 and 30–35, DOC-08 DOC08-FIX-004–011, and DOC-09 ERD-OPEN-01–15 identified additional candidate tuple gaps. This addendum closes the documentation-level ambiguity only; all keys and relations below remain CANDIDATE / NOT APPROVED.
+
+#### 42.15.1 Stock-count cutoff movement must belong to the counted Location
+
+The stock-count cutoff movement must not merely belong to the same Business. Where a cutoff movement locator is supplied, it must identify a movement in the exact stock_counts.inventory_location_id.
+
+- Add candidate referenced parent key InventoryMovement(business_id, id, inventory_location_id) with candidate unique tuple (business_id, id, inventory_location_id).
+- Replace the shorter candidate cutoff relation with (business_id, cutoff_movement_id, inventory_location_id) → InventoryMovement(business_id, id, inventory_location_id).
+- cutoff_location_posting_sequence remains the authoritative inclusive ordering watermark for the count snapshot. If the movement locator is retained, its Location and sequence must agree with the frozen watermark; the locator is not a substitute for the sequence.
+- A draft count may have no frozen watermark. Before snapshot activation, the sequence must be frozen under one documented transaction boundary. If the Location has no prior movement, the valid initial watermark must be represented explicitly and must not be confused with an absent/unfrozen snapshot.
+- Sequence allocation, freeze transaction, and locator/watermark consistency enforcement remain OPEN physical design gates.
+
+#### 42.15.2 Movement reversal must preserve the original Product and Location
+
+A reversal/compensating movement must not point to an unrelated movement in the same Business.
+
+- Add candidate referenced parent key InventoryMovement(business_id, id, product_id, inventory_location_id) (also required by §42.14).
+- Use (business_id, reversal_of_movement_id, product_id, inventory_location_id) → InventoryMovement(business_id, id, product_id, inventory_location_id) for the optional self-reference.
+- The reversal quantity sign, cumulative/partial reversal cap, same-Variant and same-Batch compatibility, and correction authorization remain separate OPEN controls. A reversal is a new immutable movement; it never edits the original.
+
+#### 42.15.3 Cost-consumption reversal must preserve the original cost layer and pool
+
+A cost-consumption reversal must not reference an unrelated consumption merely because it belongs to the same Business.
+
+- Add candidate referenced parent key InventoryCostLayerConsumption(business_id, id, cost_layer_id, product_id, inventory_location_id).
+- Use (business_id, reversal_of_consumption_id, cost_layer_id, product_id, inventory_location_id) → InventoryCostLayerConsumption(business_id, id, cost_layer_id, product_id, inventory_location_id) for the optional self-reference.
+- Reversal quantity and extended-cost caps, multiple/partial reversal ordering, lock/concurrency and nullable-Variant equality remain OPEN. The relation is a candidate integrity tuple, not an approved physical FK.
+
+#### 42.15.4 Shipment item must match its transfer demand line and transfer source Location
+
+The shipment-item candidate must prove more than same-Business membership and same transfer header.
+
+- Add candidate referenced parent key StockTransferItem(business_id, id, stock_transfer_id, product_id) and use (business_id, stock_transfer_item_id, stock_transfer_id, product_id) → StockTransferItem(business_id, id, stock_transfer_id, product_id). This proves that the shipment item's Product matches the selected demand line.
+- Where a Variant is present, retain the separate ProductVariant relation and require shipment_item.variant_id IS NOT DISTINCT FROM transfer_item.variant_id as a null-safe cross-parent invariant. A nullable composite FK alone does not prove equality when either Variant is NULL.
+- Add candidate referenced parent key StockTransfer(business_id, id, source_location_id) and use (business_id, stock_transfer_id, source_location_id) → StockTransfer(business_id, id, source_location_id). This proves the shipment item's source Location is the transfer header's source Location.
+- Retain (business_id, source_location_id) → InventoryLocation(business_id, id) and the Batch tuple (business_id, batch_id, product_id, source_location_id) → InventoryBatch(business_id, id, product_id, inventory_location_id). The three relations must agree on Business, Product, source Location and the selected Batch; Variant equality remains the explicit null-safe gate.
+- The transfer demand line and shipment item must also agree on approved base-unit interpretation. Unit conversion, over/under-shipment exception and aggregate quantity cap remain OPEN numeric/workflow decisions.
+
+These parent keys are candidate prerequisites only. Their exact physical implementation and nullable-Variant uniqueness strategy are not selected.
+
+#### 42.15.5 Audit disposition
+
+The independent review found that the earlier candidate matrix named the relevant relationships but did not fully express four cross-parent invariants as exact tuples: count cutoff-to-Location, movement reversal-to-original grain, consumption reversal-to-original layer/pool, and shipment item-to-transfer demand/source header. The tuples and prerequisites are now stated above.
+
+This addendum does not close A01/A02, XD-03/XD-05/XD-11/XD-12/XD-13/XD-14, DOC-09 ERD-OPEN items, or any physical-schema/test gate. No candidate key, FK, CHECK, index, trigger, RLS policy, role grant or runtime behavior is approved. Candidate coverage remains 17/17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
