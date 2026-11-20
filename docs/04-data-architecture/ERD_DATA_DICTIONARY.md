@@ -2043,3 +2043,149 @@ Candidate constraints to review (NOT APPROVED): shipment and transfer item must 
 Next Package D: cost exception, reservation and costing entities 11–15. After Packages A–D, perform cross-entity key/relationship/tenant/constraint reconciliation and explicit design review. Runtime schema, RLS, application implementation and tests remain separate gates.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 38. CW-11 candidate physical specification — Package D: exceptions, reservations and costing (20 November 2026)
+
+### 38.1 Status and shared conventions
+
+**PACKAGE D STATUS: CANDIDATE DESIGN — NOT APPROVED.** Candidate type conventions in §35.1 apply. No proposed field/type/key/constraint is a claim about existing schema. Numeric precision, currency representation, source identity, tenant-safe FK tuples, reservation allocation grain and cost-layer consumption semantics remain subject to design review.
+
+### 38.2 Entity D-11 — `inventory_cost_exceptions`
+
+**Purpose:** durable record of cost anomalies requiring investigation or resolution. An exception must retain source identity and resolution history; it must not silently rewrite posted inventory movements or historical cost consumption.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate exception identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `exception_code` | text | NOT NULL | Candidate controlled exception class; vocabulary OPEN |
+| `exception_status` | text | NOT NULL | Candidate lifecycle state; transition map OPEN |
+| `movement_id` | uuid | NULL | Candidate related inventory movement |
+| `cost_layer_id` | uuid | NULL | Candidate related cost layer; FK and applicability OPEN |
+| `source_reference_id` | uuid | NULL | Candidate A01 source/event registry reference |
+| `detected_at` | timestamptz | NOT NULL | Candidate detection instant |
+| `detected_by` | uuid | NULL | Candidate detector actor/service |
+| `resolution_code` | text | NULL | Candidate resolution classification; controlled vocabulary OPEN |
+| `resolution_note` | text | NULL | Candidate human-readable explanation; retention/minimization OPEN |
+| `resolved_unit_cost` | numeric | NULL | Candidate resolved unit cost; precision/currency semantics OPEN |
+| `resolved_at` | timestamptz | NULL | Candidate resolution instant |
+| `resolved_by` | uuid | NULL | Candidate resolver actor/service |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+
+Candidate constraints to review (NOT APPROVED): exception must have at least one valid source/subject relation; same-business movement/layer/source references; resolution fields required only for resolved states; immutable resolution history versus mutable current state; duplicate exception detection/idempotency; no silent mutation of posted cost history. If multiple resolution attempts must be retained, a separate append-only event structure may be required.
+
+### 38.3 Entity D-12 — `inventory_reservations`
+
+**Purpose:** reservation header linked to its originating business process. Reservation reduces available quantity, not physical on-hand quantity. A02 source identity is distinct from A01 movement/source registry identity.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate reservation identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant owner |
+| `reservation_reference` | text | NOT NULL | Candidate business-visible reference; uniqueness scope OPEN |
+| `source_type` | text | NOT NULL | Candidate A02 source type; vocabulary/validation OPEN |
+| `source_id` | uuid | NOT NULL | Candidate A02 source identity; cross-domain integrity strategy OPEN |
+| `reservation_status` | text | NOT NULL | Candidate lifecycle state; transitions OPEN |
+| `reserved_at` | timestamptz | NOT NULL | Candidate reservation instant |
+| `expires_at` | timestamptz | NULL | Candidate expiry/TTL instant; policy OPEN |
+| `released_at` | timestamptz | NULL | Candidate release instant; partial release semantics OPEN |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+| `created_by` | uuid | NULL | Candidate actor/service |
+
+Candidate constraints to review (NOT APPROVED): same-business source validation; source idempotency and duplicate prevention; allowed status transitions; expiry/release rules; partial fulfillment and release; reservations cannot increase on-hand; active reserved quantity must reconcile to reservation items/allocations. A02 `source_type/source_id` must not be conflated with A01 source registry or assumed to have a conventional FK without an approved source registry design.
+
+### 38.4 Entity D-13 — `inventory_reservation_items`
+
+**Purpose:** product/variant/location and batch allocation detail for a reservation. This candidate treats each row as an allocation slice; if the final model needs a separate demand-line parent and multiple allocation rows, that decomposition must be decided before approval.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate reservation allocation identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `reservation_id` | uuid | NOT NULL | Candidate reservation header reference |
+| `product_id` | uuid | NOT NULL | Candidate product reference |
+| `variant_id` | uuid | NULL | Optional variant reference |
+| `inventory_location_id` | uuid | NOT NULL | Candidate location allocation grain |
+| `batch_id` | uuid | NULL | Optional physical batch allocation; FEFO eligibility and non-batch stock policy OPEN |
+| `quantity_reserved_base` | numeric | NOT NULL | Candidate allocated base quantity; precision/scale OPEN |
+| `quantity_fulfilled_base` | numeric | NOT NULL | Candidate fulfilled portion; partial fulfillment rules OPEN |
+| `quantity_released_base` | numeric | NOT NULL | Candidate released portion; partial release rules OPEN |
+| `allocation_status` | text | NOT NULL | Candidate allocation lifecycle; vocabulary/transitions OPEN |
+| `expires_at` | timestamptz | NULL | Candidate allocation-level expiry if it can differ from header |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+
+Candidate constraints to review (NOT APPROVED): reservation/product/variant/location/batch same-business relation; FEFO allocation order and expired/blocked batch exclusion; reserved quantity cannot exceed eligible available stock; fulfilled plus released cannot exceed reserved; reservation affects available but not on-hand; concurrent allocation locking and idempotency. The demand-line versus allocation-slice identity must be decided; this package does not introduce an unapproved 18th entity.
+
+### 38.5 Entity D-14 — `inventory_cost_layers`
+
+**Purpose:** cost-layer identity is distinct from physical batch identity. The existing costing decision remains MWA default with FIFO as an alternative; FIFO layer selection/consumption is not a physical-batch identity rule. The Business + Product/Variant + Inventory Location pool governs MWA aggregation.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate cost-layer identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `product_id` | uuid | NOT NULL | Candidate product reference |
+| `variant_id` | uuid | NULL | Optional variant reference |
+| `inventory_location_id` | uuid | NOT NULL | Candidate costing pool location |
+| `batch_id` | uuid | NULL | Optional physical batch link; layer/batch identity remain distinct |
+| `source_movement_id` | uuid | NOT NULL | Candidate originating posted movement |
+| `layer_sequence` | bigint | NOT NULL | Candidate deterministic FIFO order; ordering key semantics OPEN |
+| `original_quantity_base` | numeric | NOT NULL | Candidate original layer quantity; precision/scale OPEN |
+| `remaining_quantity_base` | numeric | NOT NULL | Candidate remaining unconsumed quantity; reconciliation/locking OPEN |
+| `unit_cost` | numeric | NOT NULL | Candidate unit cost; precision/currency/rounding OPEN |
+| `currency_code` | text | NOT NULL | Candidate currency code; source and multi-currency policy OPEN |
+| `created_at` | timestamptz | NOT NULL | Candidate layer creation instant |
+| `layer_status` | text | NOT NULL | Candidate lifecycle state; allowed values OPEN |
+
+Candidate constraints to review (NOT APPROVED): source movement eligibility; same-business product/variant/location/batch; FIFO ordering tie-breaker; original versus remaining quantity invariants; transfer mapping; landed-cost correction treatment; immutable historical cost and compensation; currency and numeric capacity. The entity is only applicable to approved costing flows; the MWA default pool must not be incorrectly represented as one cost layer per batch.
+
+### 38.6 Entity D-15 — `inventory_cost_layer_consumptions`
+
+**Purpose:** record FIFO cost-layer allocation to an inventory movement. It is relevant when FIFO is the selected costing method; MWA default pool calculation remains separate. Consumption history must be idempotent and compensatable, not silently overwritten.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate consumption identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `inventory_movement_id` | uuid | NOT NULL | Candidate consuming movement reference |
+| `cost_layer_id` | uuid | NOT NULL | Candidate consumed cost layer reference |
+| `consumed_quantity_base` | numeric | NOT NULL | Candidate consumed base quantity; precision/scale OPEN |
+| `unit_cost_snapshot` | numeric | NOT NULL | Candidate immutable cost snapshot; precision/rounding OPEN |
+| `extended_cost_snapshot` | numeric | NOT NULL | Candidate extended cost snapshot; calculation/rounding OPEN |
+| `currency_code` | text | NOT NULL | Candidate currency; multi-currency policy OPEN |
+| `reversal_of_consumption_id` | uuid | NULL | Candidate compensation lineage; partial/multiple reversal policy OPEN |
+| `consumed_at` | timestamptz | NOT NULL | Candidate consumption instant |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+
+Candidate constraints to review (NOT APPROVED): movement/layer same-business and product/location/currency compatibility; cumulative consumption cannot exceed eligible layer quantity; FIFO order and concurrency locking; unique/idempotent allocation per movement/layer; partial reversal and compensation caps; immutable snapshots; exact numeric precision and cost rounding. This table does not select an additional `inventory_cost_layer_movements` entity.
+
+### 38.7 Package D cross-entity review matrix
+
+| Review ID | Candidate relationship/invariant | Required decision before approval |
+|---|---|---|
+| CD-01 | Cost exception → movement/layer/source | At least one subject relation, source identity and immutable resolution history |
+| CD-02 | Reservation → A02 source | Source vocabulary, source existence validation, idempotency and same-business scope |
+| CD-03 | Reservation → reservation allocation slices | Demand-line versus allocation-slice grain; partial fulfillment/release |
+| CD-04 | Reservation allocation → batch/location/product | FEFO selection, tenant-safe FK tuples and available-stock concurrency |
+| CD-05 | Reservation projection | Reconcile active reserved quantity without reducing physical on-hand |
+| CD-06 | Cost layer → source movement/batch | Layer identity separate from batch identity; source and transfer mapping |
+| CD-07 | MWA versus FIFO | MWA pool grain Business + Product/Variant + Inventory Location; FIFO layer usage only when selected |
+| CD-08 | Cost-layer consumption | FIFO ordering, locking, cumulative cap and movement linkage |
+| CD-09 | Cost correction/reversal | Append-only compensation, landed-cost adjustment and immutable cost snapshots |
+| CD-10 | Currency/numeric model | Currency source, precision, rounding, scale and maximum supported cost/quantity |
+| CD-11 | Indexes | Reservation expiry/active allocation, FIFO layer order, consumption replay and exception queues |
+| CD-12 | Candidate bridge entity #18 | Keep `inventory_cost_layer_movements` unapproved; assess separately only if the final relationship design requires it |
+
+### 38.8 Package D disposition
+
+- Candidate entity coverage: **5/17 additional entities drafted** (entities 11–15); cumulative candidate coverage **17/17** across Packages A–D.
+- Candidate field/type proposals: **NOT APPROVED**; no current-schema assertion.
+- Physical PK/FK/UNIQUE/CHECK/index/referential actions: **OPEN / NOT APPROVED**.
+- Reservation allocation grain, A02 source validation, MWA/FIFO separation, cost precision, cost correction and cost-layer concurrency remain OPEN design decisions.
+- Physical Data Dictionary acceptance remains **0/17**.
+- Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
+
+Next CW-11 phase: cross-entity reconciliation across all 17 candidate entities — primary/alternate keys, tenant-safe composite FK tuples, nullable-variant uniqueness, source registries A01/A02, movement and reservation event lineage, numeric/currency policy, lifecycle/referential actions, index strategy, RLS/server authorization and test evidence. Candidate packages must not be promoted to FIX/APPROVED until this reconciliation and explicit design review are complete.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
