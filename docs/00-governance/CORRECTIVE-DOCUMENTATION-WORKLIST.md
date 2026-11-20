@@ -2031,3 +2031,26 @@ The Worklist was fetched again from `main` after the merge. §§15.46 and 15.47 
 **PR #120: MERGED AND POST-MERGE VERIFIED.** This closes only the append-only administrative record for PR #119. The next substantive task remains **CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only**. Do not invent physical schema details; candidate `inventory_cost_layer_movements` remains unapproved as entity #18. Implementation Readiness remains NOT READY; Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.49 PR #121 merge and post-merge read-back verification (20 November 2026)
+
+PR #121 (`docs: record PR #120 merge and post-merge verification`) was squash-merged into `main` after explicit user approval and successful acceptance checks.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/121
+- Reviewed head SHA: `d2b1b26f2fb2b9d5bf8d496a1b5436882c500fb9`
+- Merge commit: `027681633ec164f63ee992476592473d8b61205a`
+- Result: MERGED.
+- CI: Documentation CI SUCCESS (documentation structure, Markdown lint, internal documentation links); POS SaaS CI SUCCESS (application-change detection). ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: one documentation file, 23 additions, 0 deletions.
+
+### 15.49.1 Post-merge current-main read-back
+
+The Worklist was fetched again from `main` after merge. §15.48 is present and records PR #120's merge and post-merge verification. Current-main Worklist blob SHA at this read-back: `ea18953f484c7b43e9cd487703f701bbe6f52907`.
+
+### 15.49.2 Closure and next task
+
+**PR #121: MERGED AND POST-MERGE VERIFIED.** This closes only the append-only administrative record for PR #120. The next substantive task remains **CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only**. Do not invent physical schema details; candidate `inventory_cost_layer_movements` remains unapproved as entity #18. Implementation Readiness remains NOT READY; Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
