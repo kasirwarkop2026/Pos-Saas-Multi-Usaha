@@ -2143,3 +2143,29 @@ Package A is a project-authored **CANDIDATE / NOT APPROVED** proposal, not an ex
 Continue with Packages B–D and then perform cross-entity reconciliation. No implementation or database authorization is implied.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.53 PR #125 merge verification and CW-11 Package B routing (20 November 2026)
+
+PR #125 (`docs: draft CW-11 candidate physical specification package A`) was squash-merged into `main` following the user's instruction to continue merging when acceptance checks pass.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/125
+- Reviewed head SHA: `fe187011d151510a61d40ff7ba60a67a28db0d74`
+- Merge commit: `55b17ffa13f6e102866f0af9449e6ee9e4503a08`
+- Result: MERGED.
+- Documentation CI run `44756984671`: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS CI run `44756984611`: SUCCESS — application-change detection. ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: two documentation files; Worklist 28 additions, DOC-04 128 additions; 156 additions, 0 deletions total.
+
+### 15.53.1 Post-merge read-back
+
+Both changed files were fetched from `main` after PR #125 merge. DOC-04 §35 (Package A) and Worklist §15.52 are present. Current-main blob SHAs at read-back: Worklist `8872afbe6a00babb9d58a9522a729851377eb449`; DOC-04 `aad5d207c5320f6ba327691bada42955472ab85c`.
+
+### 15.53.2 CW-11 Package A disposition and next action
+
+**PR #125: MERGED AND POST-MERGE VERIFIED. CW-11 remains IN PROGRESS.** Package A drafted candidate fields/types for entities 1–4 only; all remain CANDIDATE / NOT APPROVED. Physical acceptance remains 0/17.
+
+Next: **Package B — adjustment and stock-count entities 5–8**, with explicit candidate treatment of posting lifecycle, conversion snapshot, stock-count snapshot/cutoff, NULL-versus-zero count semantics and recount history. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.

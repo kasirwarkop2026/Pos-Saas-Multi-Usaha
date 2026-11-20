@@ -1798,3 +1798,126 @@ Candidate constraints to review (NOT APPROVED): one row per batch grain; batch b
 Next Package B: adjustment and stock-count entities 5–8. Package C: transfer/shipment entities 9–10 and 16–17. Package D: cost exception, reservation and costing entities 11–15. After all candidate packages, perform a cross-entity key/relationship/tenant/constraint reconciliation before any design approval. Runtime schema, RLS, application implementation and tests remain separate later gates.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 36. CW-11 candidate physical specification — Package B: adjustments and stock counts (20 November 2026)
+
+### 36.1 Status and shared conventions
+
+**PACKAGE B STATUS: CANDIDATE DESIGN — NOT APPROVED.** This package continues the project-authored proposal pattern in §35. The field names, types, nullability, identifiers and constraints below are design candidates only, not claims about an existing physical schema. Candidate type conventions from §35.1 apply unchanged; no numeric precision/scale, physical FK tuple, enum, index or referential action is approved here.
+
+### 36.2 Entity B-05 — `inventory_adjustments`
+
+**Purpose:** adjustment header and controlled posting lifecycle. An adjustment has no stock effect before posting; posted history is immutable and corrections use reversal/compensating records.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate adjustment identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant owner; composite FK strategy OPEN |
+| `inventory_location_id` | uuid | NOT NULL | Candidate affected location |
+| `adjustment_reference` | text | NOT NULL | Business-visible reference; uniqueness scope OPEN |
+| `reason_code` | text | NOT NULL | Candidate reason vocabulary; controlled values/approval OPEN |
+| `adjustment_status` | text | NOT NULL | Candidate lifecycle state; allowed transitions OPEN |
+| `requested_by` | uuid | NULL | Candidate requester actor |
+| `submitted_at` | timestamptz | NULL | Candidate submission instant |
+| `approved_by` | uuid | NULL | Candidate approver actor; SoD policy remains DOC-05 authority |
+| `approved_at` | timestamptz | NULL | Candidate approval instant |
+| `posted_at` | timestamptz | NULL | Candidate posting instant; stock effect only after valid posting |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+| `created_by` | uuid | NULL | Candidate creator actor |
+
+Candidate constraints to review (NOT APPROVED): same-business/location ownership; reference uniqueness; status/transition validation; approval actor separation where required; posted header immutability; posting only when all item quantities and generated movement links reconcile. Exact approval thresholds, statuses and event records remain OPEN.
+
+### 36.3 Entity B-06 — `inventory_adjustment_items`
+
+**Purpose:** adjustment line with input quantity, unit/conversion context and signed base-quantity effect. A posted item generates a corresponding inventory movement; correction uses a new/reversal record.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate adjustment-line identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `adjustment_id` | uuid | NOT NULL | Candidate parent adjustment reference |
+| `product_id` | uuid | NOT NULL | Candidate product reference |
+| `variant_id` | uuid | NULL | Optional variant reference |
+| `batch_id` | uuid | NULL | Optional physical batch reference; eligibility policy OPEN |
+| `input_quantity` | numeric | NOT NULL | Candidate user-entered quantity; precision/scale OPEN |
+| `input_unit_id` | uuid | NOT NULL | Candidate input unit reference |
+| `conversion_snapshot` | jsonb | NULL | Candidate immutable conversion context; schema/version/provenance OPEN |
+| `quantity_delta_base` | numeric | NOT NULL | Candidate signed base-quantity delta; sign and rounding validation OPEN |
+| `base_unit_id` | uuid | NOT NULL | Candidate base unit reference |
+| `movement_id` | uuid | NULL | Candidate link to generated posted movement; one-to-one/idempotency rules OPEN |
+| `line_note` | text | NULL | Optional explanation; data minimization/retention OPEN |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+
+Candidate constraints to review (NOT APPROVED): adjustment parent and product/variant/batch/unit references remain in one business; conversion snapshot is immutable after submission/posting; zero/negative input policy; one generated movement per posted adjustment item; no direct stock effect before posting; duplicate posting/idempotency protection. JSONB is only a candidate representation, not a selected storage format.
+
+### 36.4 Entity B-07 — `stock_counts`
+
+**Purpose:** stock-count session, location, scope and snapshot/cutoff context. Snapshot time is distinct from count start time; movements after the snapshot must be accounted for under an approved cutoff/watermark rule.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate stock-count identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant owner |
+| `inventory_location_id` | uuid | NOT NULL | Candidate counted location |
+| `count_reference` | text | NOT NULL | Candidate business-visible reference; uniqueness scope OPEN |
+| `count_status` | text | NOT NULL | Candidate lifecycle state; transitions OPEN |
+| `scope_definition` | jsonb | NULL | Candidate scope snapshot; schema/version and alternative normalized representation OPEN |
+| `snapshot_at` | timestamptz | NOT NULL | Candidate inventory snapshot instant; distinct from session start |
+| `cutoff_movement_id` | uuid | NULL | Candidate movement watermark; ordering/replay semantics OPEN |
+| `started_at` | timestamptz | NULL | Candidate operator start instant |
+| `completed_at` | timestamptz | NULL | Candidate completion instant |
+| `posted_at` | timestamptz | NULL | Candidate variance-posting instant |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+| `created_by` | uuid | NULL | Candidate creator actor |
+
+Candidate constraints to review (NOT APPROVED): one tenant/location scope; snapshot reproducibility; exact cutoff/watermark semantics; partial posting and recount lifecycle; no duplicate active count over incompatible scopes; posting must account for post-snapshot movements. Scope JSONB is a candidate only and may be replaced by normalized scope rows after review.
+
+### 36.5 Entity B-08 — `stock_count_items`
+
+**Purpose:** capture system snapshot, physical counted quantity and variance. A NULL counted quantity means not counted; zero is a valid physical count and must not be conflated with NULL.
+
+| Candidate field | Candidate type | Nullability | Candidate meaning / review note |
+|---|---|---|---|
+| `id` | uuid | NOT NULL | Candidate count-line identity / PK |
+| `business_id` | uuid | NOT NULL | Candidate tenant scope |
+| `stock_count_id` | uuid | NOT NULL | Candidate parent stock-count reference |
+| `product_id` | uuid | NOT NULL | Candidate product reference |
+| `variant_id` | uuid | NULL | Optional variant reference |
+| `batch_id` | uuid | NULL | Optional physical batch reference |
+| `system_quantity_snapshot_base` | numeric | NOT NULL | Candidate system quantity at snapshot; precision/scale OPEN |
+| `counted_quantity_base` | numeric | NULL | Candidate physical count; NULL=not counted, zero=valid count |
+| `variance_quantity_base` | numeric | NULL | Candidate derived/stored variance; derivation and storage policy OPEN |
+| `counted_at` | timestamptz | NULL | Candidate count instant |
+| `counted_by` | uuid | NULL | Candidate counting actor |
+| `recount_required` | boolean | NOT NULL | Candidate review flag; default and state machine OPEN |
+| `created_at` | timestamptz | NOT NULL | Candidate audit instant |
+
+Candidate constraints to review (NOT APPROVED): count-line grain and uniqueness; same-business parent/product/variant/batch relations; NULL-versus-zero semantics; whether variance is stored or derived; recount history model (in-row revision versus separate append-only count-attempt records); count capacity and rounding; posting movement lineage and idempotency. The `recount_required` field is a proposal only; no final default or workflow is selected.
+
+### 36.6 Package B cross-entity review matrix
+
+| Review ID | Candidate relationship/invariant | Required decision before approval |
+|---|---|---|
+| CB-01 | Adjustment header → adjustment items | Parent/child tenant-safe key tuple, line identity and deletion behavior |
+| CB-02 | Posted adjustment item → inventory movement | Exact one-to-one linkage, posting transaction, replay and correction policy |
+| CB-03 | Adjustment approvals | Requester/approver separation, thresholds, approval lifecycle and actor evidence |
+| CB-04 | Input quantity → base quantity | Conversion snapshot format/version, rounding and numeric capacity |
+| CB-05 | Stock count → snapshot/cutoff movement watermark | Snapshot boundary, ordering and post-snapshot movement treatment |
+| CB-06 | Stock count item → product/variant/batch | Scope completeness and tenant-safe FK tuple |
+| CB-07 | NULL count versus zero count | Explicit validation, UI/API serialization and recount semantics |
+| CB-08 | Recount history | Append-only attempt history versus mutable current count decision |
+| CB-09 | Count variance → movement posting | Approval/partial posting, idempotency, reversal and reconciliation |
+| CB-10 | Indexes and concurrent count sessions | Query workload, lock scope and overlap policy; no speculative index |
+
+### 36.7 Package B disposition
+
+- Candidate entity coverage: **4/17 additional entities drafted** (entities 5–8); cumulative candidate coverage **8/17**.
+- Candidate field/type proposals: **NOT APPROVED**; no current-schema assertion.
+- PK/FK/UNIQUE/CHECK/index/referential actions: **OPEN / NOT APPROVED**.
+- Physical Data Dictionary acceptance remains **0/17**.
+- Conceptual adjustment/count rules remain unchanged; no FIX decision is modified.
+
+Next Package C: transfer/shipment entities 9–10 and 16–17. Package D: cost exception, reservation and costing entities 11–15. After Packages A–D, perform cross-entity key/relationship/tenant/constraint reconciliation. Runtime schema, RLS, application implementation and tests remain separate gates.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
