@@ -2543,3 +2543,28 @@ These are candidate design clarifications only. No physical FK, key, source regi
 DOC-04 §42.13 clarifies that recounts preserve immutable measurement facts while acceptance status is a controlled current selection with audit evidence; a later attempt never overwrites a prior counted value. The count cutoff sequence is nullable only before snapshot freeze and immutable after freeze. Shipment-item source Location now has an explicit candidate tenant FK plus Batch/header consistency requirement.
 
 Acceptance-transition audit representation, sequence allocation and physical enforcement remain OPEN. No new entity or implementation scope is authorized.
+
+
+## 15.70 PR #140 acceptance result and Production deployment governance hold (20 November 2026)
+
+**PR #140: OPEN — DOCUMENTATION ACCEPTANCE CHECKS PASS; MERGE HELD BY DEPLOYMENT GOVERNANCE.**
+
+PR #140 (`docs: complete CW-11 Package E corrective candidate design`) contains only the two documentation files recorded in §§15.66–15.69. GitHub Actions completed:
+- Documentation structure: SUCCESS.
+- Markdown lint: SUCCESS.
+- Internal documentation links: SUCCESS.
+- Detect application changes: SUCCESS.
+- ESLint, TypeScript, Next.js build and dependency security: SKIPPED for documentation-only changes; not claimed as passed.
+- Review submissions: none reported.
+- Inline review threads: none reported.
+- PR is open and GitHub reports mergeable.
+
+A read-only Vercel deployment-history check found that the merge commit of PR #139 (`2f55d0e0af5ec714dcd7fef6771f3cd8e3c6f966`) has a Vercel deployment with target `production` and state `READY`. No Vercel deployment record was returned for PR #140's current head SHA at the time of this check. The repository GitHub Actions workflows are read-only CI; the Vercel Git integration is a separate deployment path.
+
+**Merge hold:** merging PR #140 into `main` may automatically trigger another Production deployment. Because Production deployment is explicitly prohibited by current project governance, PR #140 is NOT MERGED despite its documentation acceptance checks passing. Keep the PR open until the user explicitly changes/authorizes the deployment boundary or a separately authorized safe merge path is established. Do not alter Vercel configuration, GitHub workflows, Supabase configuration, deployment settings, or Production to bypass this hold.
+
+No deployment was manually initiated in this step. No rollback, cancellation, promotion or deployment mutation was performed. The observed PR #139 Production deployment remains untouched. Supabase external check suite was observed queued; no Supabase Preview/Staging action was initiated.
+
+Package E remains documented on the PR branch and is not yet part of `main`. Candidate coverage remains 17/17; physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. No FIX or DOC-09 dependency is promoted/closed.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
