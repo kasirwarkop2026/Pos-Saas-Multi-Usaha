@@ -2304,3 +2304,29 @@ Both changed files were fetched from `main` after PR #130 merge. DOC-04 §39 and
 Next controlled work queue is DOC-04 decision register XD-01–XD-14: finalize PK strategy, tenant-safe composite FK tuples, nullable-variant uniqueness, A01/A02 source contracts, workflow/event lineage, numeric/currency/rounding standard, lifecycle/referential actions, query-driven indexes, and RLS/server authorization plus separate negative-test design. Each decision must be explicitly reviewed before promotion to FIX/APPROVED. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.59 PR #131 merge verification and CW-11 current-main checkpoint (20 November 2026)
+
+PR #131 (`docs: record PR #130 merge and CW-11 status`) was squash-merged into `main` after successful acceptance checks.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/131
+- Reviewed head SHA: `7bdb4f064786d769287283db2cfa946b6454ae6b`
+- Merge commit: `5c107eb8e6b11376967b7f237e7fae07b0b7d976`
+- Result: MERGED.
+- Documentation CI run `44758096862`: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS CI run `44758096847`: SUCCESS — application-change detection. ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because the PR was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: one Worklist file, 26 additions, 0 deletions.
+
+### 15.59.1 Post-merge read-back
+
+The Worklist was fetched from `main` after PR #131 merge. §15.58 is present. Current-main Worklist blob SHA at read-back: `b38bcc37e45f2fccf20da13fc1cf574a941b8b8d`.
+
+### 15.59.2 CW-11 continuation
+
+**PR #131: MERGED AND POST-MERGE VERIFIED.** CW-11 remains IN PROGRESS — PARTIAL / ACCEPTANCE NOT MET. Candidate design drafting covers 17/17 entities, but every field/type/key/constraint proposal remains NOT APPROVED; physical acceptance remains 0/17 and canonical physical ERD remains NOT ACCEPTED.
+
+Next action remains XD-01–XD-14 cross-entity decisions and explicit design review. Only after these decisions are resolved can the candidate specification be promoted for approval. Schema/runtime implementation and test evidence remain separate later gates.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
