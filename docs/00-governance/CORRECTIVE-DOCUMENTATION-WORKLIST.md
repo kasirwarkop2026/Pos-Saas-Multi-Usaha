@@ -2536,3 +2536,10 @@ DOC-04 §42.12 narrows the candidate FK/key claims after internal consistency re
 - Global Unit and optional Business-defined Unit ownership paths remain separate.
 
 These are candidate design clarifications only. No physical FK, key, source registry, event table, FIX decision or implementation gate is accepted or closed.
+
+
+## 15.69 CW-11 Package E — count-attempt and shipment-location control clarification (20 November 2026)
+
+DOC-04 §42.13 clarifies that recounts preserve immutable measurement facts while acceptance status is a controlled current selection with audit evidence; a later attempt never overwrites a prior counted value. The count cutoff sequence is nullable only before snapshot freeze and immutable after freeze. Shipment-item source Location now has an explicit candidate tenant FK plus Batch/header consistency requirement.
+
+Acceptance-transition audit representation, sequence allocation and physical enforcement remain OPEN. No new entity or implementation scope is authorized.
