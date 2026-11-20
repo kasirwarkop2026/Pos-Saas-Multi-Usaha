@@ -3334,3 +3334,13 @@ Source-demand uniqueness is a separate, source-specific candidate rule. Default 
 A01 replay deduplicates a source posting event and its movement fan-out. A02 replay deduplicates a reservation request and protects the source demand's remaining reservable quantity. The same UUID or idempotency token must not be treated as interchangeable across the two domains. A02 reservation fulfillment still creates the separately identified A01 inventory posting event and the atomic reservation/movement outcome required by §42.16.
 
 The candidate field additions do not establish physical uniqueness, payload hashing, retention, concurrency or runtime enforcement. A01 and A02 remain REVIEW REQUIRED / OPEN; DOC-09 ERD-OPEN-05 and ERD-OPEN-06 remain OPEN. No candidate entity is added to the 17-entity inventory count; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
+
+### 42.22 Explicit design-direction acceptance — A01 and A02 (21 November 2026)
+
+The project owner explicitly accepts the recommended directions recorded in §§42.17–42.18:
+
+- **A01: Path B — bounded Inventory Posting Source Event Registry** is accepted as the logical design direction for inventory posting event identity, controlled idempotency and movement fan-out. It is not a universal event bus and remains outside the historical 17 inventory entities.
+- **A02: Alternative A — reservation header `source_type` + `source_id` with a strict server-owned source-domain resolver** is accepted as the logical design direction. The resolver must use a finite allowlist, validate source ownership/lifecycle/demand and fail closed for unknown or invalid sources.
+- A01 and A02 remain independent contracts. A02 fulfillment produces a distinct A01 posting event; their idempotency domains must not be conflated.
+
+**Acceptance scope:** conceptual/logical direction only. This acceptance does not approve physical columns, tables, indexes, UNIQUE/FK constraints, source-family activation, digest algorithm/version, retention/TTL, RLS or API/backend enforcement, concurrency protocol, transaction implementation, or test evidence. Those remain explicit DOC-09 dependencies. Nullable Variant equality, source-specific cardinality and lifecycle details remain open. No physical schema or implementation is authorized. Physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
