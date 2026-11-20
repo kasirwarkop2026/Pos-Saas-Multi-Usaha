@@ -3159,3 +3159,16 @@ These parent keys are candidate prerequisites only. Their exact physical impleme
 The independent review found that the earlier candidate matrix named the relevant relationships but did not fully express four cross-parent invariants as exact tuples: count cutoff-to-Location, movement reversal-to-original grain, consumption reversal-to-original layer/pool, and shipment item-to-transfer demand/source header. The tuples and prerequisites are now stated above.
 
 This addendum does not close A01/A02, XD-03/XD-05/XD-11/XD-12/XD-13/XD-14, DOC-09 ERD-OPEN items, or any physical-schema/test gate. No candidate key, FK, CHECK, index, trigger, RLS policy, role grant or runtime behavior is approved. Candidate coverage remains 17/17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
+
+
+### 42.16 Reservation fulfillment atomicity — DOC-03 consistency clarification
+
+DOC-03 §6 requires fulfillment to update physical stock and reservation state consistently and atomically. The candidate event wording in §42.7 is narrowed accordingly:
+
+1. A committed FULFILLED reservation event and its linked posted inventory movement are one atomic business posting outcome. The event must carry the exact movement identity in inventory_movement_id; the movement must identify the same Business, Product, Variant where applicable, Location and fulfilled quantity.
+2. The durable FULFILLED event must not be committed without its corresponding posted movement, and the posted movement must not be treated as fulfillment of a reservation unless the matching reservation event is committed in the same atomic outcome.
+3. Retries use the reservation event idempotency key and the movement/source idempotency contract; a retry cannot create a second reservation decrement or physical decrement. A conflicting replay payload is rejected for explicit resolution.
+4. If the eventual implementation cannot atomically commit both ledger effects, it must first define a separately reviewed recoverable posting protocol with explicit pending/committed/failure states and reconciliation ownership. No such asynchronous protocol is selected by this candidate package.
+5. Allocation, release, expiry and reallocation events remain reservation-availability events only and do not create physical movement rows. Their projection updates must remain deterministic and must not drive physical on-hand quantity.
+
+The atomicity boundary, transaction isolation, lock ordering, deadlock retry and crash-recovery tests remain OPEN under DOC-09 ERD-OPEN-09/10/13 and the implementation/security gates. This clarification preserves DOC08-FIX-005 and DOC08-FIX-009; it does not approve a transaction implementation or runtime behavior.
