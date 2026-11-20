@@ -2054,3 +2054,33 @@ The Worklist was fetched again from `main` after merge. §15.48 is present and r
 **PR #121: MERGED AND POST-MERGE VERIFIED.** This closes only the append-only administrative record for PR #120. The next substantive task remains **CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only**. Do not invent physical schema details; candidate `inventory_cost_layer_movements` remains unapproved as entity #18. Implementation Readiness remains NOT READY; Stage 4.7.8 remains PARTIAL — GATE NOT PASSED; Stage 4.9 remains PARTIAL — ACCEPTANCE NOT MET.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.50 PR #122 merge verification and CW-11 commencement (20 November 2026)
+
+### 15.50.1 PR #122 merge and CI
+
+PR #122 (`docs: record PR #121 merge and post-merge verification`) was squash-merged into `main` after the user's instruction to continue merging and proceed with CW-11.
+
+- PR: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/122
+- Reviewed head SHA: `caf15667959aa7acf9dc47fa2ecc9db373bbbe05`
+- Merge commit: `a41ea9d6c949cb6187f801885c1da3dae2cdcd24`
+- Result: MERGED.
+- Documentation CI run `44756101604`: SUCCESS — documentation structure, Markdown lint and internal documentation links.
+- POS SaaS CI run `44756101856`: SUCCESS — application-change detection. ESLint, dependency security audit, TypeScript typecheck and Next.js production build were SKIPPED because this was documentation-only; no application-test pass is claimed.
+- Review submissions and inline review threads: none reported at final pre-merge check.
+- Scope: one Worklist file, 23 additions, 0 deletions.
+
+### 15.50.2 Post-merge read-back
+
+The Worklist was fetched from `main` after PR #122 merge. §§15.48 and 15.49 are present. Current-main Worklist blob SHA at read-back: `da3ec5e5ab9c3c1d70652092ef3ef370eda01bb2`.
+
+### 15.50.3 CW-11 audit commencement and baseline
+
+**CW-11 is IN PROGRESS — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only.** Initial read-only audit of current `main` identified DOC-04 at `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, header v0.1.0, reconstructed working master / draft / review required / not canonical / not final. Baseline blob SHA: `45a98b556e2fd3cde4a1cf1cbe97d003d2aaafa0`.
+
+The initial review confirms 17/17 conceptual entities, documented conceptual relationships and logical attribute/tenant ownership matrices, but 0/17 physical entities accepted. Physical fields, types, keys, constraints, indexes, referential actions, exact tenant enforcement, RLS/server controls and executed evidence remain OPEN / NOT VERIFIED. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18. CW-11 must not infer or fabricate physical facts.
+
+The first CW-11 append-only acceptance audit is proposed in DOC-04 §34. It formalizes per-entity P01–P10 gates and keeps conceptual, logical, physical and implementation/evidence statuses separate. Its status remains PARTIAL / ACCEPTANCE NOT MET until the subsequent candidate-specification/design review and any required explicit approvals are completed.
+
+Governance remains READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
