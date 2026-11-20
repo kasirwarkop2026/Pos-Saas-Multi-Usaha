@@ -2622,3 +2622,40 @@ The active work is **Stage 5 documentation remediation/finalization/closure**. C
 
 The legacy Stage 5 blanket migration label is superseded for current workflow tracking by the Stage 5 definition in this section. This does not authorize GitHub/archive migration beyond the documentation PR workflow, and it does not authorize Stage 6 implementation. `DB_PUSH_BLOCKED: ACTIVE` remains in force. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, deployment, Supabase Preview/Staging or Production change is authorized by this clarification.
 
+
+
+## 15.73 CW-11 Package E independent audit — cross-parent tuple gaps corrected (20 November 2026)
+
+**Audit result: FOUR DOCUMENTATION-LEVEL CROSS-PARENT PRECISION GAPS IDENTIFIED AND CORRECTED IN DOC-04 §42.15. PACKAGE E REMAINS CANDIDATE / NOT APPROVED; FINAL INDEPENDENT RE-REVIEW AND ACCEPTANCE GATES REMAIN.**
+
+The independent audit compared DOC-04 §42 (including §§42.11–42.14) with DOC-03 §§6 and 12–13, DOC-05 §§22–25 and 30–35, DOC-08 DOC08-FIX-004–011, and DOC-09 ERD-OPEN-01–15. It confirmed that all seven F41 findings have explicit candidate corrections, the PK/alternate-grain matrix covers all 17 entities, and the exact FK matrix enumerates all 17 child entities. It also found four cross-parent invariants that were described but not fully expressed as candidate exact tuples:
+
+1. Stock-count cutoff movement was tenant-bound but did not explicitly prove that the referenced movement belongs to the counted Location.
+2. Movement reversal self-reference was Business-bound but did not explicitly prove same Product and Location as the original movement.
+3. Cost-consumption reversal self-reference was Business-bound but did not explicitly prove the original cost layer and Product/Location pool.
+4. Shipment item was linked to the same transfer header and transfer item but did not fully prove same Product as the demand line or same source Location as the transfer header.
+
+DOC-04 §42.15 now adds candidate parent-key prerequisites and exact tuple proposals for these relations, plus explicit null-safe Variant equality and base-unit/quantity-cap boundaries. All remain candidate-only; no physical key or enforcement mechanism is approved.
+
+### 15.73.1 Cross-document audit disposition
+
+- **DOC-03:** Package E preserves the immutable movement ledger, rebuildable projections, reservation availability-only effect, MWA/FIFO distinction, transit ownership and A11 separate shipment-event principles. Physical transaction boundaries, concurrency, locking and execution remain OPEN.
+- **DOC-05:** actor references resolve through Business Actor Context/membership; actor FK validity is not permission. Exact action grants, SoD/approval, RLS and server enforcement remain separate and unapproved.
+- **DOC-08:** DOC08-FIX-004–011 remain unchanged at their existing conceptual/logical scope. No FIX decision is promoted or reinterpreted as physical acceptance.
+- **DOC-09:** ERD-OPEN-01–15 and related AUTH-OPEN dependencies remain owned by DOC-09 and are not closed by this candidate correction. ERD-OPEN-16 onward retain their existing source/provenance status.
+
+### 15.73.2 Remaining acceptance gates
+
+- A01 source catalogue, identity model selection, source ownership, fan-out and idempotency remain OPEN.
+- A02 source catalogue, tenant validation and cardinality remain OPEN.
+- Nullable Variant/Batch equality and uniqueness mechanism remain OPEN.
+- Count-attempt acceptance transition, watermark allocation/freeze and variance-posting idempotency remain OPEN.
+- Shipment event/A01 linkage, location-policy, quantity disposition and over/under-shipment rules remain OPEN.
+- Reservation event vocabulary, fulfillment atomicity, concurrency and idempotency acceptance remain OPEN.
+- Transfer costing fees, landed-cost allocation, currency/FX, timing and reversal policy remain OPEN.
+- Numeric precision/capacity, referential actions, query-driven indexes, RLS/server authorization and executed negative-test evidence remain OPEN or NOT EXECUTED.
+- All candidate keys/FKs/constraints remain NOT APPROVED; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
+
+**Next action:** re-read DOC-04 §§35–42.15 and the relevant cross-document authorities after the addendum; verify the corrected tuples and absence of contradictions; update PR acceptance notes. Do not mark Package E FIXED/CLOSED until review is complete, merge is governance-permitted, and post-merge current-main read-back succeeds.
+
+PR #140 remains OPEN. The Production deployment governance hold in §15.70 remains controlling. No Vercel, CI, database, application, RLS/Auth, API/backend, Supabase Preview/Staging or Production change was made. READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE.
