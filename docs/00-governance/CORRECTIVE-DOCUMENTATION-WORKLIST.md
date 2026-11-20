@@ -1889,3 +1889,45 @@ CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED 
 **Next bounded task:** CW-09 — final requirements-to-release-gate and implementation-readiness audit across DOC-00–DOC-12. CW-09 must distinguish documentation-design closure from physical schema, authorization enforcement, runtime verification, operational controls and actual implementation authorization. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
+
+
+## 15.44 Current CW-09/CW-10A/CW-10B status and navigation reconciliation (20 November 2026)
+
+This append-only checkpoint reconciles current work routing against merged PR records and current-main document content. It supersedes stale current-status and next-action wording in the original header and §§15.36/15.43 for navigation only. Historical text and merge records remain unchanged.
+
+### 15.44.1 Verified bounded work-package status
+
+| Work package | GitHub merge record | Current bounded disposition |
+|---|---|---|
+| CW-08 | PR #106 merged at `3d1c917c7adbfdc54ea45a829d2183b116f9f478`; post-merge verification recorded by PR #115 at `156c5d547728c6749ee50cdc4c28ccf690826d5c` | PASS / CLOSED — product-to-requirement logical traceability only |
+| CW-09 | PR #110 merged at `3661496a66b8e56889c87949cd0e0097ed7da95a` | PASS / CLOSED — release-gate and implementation-readiness audit; readiness remains NOT READY |
+| CW-10A | PR #112 merged at `c009cbccfb384f5245fe9887fdbd0f066b81a628` | PASS / CLOSED — 13 category profiles and 190 logical workflow/exception owner/title indexes |
+| CW-10B | PR #114 merged at `c04b03921779a4cebd35041bad8483d6b0ed7c55` | PASS / CLOSED — category/workflow cross-master alignment across DOC-03/05/06/07/11 |
+
+These are bounded documentation-design closures only. They do not mean technical implementation, runtime verification, test execution, evidence generation, Stage 4.9 acceptance or implementation authorization has passed.
+
+### 15.44.2 PR #114 post-merge scope confirmation
+
+PR #114 changed six documentation files: this Worklist, DOC-03, DOC-05, DOC-06, DOC-07 and DOC-11. The merged additions are present in current `main`. Its scope includes DOC-03 §23 (13-category owner/interaction crosswalk and 190 logical items), DOC-05 §35 (category eligibility versus exact permissions), DOC-06 §33 (190-item traceability and 13 category-level acceptance designs), DOC-07 §47 (evidence contracts), and DOC-11 §18 (updated category coverage and remaining blockers).
+
+The 146 operational workflows outside CAT-10/CAT-11 still lack dedicated workflow-specific negative-test designs. CAT-12's 14 items are exception steps, not operational workflows. CW10-CAT-01–13 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED / NOT VERIFIED.
+
+### 15.44.3 Worklist authority and historical ordering correction
+
+The original header's `PROPOSED` status and condition that the Worklist becomes active only after merge are historical creation metadata. PR #81 merged at `041a75c838b7dc9553552cf56fb42c1d0d826b47`; DOC-00 §29 and DOC-11 §16 already confirm the Worklist as active corrective-work routing. For current navigation, this §15.44 supersedes the stale header wording; the header itself is preserved append-only.
+
+The §15.36 CW-08 record was appended after §15.43 by PR #115. Its later physical position does not make CW-08 the latest work item or restore CW-09 as next. Treat §15.36 as a historical CW-08 verification record and use this §15.44 as the current reconciliation.
+
+### 15.44.4 Current next task and acceptance boundary
+
+**Next bounded task: CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only.**
+
+CW-11 must assess the conceptual 17-entity baseline against physical specification acceptance requirements without inventing physical columns, types, keys, constraints, indexes, referential actions, RLS or implementation facts. Candidate `inventory_cost_layer_movements` remains unapproved as entity #18. Where physical primary sources are absent, relevant fields remain OPEN / NOT VERIFIED and must not be fabricated.
+
+Still open: DOC-04 physical field/key/constraint acceptance; DOC-05 exact grants; DOC-07 security enforcement/runtime evidence; 146 workflow-specific negative-test designs; Purchasing 14→15 and Sales 20→18 crosswalks; DOC-08 full Master FIX Register publication/acceptance (only focused ST5-11.40 correction is published); DOC-09/10 review/acceptance; DOC-12 content review beyond the limited recorded review (231 manifest rows are not 231 content reviews); Stage 4.7.8 and Stage 4.9 acceptance.
+
+### 15.44.5 Governance
+
+No FIX decision is changed; no dependency is closed by this reconciliation; no document is promoted to canonical/final/accepted; and no technical or implementation authority is granted.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED. No database, application source, Supabase, CI workflow, deployment or Production change is included.

@@ -424,3 +424,48 @@ This addendum updates category coverage after CW-10A/CW-10B. It does not rewrite
 **Implementation readiness remains NOT READY.** CW-10 closes category profile and logical owner/title indexing only. It does not close the 146 workflow-specific test gaps, physical schema, exact authorization grants, technical enforcement, evidence execution, purchasing/sales gaps or Stage 4.9.
 
 Next bounded task: CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only. DB_PUSH_BLOCKED ACTIVE; Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 19. CW-09/CW-10A/CW-10B current status and CW-11 routing reconciliation (20 November 2026)
+
+This addendum supersedes current navigation and category-coverage summaries in §§17–18 only where they reflect earlier checkpoints. Historical text remains preserved. It does not change any technical release gate or implementation authorization.
+
+### 19.1 Bounded work-package completion
+
+- CW-09 readiness audit: PASS / CLOSED as a documentation audit through PR #110, merged at `3661496a66b8e56889c87949cd0e0097ed7da95a`. Its decision remains **IMPLEMENTATION READINESS: NOT READY**.
+- CW-10A category profile/index: PASS / CLOSED through PR #112, merged at `c009cbccfb384f5245fe9887fdbd0f066b81a628`.
+- CW-10B all-category cross-master alignment: PASS / CLOSED through PR #114, merged at `c04b03921779a4cebd35041bad8483d6b0ed7c55`.
+- The active corrective-work sequence and detailed merge/read-back records are controlled by the Worklist, not by this roadmap's historical next-action snapshots.
+
+### 19.2 Current category and requirements-design coverage
+
+- 13/13 category profiles are indexed with CORE/CONDITIONAL/OUT-OF-BASELINE distinctions and special CAT-08/CAT-12/CAT-13 restrictions.
+- 190/190 logical workflow/exception items have primary-owner/title references.
+- CAT-10/CAT-11 have 30 dedicated workflow negative-test designs.
+- 146 other operational workflows still need dedicated workflow-specific negative-test designs. CAT-12's 14 exception items are not operational workflows.
+- CW10-CAT-01–13 remain DESIGN / NOT EXECUTED; evidence NOT GENERATED / NOT VERIFIED.
+
+### 19.3 Release blockers remain open
+
+| Gate area | Current status |
+|---|---|
+| Physical ERD/Data Dictionary | NOT ACCEPTED |
+| Exact authorization grants | OPEN / NOT APPROVED |
+| RLS/server/API enforcement | NOT VERIFIED / NOT AUTHORIZED |
+| Workflow-specific negative-test designs outside CAT-10/CAT-11 | 146 OPEN |
+| Purchasing / Sales crosswalks | 14→15 / 20→18 incomplete |
+| DOC-08 full Master FIX Register | NOT PUBLISHED / NOT ACCEPTED; focused ST5-11.40 correction only |
+| DOC-09 / DOC-10 | DRAFT / REVIEW REQUIRED / NOT CANONICAL / NOT FINAL |
+| DOC-12 archive content review | PARTIAL; 231-row manifest is not 231 content reviews |
+| Stage 4.7.8 | PARTIAL — GATE NOT PASSED |
+| Stage 4.9 | PARTIAL — ACCEPTANCE NOT MET |
+
+### 19.4 Current readiness and next bounded task
+
+**IMPLEMENTATION READINESS: NOT READY.** Completion of CW-09, CW-10A and CW-10B closes only their stated documentation-design scopes. It does not satisfy physical data, authorization, security, testing, operational or release gates.
+
+**Next bounded task: CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only.** Any physical detail lacking a controlling source must remain OPEN / NOT VERIFIED rather than inferred.
+
+### 19.5 Governance boundary
+
+No database/schema mutation, SQL, DDL, DML, migration, RLS, Auth, trigger, API/backend, application source, CI workflow, Vercel/deployment, Supabase Preview/Staging or Production change is authorized or performed by this addendum. `DB_PUSH_BLOCKED: ACTIVE`; Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
