@@ -1847,3 +1847,45 @@ This CW does not close physical schema, exact grants, technical enforcement, tes
 **Next bounded task:** CW-11 — DOC-04 physical Data Dictionary and ERD specification acceptance, documentation-only with DB push blocked.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. Stage 5 and Stage 6 remain NOT AUTHORIZED.
+
+
+## 15.36 CW-08 — PR #106 merge and post-merge readback (20 November 2026)
+
+**PR:** [#106 — complete CW-08 product-to-requirement and cross-master traceability](https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/106)  
+**Branch:** `docs/cw08-requirements-product-to-evidence-traceability-2026-11-20`  
+**Head SHA:** `29c3d50b44a1274206ce07ce358d9e291d953560`  
+**Base SHA:** `ae170d2a83d8da4adc800d4c37100c0d57a72083`  
+**Squash merge commit:** `3d1c917c7adbfdc54ea45a829d2183b116f9f478`
+
+### 15.36.1 CI result at merge
+
+- Documentation CI run `44581372831`: SUCCESS — Documentation structure, Markdown lint and Internal documentation links.
+- POS SaaS CI run `44581372865`: SUCCESS.
+- Detect application changes: SUCCESS.
+- ESLint, TypeScript, Next.js production build and Dependency security audit: SKIPPED under the documentation-only condition; these are not claimed as executed application tests.
+- PR #106 was CLOSED / MERGED. No review submissions or inline review threads were present.
+
+### 15.36.2 Post-merge readback from main
+
+All eight changed files were fetched again from `main`; all appended sections and scenario references were verified:
+
+| File | Main blob SHA | Readback |
+|---|---|---|
+| `docs/00-governance/CORRECTIVE-DOCUMENTATION-WORKLIST.md` | `614f6529fd86437de74881b41bc54912739e060f` | §15.35 present |
+| `docs/01-product-blueprint/PRODUCT_BLUEPRINT.md` | `60333a615eac8a39b14a87cbb1f2b4f5fe2f772e` | §17 present |
+| `docs/02-business-domains/CATEGORY_WORKFLOW_MASTER.md` | `2991bd412b6c8d9e0b9e98db39973fd033cbc1d6` | §19 present |
+| `docs/03-system-architecture/SYSTEM_ARCHITECTURE.md` | `b7611f283e4b73c6066a2ab5deb89f6d140cfb26` | §22 present |
+| `docs/04-data-architecture/ERD_DATA_DICTIONARY.md` | `45a98b556e2fd3cde4a1cf1cbe97d003d2aaafa0` | §33 present |
+| `docs/05-authorization/AUTHORIZATION_MASTER.md` | `312df4d6f22a294bb90426fd2c3c904c59b7f45e` | §34 present |
+| `docs/05-requirements-traceability/MASTER_TRACEABILITY.md` | `6398eaa716b8529f474c2ea1ede7b7420b8bf741` | §§30–31 and CW08-TRACE-01–12 present |
+| `docs/06-security-evidence/SECURITY_EVIDENCE.md` | `6c376dac87821fa8c0038755e8102b6618bd740e` | §44 and CW08-TRACE-01–12 present |
+
+### 15.36.3 Final bounded disposition
+
+**CW-08: PASS / CLOSED — PRODUCT-TO-REQUIREMENT / CROSS-MASTER LOGICAL TRACEABILITY SCOPE.** PR #106 merged successfully; all eight changed files were verified from `main`. The DOC-06 duplicate locator issue is reconciled append-only; reciprocal cross-master traceability and the current logical acceptance matrix are present.
+
+CW08-TRACE-01–12 remain DESIGN / NOT EXECUTED; evidence remains NOT GENERATED / NOT VERIFIED. The total design inventory is 99 IDs, all unexecuted. Physical schema/field acceptance, exact grants, technical enforcement, runtime evidence, evidence retention and Production/release readiness remain OPEN / NOT AUTHORIZED. DOC-06 remains a reconstructed working master / review-required / not canonical / not final.
+
+**Next bounded task:** CW-09 — final requirements-to-release-gate and implementation-readiness audit across DOC-00–DOC-12. CW-09 must distinguish documentation-design closure from physical schema, authorization enforcement, runtime verification, operational controls and actual implementation authorization. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No database, application source, CI workflow, deployment, Supabase Preview/Staging or Production change was made.
