@@ -3172,3 +3172,105 @@ DOC-03 §6 requires fulfillment to update physical stock and reservation state c
 5. Allocation, release, expiry and reallocation events remain reservation-availability events only and do not create physical movement rows. Their projection updates must remain deterministic and must not drive physical on-hand quantity.
 
 The atomicity boundary, transaction isolation, lock ordering, deadlock retry and crash-recovery tests remain OPEN under DOC-09 ERD-OPEN-09/10/13 and the implementation/security gates. This clarification preserves DOC08-FIX-005 and DOC08-FIX-009; it does not approve a transaction implementation or runtime behavior.
+
+
+### 42.17 A01 — bounded inventory posting source-event registry recommendation
+
+**RECOMMENDED DESIGN DIRECTION: bounded Inventory Posting Source Event Registry (Path B), REVIEW REQUIRED / NOT APPROVED.** This recommendation resolves the design comparison for the next review cycle, but it does not select a physical table, add an approved entity or close A01.
+
+#### 42.17.1 Why Path B is preferred for this project
+
+The documented inventory posting source families span purchasing/receipt, sales/fulfillment, adjustments, stock counts, transfer dispatch/receipt, loss/damage, returns, production/consumption, write-off and approved correction. A source event can also fan out to multiple inventory movements, such as one shipment event affecting multiple Products, Locations, Batches or cost slices. A single explicit nullable FK column for every source family would grow the movement row and require a coordinated schema change whenever a new supported source family is added. The bounded registry provides one stable inventory-posting event identity and one common idempotency/fan-out contract while leaving each source domain authoritative for its own source record and lifecycle.
+
+Path B is therefore preferred only for the inventory posting boundary. It must not become a universal event bus, generic cross-domain event store or substitute for source-domain ownership. Payment events, webhooks, offline synchronization and A02 reservation-source identity remain separate contracts.
+
+#### 42.17.2 Candidate registry contract
+
+If separately approved, the supporting registry must carry at least:
+
+- `id uuid` — stable inventory posting source-event identity.
+- `business_id uuid` — mandatory tenant context.
+- `source_domain text` and `source_event_type text` — controlled allowlisted vocabulary, not free-form routing.
+- `source_record_id uuid` — identity of the authoritative source object.
+- `source_event_sequence bigint` — stable event identity within that source object where repeated events are possible.
+- `idempotency_key text` — unique within Business and the defined posting purpose.
+- `payload_digest text` — canonical payload identity used to distinguish a safe replay from a conflicting reuse of the same key; digest algorithm/version remains OPEN.
+- `occurred_at`, `posted_at`, `actor_context_id`, and explicit posting outcome metadata.
+- Optional `reversal_of_source_event_id` — links a correction to the original source event without mutating it.
+
+The registry must not store a free-form source pointer and then trust it. A source-domain adapter must resolve the source using a finite server-owned mapping and verify: source exists; source Business equals registry Business; source object is in a reservable/postable lifecycle state; the requested event is allowed for that source type; quantities and source version are valid; and the event has not already been posted under another identity.
+
+#### 42.17.3 Movement fan-out and identity
+
+- One source event may produce zero movements only for a documented no-stock-effect event; otherwise it produces one or more movements according to the source event contract.
+- Each generated movement carries `source_reference_id` to the registry identity and a stable `source_event_movement_sequence` within that source event.
+- Candidate uniqueness is `(business_id, source_reference_id, source_event_movement_sequence)`, conditional on Path B approval.
+- A retry with the same Business, idempotency key and canonical payload returns the same posting outcome and movement identities; a different payload under the same key is a conflict, not an update.
+- Movement fan-out is all-or-nothing for one posting event unless a separately approved recoverable multi-step posting protocol defines durable pending/committed/failure states and reconciliation ownership.
+- Reversal creates a new source event and new compensating movement(s), linked to the original source event/movement. Posted movement history is never rewritten.
+
+#### 42.17.4 Supporting-component boundary and acceptance
+
+The registry is a separately reviewed supporting component outside the historical 17 inventory entities. It is not `inventory_cost_layer_movements`, is not entity #18, and does not change the 17-entity count. No physical table name, FK, index, trigger, API, job, schema migration or runtime implementation is approved.
+
+A01 can be marked FIXED at the documentation-design level only after the project explicitly accepts Path B, approves the finite source-event catalogue and cardinality, defines payload canonicalization/versioning, confirms source adapter ownership, and accepts replay/fan-out/reversal semantics. It can be CLOSED only after required PR merge is governance-permitted and post-merge main verification passes. Physical A01 remains OPEN until its own physical-schema and test gates pass.
+
+### 42.18 A02 — independent reservation-source validation contract
+
+**RECOMMENDED DESIGN DIRECTION: retain A02 Alternative A (`source_type` + `source_id` on the reservation header) with a strict source-domain resolver; REVIEW REQUIRED / NOT APPROVED.** A02 remains independent of A01. The A01 posting registry must never be reused as a generic reservation-demand registry.
+
+#### 42.18.1 Source identity and cardinality
+
+- `inventory_reservations` represents one logical reservation request for one atomic reservable demand object. For a multi-line source document, the source identity should resolve to the specific demand line/material requirement, not merely the parent document, unless the source adapter proves that the entire parent is one indivisible reservable unit.
+- One source demand object may have multiple allocation slices in `inventory_reservation_items` across eligible Locations/Batches, but those are allocations of the same reservation demand, not additional source identities.
+- Repeated API/client attempts for the same logical reservation request must resolve to the same reservation identity through a tenant-scoped idempotency contract. They must not create a second active reservation for the same demand/purpose accidentally.
+- Whether a source demand may intentionally create multiple reservation headers (for separate fulfilment waves, priorities or time windows) remains an explicit source-specific cardinality decision. If allowed, the uniqueness grain must include the approved reservation purpose/wave identity; it must not be inferred from `source_type/source_id` alone.
+
+#### 42.18.2 Candidate source catalogue and eligibility
+
+A02 source types are a finite, project-owned allowlist. Candidate source families are:
+
+| Candidate source family | Eligibility condition | Required source granularity |
+|---|---|---|
+| M03 POS / sales demand | Confirmed or otherwise explicitly reservable order demand; cancelled/closed/fully fulfilled demand is denied | Product/order demand line or equivalent atomic demand object |
+| M05 booking / appointment demand | Only if the workflow consumes or commits inventory; service-only bookings are excluded | Booking/appointment material line or equivalent atomic demand object |
+| M09 service / work-order demand | Approved material requirement with an active work order and valid Business/Location context | Work-order material requirement line |
+| M10 production / recipe demand | Released production requirement with an approved material quantity and schedule | Production material requirement line |
+| M06 controlled internal reservation request | Explicitly created and authorized inventory demand request; not a generic arbitrary UUID | M06 reservation request line or equivalent controlled demand object |
+
+This table is a candidate catalogue, not a claim that all five source families are currently implemented or enabled. Each family must be explicitly enabled only after its source-domain owner, exact source object, state eligibility and cardinality are documented. Unknown `source_type` values fail closed.
+
+#### 42.18.3 Mandatory resolver validation
+
+Before creating, increasing, allocating or fulfilling a reservation, the M06-owned resolver must verify:
+
+1. `source_type` is in the enabled allowlist and maps to exactly one registered source adapter.
+2. The source object exists and resolves to the same `business_id`; a guessed UUID or client-supplied Business identifier is not evidence of ownership.
+3. The source object is in an allowed lifecycle state and is not cancelled, expired, closed, blocked or already fully fulfilled.
+4. Product, Variant, base unit, demand quantity, remaining unreserved quantity and any permitted Location restriction match the authoritative source line.
+5. Requested reserved quantity does not exceed eligible remaining demand after subtracting already committed reservations under the concurrency policy.
+6. The source version/state has not changed between validation and commit; the implementation must use a transaction/locking or separately approved concurrency-safe protocol.
+7. The same idempotency key and canonical request payload return the same reservation outcome; same key with different payload is rejected for explicit resolution.
+8. Release, expiry, cancellation, source amendment and fulfillment are explicit transitions. Source cancellation must not silently delete reservation events; it must cause an authorized release/compensation event and preserve history.
+9. DOC-05 authorization is evaluated independently for the actor and operation. Source ownership or source relationship does not grant permission.
+
+#### 42.18.4 Physical and security boundary
+
+The polymorphic `(source_type, source_id)` pair does not provide a conventional FK by itself. The candidate resolver is a logical server-side contract, not proof of referential integrity or deployed enforcement. A finite explicit-FK design may be reconsidered if the approved source catalogue becomes small and stable; a separate A02 registry is not selected by this recommendation. Exact physical FK strategy, source adapters, idempotency storage, TTL/expiry semantics, transaction boundaries, RLS/server authorization and tenant-negative tests remain OPEN.
+
+**A02 acceptance:** approve the finite source catalogue and atomic demand granularity; document source-specific cardinality/uniqueness; define allowed source lifecycle and amendment handling; specify tenant-safe resolution and replay semantics; verify DOC-05 authorization separation; then separately approve the physical FK/resolver and executed negative tests. Until then A02 and DOC-09 ERD-OPEN-06 remain OPEN.
+
+### 42.19 A01/A02 separation and dependency matrix
+
+| Concern | A01 movement source event | A02 reservation source |
+|---|---|---|
+| Purpose | Identity of an inventory posting event | Identity of originating inventory demand |
+| Owning authority | Source domain owns source record; M06 validates posting | Source domain owns demand; M06 owns reservation commitment |
+| Candidate identity | Bounded registry event identity (recommended, not approved) | `source_type` + `source_id` on reservation header (retained, not approved) |
+| Cardinality | One source event may fan out to multiple movements | One demand object may fan out to multiple allocation slices; multiple reservation headers only by explicit source-specific rule |
+| Idempotency | Posting-event idempotency + movement fan-out sequence | Reservation-request idempotency + demand remaining-quantity cap |
+| Lifecycle | Post, replay, reverse/compensate | Reserve, allocate, reallocate, release, expire, fulfill, cancel/compensate |
+| Tenant control | Registry Business and authoritative source Business must match | Reservation Business and authoritative demand Business must match |
+| Cross-use | Must not be used as a generic demand registry | Must not be used as movement posting-event identity |
+
+Both recommendations remain CANDIDATE / REVIEW REQUIRED. Neither closes DOC-09 ERD-OPEN-05 or ERD-OPEN-06, neither promotes any FIX decision, and neither authorizes a physical schema or implementation. Candidate inventory entity count remains 17; physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
