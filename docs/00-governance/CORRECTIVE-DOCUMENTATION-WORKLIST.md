@@ -2425,3 +2425,28 @@ Worklist and DOC-04 were fetched from main after PR #135 merge:
 **PR #135: MERGED AND POST-MERGE VERIFIED.** XD-01–XD-14 proposal pack remains COMPLETE FOR REVIEW / NOT APPROVED. Candidate coverage 17/17; physical acceptance 0/17; canonical physical ERD NOT ACCEPTED. Explicit design approval/revision is still required before any candidate is promoted to FIX or physical acceptance.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
+
+
+## 15.64 CW-11 XD-01–XD-14 independent design review — findings recorded (20 November 2026)
+
+A structured review was completed against DOC-04 §§35–40, DOC-05 §§22–35, DOC-08 DOC08-FIX-004–011 and the relevant DOC-09 ERD/AUTH open registers.
+
+**Review result:**
+- PASS AT PRINCIPLE LEVEL: XD-02, XD-09, XD-12, XD-13, XD-14.
+- REVISE: XD-01, XD-04, XD-06, XD-07, XD-08, XD-10.
+- CONDITIONAL / OPEN: XD-03, XD-05, XD-11.
+
+DOC-04 §41 records seven concrete design findings:
+1. Surrogate-PK recommendation in §40 is inconsistent with balance projection candidate fields in §35.4–35.5, which omit id.
+2. Composite FK pattern needs parent ownership classification; shared/global catalogues and actor/membership references cannot be treated as ordinary tenant-owned parents.
+3. A01 source_reference_id target is not specified; source model and idempotency/reversal lineage remain unresolved.
+4. Count-recount proposal lacks candidate attempt identity/sequence and accepted-attempt history.
+5. Shipment item singular movement references and mutable aggregate quantities cannot safely represent repeated partial receipts/exceptions/returns without event-level lineage.
+6. Reservation item mutable totals/status do not yet provide the immutable allocation/fulfillment/release event history recommended in §40.
+7. Transfer-costing proposal needs transit stock, partial receipt, loss/damage, MWA/FIFO and landed-cost scenarios.
+
+No FIX or DOC-09 dependency is changed/closed. No candidate field/type/key/constraint is promoted to approved. Physical acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY. Candidate inventory_cost_layer_movements remains unapproved as entity #18.
+
+Next package: correct the seven findings, normalize the 17-entity PK/alternate-grain matrix, classify FK parent ownership and draft exact candidate FK tuples, while preserving all unresolved source/event/number/costing gates.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel, deployment, Supabase Preview/Staging or Production change was made. Stage 5 blanket migration and Stage 6 implementation remain NOT AUTHORIZED.
