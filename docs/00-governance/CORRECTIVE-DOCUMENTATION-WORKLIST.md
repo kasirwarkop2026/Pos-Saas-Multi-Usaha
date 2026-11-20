@@ -2911,3 +2911,23 @@ Latest verified PR #141 head for this snapshot: \`23358aa931f077a0b4a8088fd9db32
 **Merge boundary:** PR #141 is technically mergeable as a documentation-only change, but this snapshot does not execute a merge. The repository's Git integration automatically triggers a Vercel Production deployment on merge; any merge must remain subject to explicit user authorization for that Production side effect. No manual deployment or Vercel configuration action is authorized.
 
 **Disposition:** PR #141 documentation refinement and applicable CI PASS; application checks SKIPPED; stock-count entry policy, source-domain conversion contract, exact numeric/rounding policy, physical enforcement and executed evidence remain OPEN. CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Physical Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 15.86 — PR #141 Merge, Main Read-Back & Production Deployment Handoff (2026-11-21)
+
+- PR: #141 — Null-safe Variant equality and unit/quantity normalization contract.
+- Branch: `docs/cw11-package-e-variant-unit-normalization-2026-11-21`.
+- Final head SHA verified before merge: `4dd96d1d3c60e6bc0861c79963c1b0ae7db4d892`.
+- Merge commit: `c61b77091f5f3bcebd39192457552b824b374be3`.
+- GitHub result: CLOSED / MERGED; mergeability was true immediately before merge.
+- Final diff: 3 documentation files; 279 additions; 0 deletions; branch was 7 commits ahead and 0 behind `main`.
+- Review submissions: none; inline review threads: none.
+- Documentation CI run `44801830853`: SUCCESS — Markdown lint, Documentation structure, Internal documentation links all SUCCESS.
+- POS SaaS CI run `44801830978`: overall SUCCESS — Detect application changes SUCCESS; ESLint, TypeScript typecheck, Next.js production build, and dependency security audit SKIPPED because no application changes were detected. SKIPPED is not PASS.
+- Post-merge read-back from `main`: DOC-04, DOC-09, and this Worklist were fetched successfully; DOC-04 §42.25.9, DOC-09 §11.7, and Worklist §15.85 are present.
+- Vercel Git integration automatically created Production deployment `dpl_sL9856oPUVuVHYpto6bmG9pJ4vzT` for merge commit `c61b77091f5f3bcebd39192457552b824b374be3`. Last observed state: BUILDING. No manual deployment, promotion, rollback, cancellation, or configuration change was performed.
+- Logical Variant/unit semantics and 17-entity crosswalk are recorded; they do not constitute physical schema acceptance or implementation authorization.
+- Stock-count non-base-unit entry policy remains OPEN for owner decision. Numeric precision/scale/capacity/overflow, factor precision/versioning, rounding/tolerance, physical enforcement, security, and execution evidence remain OPEN.
+- Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+- Governance unchanged: READ-ONLY / APPEND-ONLY documentation work; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED; no database push and no production configuration changes.
+- Next action: continue the next bounded documentation remediation only; do not infer or decide the unresolved stock-count input-unit policy.
