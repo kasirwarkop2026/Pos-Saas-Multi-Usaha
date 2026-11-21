@@ -3116,3 +3116,27 @@ CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Diction
 ### 15.92.4 Governance
 
 This is a documentation-only, append-only continuation on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; any merge to `main` triggers the linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.93 CW-11 Package E — Stock Count variance posting all-or-nothing Owner FIX (21 November 2026)
+
+### 15.93.1 Owner decision
+
+The Owner explicitly selected **Option A — Count-session all-or-nothing** for Stock Count Variance Posting Policy. Every required count-line variance in one session must commit together, or none may commit. Any failed required line or prerequisite prevents the entire session posting. Item-level partial posting is prohibited. The count session is the posting/retry/idempotency boundary; the session becomes POSTED only after the complete atomic commit.
+
+### 15.93.2 Append-only documentation reconciliation
+
+- DOC-08 §10 records **DOC08-FIX-021 — Stock Count variance posting is count-session all-or-nothing** as FIX / OWNER-APPROVED / CONCEPTUAL.
+- DOC-04 §42.31 records the policy, atomicity boundary, failure behavior, session retry boundary and implementation limitations.
+- DOC-09 §11.13 marks the A-versus-B Owner choice RESOLVED at conceptual level and lists the remaining technical gates.
+- DOC-04 §42.30.5 and DOC-09 §11.12 remain historical proposal/decision-gate entries and are superseded only as to the posting-boundary choice. Candidate parent/attempt state vocabulary and transitions remain OPEN for separate Owner acceptance.
+
+### 15.93.3 Remaining acceptance status
+
+Physical transaction atomicity, locking/isolation, session-level idempotency, rollback/retry behavior, authorization/SoD, tenant/grain enforcement, post-cutoff reconciliation integration, numeric precision/rounding and executed failure/replay/reconciliation evidence remain OPEN. No physical schema, API/backend behavior, implementation, test result or deployment is approved.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. The candidate parent/attempt state vocabulary/transitions still require separate Owner acceptance.
+
+### 15.93.4 Validation and governance
+
+This is a documentation-only, append-only continuation on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; any merge to `main` triggers the linked Vercel Production deployment and requires separate explicit Owner authorization.
