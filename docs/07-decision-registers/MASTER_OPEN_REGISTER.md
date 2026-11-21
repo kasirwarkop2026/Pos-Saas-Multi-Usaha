@@ -882,3 +882,23 @@ This resolves the prior Owner-decision dependency for conceptual inclusion/exclu
 Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+
+## 11.28 CW-11 Package E — A01 Purchase / Goods Receipt adapter contract drafted; technical dependencies remain OPEN (22 November 2026)
+
+DOC-04 §42.46 records the logical Purchase / Goods Receipt adapter contract under DOC08-FIX-026.
+
+**Resolved at the logical contract level:** only physically received and accepted quantity is eligible; purchase commitment/order and non-physical purchase lifecycle events do not post on-hand; each partial receipt occurrence is independently traceable and append-only; accepted quantity uses validated Product base-unit context; the receipt movement is positive at the receiving stock grain under DOC08-FIX-024; duplicate physical posting is prohibited; posted corrections follow DOC08-FIX-025; A01 remains bounded, separate from A02, tenant-scoped and independently authorized.
+
+**Contract safeguards:** each receipt occurrence and source line must be unambiguous; accepted quantity must not be inferred from ordered/invoiced/expected quantity; source-owned unit conversion must be reproducible; multi-line fan-out must be deterministic and complete; retries must resolve the same event outcome; changed payload under the same identity conflicts; one physical receipt effect cannot also post through an adjustment or other overlapping path; costing-only processing creates no second on-hand movement.
+
+**PASS WITH OPEN TECHNICAL CONTRACT DEPENDENCIES — logical adapter contract drafted.** This does not activate the adapter or approve physical schema/implementation.
+
+**OPEN under ERD-OPEN-05:** exact purchase/receipt/source-line/receipt-occurrence objects and identifiers; exact eligible lifecycle states and acceptance/rejection/inspection path; source-version and amendment semantics; multi-line event cardinality and movement fan-out; authoritative accepted-quantity field and conversion provenance; precision/rounding/tolerance; over-receipt policy; receiving Location and Batch resolution; DOC-05 authorization/SoD mapping; stable event identity/idempotency/retry/recovery; physical registry/keys/constraints; atomicity/concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+No exact physical table, column, enum, FK, key, digest, retention, numeric type, transaction isolation or adapter identifier is selected. No DOC08 FIX is added or revised. DOC08-FIX-026 remains the conceptual source-family scope; DOC08-FIX-018/019/024/025 remain unchanged.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. No adapter is enabled.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
