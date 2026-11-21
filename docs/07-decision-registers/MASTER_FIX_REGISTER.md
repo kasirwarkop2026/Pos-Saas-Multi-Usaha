@@ -166,3 +166,22 @@ The Owner explicitly selected Option A — All-or-nothing:
 Physical transaction design, API/backend enforcement, locking/isolation, authorization/SoD, session idempotency, failure handling, executed tests and evidence remain OPEN. No schema, implementation, test result or deployment is approved. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
 
 Anchors: DOC-04 §§42.30.5–42.31; DOC-09 §§11.12–11.13; Worklist §15.93.
+
+
+## 11. Stock Count lifecycle policy — Owner FIX (21 November 2026)
+
+**DOC08-FIX-022 — Stock Count parent/attempt lifecycle and transition guards are Owner-approved conceptually.**
+
+The Owner explicitly selected Option A and approved all four lifecycle items presented for review:
+
+- **Lifecycle vocabulary and transitions:** accept the candidate parent states/transitions in DOC-04 §42.30.2 and attempt dispositions/transitions/invariants in §§42.30.3 and 42.32.2 as the conceptual policy.
+- **Cancellation:** allow cancellation only before the session posting transaction commits; preserve snapshot/attempt history; emit no variance movement; serialize cancellation against posting so only one can win. POSTED and CANCELLED are terminal.
+- **Accepted-attempt supersession:** require an explicit controlled return to COUNTING and a coordinated, auditable supersession of the old accepted attempt with acceptance of its replacement. Recount creates a new immutable attempt. No supersession after session posting commits.
+- **Zero variance:** a zero-variance line may emit no movement but must be explicitly accounted for in the session result. NULL/not-counted is not zero; zero is a valid measurement.
+- **POSTED condition:** retain DOC08-FIX-021 all-or-nothing session posting. POSTED is reached only after every required line is accounted for and all required variance movements/posting identity commit together. Failure leaves no partial posting; no externally visible intermediate POSTING business state is introduced.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. This decision accepts the logical lifecycle and guards, not physical status enums/fields/constraints, database transaction design, locking/isolation, API/backend behavior, authorization implementation, numeric parameters, test evidence or deployment.
+
+Physical snapshot/cutoff enforcement, post-cutoff replay, atomic transaction feasibility, cancel/post serialization, session idempotency, concurrency, tenant/security/SoD, numeric precision/rounding and executed evidence remain OPEN. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+Anchors: DOC-04 §42.33; DOC-09 §11.15; Worklist §15.95.
