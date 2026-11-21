@@ -4427,3 +4427,161 @@ The following remain separate technical/evidence gates and are **not** closed by
 No physical schema, SQL/DDL/DML, database mutation, RLS/Auth, trigger, API/backend, application source, CI workflow, deployment or Production change is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E overall remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.42 CW-11 Package E — A01 inventory posting source-event catalogue and lifecycle matrix (21 November 2026)
+
+### 42.42.1 Purpose, authority and boundary
+
+This addendum converts the source-family inventory in §§42.4, 42.17–42.24 and 42.39 into one bounded **candidate A01 catalogue and lifecycle matrix**. Its purpose is to make the proposed source-event boundary reviewable by source family without silently inventing physical source tables, field names, enum values, adapters or enabled workflows.
+
+The governing direction is DOC08-FIX-018: A01 is a bounded Inventory Posting Source Event Registry for inventory-posting identity, idempotency and movement fan-out. It is not a universal event bus. A02 reservation-demand identity remains separate. A02 fulfillment may hand off a distinct A01 physical-fulfillment posting event; A02 reservation create/release/expiry/cancel events do not themselves become A01 on-hand postings.
+
+This is a **candidate catalogue, not an activation allowlist**. Every source-family row below remains NOT ENABLED / OWNER ACTIVATION NOT RECORDED unless and until the exact source-domain owner, source object and line identity, event type, lifecycle eligibility, quantity authority, cardinality/fan-out, authorization and activation approval are explicitly accepted. Descriptive event labels in this matrix are not approved enum literals.
+
+### 42.42.2 Shared A01 admission contract
+
+A candidate source event may enter A01 posting only when all applicable conditions are satisfied:
+
+1. The source family and exact event type are on a finite, server-owned enabled catalogue. Unknown, disabled or ambiguous mappings fail closed; no generic UUID lookup or client-selected adapter fallback is allowed.
+2. The authoritative source record and exact source line or atomic source item are resolved by their owning domain. Parent-document identity alone is insufficient where a document contains multiple independently postable lines.
+3. The source Business is proven to equal the actor-derived and A01 posting Business. Cross-Business lookup, replay, fan-out and correction are denied without disclosing another Business's source.
+4. The source is in the event-specific eligible lifecycle state at the commit boundary. Draft, merely authorized, ordered, paid, reserved, cancelled, closed, superseded, rejected or otherwise non-physical states do not post stock unless a separately approved event contract explicitly says otherwise.
+5. The authoritative quantity, Product, nullable Variant, base unit, Location and applicable Batch are resolved from the source domain and normalized to the Product base unit. Nullable Variant equality is exact and null-safe under §42.25; no quantity, unit, Batch or Location is inferred from a label or client payload.
+6. The event identity and replay identity are stable and tenant-scoped. Same identity plus same canonical business payload returns the original committed outcome; changed business payload conflicts. Retry must not allocate a new event identity or duplicate movement fan-out.
+7. The complete expected movement set is determined and validated before commit. A multi-leg event cannot be reported as committed with a partial visible fan-out. Any different recoverable multi-step protocol requires separate approval.
+8. The actor is independently authorized under DOC-05 for the exact operation and scope. Source ownership is not permission; permission is not proof of source ownership.
+9. A legitimate zero-movement outcome is explicitly recorded with its reason and is permitted only where the event contract allows no physical on-hand effect. Zero movements do not mean validation failure, missing fan-out or an incomplete posting.
+10. The source event, source line, A01 event identity and every movement leg remain traceable. Posted movement facts are immutable; correction follows DOC08-FIX-025.
+
+The logical A01 lifecycle remains UNCLAIMED → VALIDATED → COMMITTED, with REJECTED as a terminal pre-commit rejection outcome under §42.24. These labels describe logical states, not approved physical enum values or implementation states.
+
+### 42.42.3 Candidate source-event catalogue
+
+| Source family | Candidate source record and line grain | Candidate posting event boundary (descriptive, not enum) | Lifecycle eligibility and quantity authority | Expected movement fan-out | Current disposition |
+|---|---|---|---|---|---|
+| Purchase / goods receipt | Authoritative purchase/receipt record plus the exact received item line; partial receipts require distinct receipt occurrences | Physical receipt accepted and posted | Only physically received and accepted quantity; purchase order, commitment or unreceived quantity is ineligible | Positive at receiving Location and applicable Batch; one or more legs only where actual received stock is split by valid stock grain | CANDIDATE; exact source object, receipt occurrence identity, partial-receipt cardinality and activation OPEN |
+| Sales / fulfillment | Authoritative sales fulfillment/shipment record plus exact fulfilled item line or issue slice | Physical fulfillment/issue committed | Only quantity actually issued from the issuing Location; order creation, payment, authorization and reservation alone are ineligible | Negative at issuing Location; split legs only for actual Location/Batch issue slices | CANDIDATE; exact fulfillment source/line, partial fulfillment identity and activation OPEN |
+| Inventory adjustment | Adjustment record plus exact adjustment item/reason line | Approved adjustment posted | Approved signed quantity and controlled reason; approval alone without posting is not the stock event; reason-specific eligibility and zero policy remain to be approved | Positive for approved increase or negative for approved decrease at exact stock grain | CANDIDATE; reason taxonomy, event kinds, approval boundary, source quantity and activation OPEN |
+| Stock Count | Stock Count session plus stable count line and the single accepted immutable attempt for that line | All-or-nothing accepted count-session posting | Only accepted attempt(s) for a session that satisfies the governing READY_TO_POST/posting gate; rejected/superseded attempts cannot post. Variance follows DOC08-FIX-023/024 and Product base unit | Nonzero accepted variance creates movement at exact Business/Product/Variant/Location/Batch grain; zero variance creates no movement but is explicitly accounted for | CONCEPTUAL RULES FIXED; A01 source/event identity, event cardinality and physical activation OPEN |
+| Transfer dispatch | Transfer/shipment record plus exact shipment item and dispatch occurrence | Physical dispatch from source Location | Only quantity actually dispatched; transfer creation/approval without dispatch is ineligible | Paired source Location negative and transit Location positive, reconciled exactly by Product/Variant/Batch and base quantity | CANDIDATE; dispatch event identity, split dispatch cardinality and paired commit OPEN |
+| Transfer receipt | Shipment record plus exact shipment item and each receipt occurrence | Physical partial or final receipt at destination | Only quantity physically received and accepted at destination; each partial receipt is a distinct event | Paired transit Location negative and destination Location positive; each receipt occurrence is separately traceable | CANDIDATE; receipt occurrence identity, acceptance/condition and fan-out OPEN |
+| Transfer loss / destruction | Shipment/transfer exception record plus exact affected shipment item and disposition occurrence | Physical loss or approved destruction disposition | Only quantity physically lost/destroyed under an authorized disposition; same quantity cannot also be posted through a second loss/exception path | Negative once at the Location where physical loss occurs, normally transit for in-transit loss | CANDIDATE; loss reason, disposition authority, event identity and double-post prevention OPEN |
+| Damage while still physically held | Damage/quality disposition record plus exact affected item and Location | Move into an approved quality-hold Location while goods remain physically held | Physical quantity remains present; hold/disposition must be authorized and must not be treated as destruction | Paired negative from former Location and positive to quality-hold Location; no net Business-wide on-hand loss | CANDIDATE; quality-hold Location policy, event identity and activation OPEN |
+| Return before transfer receipt | Transfer/shipment return record plus exact returned item and return occurrence | Physical return from transit to source/return Location | Only quantity physically returned and accepted into the return Location; original dispatch remains immutable | Transit negative and source/return Location positive | CANDIDATE; return event identity, condition and acceptance OPEN |
+| Return after transfer receipt | Reverse-transfer/return record plus exact item and each physical leg/receipt occurrence | Physical reverse flow after destination receipt | Only actual returned quantity; destination issue and subsequent transit/source receipt are separate physical events | Destination negative and transit positive; later transit negative and source positive when received | CANDIDATE; reverse-flow source identity, leg cardinality and reconciliation OPEN |
+| Customer / supplier physical return | Return record plus exact returned item line and receiving occurrence | Physical return received and accepted | Only physically received and accepted quantity; refund, credit note or return authorization without receipt is ineligible | Positive at receiving Location and applicable Batch; disposition may require separate hold/quality movement | CANDIDATE; return ownership, acceptance/condition, source line and activation OPEN |
+| Production / assembly input consumption | Production/work-order record plus exact material requirement/consumption line | Actual authorized material issue or consumption | Only actual consumed quantity; production order, planned requirement or reservation alone is ineligible | Negative for each consumed Product/Variant/Location/Batch input grain | CANDIDATE; source-line identity, issue-versus-consumption boundary and scrap handling OPEN |
+| Production / assembly output | Production/work-order record plus exact output/co-product line and receipt occurrence | Accepted physical output received into a Location | Only accepted output quantity; planned yield or unaccepted output is ineligible | Positive for each accepted output Product/Variant/Location/Batch grain | CANDIDATE; output acceptance, by-product/scrap cardinality and activation OPEN |
+| Write-off / loss outside transfer | Authorized disposition record plus exact affected item/reason line | Physical removal, destruction or approved write-off posted | Only quantity physically removed or destroyed under an authorized disposition; avoid a duplicate adjustment for the same effect | Negative once at affected Location and exact stock grain | CANDIDATE; source owner, reason taxonomy, approval and activation OPEN |
+| Reservation fulfillment | M06 fulfillment event plus exact reservation allocation slice / fulfilled quantity; retain A02 demand identity separately | Actual physical issue against a fulfilled allocation | Only quantity actually issued; reservation allocation, release, expiry or cancellation is not fulfillment | One distinct negative A01 physical issue at issuing Location; must not duplicate a second decrement from the reservation lifecycle | CANDIDATE; A02-to-A01 handoff, fulfillment identity, atomic outcome and activation OPEN |
+| Approved movement correction | New source-domain correction event plus exact immediate target movement, root original, source line and correction intent | Separately authorized correction of a committed movement | Only the accepted correction under DOC08-FIX-025; exact target must be committed, same stock grain/base unit and within recursively recalculated effective cap | New immutable opposite-effect movement(s) for the explicitly enumerated target leg(s); never edit original movement | CONCEPTUAL CONTRACT FIXED by DOC08-FIX-025; source adapter/event kind and physical activation OPEN |
+
+### 42.42.4 Explicit exclusions and non-posting lifecycle events
+
+The following are not independent A01 on-hand posting events:
+
+- Purchase order creation, approval or unreceived commitment.
+- Sales order creation, payment, authorization or reservation without physical issue.
+- Transfer creation or approval without dispatch.
+- Return authorization, refund or credit note without physical receipt.
+- Production order/release/planning without actual input consumption or accepted output receipt.
+- Reservation create, allocate, increase, release, expiry, cancel or reallocation. These belong to the separate A02 reservation lifecycle and do not change physical on-hand.
+- Cost-layer creation/consumption, FIFO allocation, MWA recalculation, valuation update or cost-only correction. These reconcile to physical movements but do not create another quantity movement.
+- A correction request that is rejected, invalid, ambiguous, over the DOC08-FIX-025 cap or a legitimate no-effect outcome. No zero-quantity movement is created.
+
+A source-domain state transition may be important evidence for eligibility without itself being the inventory posting event. The owning domain's event and the A01 posting event must remain separately identifiable where the two are not the same committed fact.
+
+### 42.42.5 Cardinality and lifecycle controls to resolve per adapter
+
+Before any candidate family can be enabled, its adapter specification must explicitly state:
+
+1. Whether one source record can produce one event, repeated events, partial events or multiple waves; the stable event-sequence rule for each case.
+2. The exact atomic source-line identity and whether one event can cover multiple lines. If multiple lines are covered, deterministic per-line movement fan-out and sequence are required.
+3. The source lifecycle states that permit posting, states that prohibit posting, and whether a later source amendment/cancellation requires a new correction event rather than mutation.
+4. The authoritative quantity field/decision, accepted-versus-rejected quantity treatment, unit normalization, Batch selection and Location authority.
+5. Whether one source event creates one movement or paired/multi-leg movements; the exact fan-out cardinality and zero-effect eligibility.
+6. The actor/approval authority, SoD requirements and DOC-05 action/scope mapping.
+7. How source version changes, retry after uncertain commit, duplicate source event, idempotency collision and recovery are resolved.
+8. How source-domain correction hands off to DOC08-FIX-025 without a second generic/manual posting.
+9. How committed source-event outcome and all movement legs reconcile to the affected balance projections.
+
+No exact state names, source-table names, physical FK, event enum, adapter identifier, digest algorithm, retention duration, quantity field or numeric precision is selected by this matrix.
+
+### 42.42.6 Audit disposition and next gate
+
+**PASS WITH OPEN OWNER / SOURCE-CONTRACT DECISIONS — candidate catalogue structure only.** This matrix makes the source-family inventory and expected posting boundaries explicit enough for bounded review. It does not establish a final enabled source allowlist.
+
+The next logical gate is Owner review of the finite source-family inclusion/exclusion set and the per-family event boundary/eligibility. After that review, each included adapter still needs exact source object/line identity, cardinality, source version, quantity authority, authorization and replay/fan-out contract. Physical A01 registry/FK/constraints, persistence, concurrency, transaction/recovery, tenant enforcement, source activation and executed evidence remain separate OPEN gates.
+
+No new DOC08 FIX is added. DOC08-FIX-018 remains the accepted conceptual A01 direction; DOC08-FIX-024 and DOC08-FIX-025 remain unchanged. DOC-09 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.43 CW-11 Package E — proposed Owner-review disposition for A01 source families (22 November 2026)
+
+### 42.43.1 Review basis and authority boundary
+
+This addendum records a technical recommendation following review of the candidate catalogue in §42.42. It is a **PROPOSED DISPOSITION — NOT AN OWNER DECISION, NOT A DOC08 FIX, AND NOT AN ACTIVATION APPROVAL**. The recommendation classifies the existing 15 candidate source-family rows as INCLUDE, INCLUDE WITH CONDITIONS, or EXCLUDE FROM A01. It does not add, remove or enable a source family in the system.
+
+### 42.43.2 Proposed source-family disposition
+
+| Candidate source family | Proposed disposition | Required boundary / rationale |
+|---|---|---|
+| Purchase / goods receipt | INCLUDE | Only physically received and accepted quantity; order/commitment is excluded |
+| Sales / fulfillment | INCLUDE | Only actual physical issue from the issuing Location |
+| Inventory adjustment | INCLUDE | Approved signed adjustment with controlled reason; reason taxonomy and zero policy remain OPEN |
+| Stock Count | INCLUDE | Accepted count-session posting only; preserve the approved all-or-nothing lifecycle and DOC08-FIX-024 semantics |
+| Transfer dispatch | INCLUDE | Paired source-Location decrease and transit-Location increase for actual dispatched quantity |
+| Transfer receipt | INCLUDE | Paired transit decrease and destination increase for each actual receipt occurrence |
+| Transfer loss / destruction | INCLUDE | One authorized physical-loss/disposition posting; prevent duplicate loss paths |
+| Damage while still physically held / quality hold | INCLUDE WITH CONDITIONS | Only when physical stock is relocated to an approved hold Location; paired Location effects, no Business-wide on-hand loss |
+| Return before transfer receipt | INCLUDE | Only actual physical return from transit to source/return Location |
+| Return after transfer receipt | INCLUDE | Each actual reverse-flow leg is a distinct physical event with traceable quantity |
+| Customer / supplier physical return | INCLUDE | Only physically received and accepted goods; refund/authorization alone is excluded |
+| Production / assembly input consumption | INCLUDE | Only actual authorized material issue/consumption, not planned requirements or reservations |
+| Production / assembly output | INCLUDE | Only accepted physical output received into a Location |
+| Write-off / loss outside transfer | INCLUDE | Only authorized physical removal/destruction; deduplicate against adjustment and transfer-loss paths |
+| Reservation fulfillment handoff | INCLUDE WITH CONDITIONS | Separate A02-to-A01 handoff only for actual physical issue; no second decrement from reservation lifecycle |
+| Approved movement correction | INCLUDE | New immutable correction movement only, strictly under DOC08-FIX-025 and its lineage/effective-quantity cap |
+
+### 42.43.3 Proposed exclusions from A01 posting
+
+Keep purchase commitments, sales order/payment/reservation without physical issue, transfer approval without dispatch, return authorization/refund without receipt, production planning, A02 reservation create/allocate/release/expiry/cancel/reallocation, costing-only events, and rejected/invalid/ambiguous/no-effect correction requests outside A01 on-hand posting. These exclusions preserve the distinction between source-domain lifecycle evidence, reservation demand, costing, and physical inventory movement.
+
+### 42.43.4 Cross-family safeguards
+
+Before any family is considered for activation, its adapter contract must explicitly prevent: (a) duplicate posting of one physical effect through multiple source paths; (b) partial visible commitment of paired or multi-leg movements; (c) replay with changed payload or a newly allocated identity; (d) cross-Business source resolution; (e) reservation lifecycle decrement duplicated by fulfillment; and (f) correction through both a source-domain path and a generic movement-reversal path. Partial receipts, fulfillments, transfer legs and production input/output occurrences require independently traceable event cardinality.
+
+### 42.43.5 Disposition and next gate
+
+**TECHNICAL REVIEW: PASS — PROPOSED DISPOSITION RECORDED; OWNER ACCEPTANCE PENDING.** The proposed recommendation is to retain all 15 candidate families in the catalogue, classify 13 as INCLUDE and 2 as INCLUDE WITH CONDITIONS (held damage/quality hold; reservation fulfillment handoff), and keep the stated non-posting lifecycle events excluded. No candidate family is activated by this recommendation.
+
+Owner acceptance or revision remains required before this proposed disposition can be treated as an accepted conceptual allowlist. Even after such acceptance, each included family still requires its own exact source object/line identity, lifecycle eligibility, cardinality, source version, quantity authority, adapter ownership, authorization, idempotency, fan-out/recovery and physical evidence decisions. No physical table, field, FK, enum, key, adapter identifier, digest, retention or numeric policy is selected here.
+
+DOC08-FIX-018/024/025 remain unchanged. DOC-09 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.44 Correction to candidate source-family count in §42.43 (22 November 2026)
+
+A count reconciliation found that §42.42.3 contains **16** candidate source-family rows, not 15. The proposed disposition in §42.43.2 therefore applies to 16 rows: **14 INCLUDE** and **2 INCLUDE WITH CONDITIONS** (damage/quality hold; reservation fulfillment handoff). The 14 INCLUDE rows are purchase/receipt; sales/fulfillment; inventory adjustment; Stock Count; transfer dispatch; transfer receipt; transfer loss/destruction; return before transfer receipt; return after transfer receipt; customer/supplier physical return; production input consumption; production output; write-off/loss; and approved movement correction.
+
+This correction clarifies the arithmetic only. It does not change any row's proposed classification, create an Owner decision/FIX, enable any source family, or close any technical dependency. If §42.43 contains a contrary count, this §42.44 count reconciliation governs the intended count.
+
+DOC08-FIX-018/024/025 remain unchanged. Owner acceptance remains pending; ERD-OPEN-05 remains OPEN; Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+
+## 42.45 Owner approval — A01 source-family conceptual scope FIX (22 November 2026)
+
+DOC08-FIX-026 in DOC-08 §15 records the Owner-approved conceptual disposition of the 16 candidate source-family rows in §42.42.3: 14 INCLUDE and two INCLUDE WITH CONDITIONS (physical quality-hold relocation; A02-to-A01 reservation fulfillment handoff). The exact boundaries and explicit non-posting exclusions are governed by DOC08-FIX-026 and are incorporated by reference; this section does not create separate event enum values or physical adapters.
+
+**Consistency disposition:** the conceptual source-family scope is aligned with DOC08-FIX-018's bounded A01 registry, DOC08-FIX-019's separate A02 reservation identity, DOC08-FIX-024's signed movement direction and DOC08-FIX-025's immutable correction lineage. No conceptual conflict was identified in the reviewed documentation.
+
+**FIX — OWNER-APPROVED / CONCEPTUAL.** The former proposed / Owner-acceptance-pending disposition in §§42.43–42.44 is superseded only for conceptual inclusion, conditional boundaries and explicit exclusions by DOC08-FIX-026. All technical gates remain OPEN: exact source object/line identity; lifecycle eligibility; event cardinality/version; quantity authority; adapter ownership/activation; authorization; replay/idempotency; physical registry/integrity; atomic transaction/fan-out/recovery; concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+No source family or adapter is enabled. No physical table, column, FK, key, enum, digest, retention, numeric or runtime-state choice is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.

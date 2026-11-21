@@ -3441,3 +3441,96 @@ Therefore, this specific reversal/compensation conceptual audit is CLOSED. CW-11
 ### 15.103.4 Governance
 
 Documentation-only, append-only correction on the existing PR #147 branch. No SQL/DDL/DML, database mutation, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #147 remains stacked on PR #146 and must be re-reviewed after its base is merged. Merge to main requires separate explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+
+## 15.104 CW-11 Package E — A01 candidate source-event catalogue and lifecycle matrix (21 November 2026)
+
+### 15.104.1 Audit scope and source basis
+
+Following the cross-source movement-direction audit (§15.101) and conceptual reversal/compensation closure (§15.103), this checkpoint records the next bounded A01 task. The review reconciles DOC-04 §§42.4–42.7 and 42.17–42.24, §42.39 and the accepted DOC08-FIX-018/024/025 with DOC-09 §§11.4–11.6 and 11.23.
+
+The objective is to make candidate inventory-posting sources reviewable without treating a conceptual source-family list as an enabled catalogue. A01 remains inventory-posting scoped and separate from A02 reservation-demand identity.
+
+### 15.104.2 Append-only documentation changes
+
+- DOC-04 §42.42 adds a candidate source-event catalogue for purchase/receipt, sales/fulfillment, adjustment, Stock Count, transfer dispatch/receipt, loss/destruction, held damage, transfer returns, customer/supplier physical returns, production input/output, write-off, reservation fulfillment handoff and approved movement correction.
+- Each row distinguishes candidate source record/line grain, descriptive posting boundary, lifecycle eligibility, quantity authority, expected movement fan-out and current disposition.
+- DOC-04 §42.42.2 defines shared A01 admission controls: finite server-owned adapter catalogue; authoritative source/line and Business validation; event-specific lifecycle check at commit; Product base-unit quantity; stable event/replay identity; deterministic complete fan-out; independent DOC-05 authorization; and explicit zero-effect handling.
+- DOC-04 §42.42.4 excludes non-posting events and preserves A02 reservation lifecycle and costing-only events outside A01 on-hand posting.
+- DOC-04 §42.42.5 lists the per-adapter decisions required before any source family may be enabled.
+- DOC-09 §11.24 records the catalogue-only disposition and preserves ERD-OPEN-05 as OPEN.
+
+### 15.104.3 Acceptance and status
+
+**PASS WITH OPEN OWNER / SOURCE-CONTRACT DECISIONS — catalogue structure only.** The candidate family inventory and posting boundaries are now explicit enough for Owner review. The matrix is not a final enabled allowlist, and descriptive event labels are not approved enum values.
+
+Still OPEN: Owner acceptance of inclusion/exclusion and event boundaries; exact source object and atomic source-line identity; per-family lifecycle states and eligibility; event/source version and sequence; partial/multi-wave cardinality; quantity authority and accepted/rejected treatment; source adapter ownership/activation; authorization/SoD mapping; idempotency digest/version/retention; physical registry/key/FK/integrity; transaction/fan-out/recovery/concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+No new DOC08 FIX is introduced. DOC08-FIX-018/024/025 remain unchanged. ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.104.4 Next gate
+
+The next step is Owner review of the proposed finite source-family inclusion/exclusion set and the per-family physical event boundary. After Owner disposition, continue one family at a time to define exact source/line identity, eligibility, cardinality, quantity authority, adapter ownership and movement fan-out. Do not activate any source family or infer physical schema from this catalogue.
+
+### 15.104.5 Governance
+
+Documentation-only, append-only changes on branch `docs/cw11-a01-source-event-catalogue-2026-11-21`. No SQL/DDL/DML, database introspection or mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge remain separate gates; merge to `main` requires explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+
+## 15.105 CW-11 Package E — A01 source-family technical review and proposed disposition (22 November 2026)
+
+### 15.105.1 Scope and basis
+
+Following the catalogue-only A01 candidate matrix in DOC-04 §42.42 / DOC-09 §11.24, perform a bounded technical review of the proposed inclusion/exclusion set and cross-family posting risks. This checkpoint records a recommendation only; it does not represent Owner approval.
+
+### 15.105.2 Proposed disposition recorded
+
+- DOC-04 §42.43 records a proposed disposition for all 15 candidate source families: 13 INCLUDE and two INCLUDE WITH CONDITIONS.
+- The two conditional candidates are damage/quality hold (only an actual physical relocation into an approved hold Location, with paired Location effects) and reservation fulfillment (only a distinct A02-to-A01 handoff for actual physical issue, with no duplicate reservation decrement).
+- The other 14 families are recommended for inclusion within their existing physical-event boundaries: purchase/receipt; sales/fulfillment; adjustment; Stock Count; transfer dispatch; transfer receipt; transfer loss/destruction; return before transfer receipt; return after transfer receipt; customer/supplier physical return; production input consumption; production output; write-off/loss; approved movement correction.
+- Non-posting lifecycle and costing events remain excluded from A01 on-hand posting as specified in DOC-04 §42.43.3.
+- DOC-09 §11.25 records the proposed disposition and preserves Owner acceptance as pending.
+
+### 15.105.3 Review findings and safeguards
+
+The next adapter work must preserve: no duplicate posting of one physical effect through multiple source paths; no partial visible commit of paired/multi-leg movement sets; stable tenant-scoped event/replay identity; same-Business source ownership; distinct A02 reservation demand and A01 physical issue; and exclusive correction routing under DOC08-FIX-025. Partial receipts, fulfillment slices, transfer legs and production occurrences require explicit event cardinality.
+
+### 15.105.4 Acceptance and status
+
+**TECHNICAL REVIEW: PASS — PROPOSED DISPOSITION RECORDED; OWNER ACCEPTANCE PENDING.** This checkpoint does not create a new DOC08 FIX, approve a final allowlist, activate any adapter, or close ERD-OPEN-05. The exact source object/line, lifecycle eligibility, cardinality, source version, quantity authority, adapter ownership, authorization, idempotency, physical identity/integrity, transaction/recovery, tenant enforcement and executed evidence remain OPEN.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.105.5 Governance
+
+Documentation-only, append-only continuation on PR #148 branch `docs/cw11-a01-source-event-catalogue-2026-11-21`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge remain separate gates; merge to `main` requires explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+
+## 15.106 CW-11 Package E — correction of A01 candidate source-family count (22 November 2026)
+
+A reconciliation of DOC-04 §42.42.3 shows **16** candidate source-family rows, not 15. The proposed disposition is therefore **14 INCLUDE + 2 INCLUDE WITH CONDITIONS**. DOC-04 §42.44 and DOC-09 §11.26 record this count correction append-only. It does not change any proposed classification or convert the recommendation into Owner approval. No family is activated; Owner acceptance remains pending; ERD-OPEN-05 remains OPEN; Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 15.107 CW-11 Package E — Owner approval of A01 source-family conceptual scope (22 November 2026)
+
+### 15.107.1 Owner decision and consistency audit
+
+Following the Owner's conditional instruction to promote the proposed source-family disposition to FIX if aligned, the conceptual cross-document review checked the proposed scope against DOC08-FIX-018 (bounded A01 registry), DOC08-FIX-019 (separate A02 identity), DOC08-FIX-024 (signed movement direction) and DOC08-FIX-025 (immutable correction lineage). No conceptual contradiction was identified. The Owner-approved result is recorded as DOC08-FIX-026 in DOC-08 §15.
+
+### 15.107.2 Accepted scope
+
+- 16 catalogue rows: 14 INCLUDE and 2 INCLUDE WITH CONDITIONS.
+- Conditional: damage/quality hold only when physical stock is relocated to an approved hold Location with paired Location effects; reservation fulfillment only as a distinct A02-to-A01 handoff for actual physical issue, without duplicate decrement.
+- The 14 unconditional conceptual inclusions and all explicit non-posting exclusions are enumerated in DOC08-FIX-026.
+- A01 remains bounded and separate from A02; signed movement semantics and correction lineage remain governed by DOC08-FIX-024/025.
+- DOC-04 §42.45 and DOC-09 §11.27 record the approved disposition and supersession of the earlier proposed/pending wording within this conceptual scope.
+
+### 15.107.3 Acceptance boundary
+
+**FIX — OWNER-APPROVED / CONCEPTUAL.** The Owner decision gate for the 16-row conceptual source-family scope is resolved. This does not activate source families or adapters and does not prove implementation feasibility or correctness. Exact source/line identity, lifecycle, cardinality/version, quantity authority, adapter ownership, authorization, idempotency, physical registry/integrity, transaction/fan-out/recovery, concurrency, tenant security, projection reconciliation and executed evidence remain OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.107.4 Governance
+
+Documentation-only, append-only continuation on PR #148 branch `docs/cw11-a01-source-event-catalogue-2026-11-21`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge remain separate gates; merge to `main` requires explicit Owner instruction because it triggers linked Vercel Production deployment.
