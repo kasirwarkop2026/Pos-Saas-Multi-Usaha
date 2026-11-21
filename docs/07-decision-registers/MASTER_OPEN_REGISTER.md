@@ -830,3 +830,22 @@ DOC-08 DOC08-FIX-025 and DOC-04 §42.41 record the Owner-approved conceptual con
 No physical schema, implementation, test PASS or deployment is implied. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E overall remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.24 CW-11 Package E — A01 candidate source-event catalogue and lifecycle matrix recorded; activation remains OPEN (21 November 2026)
+
+DOC-04 §42.42 consolidates the candidate A01 source families, source record/line grain, descriptive posting boundary, lifecycle eligibility, quantity authority, expected movement fan-out and current disposition.
+
+**Bounded result:** the candidate inventory covers purchase/receipt; sales/fulfillment; adjustment; Stock Count; transfer dispatch and receipt; transfer loss/destruction; held damage/quality disposition; transfer returns before and after receipt; customer/supplier physical returns; production input/output; write-off/loss; reservation fulfillment handoff; and approved movement correction.
+
+The matrix also explicitly excludes non-posting events: purchase commitment, sales payment/order/reservation without issue, transfer approval without dispatch, return authorization/refund without physical receipt, production planning, reservation lifecycle events, costing-only updates, and rejected/invalid/no-effect correction requests.
+
+**Shared A01 admission boundary:** finite enabled adapter; authoritative source and atomic line resolution; same-Business ownership; event-specific lifecycle eligibility at commit; authoritative quantity and Product base-unit normalization; stable event/replay identity; complete deterministic movement fan-out; independent DOC-05 authorization; explicit permitted zero-effect outcome; and immutable source/movement lineage.
+
+**Important status boundary:** descriptive event labels are not approved enum literals. No source family is enabled by this catalogue. No physical source-table name, source-line field, registry field, FK, key, adapter identifier, digest algorithm, retention duration, quantity precision or runtime state enum is selected. The matrix does not silently infer source object names or exact lifecycle state names where those remain unapproved.
+
+**Disposition:** PASS WITH OPEN OWNER / SOURCE-CONTRACT DECISIONS for catalogue structure only. DOC08-FIX-018 remains the accepted A01 conceptual direction. No new FIX is added. ERD-OPEN-05 remains OPEN for exact source object/line identity, event-specific eligibility, cardinality, source version, quantity authority, source catalogue activation/ownership, physical identity/integrity, replay/fan-out persistence, transaction/recovery, tenant security and executed evidence. A02 remains separate.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
