@@ -864,3 +864,8 @@ Owner acceptance or revision remains pending. Exact source object/line identity,
 Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.26 Correction to A01 candidate source-family count (22 November 2026)
+
+Count reconciliation against DOC-04 §42.42.3 confirms **16** candidate source-family rows, not 15: **14 INCLUDE** and **2 INCLUDE WITH CONDITIONS** under the proposed technical disposition in DOC-04 §§42.43–42.44. The two conditional rows remain damage/quality hold and reservation fulfillment handoff. This is a count correction only; no classification, Owner decision, FIX, activation or technical gate changes. Owner acceptance remains pending; ERD-OPEN-05 remains OPEN.
