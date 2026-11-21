@@ -849,3 +849,18 @@ The matrix also explicitly excludes non-posting events: purchase commitment, sal
 Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.25 CW-11 Package E — proposed A01 source-family disposition recorded; Owner acceptance pending (22 November 2026)
+
+DOC-04 §42.43 records a technical recommendation for the 15 candidate A01 source families in §42.42. Proposed disposition: retain all 15 candidates in the catalogue; classify 13 as INCLUDE and two as INCLUDE WITH CONDITIONS (damage/quality hold only with actual relocation to an approved hold Location; reservation fulfillment only as a distinct A02-to-A01 handoff for actual physical issue).
+
+The proposed exclusions remain purchase commitments; sales order/payment/reservation without physical issue; transfer approval without dispatch; return authorization/refund without receipt; production planning; A02 reservation lifecycle events; costing-only events; and rejected/invalid/ambiguous/no-effect correction requests.
+
+This is a **technical recommendation only**. It is not an Owner decision, DOC08 FIX, final enabled allowlist or source-family activation. No family is enabled. Cross-family duplicate-post prevention, atomic multi-leg fan-out, stable replay identity, tenant/source ownership, A02/A01 separation and DOC08-FIX-025 correction-path exclusivity remain required controls.
+
+Owner acceptance or revision remains pending. Exact source object/line identity, lifecycle eligibility, event cardinality, source version, quantity authority, adapter ownership, authorization, idempotency, physical registry/integrity, transaction/recovery and executed evidence remain OPEN under ERD-OPEN-05.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
