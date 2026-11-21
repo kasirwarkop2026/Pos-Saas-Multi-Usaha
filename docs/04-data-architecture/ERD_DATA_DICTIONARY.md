@@ -3999,3 +3999,52 @@ This FIX accepts the logical lifecycle and guards only. It does not approve phys
 Anchors: DOC-08 DOC08-FIX-022; DOC-04 §§42.30–42.33; DOC-09 §§11.14–11.15; Worklist §15.95.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.34 CW-11 Stock Count snapshot/cutoff and post-cutoff reconciliation — consistency audit (21 November 2026)
+
+### 42.34.1 Audit basis and current logical contract
+
+This audit rechecks §§42.5, 42.13–42.15, 42.26–42.30 and Owner FIX decisions DOC08-FIX-020–022. It preserves the existing conceptual rules:
+
+- stock_counts owns scope, snapshot/cutoff and lifecycle context; count quantities belong to the count-line/attempt grain.
+- snapshot_at plus the inclusive cutoff_location_posting_sequence define the snapshot boundary. The sequence is the ordering authority; cutoff_movement_id is only a same-Location locator whose sequence must agree when supplied.
+- A draft may have no frozen watermark. Before COUNTING, scope, snapshot instant and cutoff must be frozen together under one consistent Location-level transaction boundary. The initial watermark for a Location with no earlier movement must be explicit and distinguishable from an unfrozen value.
+- location_posting_sequence is a candidate monotonic order per Business + Location. Movement facts after the cutoff are not silently folded into the original snapshot or discarded.
+- Before variance posting, applicable post-cutoff movement effects must be reconciled against the counted scope. The accepted count remains Product-base-unit input under DOC08-FIX-020.
+- DOC08-FIX-021 and DOC08-FIX-022 require the whole count session to post atomically only after all required lines are accounted for and reconciliation is complete.
+
+### 42.34.2 Consistency findings and documentation clarifications
+
+The existing contract states the correct high-level sequence, but several operationally decisive logical boundaries were not yet explicit. The following clarifications are added without selecting physical mechanisms:
+
+1. **Snapshot quantity provenance:** each count line's system_quantity_snapshot_base must represent the authoritative on-hand quantity for its exact Business + Product + nullable Variant + Location + applicable Batch grain at the same frozen cutoff. A lagging or independently refreshed inventory_balances / inventory_batch_balances projection cannot be assumed to represent that cutoff unless its applied movement watermark is proven to cover the frozen cutoff for the same grain.
+2. **Inclusive/exclusive sequence semantics:** cutoff C is inclusive. The original snapshot contains movement effects through C; the post-cutoff reconciliation set is strictly greater than C. A movement at C must never be applied both in the snapshot and again in the replay set.
+3. **Reconciliation upper boundary:** replay must be bounded by a separately identified reconciliation/posting boundary R for the same Location. The expected quantity used for variance is the snapshot at C plus the signed net effect of all applicable movements in (C, R]. The exact allocation/serialization mechanism for R remains OPEN; wall-clock timestamps or UUID order alone are not substitutes for the Location posting sequence.
+4. **Movement-scope filtering:** the replay set must include every posted movement affecting the counted Product/Variant/Batch/Location scope, regardless of source workflow. It must exclude unrelated Business, Location, Product, Variant or Batch grains. Paired movements across Locations are evaluated against each Location's own sequence and count scope; a source-side movement does not stand in for its destination-side counterpart.
+5. **Concurrent postings and finality:** reconciliation is not complete merely because one scan of post-cutoff movements returned a result. Before variance posting commits, the system must prove that the reconciliation boundary remains complete through the posting decision, with no applicable movement omitted between the last replay and the all-or-nothing session commit. The logical requirement is serialization/finality; no lock, isolation level, queue, retry or physical transaction design is selected here.
+6. **Idempotent replay:** replaying the same (C, R] movement set must reproduce the same expected quantity and must not create inventory movements or mutate original movement facts. Reconciliation is a deterministic calculation/proof step; variance posting remains the separate session-level posting operation governed by DOC08-FIX-021.
+7. **Exception behavior:** missing sequence, duplicate/ambiguous sequence, sequence gap where continuity is required, wrong-Location cutoff locator, projection watermark behind C, missing movement in the replay range, incompatible grain, or unreconciled source-event fan-out blocks READY_TO_POST. No fallback to timestamps, current balance, zero, or partial scope is permitted.
+8. **Batch and non-batch consistency:** when a count line is Batch-scoped, the snapshot and replay must reconcile at that exact Batch grain and also remain consistent with the parent Product/Variant/Location total. Non-Batch count lines must not silently absorb Batch-specific quantities or double-count them. The existing Batch-versus-Product aggregate rules remain applicable.
+9. **Variance basis:** for each accepted attempt, expected_quantity_at_R = system_quantity_snapshot_base_at_C + net_applicable_posted_movement_delta_(C,R]; variance is derived from the accepted base-unit count against that expected quantity under the still-OPEN numeric policy. This statement defines the logical basis only; sign convention, precision, rounding and storage-versus-derivation remain governed by their existing OPEN items.
+
+### 42.34.3 Reconciled acceptance sequence
+
+1. Keep the count in DRAFT while scope and count lines are prepared; no active cutoff is implied.
+2. Establish one Location-consistent snapshot boundary: freeze count scope, snapshot instant, inclusive cutoff C, and per-line snapshot quantities whose provenance proves they represent the same boundary.
+3. Validate any cutoff movement locator against Business, Location and exact sequence C; if no prior movement exists, use an explicit valid initial watermark representation.
+4. During COUNTING and later review, retain all original movement facts. For reconciliation, identify the final Location sequence boundary R and deterministically collect every applicable movement in (C,R].
+5. Reconcile replay completeness, source fan-out, exact Product/Variant/Batch/Location grain, and parent Product/Location plus Batch projection totals. Any exception blocks readiness.
+6. Derive expected quantity at R and variance for each accepted attempt; preserve NULL/not-counted versus valid zero.
+7. Before READY_TO_POST / POSTED, establish that no applicable movement can fall between the proven reconciliation boundary and the session posting commit. The technical serialization solution remains OPEN.
+8. Post all required session variance movements and the session posting identity atomically under DOC08-FIX-021. A failure leaves no partial variance posting; retries must reproduce the same reconciliation result and resolve to the same session posting outcome.
+
+### 42.34.4 Remaining OPEN physical and Owner boundaries
+
+This audit makes no new Owner policy choice and does not approve a new field, status, event, registry, key, constraint, transaction design or implementation. In particular, the following remain OPEN: exact snapshot acquisition/provenance; projection applied-watermark representation; initial watermark representation; monotonic Location sequence allocation and gap/recovery semantics; selection and atomic capture of reconciliation boundary R; serialization of concurrent inventory postings against reconciliation and count posting; A01 source-event completeness/fan-out; exact replay algorithm and exception recovery; Batch/Variant null-safe enforcement; numeric sign/precision/scale/overflow/rounding; audit evidence and executed concurrency/failure/replay/reconciliation tests.
+
+**Disposition:** PASS WITH OPEN DEPENDENCIES for the logical documentation consistency review. The high-level snapshot/cutoff contract is reconciled to DOC08-FIX-020–022; the physical and execution acceptance gates remain OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+Anchors: DOC-04 §§42.5, 42.13–42.15, 42.26–42.30 and 42.34; DOC-09 §11.16; Worklist §15.96.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
