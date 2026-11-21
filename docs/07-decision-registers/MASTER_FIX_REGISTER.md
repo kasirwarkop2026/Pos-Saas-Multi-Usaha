@@ -131,3 +131,20 @@ The project owner explicitly approved the following bounded conceptual decisions
 - A01 and A02 remain separate domains and replay boundaries. Reservation fulfillment creates a distinct A01 posting event; A02 request replay is not interchangeable with A01 posting replay.
 
 **Decision scope limitation:** these are accepted conceptual/logical design directions only. They do not approve physical schema, columns, indexes, constraints, FK strategy, enabled source families, digest/retention choices, RLS/API enforcement, runtime behavior, test evidence or implementation. Corresponding DOC-09 physical/security/evidence dependencies remain OPEN. This entry does not promote any physical or implementation gate and does not authorize Stage 6.
+
+
+## 9. Stock Count input-unit policy — Owner FIX (21 November 2026)
+
+**DOC08-FIX-020 — Stock Count accepts Product base unit only.**
+
+The Owner explicitly selected Option A:
+
+- Stock Count and recount input accept only the relevant Product's configured base unit.
+- Non-base-unit input is not supported for Stock Count; no alternate-unit conversion is performed as part of count entry.
+- The counted quantity remains expressed in Product base units, consistent with the existing candidate `counted_quantity_base` representation.
+- This policy is limited to Stock Count measurement entry. It does not prohibit upstream source workflows from accepting non-base units under their own explicit conversion and provenance contracts.
+- This is a conceptual Owner decision. It does not approve a physical field, UI/API validation implementation, database constraint, authorization grant, runtime behavior, test result or deployment.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. Physical enforcement and evidence remain OPEN. This decision resolves only the Stock Count input-unit policy question; it does not close count-attempt lifecycle, cutoff/watermark, accepted-attempt posting, partial-posting, idempotency, concurrency, security or other CW-11 gates.
+
+Anchors: DOC-04 §§36.4–36.5, 42.5, 42.25.8–42.25.9 and 42.28.3; DOC-09 §§11.10–11.11.
