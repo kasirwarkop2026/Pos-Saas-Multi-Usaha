@@ -717,3 +717,20 @@ DOC-04 §42.35 audits Stock Count quantity/variance arithmetic against DOC08-FIX
 Design acceptance cases in DOC-04 §42.35.4 are NOT EXECUTED. No physical type, schema, implementation or test result is accepted. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.18 Stock Count variance sign convention Owner decision recorded — conceptual gate resolved; numeric and physical gates remain OPEN (21 November 2026)
+
+The Owner explicitly approved recommended Option A. DOC-08 DOC08-FIX-023 and DOC-04 §42.36 record the accepted conceptual convention:
+
+- `variance_quantity_base = accepted_counted_quantity_base - expected_quantity_at_R`.
+- Positive = surplus; negative = shortage; zero = exact match.
+- Expected quantity remains the cutoff-C snapshot plus signed applicable posted movement delta in (C,R].
+
+**Resolved:** Owner approval of the subtraction order and semantic sign convention previously requested in §11.17.
+
+**OPEN / NOT CLOSED:** Product discrete/fractional eligibility; minimum increment/maximum magnitude; numeric representation, precision/scale/capacity and intermediate overflow; rounding boundary/mode; tolerance; variance storage-versus-derivation; mapping variance sign to inventory movement delta; physical enforcement; and executed positive/negative/zero/fractional/boundary/overflow/replay/failure evidence.
+
+The sign convention does not itself define inventory movement direction. That mapping requires separate reconciliation with the established ledger delta convention. No physical type, schema, implementation or test result is accepted. Design acceptance cases in DOC-04 §42.35.4 remain NOT EXECUTED. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
