@@ -3291,3 +3291,28 @@ No physical schema, SQL/DDL/DML, API/backend behavior, implementation, test resu
 ### 15.98.4 Governance
 
 Documentation-only, append-only continuation on existing PR #144. No application source, database introspection, migration, RLS/Auth, triggers, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.99 CW-11 Package E — Stock Count variance-to-inventory-movement sign mapping audit (21 November 2026)
+
+### 15.99.1 Scope
+
+Review the candidate movement-ledger contract and Stock Count variance formula after Owner approval of DOC08-FIX-023. Scope is limited to the semantic relationship between Stock Count surplus/shortage and signed `inventory_movements.quantity_delta_base`.
+
+### 15.99.2 Findings
+
+The working documentation establishes an immutable posted movement ledger with signed base-quantity deltas and a rebuildable balance projection. It does not define whether positive movement delta increases or decreases on-hand. Candidate movement-kind vocabulary and sign validation are also OPEN.
+
+A bounded candidate is recorded for Owner review: positive variance/surplus → positive movement delta/increase on-hand; negative variance/shortage → negative movement delta/decrease on-hand; zero variance → no movement but explicit session accounting. Candidate movement delta equals accepted variance in Product base units at the exact count-line grain.
+
+This is NOT an Owner FIX. The proposal must be reconciled to one canonical sign convention across all movement source workflows, including reversal/compensation semantics. No movement mapping is inferred as accepted.
+
+### 15.99.3 Decision and acceptance status
+
+**OWNER DECISION REQUIRED:** approve or revise the candidate positive-increases / negative-decreases convention and movement-delta-equals-variance relationship.
+
+Global ledger sign semantics, movement-kind/event validation, source-event lineage, reversal/compensation sign behavior, zero movement handling, numeric precision/rounding/tolerance, physical enforcement and executed evidence remain OPEN. No schema, implementation or test result is approved. DOC08-FIX-023 remains conceptual; Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.99.4 Governance
+
+Documentation-only, append-only continuation on a new bounded documentation branch. No SQL/DDL/DML, database introspection, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. Merge requires separate explicit Owner instruction because it triggers linked Vercel Production deployment.
