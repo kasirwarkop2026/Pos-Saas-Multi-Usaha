@@ -4563,3 +4563,12 @@ Owner acceptance or revision remains required before this proposed disposition c
 DOC08-FIX-018/024/025 remain unchanged. DOC-09 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.44 Correction to candidate source-family count in §42.43 (22 November 2026)
+
+A count reconciliation found that §42.42.3 contains **16** candidate source-family rows, not 15. The proposed disposition in §42.43.2 therefore applies to 16 rows: **14 INCLUDE** and **2 INCLUDE WITH CONDITIONS** (damage/quality hold; reservation fulfillment handoff). The 14 INCLUDE rows are purchase/receipt; sales/fulfillment; inventory adjustment; Stock Count; transfer dispatch; transfer receipt; transfer loss/destruction; return before transfer receipt; return after transfer receipt; customer/supplier physical return; production input consumption; production output; write-off/loss; and approved movement correction.
+
+This correction clarifies the arithmetic only. It does not change any row's proposed classification, create an Owner decision/FIX, enable any source family, or close any technical dependency. If §42.43 contains a contrary count, this §42.44 count reconciliation governs the intended count.
+
+DOC08-FIX-018/024/025 remain unchanged. Owner acceptance remains pending; ERD-OPEN-05 remains OPEN; Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
