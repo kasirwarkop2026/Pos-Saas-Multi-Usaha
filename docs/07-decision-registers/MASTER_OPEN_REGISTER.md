@@ -549,3 +549,22 @@ This is a candidate ownership/grain clarification only. It does not approve phys
 **OPEN / NOT CLOSED:** all NUM-01/02/03 physical and operational acceptance criteria remain open where they require exact numeric policy, conversion provenance, arithmetic boundaries, physical enforcement or executed evidence. Stock-count non-base-unit entry policy remains an explicit owner decision. No FIX is newly promoted and no physical Data Dictionary or canonical ERD acceptance is claimed.
 
 **Disposition:** logical numeric ownership across 17 candidate entities SPECIFIED; numeric implementation and evidence gates remain OPEN. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.9 Numeric operation ownership and arithmetic-boundary map specified; numeric policy remains OPEN (21 November 2026)
+
+DOC-04 §42.27 maps the authoritative inputs, operation owner/output, required invariants and unresolved arithmetic policy for the principal inventory/costing numeric operations: unit conversion, adjustment posting, movement ledger, Product/Batch balance projections, stock count/variance, reservation allocation/lifecycle, transfer/shipment, FIFO, MWA, transfer cost carry-forward, landed-cost allocation, cost exception resolution and currency/FX.
+
+The map clarifies the following cross-domain boundaries:
+
+- Source workflows own raw entered quantities, input units and their conversion provenance where non-base entry is supported. Inventory consumes only validated Product base-unit context.
+- Posted movement facts remain the physical quantity ledger; Product and Batch balances are projections. Reservation allocation affects available stock, not on-hand.
+- Count, transfer and reservation headers own scope/lifecycle/source context; quantity facts remain at their appropriate item/event grain.
+- FIFO layer consumption, MWA pool valuation, transfer cost carry-forward, LRM landed-cost allocation, cost exception resolution and FX each have distinct arithmetic/residual boundaries. LRM is not a universal quantity or costing algorithm.
+- Posted source facts and applied historical snapshots must not be silently rewritten by later reference/configuration changes.
+
+**OPEN / NOT CLOSED:** per-Product minimum increment/fraction and maximum magnitude; precision/scale/capacity/overflow; conversion factor precision and version/effective-time provenance; allowed conversion graph; operation-specific calculation and rounding boundaries; sign/zero/NULL/cap/partial-event semantics; currency/denominator and FX policy; MWA/FIFO residual treatment; transfer transit/loss valuation; atomicity/concurrency/idempotency; physical constraints/security; and executed boundary/negative/replay/tenant-isolation evidence.
+
+The stock-count non-base-unit entry policy remains an explicit owner decision. A01/A02 physical identity, integrity, security, concurrency and test evidence remain OPEN. This section is a logical ownership/operation map only: no numeric parameter, physical type, algorithm implementation or test PASS is approved. No dependency is closed and no FIX is promoted.
+
+**Disposition:** numeric operation ownership and arithmetic boundaries SPECIFIED at logical level; physical/numeric acceptance remains OPEN. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
