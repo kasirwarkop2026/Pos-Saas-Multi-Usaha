@@ -902,3 +902,21 @@ No exact physical table, column, enum, FK, key, digest, retention, numeric type,
 Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. No adapter is enabled.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+
+## 11.29 CW-11 Package E — Purchase / Goods Receipt cross-document audit PASS; adapter-specific decisions remain OPEN (22 November 2026)
+
+DOC-04 §42.47 audits the Purchase / Goods Receipt logical contract in §42.46 against DOC-02 `CATEGORY_WORKFLOW_MASTER.md` §5–§6, DOC-05 `AUTHORIZATION_MASTER.md` §23.4–§23.6, DOC-04 §§17.2–17.4 and DOC08-FIX-018/019/024/025/026.
+
+**PASS — conceptual consistency:** procurement request/PO, approval, physical receiving, discrepancy review and supplier payment are distinct controls; only physically received and accepted quantity is eligible for A01; accepted receipt movement is positive under DOC08-FIX-024; partial receipt occurrences remain traceable; inventory ledger is distinct from projection/costing; purchase approval is not automatically inventory-posting authorization.
+
+**Important scope guard:** DOC-04 §§17.2–17.4's one-movement-per-receipt-detail conceptual precedent is scoped to transfer shipment receipt/return (A12.10/A12.11). It is not generalized to Purchase / Goods Receipt. Purchase receipt-detail-to-movement cardinality and Batch/Location fan-out remain OPEN. DOC-05 §23.4's M06 starter keys do not supply a purchase-receipt-specific permission tuple; no M08 permission literal or grant is inferred.
+
+**Resolved conceptual boundaries retained:** order/commitment/payment without accepted physical receipt creates no A01 movement; only accepted quantity posts positive; receipt occurrence history is append-only; discrepancy review and inventory posting remain distinct controls; ledger, projections and costing remain separate.
+
+**OPEN under ERD-OPEN-05:** source domain/object/line/receipt-detail ownership and identity; accepted/rejected/discrepant quantity representation; inspection/discrepancy lifecycle and partial-acceptance split; purchase-specific event cardinality and movement fan-out; source version/amendment; over-receipt policy; receiving Location/Batch resolution; purchase-specific permission/actor/scope/SoD/approver/audit; idempotency/recovery; physical constraints/atomicity/concurrency; tenant enforcement; projection reconciliation; executed evidence.
+
+**PASS — cross-document conceptual consistency; no contradiction found.** No new DOC08 FIX is added; DOC08-FIX-018/019/024/025/026 remain unchanged. No permission is granted and no adapter is enabled. Candidate Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
