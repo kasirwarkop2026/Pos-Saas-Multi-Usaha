@@ -3930,3 +3930,53 @@ The Owner explicitly selected **Option A — Count-session all-or-nothing** for 
 **Implementation boundary:** This decision does not approve a database transaction design, physical fields/enums/indexes/constraints, API/backend behavior, locking/isolation strategy, authorization/SoD mapping, retries, test evidence or deployment. Atomic transaction feasibility, session-level idempotency, concurrency/locking, failure injection, reconciliation and audit evidence remain OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+### 42.32 Stock Count lifecycle candidate — consistency audit after Owner posting FIX (21 November 2026)
+
+This addendum audits the candidate lifecycle in §42.30 against the now-approved count-session all-or-nothing posting policy in §42.31. It refines the proposal for a further Owner review; it does **not** approve the parent/attempt status catalogue or physical workflow.
+
+#### 42.32.1 Parent transition and cancellation guards
+
+| Current candidate state | Proposed permitted next state(s) | Required guard |
+|---|---|---|
+| DRAFT | COUNTING, CANCELLED | COUNTING begins only after scope, snapshot instant and inclusive Location cutoff are frozen together. DRAFT cancellation emits no variance movement. |
+| COUNTING | SUBMITTED, CANCELLED | Every measurement is a new immutable attempt. Cancellation is allowed only before submission/posting and preserves all attempt facts; it emits no variance movement. |
+| SUBMITTED | REVIEW_REQUIRED, READY_TO_POST, COUNTING, CANCELLED | READY_TO_POST requires every required line to have a valid accepted attempt, complete post-cutoff reconciliation and no unresolved exception. Return to COUNTING is an explicit audited recount decision. Cancellation is permitted only before posting starts and emits no variance movement. |
+| REVIEW_REQUIRED | READY_TO_POST, COUNTING, CANCELLED | Approval/rejection and reason are auditable. Return to COUNTING creates new attempt(s); prior measurement facts remain immutable. Cancellation is permitted only before posting starts and emits no variance movement. |
+| READY_TO_POST | POSTED, REVIEW_REQUIRED, COUNTING, CANCELLED | POSTED only after the single all-or-nothing session transaction commits. A technical transaction failure leaves no partial posting and may be retried against the same session idempotency identity. A business/data exception routes to REVIEW_REQUIRED; recount requires controlled return to COUNTING. Cancellation is permitted only before the posting transaction commits and must serialize against posting so that cancellation and posting cannot both win. |
+| POSTED | Terminal | Complete session posting committed; no reopening, cancellation, mutation or duplicate posting. Corrections use separately governed compensating events. |
+| CANCELLED | Terminal | No variance posting was committed; snapshot and attempt history remain retained. |
+
+No persistent intermediate POSTING state is proposed as an externally visible lifecycle state: the Owner's all-or-nothing rule requires the posting transaction to be atomic. A transaction in progress is not a committed business state. If the transaction fails, the session remains at its pre-commit state; it must never expose a partially POSTED session.
+
+#### 42.32.2 Attempt supersession and acceptance guards
+
+1. RECORDED is a captured immutable measurement, not an approval. It may proceed to REVIEW_REQUIRED, ACCEPTED or REJECTED only through the governed decision path.
+2. REVIEW_REQUIRED may proceed to ACCEPTED or REJECTED; a recount creates a separate attempt identity rather than editing the reviewed attempt.
+3. At most one attempt per count line may be accepted for the session's eventual variance calculation.
+4. Replacing an accepted attempt requires an explicit return to COUNTING and one coordinated, auditable operation that supersedes the old accepted attempt and accepts the replacement. There must be no interval in which two attempts are accepted or the line silently loses its accepted attempt while the session remains eligible for posting.
+5. REJECTED and SUPERSEDED are terminal dispositions and cannot be selected for posting.
+6. Once the session posting transaction commits, no accepted attempt in that session may be superseded, reopened or reposted. A correction is a separate compensating event, not a new count attempt against the committed session.
+
+#### 42.32.3 All-or-nothing POSTED acceptance conditions
+
+A session may transition from READY_TO_POST to POSTED only when all of the following are true within one consistent session-level posting boundary:
+
+- Every required count line is explicitly accounted for and has one valid accepted attempt; NULL/not-counted is never treated as zero.
+- Counted quantities use the Product base unit under DOC08-FIX-020; zero remains a valid measured quantity.
+- Snapshot/cutoff identity is frozen and valid, and every applicable post-cutoff movement has been reconciled.
+- All variance calculations and required movement outputs are reproducible and pass the approved numeric/integrity rules; numeric parameters remain OPEN.
+- Authorization and approval-separation requirements are satisfied.
+- All required variance movements and the session's committed posting identity succeed together. If any required write or guard fails, none of the session's variance movements may remain committed.
+- The session-level idempotency identity resolves retries to the original committed outcome and prevents duplicate movement creation.
+
+A zero-variance line may produce no movement, but it must still be explicitly accounted for in the session acceptance result; it cannot be silently omitted to bypass the all-lines requirement. Exact zero-variance disposition representation remains a candidate logical detail, not a physical field or enum decision.
+
+#### 42.32.4 Remaining Owner review and technical gates
+
+The above is a refined candidate proposal. **Separate Owner acceptance is still required** for the parent and attempt status vocabulary/transitions, including the cancellation and supersession guards and the explicit treatment of zero-variance lines. Physical transaction atomicity, serialization between cancel/post, session idempotency, locking/isolation, authorization/SoD, post-cutoff replay, numeric precision/rounding, and executed failure/replay/reconciliation evidence remain OPEN.
+
+No physical field/type, enum, index, constraint, transaction implementation, API/backend behavior, test result or deployment is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
