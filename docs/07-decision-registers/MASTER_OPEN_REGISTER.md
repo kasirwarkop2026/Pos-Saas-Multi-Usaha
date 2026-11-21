@@ -700,3 +700,20 @@ DOC-04 §42.34 rechecks the snapshot/cutoff contract against DOC08-FIX-020–022
 This audit adds no Owner FIX and approves no physical field, schema, constraint, lock/isolation mechanism, API/backend, implementation or test result. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.17 Stock Count variance arithmetic and numeric precision audit — PASS WITH OPEN OWNER DECISION (21 November 2026)
+
+DOC-04 §42.35 audits Stock Count quantity/variance arithmetic against DOC08-FIX-020–022 and snapshot reconciliation §42.34.
+
+**Reconciled requirements:** all operands must use the same Product base unit and exact Business/Product/Variant/Location/Batch grain; only the accepted immutable attempt is used; NULL means not counted while zero is valid; snapshot cutoff C is inclusive and replay is strictly (C,R]; zero-variance lines must be explicitly accounted for; numeric or reconciliation failure on any required line blocks the all-or-nothing session posting.
+
+**Candidate variance expression:** variance_quantity_base = accepted_counted_quantity_base - expected_quantity_at_R, where expected_quantity_at_R is snapshot quantity at C plus the signed net applicable movement delta in (C,R]. This proposes positive = surplus and negative = shortage. **Owner confirmation is required** before the sign convention becomes FIX or controls movement mapping.
+
+**Numeric guardrails:** no silent rounding/truncation/clamping/coercion; no universal decimal scale is assumed; intermediate/final overflow must fail closed; no tolerance is inferred; LRM and monetary rounding do not apply as generic Stock Count variance rules. Product fractional/increment rules, precision/scale/capacity, rounding mode/boundary and storage-versus-derivation remain OPEN.
+
+**OPEN / NOT CLOSED:** Owner confirmation of variance sign; Product discrete/fractional policy; minimum increment/maximum magnitude; numeric representation and intermediate overflow; rounding and tolerance; movement sign mapping; physical enforcement and executed positive/negative/zero/fractional/boundary/overflow/replay/failure evidence.
+
+Design acceptance cases in DOC-04 §42.35.4 are NOT EXECUTED. No physical type, schema, implementation or test result is accepted. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
