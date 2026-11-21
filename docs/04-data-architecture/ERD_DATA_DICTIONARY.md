@@ -4305,3 +4305,76 @@ This audit does not add an Owner FIX and does not revise DOC08-FIX-024. It does 
 **Disposition:** PASS WITH OPEN DEPENDENCIES for conceptual cross-source sign consistency only. CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.40 CW-11 Package E — Inventory Movement Reversal & Compensation Contract Audit (21 November 2026)
+
+### 42.40.1 Scope and separation of contracts
+
+This audit examines logical correction of already-posted `inventory_movements` under the immutable-ledger principle and DOC08-FIX-024. It distinguishes:
+
+- **Movement reversal/compensation:** a new inventory movement that corrects the physical on-hand effect of an earlier posted movement.
+- **Cost-layer consumption compensation:** the A12.17 relationship between an original cost-layer consumption and one or more partial compensation records.
+
+A12.17 establishes conceptual 1:N original-consumption-to-compensation cardinality and an aggregate compensation cap for its cost-layer allocation/consumption domain. It is relevant precedent for immutability, partial correction and caps, but it is **not by itself an approved movement-reversal algorithm**, movement identity contract or physical schema.
+
+Governing movement baseline remains DOC08-FIX-024: positive `quantity_delta_base` increases on-hand; negative decreases on-hand. No original posted movement may be edited or deleted to implement a correction.
+
+### 42.40.2 Candidate correction contract — NOT OWNER-APPROVED
+
+The following is a bounded logical proposal for Owner review, not a new FIX and not implementation authorization.
+
+1. **Original movement remains immutable.** A posted movement is a permanent fact. A correction appends a new movement; it never overwrites, deletes, reuses or silently changes the original movement or its source event.
+2. **Opposite signed effect.** A direct reversal of a target movement uses the opposite sign from that target and the same normalized Product base unit and exact Business + Product + nullable Variant + Location + applicable Batch grain. Its absolute quantity cannot exceed the target's still-correctable remainder.
+3. **Full reversal.** A full reversal corrects the entire currently eligible remainder of its target. It is a distinct linked posting, not a status change on the original movement.
+4. **Partial reversal.** A partial reversal corrects only an explicitly supplied eligible quantity. Multiple partial reversals may target one original movement, but their cumulative effective correction must remain within the original movement's absolute quantity.
+5. **Cumulative cap.** The cap is evaluated across the complete correction lineage for the root original movement, not merely one request, one child record or one application session. The logical invariant is that the net effective correction attributable to the root original must never exceed its absolute posted quantity or create a sign inversion beyond that original effect.
+6. **Correction of a correction / reversal of reversal.** If a prior correction is itself wrong, it is corrected by another new immutable movement with the opposite sign to the immediately targeted correction. This does not erase or mutate the earlier correction. The new record must retain both immediate-target lineage and root-original lineage. Its effect must be included in the root lineage's cumulative-cap calculation so that reinstatement can restore only the quantity actually corrected by the targeted correction and cannot create excess stock.
+7. **No unbounded correction chain.** Every correction must resolve to one posted target movement and one root original movement. Cycles, self-reference, cross-root ambiguity and references to unposted/nonexistent targets are invalid logical outcomes. Exact representation and validation remain OPEN.
+8. **Source-event lineage.** A correction must identify the original source event and the exact original movement being corrected; a correction of a correction must also identify the immediate correction target. Where one source event fans out to several movement rows, correction is scoped to the exact movement/grain and must not implicitly reverse unrelated lines or other Location legs.
+9. **No duplicate compensation.** The same physical correction must not be posted both as a source-domain correction and as a generic ledger reversal. One authoritative correction intent must produce one deterministic movement outcome. A retry with the same idempotency identity and same canonical payload must resolve to the same outcome; a changed payload under that identity must conflict.
+10. **Zero and invalid requests.** Zero-quantity correction is not a substitute for a failed or missing correction. A legitimate no-op must be explicitly accounted for with a reason and no movement; NULL, missing quantity, invalid grain, exhausted remainder or ambiguous lineage must fail closed rather than be coerced to zero.
+11. **Authorization and auditability.** The initiating actor, approval/authority, reason, timestamp, source reference and correction relationship must be auditable. A correction must not inherit approval merely because the original movement was authorized. Exact permission/SoD policy remains OPEN.
+12. **Atomic observable outcome.** The correction movement, correction-lineage outcome and affected balance projection must not become observably inconsistent. A failed/incomplete correction must not leave a partial externally visible correction. Transaction, locking, isolation, retry and recovery mechanisms remain physical/technical OPEN gates.
+
+### 42.40.3 Logical acceptance invariants and design cases
+
+The candidate contract is internally coherent only if all of the following can be demonstrated at the exact stock grain:
+
+- Original movement quantity is unchanged after every correction.
+- A full reversal leaves zero net effect for the eligible original quantity, without deleting its history.
+- Several partial reversals aggregate to no more than the original eligible quantity.
+- A partial reversal followed by a reversal-of-reversal restores only the amount targeted by that second correction.
+- A later additional reversal is limited by the recalculated remaining correctable amount across the entire root lineage.
+- Repeated identical correction requests do not create duplicate movements.
+- Concurrent correction requests cannot jointly exceed the root movement's remaining cap.
+- Correction of one leg of a paired/multi-leg source event does not silently correct another leg; any required paired correction is separately identified and reconciled.
+- A correction cannot cross Business, Product, Variant, Location, Batch or Product base-unit grain.
+- Cost-layer consumption compensation under A12.17 remains separately reconciled and does not create a second on-hand movement for the same physical correction.
+
+These are design acceptance cases only. They have not been executed and do not establish a test PASS.
+
+### 42.40.4 OPEN decisions and technical gates
+
+The candidate does not settle the following:
+
+- Whether the accepted domain contract should use the term reversal, compensation, correction or distinct event types for different business reasons.
+- Whether partial corrections are measured against the immediate target remainder, the root original's net effective correction, or a formally defined combination of both.
+- The exact signed arithmetic for correction-of-correction, including multiple branches, nested corrections and correction of a previously reinstated amount.
+- Whether a root movement may be corrected through multiple independently authorized source events and how those intents are consolidated.
+- Exact source-event/source-line identity, movement identity, lineage cardinality, allowed target lifecycle and correction reason taxonomy.
+- Whether the original source event must first be voided/adjusted in its owning domain, and how domain correction and ledger correction are prevented from double-posting.
+- Idempotency-key scope, canonical payload definition, duplicate/conflict response, concurrency serialization, lock ordering, isolation and crash/retry recovery.
+- Authorization, approval, separation of duties, audit retention, tenant enforcement and correction limits.
+- Numeric precision/scale/capacity, fractional quantity policy, rounding, overflow and tolerance.
+- Projection reconciliation, paired/multi-leg atomicity and executed positive/negative/full/partial/reversal-of-reversal/retry/concurrency/failure evidence.
+
+### 42.40.5 Audit disposition and governance
+
+**CANDIDATE — OWNER DECISION REQUIRED.** The immutable append-only direction and opposite-sign correction principle are consistent with DOC08-FIX-005 and DOC08-FIX-024. A12.17 provides a relevant partial-compensation precedent but does not close movement-ledger reversal semantics. No new Owner FIX is inferred or added.
+
+Until the Owner explicitly accepts or revises the candidate policy, movement-reversal arithmetic, partial cap aggregation, correction-of-correction behavior and authorization remain OPEN. Physical schema, source catalogue activation, API/backend behavior, SQL/DDL/DML, database mutation, implementation, test execution and deployment are not approved.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
