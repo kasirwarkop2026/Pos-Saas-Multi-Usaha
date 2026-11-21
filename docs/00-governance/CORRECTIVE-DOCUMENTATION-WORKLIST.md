@@ -3511,3 +3511,26 @@ Documentation-only, append-only continuation on PR #148 branch `docs/cw11-a01-so
 A reconciliation of DOC-04 §42.42.3 shows **16** candidate source-family rows, not 15. The proposed disposition is therefore **14 INCLUDE + 2 INCLUDE WITH CONDITIONS**. DOC-04 §42.44 and DOC-09 §11.26 record this count correction append-only. It does not change any proposed classification or convert the recommendation into Owner approval. No family is activated; Owner acceptance remains pending; ERD-OPEN-05 remains OPEN; Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 15.107 CW-11 Package E — Owner approval of A01 source-family conceptual scope (22 November 2026)
+
+### 15.107.1 Owner decision and consistency audit
+
+Following the Owner's conditional instruction to promote the proposed source-family disposition to FIX if aligned, the conceptual cross-document review checked the proposed scope against DOC08-FIX-018 (bounded A01 registry), DOC08-FIX-019 (separate A02 identity), DOC08-FIX-024 (signed movement direction) and DOC08-FIX-025 (immutable correction lineage). No conceptual contradiction was identified. The Owner-approved result is recorded as DOC08-FIX-026 in DOC-08 §15.
+
+### 15.107.2 Accepted scope
+
+- 16 catalogue rows: 14 INCLUDE and 2 INCLUDE WITH CONDITIONS.
+- Conditional: damage/quality hold only when physical stock is relocated to an approved hold Location with paired Location effects; reservation fulfillment only as a distinct A02-to-A01 handoff for actual physical issue, without duplicate decrement.
+- The 14 unconditional conceptual inclusions and all explicit non-posting exclusions are enumerated in DOC08-FIX-026.
+- A01 remains bounded and separate from A02; signed movement semantics and correction lineage remain governed by DOC08-FIX-024/025.
+- DOC-04 §42.45 and DOC-09 §11.27 record the approved disposition and supersession of the earlier proposed/pending wording within this conceptual scope.
+
+### 15.107.3 Acceptance boundary
+
+**FIX — OWNER-APPROVED / CONCEPTUAL.** The Owner decision gate for the 16-row conceptual source-family scope is resolved. This does not activate source families or adapters and does not prove implementation feasibility or correctness. Exact source/line identity, lifecycle, cardinality/version, quantity authority, adapter ownership, authorization, idempotency, physical registry/integrity, transaction/fan-out/recovery, concurrency, tenant security, projection reconciliation and executed evidence remain OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.107.4 Governance
+
+Documentation-only, append-only continuation on PR #148 branch `docs/cw11-a01-source-event-catalogue-2026-11-21`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge remain separate gates; merge to `main` requires explicit Owner instruction because it triggers linked Vercel Production deployment.
