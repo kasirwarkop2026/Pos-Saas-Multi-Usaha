@@ -3258,3 +3258,36 @@ No new FIX, physical schema, implementation or test PASS is inferred. CW-11 Pack
 ### 15.97.4 Governance
 
 Documentation-only, append-only changes on existing PR #144. No SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.98 CW-11 Package E — Owner approval of Stock Count variance sign convention (21 November 2026)
+
+### 15.98.1 Owner decision
+
+The Owner accepted the recommended Option A and approved DOC08-FIX-023:
+
+`variance_quantity_base = accepted_counted_quantity_base - expected_quantity_at_R`
+
+- Positive variance means surplus.
+- Negative variance means shortage.
+- Zero variance means exact match.
+- Expected quantity remains snapshot quantity at inclusive cutoff C plus signed applicable posted movement delta in (C,R].
+
+### 15.98.2 Append-only documentation reconciliation
+
+- DOC-08 §12 records DOC08-FIX-023 as FIX / OWNER-APPROVED / CONCEPTUAL.
+- DOC-04 §42.36 records the accepted formula, semantic sign interpretation and explicit boundary.
+- DOC-09 §11.18 resolves the Owner sign-convention decision gate previously recorded in §11.17.
+- DOC-04 §42.35 and DOC-09 §11.17 remain the historical numeric audit basis and must be read with this Owner decision addendum. Earlier statements that Owner confirmation was still required are superseded only for the formula and positive/negative/zero semantic convention.
+
+### 15.98.3 Remaining acceptance status
+
+This decision does not define movement sign mapping. Positive/negative variance must not be translated into movement delta without separately reconciling the established inventory-ledger convention.
+
+Product discrete/fractional policy, minimum increment/maximum magnitude, numeric type/precision/scale/capacity, intermediate overflow, rounding boundary/mode, tolerance, storage-versus-derivation, movement sign mapping, physical enforcement and executed evidence remain OPEN. The design cases remain NOT EXECUTED.
+
+No physical schema, SQL/DDL/DML, API/backend behavior, implementation, test result or deployment is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.98.4 Governance
+
+Documentation-only, append-only continuation on existing PR #144. No application source, database introspection, migration, RLS/Auth, triggers, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
