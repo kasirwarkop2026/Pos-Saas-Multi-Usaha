@@ -4238,3 +4238,70 @@ Movement rows remain immutable posted facts. Reversal/compensation must retain s
 No physical schema, SQL/DDL/DML, database change, API/backend behavior, implementation, test result or deployment is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.39 CW-11 Package E — cross-source inventory movement sign consistency audit (21 November 2026)
+
+### 42.39.1 Scope and governing baseline
+
+This audit follows DOC08-FIX-024 and DOC-04 §42.38. It checks whether the documented inventory-posting source families can be read consistently under one signed on-hand delta convention. It is a logical documentation audit only; it does not assert that every listed source family is implemented, enabled, or represented by a verified physical object.
+
+**Governing conceptual baseline (DOC08-FIX-024):** positive `inventory_movements.quantity_delta_base` increases on-hand at the affected Business + Product + nullable Variant + Location + applicable Batch grain; negative decreases on-hand. Stock Count uses `movement_delta_base = variance_quantity_base`. Movement history is immutable.
+
+The A01 bounded Inventory Posting Source Event Registry is accepted as a logical direction by DOC08-FIX-018, but source catalogue activation, event identity details, physical registry/FK, idempotency enforcement and executed evidence remain OPEN. The source families below are a crosswalk for audit, not an enabled A01 allowlist.
+
+### 42.39.2 Source-family sign and movement-effect crosswalk
+
+| Source family / event | Expected physical effect | Signed movement direction under FIX-024 | Audit disposition / boundary |
+|---|---|---|---|
+| Purchase / goods receipt | Received goods enter the receiving Location and applicable Batch | Positive at receiving grain | Direction is conceptually consistent with an increase; exact receipt source-event identity, partial receipt cardinality, eligibility and physical evidence remain OPEN |
+| Purchase order / unreceived commitment | No physical stock has entered inventory | No movement | Order/commitment alone must not increase on-hand; receipt is the stock-posting boundary |
+| Sales / physical fulfillment or issue | Goods leave the issuing Location | Negative at issuing grain | Direction is conceptually consistent with a decrease; order creation, payment or reservation alone must not decrement on-hand; fulfillment event identity and source eligibility remain OPEN |
+| Inventory adjustment | Approved correction changes on-hand at one exact grain | Positive for approved increase; negative for approved decrease | Direction is determined by the signed approved quantity/reason, not inferred from an adjustment label; event-kind vocabulary, approval and zero policy remain OPEN |
+| Stock Count variance | Reconcile ledger quantity to the accepted count at R | Positive surplus → positive; negative shortage → negative; zero → no movement but explicitly accounted | RESOLVED conceptually by DOC08-FIX-024 and DOC-04 §42.38; physical enforcement and executed evidence remain OPEN |
+| Transfer dispatch | Quantity leaves source Location and enters transit Location | Source negative; transit positive | Paired movements must reconcile exactly by event, Product/Variant/Batch and quantity; event identity, atomic fan-out and physical enforcement remain OPEN |
+| Partial / final transfer receipt | Quantity leaves transit and enters destination Location | Transit negative; destination positive | Each receipt event is distinct and append-only; repeated partial receipts cannot overwrite prior facts |
+| Transfer loss / destroyed damage | Physical quantity leaves transit or affected Location | Negative once at the Location where physical loss occurs | One disposition event must not be decremented twice through both loss and exception paths; source-event and cost/exception lineage remain OPEN |
+| Damaged but still physically held / quality hold | Quantity changes custody/availability or Location, but remains physically held | Paired negative from old Location and positive to quality-hold Location; no net Business-wide on-hand loss | Availability restriction is not physical destruction; do not treat held goods as lost unless a separate destruction event is approved |
+| Return before transfer receipt | Quantity leaves transit and returns to source/return Location | Transit negative; source/return Location positive | Separate return event; original dispatch remains immutable |
+| Return after transfer receipt | Quantity leaves destination and returns through the approved reverse route | Destination negative; transit positive, then transit negative and source positive when received | New reverse-flow events; never rewrite original receipt |
+| Customer / supplier physical return | Returned goods enter a receiving Location only when physically received and accepted | Positive at receiving grain | A refund, credit note or return authorization without physical receipt must not increase on-hand; return eligibility, condition and disposition policy remain OPEN |
+| Production / assembly consumption | Raw/material stock is consumed from its Location | Negative for each consumed input grain | Production order or reservation alone is not consumption; actual authorized issue/consumption is the stock effect |
+| Production / assembly output | Finished/co-product quantity is received into a Location | Positive for each accepted output grain | Output receipt is distinct from input consumption; yield, scrap, by-product and event cardinality remain OPEN |
+| Loss / write-off / destruction outside transit | Physical quantity leaves the affected Location | Negative once | Approved disposition and source evidence required; avoid duplicate decrement from a second adjustment/exception path |
+| Reservation create / allocate / increase | Availability is reserved; physical stock remains in place | No on-hand movement | Reservation changes reserved/available projection only; it must not create a physical quantity delta |
+| Reservation release / expiry / cancel | Reserved availability is restored after the lifecycle event commits | No on-hand movement | Release/expiry is not a receipt or stock increase; preserve immutable reservation event history |
+| Reservation fulfillment | Physical issue/consumption occurs against fulfilled allocation | Negative at the issuing Location through a distinct A01 posting event | Fulfillment and its inventory posting must be one governed outcome; reservation fulfillment must not be counted as a second independent decrement |
+| FIFO layer creation / consumption; MWA recalculation | Costing facts/projections change in response to eligible inventory events | No separate quantity movement solely for costing | Cost-layer creation/consumption and MWA recalculation must reconcile to the originating physical movement; they must not duplicate its on-hand delta |
+| Reversal / compensation of a posted movement | Previously posted physical effect is corrected by a new immutable event | Opposite sign to the quantity being reversed, at the same affected grain; partial correction is capped by unreversed remainder | Original movement remains immutable; new event must identify original event/movement and be idempotent. Exact algorithm, partial/reversal-of-reversal authorization and physical enforcement remain OPEN |
+
+### 42.39.3 Cross-source invariants and double-count prevention
+
+1. **One sign meaning:** all signed `quantity_delta_base` values use positive = on-hand increase and negative = on-hand decrease. No source adapter may invert the meaning for a particular event family.
+2. **Location-local effect:** a movement is interpreted at its own Location. Paired transfers are separate Location effects; source-side decrease does not substitute for destination/transit increase.
+3. **Physical event boundary:** create/authorize/approve/pay/reserve/allocate does not itself change on-hand unless that event is explicitly the physical receipt, issue, consumption, loss, return or correction boundary.
+4. **Exactly-once logical effect:** one authoritative source event has one stable identity and deterministic movement fan-out. Same idempotency key and same canonical payload resolves to the original outcome; changed payload conflicts. Retries must not create duplicate movements.
+5. **Paired and multi-leg completeness:** transfer dispatch, receipt, loss, damage disposition and return are separately traceable events. Required movement fan-out must be complete and reconciled before the source event is considered committed; no partial externally visible fan-out.
+6. **No duplicate physical decrement/increment:** a loss, destruction, return, reservation fulfillment, cost-layer consumption or adjustment must not be posted again through a second source path for the same physical effect. Costing and reservation projections do not create additional on-hand movements.
+7. **Immutable correction:** reversal/compensation appends a new linked event; it does not edit/delete original movement rows or silently reuse the original event identity.
+8. **Zero-effect outcomes:** an authorized source event that legitimately has no stock effect must carry an explicit zero-movement outcome/reason under A01. Zero movement must not conceal a failed, incomplete or unposted event. This is distinct from a zero-variance Stock Count line, which must remain explicitly accounted under FIX-022/024.
+9. **Common quantity grain:** source and movement quantities must be normalized to Product base unit and match Business + Product + nullable Variant + Location + applicable Batch and source-line/event grain. A same-sign delta at a mismatched grain is still invalid.
+10. **Projection separation:** `inventory_balances` and `inventory_batch_balances` remain projections reconciled from movement facts and reservation lifecycle facts; they are not independent movement sources.
+
+### 42.39.4 Findings and unresolved decisions
+
+**PASS — conceptual direction consistency:** DOC08-FIX-024 supplies one unambiguous positive/negative on-hand delta meaning that can be applied across the inventoried source families. Existing transfer event proposals in §42.6 are directionally consistent with that meaning. Reservation and costing contracts explicitly distinguish non-physical lifecycle/cost effects from physical on-hand movement.
+
+**OPEN — source catalogue and event-specific contract:** the current design inventory is not yet a final enabled A01 catalogue. Purchase/receipt, sales/fulfillment, adjustment, count, transfer, loss/damage/return, production/consumption, write-off and approved correction still need exact source object/line identity, event type, allowed lifecycle, quantity authority, event cardinality, actor/authorization and per-source movement fan-out acceptance.
+
+**OPEN — sign validation:** no complete approved mapping table exists for every enabled event type. In particular, adjustment reason/kind mapping; receipt/return acceptance and condition disposition; production input/output/scrap; reservation fulfillment handoff; and correction/reversal event kinds require source-specific validation. The crosswalk above is the audit's expected logical direction, not a declaration that all source types are enabled or physically enforced.
+
+**OPEN — reversal/compensation:** the logical baseline requires a new linked correction event and prohibits over-reversal, but exact same-grain inverse arithmetic, partial reversal aggregation, correction-of-correction authorization, source-event lineage and concurrent cap enforcement still need a complete accepted contract.
+
+**OPEN — physical and evidence:** A01 registry/source keys, movement-kind vocabulary, event-specific sign checks, unique fan-out identity, transaction/locking/isolation, idempotency, RLS/server authorization, projection reconciliation, retry/crash recovery and executed source-family positive/negative/zero/paired/reversal/concurrency tests remain NOT ACCEPTED.
+
+This audit does not add an Owner FIX and does not revise DOC08-FIX-024. It does not authorize any source family, physical entity/field/constraint, SQL/DDL/DML, database change, API/backend behavior, application implementation, CI workflow change, test execution or deployment.
+
+**Disposition:** PASS WITH OPEN DEPENDENCIES for conceptual cross-source sign consistency only. CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
