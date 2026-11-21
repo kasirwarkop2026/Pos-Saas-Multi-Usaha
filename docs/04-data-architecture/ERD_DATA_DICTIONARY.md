@@ -4517,3 +4517,49 @@ The next logical gate is Owner review of the finite source-family inclusion/excl
 No new DOC08 FIX is added. DOC08-FIX-018 remains the accepted conceptual A01 direction; DOC08-FIX-024 and DOC08-FIX-025 remain unchanged. DOC-09 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.43 CW-11 Package E — proposed Owner-review disposition for A01 source families (22 November 2026)
+
+### 42.43.1 Review basis and authority boundary
+
+This addendum records a technical recommendation following review of the candidate catalogue in §42.42. It is a **PROPOSED DISPOSITION — NOT AN OWNER DECISION, NOT A DOC08 FIX, AND NOT AN ACTIVATION APPROVAL**. The recommendation classifies the existing 15 candidate source-family rows as INCLUDE, INCLUDE WITH CONDITIONS, or EXCLUDE FROM A01. It does not add, remove or enable a source family in the system.
+
+### 42.43.2 Proposed source-family disposition
+
+| Candidate source family | Proposed disposition | Required boundary / rationale |
+|---|---|---|
+| Purchase / goods receipt | INCLUDE | Only physically received and accepted quantity; order/commitment is excluded |
+| Sales / fulfillment | INCLUDE | Only actual physical issue from the issuing Location |
+| Inventory adjustment | INCLUDE | Approved signed adjustment with controlled reason; reason taxonomy and zero policy remain OPEN |
+| Stock Count | INCLUDE | Accepted count-session posting only; preserve the approved all-or-nothing lifecycle and DOC08-FIX-024 semantics |
+| Transfer dispatch | INCLUDE | Paired source-Location decrease and transit-Location increase for actual dispatched quantity |
+| Transfer receipt | INCLUDE | Paired transit decrease and destination increase for each actual receipt occurrence |
+| Transfer loss / destruction | INCLUDE | One authorized physical-loss/disposition posting; prevent duplicate loss paths |
+| Damage while still physically held / quality hold | INCLUDE WITH CONDITIONS | Only when physical stock is relocated to an approved hold Location; paired Location effects, no Business-wide on-hand loss |
+| Return before transfer receipt | INCLUDE | Only actual physical return from transit to source/return Location |
+| Return after transfer receipt | INCLUDE | Each actual reverse-flow leg is a distinct physical event with traceable quantity |
+| Customer / supplier physical return | INCLUDE | Only physically received and accepted goods; refund/authorization alone is excluded |
+| Production / assembly input consumption | INCLUDE | Only actual authorized material issue/consumption, not planned requirements or reservations |
+| Production / assembly output | INCLUDE | Only accepted physical output received into a Location |
+| Write-off / loss outside transfer | INCLUDE | Only authorized physical removal/destruction; deduplicate against adjustment and transfer-loss paths |
+| Reservation fulfillment handoff | INCLUDE WITH CONDITIONS | Separate A02-to-A01 handoff only for actual physical issue; no second decrement from reservation lifecycle |
+| Approved movement correction | INCLUDE | New immutable correction movement only, strictly under DOC08-FIX-025 and its lineage/effective-quantity cap |
+
+### 42.43.3 Proposed exclusions from A01 posting
+
+Keep purchase commitments, sales order/payment/reservation without physical issue, transfer approval without dispatch, return authorization/refund without receipt, production planning, A02 reservation create/allocate/release/expiry/cancel/reallocation, costing-only events, and rejected/invalid/ambiguous/no-effect correction requests outside A01 on-hand posting. These exclusions preserve the distinction between source-domain lifecycle evidence, reservation demand, costing, and physical inventory movement.
+
+### 42.43.4 Cross-family safeguards
+
+Before any family is considered for activation, its adapter contract must explicitly prevent: (a) duplicate posting of one physical effect through multiple source paths; (b) partial visible commitment of paired or multi-leg movements; (c) replay with changed payload or a newly allocated identity; (d) cross-Business source resolution; (e) reservation lifecycle decrement duplicated by fulfillment; and (f) correction through both a source-domain path and a generic movement-reversal path. Partial receipts, fulfillments, transfer legs and production input/output occurrences require independently traceable event cardinality.
+
+### 42.43.5 Disposition and next gate
+
+**TECHNICAL REVIEW: PASS — PROPOSED DISPOSITION RECORDED; OWNER ACCEPTANCE PENDING.** The proposed recommendation is to retain all 15 candidate families in the catalogue, classify 13 as INCLUDE and 2 as INCLUDE WITH CONDITIONS (held damage/quality hold; reservation fulfillment handoff), and keep the stated non-posting lifecycle events excluded. No candidate family is activated by this recommendation.
+
+Owner acceptance or revision remains required before this proposed disposition can be treated as an accepted conceptual allowlist. Even after such acceptance, each included family still requires its own exact source object/line identity, lifecycle eligibility, cardinality, source version, quantity authority, adapter ownership, authorization, idempotency, fan-out/recovery and physical evidence decisions. No physical table, field, FK, enum, key, adapter identifier, digest, retention or numeric policy is selected here.
+
+DOC08-FIX-018/024/025 remain unchanged. DOC-09 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
