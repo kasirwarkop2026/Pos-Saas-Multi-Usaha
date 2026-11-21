@@ -3061,3 +3061,31 @@ CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Diction
 ### 15.90.4 Governance
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migrations, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration changes. Stage 6 implementation remains NOT AUTHORIZED. Any merge to `main` triggers the linked Production deployment and requires explicit user authorization.
+
+
+## 15.91 CW-11 Package E — Stock Count Input Policy Owner decision and cross-register reconciliation (21 November 2026)
+
+### 15.91.1 Explicit Owner decision
+
+The Owner selected **Option A**: Stock Count and recount accept Product base unit only. Non-base-unit Stock Count input is not supported, and Stock Count does not perform alternate-unit conversion. The existing logical `counted_quantity_base` representation remains; no raw entered-unit or conversion-snapshot attributes are added for Stock Count.
+
+This is recorded as **DOC08-FIX-020 — FIX / OWNER-APPROVED / CONCEPTUAL**.
+
+### 15.91.2 Append-only documentation updates
+
+- DOC-08 §9 adds DOC08-FIX-020 with the decision scope and explicit conceptual/physical boundary.
+- DOC-04 §42.29 records the base-unit-only rule for count and recount, reconciles earlier OPEN alternatives, and lists remaining technical acceptance gates.
+- DOC-09 §11.11 records the Owner-choice question as resolved at conceptual decision level while retaining physical and operational dependencies as OPEN.
+- Earlier references in DOC-04 §§42.25.8 and 42.28.3 and DOC-09 §§11.7, 11.9 and 11.10 remain preserved as historical audit snapshots; this later Owner decision controls the choice. Upstream source workflows that support non-base units retain their separate conversion/provenance obligations.
+
+### 15.91.3 Bounded disposition
+
+The Owner-choice question is resolved. No physical/UI/API enforcement, schema field, database constraint, permission grant, implementation, numeric parameter, test result or evidence is approved. Count-attempt lifecycle, cutoff/watermark, accepted-attempt posting, partial-posting policy, idempotency, concurrency, tenant/security, numeric precision/rounding and executed evidence remain OPEN.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. No other dependency is closed.
+
+### 15.91.4 Validation and governance
+
+This is a documentation-only, append-only update to the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+PR #144 remains subject to fresh documentation validation and read-back. It is not merged. Any merge to `main` triggers the linked Vercel Production deployment and requires separate explicit Owner authorization.
