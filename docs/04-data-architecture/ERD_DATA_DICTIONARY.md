@@ -4393,7 +4393,7 @@ The correction lineage is a rooted, acyclic, branching tree. Every correction mo
 
 For each movement node N, define the current effective signed quantity:
 
-**E(N) = quantity_delta_base(N) + Σ E(C)**
+`E(N) = quantity_delta_base(N) + Σ E(C)`
 
 where C is each direct correction child of N. Each new correction child must have the opposite sign to the current E(N), with a nonzero absolute quantity no greater than ABS(E(N)) immediately before posting. The updated E(N) may reach zero but must not cross zero or invert sign. Recalculate against the complete existing descendant tree before every new correction.
 
