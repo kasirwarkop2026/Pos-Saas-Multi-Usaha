@@ -4202,3 +4202,39 @@ Until explicit Owner approval, the mapping remains CANDIDATE / NOT FIX. Existing
 No physical schema, SQL/DDL/DML, database change, API/backend behavior, implementation, test result or deployment is approved. DOC08-FIX-023 remains conceptual only; Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.38 CW-11 Stock Count variance-to-ledger movement sign mapping — Owner-approved conceptual FIX (21 November 2026)
+
+### 42.38.1 Owner decision
+
+The Owner explicitly approved Option A, recorded as DOC08-FIX-024:
+
+- Positive Stock Count variance (surplus) maps to a positive `inventory_movements.quantity_delta_base` and increases on-hand quantity.
+- Negative Stock Count variance (shortage) maps to a negative `inventory_movements.quantity_delta_base` and decreases on-hand quantity.
+- Zero variance emits no quantity movement, but the count line must remain explicitly accounted for in the Stock Count session. NULL/not-counted is not zero.
+- Stock Count movement delta equals the accepted variance quantity in Product base units: `movement_delta_base = variance_quantity_base`.
+- The count-line grain remains exact Business + Product + nullable Variant + Location + applicable Batch. The movement must use the same grain as the accepted count line.
+- Positive/negative signed on-hand delta semantics must be consistent across all inventory movement source workflows; this is not a Stock Count-only convention.
+
+### 42.38.2 Relationship to prior FIX decisions
+
+DOC08-FIX-024 consumes the accepted variance from DOC08-FIX-023; it does not redefine the variance calculation. The accepted variance is calculated once from the single accepted immutable attempt against expected quantity at R. Movement generation must not substitute another attempt, snapshot or cutoff.
+
+The mapping preserves DOC08-FIX-021 session all-or-nothing posting and DOC08-FIX-022 lifecycle, immutable attempt history, and explicit zero-variance line accounting. A zero-variance line produces no quantity delta but remains part of the session's complete accounted result. NULL/not-counted cannot be coerced into zero.
+
+### 42.38.3 Ledger-wide consistency and correction boundary
+
+The positive-increases / negative-decreases meaning is the canonical conceptual interpretation of signed on-hand quantity deltas and must be applied consistently across every inventory movement source workflow. Individual event-kind vocabulary, source-specific validation and complete source-to-ledger mapping are not defined by this decision.
+
+Movement rows remain immutable posted facts. Reversal/compensation must retain source-event lineage and follow separately governed ledger correction semantics. This FIX does not define the complete reversal/compensation algorithm, event vocabulary or implementation.
+
+### 42.38.4 Acceptance status and remaining OPEN gates
+
+**Conceptual Owner decision:** RESOLVED by DOC08-FIX-024.
+
+**OPEN / NOT ACCEPTED:** movement-kind vocabulary; event-specific sign validation across all source workflows; A01 source-event identity and movement lineage; reversal/compensation semantics and linkage; zero-line accounting enforcement; numeric representation, precision/scale/capacity, intermediate overflow, rounding and tolerance; physical enforcement; concurrency, serialization and session idempotency; and executed positive/negative/zero/retry/reversal/reconciliation evidence.
+
+No physical schema, SQL/DDL/DML, database change, API/backend behavior, implementation, test result or deployment is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
