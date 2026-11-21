@@ -4157,3 +4157,48 @@ No numeric representation, Product fractional eligibility, minimum increment, ma
 Design cases in §42.35.4 remain NOT EXECUTED. This addendum does not accept a physical Data Dictionary field or ERD, authorize SQL/DDL/DML, database changes, API/backend work, implementation, testing, deployment or Stage 6. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.37 CW-11 Stock Count variance-to-movement sign mapping — bounded ledger consistency audit (21 November 2026)
+
+### 42.37.1 Scope and evidence reviewed
+
+This audit follows DOC08-FIX-023 and reviews the candidate movement-ledger contract in §§35.3, 35.4, 36.5, 42.26 and 42.27, including the candidate `inventory_movements.quantity_delta_base` signed-delta field and the Stock Count/adjustment posting paths.
+
+The published working documentation establishes that `inventory_movements` is the immutable posted physical quantity ledger; each posted row carries a signed base-quantity delta; corrections use linked reversal/compensating records; and `inventory_balances` is a projection reconciled from posted movement facts. However, the current candidate text leaves `movement_kind` vocabulary, sign validation, zero-value policy, and the exact Stock Count variance-to-ledger mapping OPEN. It does not yet define whether positive `quantity_delta_base` means an increase or decrease in on-hand stock.
+
+### 42.37.2 Candidate semantic mapping for Owner review — NOT FIX
+
+To make the unresolved relationship explicit, the following conventional mapping is proposed for review only:
+
+| Stock Count result under DOC08-FIX-023 | Physical interpretation | Candidate ledger delta |
+|---|---|---|
+| Positive variance (surplus) | Increase on-hand quantity to reconcile ledger to accepted physical count | Positive `quantity_delta_base` |
+| Negative variance (shortage) | Decrease on-hand quantity to reconcile ledger to accepted physical count | Negative `quantity_delta_base` |
+| Zero variance | No physical quantity correction required | No variance movement; line remains explicitly accounted for under DOC08-FIX-022 |
+
+The candidate relationship is therefore movement delta = variance quantity, using the same Product base unit and exact Business/Product/nullable Variant/Location/applicable Batch grain. This is a semantic proposal, not a confirmed property of the existing ledger. It must not be treated as an established convention until the Owner explicitly approves it and the existing movement-source contracts are reconciled.
+
+### 42.37.3 Required consistency and safety conditions
+
+If the Owner accepts the candidate mapping, documentation and eventual implementation must preserve all of the following:
+
+1. The variance is calculated once from the accepted immutable attempt and expected quantity at R under DOC08-FIX-023; movement generation must not recompute it from a different snapshot or attempt.
+2. A positive adjustment delta increases the affected on-hand quantity; a negative delta decreases it. The exact ledger sign convention must be uniform across every source workflow, not Stock Count alone.
+3. A Stock Count variance movement is a correction event, not a rewrite of prior movement facts. Posted history remains immutable; later correction uses separately governed reversal/compensation.
+4. Zero variance emits no quantity movement but is explicitly accounted for in the all-or-nothing session result. NULL/not-counted cannot generate a zero movement.
+5. All required line movements and the session posting identity remain within DOC08-FIX-021 all-or-nothing atomicity and DOC08-FIX-022 lifecycle guards.
+6. Movement source identity, idempotency, exact grain, Location sequencing, post-cutoff reconciliation and audit lineage remain required; no duplicate or partial movement may be produced on retry.
+7. This mapping does not decide numeric precision, rounding, tolerance, Product fractional policy, movement-kind vocabulary, reversal policy, physical schema or implementation.
+
+### 42.37.4 Owner decision and OPEN gates
+
+**OWNER DECISION REQUIRED:** confirm or revise the candidate mapping in §42.37.2, specifically whether positive `quantity_delta_base` increases on-hand and negative `quantity_delta_base` decreases on-hand, making Stock Count movement delta equal to the accepted variance.
+
+Until explicit Owner approval, the mapping remains CANDIDATE / NOT FIX. Existing documentation does not establish the sign semantics, so no stronger claim is made.
+
+**OPEN / NOT ACCEPTED:** canonical sign semantics across all movement sources; movement-kind vocabulary and event-specific sign validation; Stock Count source-event and movement linkage; reversal/compensation sign behavior; zero movement handling; numeric representation/rounding/tolerance; physical enforcement; and executed positive/negative/zero/retry/reversal/reconciliation evidence.
+
+No physical schema, SQL/DDL/DML, database change, API/backend behavior, implementation, test result or deployment is approved. DOC08-FIX-023 remains conceptual only; Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
