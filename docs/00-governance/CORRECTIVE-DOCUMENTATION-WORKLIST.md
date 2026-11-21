@@ -3140,3 +3140,29 @@ CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Diction
 ### 15.93.4 Validation and governance
 
 This is a documentation-only, append-only continuation on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; any merge to `main` triggers the linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.94 CW-11 Package E — Stock Count lifecycle consistency audit and candidate refinement (21 November 2026)
+
+### 15.94.1 Audit scope
+
+Re-read DOC-04 §§42.30–42.31 after the Owner approved DOC08-FIX-021 (count-session all-or-nothing variance posting). Audited parent transitions, cancellation, attempt supersession, retry behavior and the meaning of POSTED against the atomic session boundary.
+
+### 15.94.2 Findings and append-only correction
+
+- The prior candidate lifecycle did not explicitly reconcile cancellation from READY_TO_POST with a concurrently starting posting transaction.
+- It did not state whether a persisted intermediate POSTING state was appropriate under all-or-nothing semantics.
+- Attempt supersession needed an explicit controlled return-to-counting and coordinated replacement rule.
+- POSTED acceptance needed a complete all-lines guard, including explicit handling of zero-variance lines and preserving NULL as not-counted.
+- DOC-04 §42.32 now records a refined candidate transition table, cancellation/post serialization guard, no-partial-posting retry behavior, attempt supersession rule and all-or-nothing POSTED acceptance conditions.
+- DOC-09 §11.14 records the same audit disposition, Owner gates and technical dependencies.
+
+### 15.94.3 Decision boundary and next action
+
+This refinement is a candidate proposal only. It does not create a new DOC-08 FIX and does not accept the parent/attempt status catalogue. Owner acceptance remains required for status vocabulary/transitions, cancellation eligibility, supersession sequence and zero-variance line treatment. No implementation or physical design is approved.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. Physical atomicity, cancel/post serialization, session idempotency, concurrency, security, numeric policy and executed evidence remain OPEN.
+
+### 15.94.4 Governance
+
+Documentation-only, append-only update on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
