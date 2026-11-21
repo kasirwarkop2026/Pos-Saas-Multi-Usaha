@@ -4572,3 +4572,16 @@ A count reconciliation found that §42.42.3 contains **16** candidate source-fam
 This correction clarifies the arithmetic only. It does not change any row's proposed classification, create an Owner decision/FIX, enable any source family, or close any technical dependency. If §42.43 contains a contrary count, this §42.44 count reconciliation governs the intended count.
 
 DOC08-FIX-018/024/025 remain unchanged. Owner acceptance remains pending; ERD-OPEN-05 remains OPEN; Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+
+## 42.45 Owner approval — A01 source-family conceptual scope FIX (22 November 2026)
+
+DOC08-FIX-026 in DOC-08 §15 records the Owner-approved conceptual disposition of the 16 candidate source-family rows in §42.42.3: 14 INCLUDE and two INCLUDE WITH CONDITIONS (physical quality-hold relocation; A02-to-A01 reservation fulfillment handoff). The exact boundaries and explicit non-posting exclusions are governed by DOC08-FIX-026 and are incorporated by reference; this section does not create separate event enum values or physical adapters.
+
+**Consistency disposition:** the conceptual source-family scope is aligned with DOC08-FIX-018's bounded A01 registry, DOC08-FIX-019's separate A02 reservation identity, DOC08-FIX-024's signed movement direction and DOC08-FIX-025's immutable correction lineage. No conceptual conflict was identified in the reviewed documentation.
+
+**FIX — OWNER-APPROVED / CONCEPTUAL.** The former proposed / Owner-acceptance-pending disposition in §§42.43–42.44 is superseded only for conceptual inclusion, conditional boundaries and explicit exclusions by DOC08-FIX-026. All technical gates remain OPEN: exact source object/line identity; lifecycle eligibility; event cardinality/version; quantity authority; adapter ownership/activation; authorization; replay/idempotency; physical registry/integrity; atomic transaction/fan-out/recovery; concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+No source family or adapter is enabled. No physical table, column, FK, key, enum, digest, retention, numeric or runtime-state choice is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
