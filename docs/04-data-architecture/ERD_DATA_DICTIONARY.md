@@ -4723,3 +4723,56 @@ The next gate is to resolve the OPEN source/line/receipt-occurrence identity and
 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+
+## 42.47 CW-11 Package E — Purchase / Goods Receipt cross-document contract audit (22 November 2026)
+
+### 42.47.1 Audit basis
+
+This audit checks DOC-04 §42.46 against the current project-authored workflow and authorization baselines:
+- DOC-02 `CATEGORY_WORKFLOW_MASTER.md` §5 (Retail & Distribution pattern: procurement → receiving → inventory) and §6 (procurement/receiving controls).
+- DOC-05 `AUTHORIZATION_MASTER.md` §23.4–§23.6 (inventory action catalogue starter, role/scope/approval completion rules and explicit non-grant boundary).
+- DOC-04 §§17.2–17.4 (historical conceptual entity matrix, quantity/source identity/lifecycle groups and unresolved physical specification protocol).
+- DOC08-FIX-018/019/024/025/026.
+
+The audit is documentation-only. It does not create a new FIX, assign a permission, establish an unrecorded source entity or authorize implementation.
+
+### 42.47.2 Cross-document consistency findings
+
+**PASS — physical receipt is distinct from procurement commitment and payment.** DOC-02 §6 explicitly separates request/PO creation, approval, physical receiving, discrepancy review and supplier payment. DOC-04 §42.46 correctly prevents purchase order, expected delivery, invoice or payment from independently increasing on-hand. The receiving event must be based on the physical receipt and applicable acceptance outcome, not on commercial or accounting lifecycle alone.
+
+**PASS — receipt acceptance is a quantity boundary, not a whole-document assumption.** DOC08-FIX-026 limits purchase/receipt posting to physically received and accepted quantity. DOC-04 §42.46's receipt-line and partial-occurrence treatment is consistent with that boundary. Where a receipt contains accepted, rejected, disputed or not-yet-inspected quantities, only the quantity actually accepted for inventory posting may enter A01. The exact inspection/discrepancy lifecycle and whether accepted quantity is split into multiple receipt details remain OPEN; this audit does not invent those states.
+
+**PASS — inventory ledger remains distinct from procurement and projections.** DOC-04 §§17.2–17.4 preserve `inventory_movements` as immutable ledger facts and `inventory_balances` / batch balances as rebuildable projections. DOC-04 §42.46 correctly requires a positive receiving-grain movement and reconciliation, while costing-only processing does not create another on-hand movement.
+
+**PASS — independent authorization is required; purchase approval is not inventory-posting authority by implication.** DOC-02 §6 separates request/PO, approval, physical receiving, discrepancy review and supplier payment. DOC-05 §23.5 requires exact action, actor, scope, state, SoD, approver and audit rows; §23.6 states that the starter catalogue does not grant permissions. DOC-04 §42.46 correctly does not assume that PO approval grants A01 posting authority.
+
+**PASS — no unsupported purchase permission key is inferred.** DOC-05 §23.4 provides candidate M06 inventory keys but does not supply a complete purchase-receipt-specific permission tuple. No `M08.*` or other purchase-receipt permission literal is created by this audit. Exact procurement/receiving actor functions, permission keys, scope, conditions, approver/SoD and audit tuple remain OPEN.
+
+### 42.47.3 Contract clarifications and boundaries
+
+1. **Quantity partition:** physical arrived quantity, accepted-for-inventory quantity, rejected quantity and unresolved/discrepant quantity are conceptually distinct. Only accepted-for-inventory quantity is eligible for the A01 receipt movement. Their exact source representation and arithmetic/caps remain OPEN.
+2. **Discrepancy workflow:** discrepancy review is a separate control from physical receiving and supplier payment. An unresolved discrepancy cannot be silently treated as accepted inventory. The exact rule for partial acceptance, inspection hold, supplier claim and subsequent disposition remains OPEN.
+3. **Source ownership:** DOC-02 establishes the procurement/receiving workflow pattern and DOC-05 establishes independent action authorization, but the reviewed documents do not yet name the exact authoritative source domain/object or its owner for each receipt fact. Purchasing/receiving source ownership and M06 ledger command boundary must be explicitly mapped before adapter acceptance.
+4. **Line and movement cardinality:** DOC-04 §17.2's exact one-movement-per-receipt-detail precedent is scoped to transfer shipment receipt/return details (A12.10/A12.11); it must not be silently generalized to Purchase / Goods Receipt. For purchase receipt, one receipt detail to one or multiple movements, including Batch/Location splits, remains OPEN and requires its own source-specific decision.
+5. **Authorization:** do not reuse inventory-adjustment approval/post keys as purchase-receipt authorization without an explicit mapping. DOC-05 §23.5 requires a separate row for exact key/actor/scope/state/SoD/approver/audit. Purchase approval, discrepancy approval and inventory posting remain distinct until an explicit policy says otherwise.
+6. **Batch and cost:** physical Batch tracking and cost-layer creation are distinct identities. A received quantity may need stock-grain allocation and downstream cost-layer provenance, but neither Batch nor cost-layer identity may be invented from a purchase document number. Exact receipt-to-Batch and receipt-to-cost-layer cardinality remain OPEN.
+
+### 42.47.4 Decision disposition
+
+**PASS — cross-document conceptual consistency; no contradiction found.** DOC-04 §42.46 remains a valid logical adapter-contract draft under DOC08-FIX-026. The following matters are sufficiently settled conceptually and should not be reopened without a specific conflict:
+- purchase commitment/order and payment/invoice without accepted physical receipt create no A01 on-hand movement;
+- only physically received and accepted quantity is eligible;
+- accepted quantity produces a positive movement under DOC08-FIX-024 at the authoritative receiving stock grain;
+- partial receipt occurrences remain independently traceable and append-only;
+- procurement/receiving approval, discrepancy review, supplier payment and inventory posting are distinct control actions;
+- inventory movement ledger and its projections/costing remain separate concerns.
+
+**NOT CLOSED — source-specific contract decisions:** exact source ownership/object/line/receipt detail identity; accepted/rejected/discrepant quantity representation; inspection and discrepancy lifecycle; partial acceptance split and event cardinality; receipt-detail-to-movement cardinality and Batch/Location fan-out; source version/amendment semantics; over-receipt authority; receiving Location/Batch policy; purchase-receipt permission key and actor/scope/SoD/approver/audit tuple; idempotency/recovery; physical constraints/atomicity/concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+No new DOC08 FIX is added. DOC08-FIX-018/019/024/025/026 remain unchanged. No purchase-receipt permission is granted, no adapter is enabled, and no physical schema or runtime behavior is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
