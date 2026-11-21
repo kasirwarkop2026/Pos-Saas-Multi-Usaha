@@ -678,3 +678,25 @@ This resolves the lifecycle Owner-approval questions carried in §§11.12 and 11
 No physical Data Dictionary field, enum, constraint, API/backend implementation, test result or deployment is accepted. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.16 Stock Count snapshot/cutoff and post-cutoff reconciliation audit — PASS WITH OPEN DEPENDENCIES (21 November 2026)
+
+DOC-04 §42.34 rechecks the snapshot/cutoff contract against DOC08-FIX-020–022 and clarifies the logical requirements without choosing physical implementation.
+
+**Reconciled conceptual requirements:**
+- Count-line snapshot quantity must prove exact Business + Product + nullable Variant + Location + applicable Batch grain and the same frozen inclusive cutoff. A lagging projection is not accepted as snapshot proof unless its applied movement watermark covers that cutoff.
+- Cutoff C is inclusive; replay is strictly (C,R] for a separately proven same-Location reconciliation boundary R.
+- Replay includes every applicable posted movement from every source workflow, while excluding unrelated grains. Paired transfer movements are evaluated independently at their respective Location sequences.
+- Expected quantity at R is the snapshot quantity at C plus the signed net applicable movement delta in (C,R]; accepted count variance uses this expected quantity, subject to OPEN numeric rules.
+- Reconciliation must be complete through the session posting decision. A scan that can miss concurrent movements is insufficient.
+- Replay is deterministic and read-only with respect to original movement facts; replay itself creates no inventory movements.
+- Missing/ambiguous sequence, incomplete source fan-out, stale projection watermark, wrong-Location locator, incompatible grain or other unresolved reconciliation exception blocks READY_TO_POST.
+- Batch-scoped counts reconcile at Batch grain and remain consistent with Product/Variant/Location totals; Batch quantities cannot be double-counted or silently absorbed into non-Batch lines.
+- DOC08-FIX-021/022 session all-or-nothing and lifecycle acceptance remain the posting boundary.
+
+**OPEN / NOT CLOSED:** exact snapshot acquisition/provenance; projection applied-watermark representation; initial watermark representation; Location sequence allocation/gap recovery; selection/capture of reconciliation boundary R; serialization against concurrent postings; A01 source-event completeness/fan-out; replay algorithm/recovery; null-safe Variant/Batch enforcement; numeric policy; and executed concurrency/failure/replay/reconciliation evidence.
+
+This audit adds no Owner FIX and approves no physical field, schema, constraint, lock/isolation mechanism, API/backend, implementation or test result. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
