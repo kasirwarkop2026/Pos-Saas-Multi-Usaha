@@ -3757,3 +3757,294 @@ The numeric operation ownership map is now specified at the logical level across
 NUM-01–NUM-12 physical/operational details remain OPEN where not explicitly fixed in their source decisions. Stock-count non-base-unit entry remains an owner decision. A01/A02 physical idempotency, atomicity, tenant/security enforcement and evidence remain OPEN. No dependency is closed; no FIX is promoted; candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.28 CW-11 Package E — numeric-policy coverage and lifecycle acceptance crosswalk (21 November 2026)
+
+### 42.28.1 Audit purpose and boundary
+
+A cross-document audit of DOC-04 §§20.2–20.7, 35–38 and 42.1–42.27 against DOC-08 FIX decisions and DOC-09 §§3C and 11.4–11.9 found that the numeric operation map is correctly scoped to inventory/costing, but its coverage boundary against the full NUM-01–NUM-12 baseline was implicit. The lifecycle rules also existed across the F41 corrections and A01/A02 contracts, but were not indexed together as one acceptance crosswalk.
+
+This addendum makes coverage and exclusions explicit. It does not add a new numeric policy, lifecycle decision, entity, field, physical constraint or test result. Existing FIX decisions retain their scope; unresolved items remain OPEN.
+
+### 42.28.2 NUM-01–NUM-12 coverage crosswalk
+
+| Numeric rule | Package E coverage | Controlling logical anchor | Boundary retained |
+|---|---|---|---|
+| NUM-01 — quantity and Product base unit | IN SCOPE | §§20.2–20.3, 42.25–42.27 | Product base unit remains canonical; per-Product fraction/increment, precision, capacity and physical type remain OPEN. |
+| NUM-02 — unit conversion | IN SCOPE | §§42.25, 42.27.2–42.27.5 | Conversion must be explicit, compatible and reproducible; factor precision/version, allowed graph, overflow and rounding boundary remain OPEN. |
+| NUM-03 — cost and cost layers | IN SCOPE | §§20.2–20.3, 38.5–38.6, 42.8, 42.27 | Total cost remains authoritative and unit cost derived. The conceptual requirement for deterministic residual reconciliation is retained; the exact FIFO/MWA operation, precision, residual method and posting boundary remain OPEN. NUM-07 LRM must not be generalized to FIFO or MWA. |
+| NUM-04 — MWA / FIFO | IN SCOPE | §§20.2–20.3, 38.5–38.6, 42.8.2–42.8.3, 42.27 | MWA default, FIFO alternative and location-scoped pool remain established. Physical ordering keys, precision, residual, locking and execution remain OPEN. |
+| NUM-05 — transfer costing | IN SCOPE | §§37.4–37.5, 42.6, 42.8, 42.27 | Internal transfer carries existing cost through transit; exact transit valuation, partial disposition, fee/FX treatment and rounding remain OPEN. |
+| NUM-06 — landed cost | IN SCOPE | §§20.2, 42.8.4, 42.27 | Direct identifiable cost and verifiable allocation basis remain the conceptual rules; eligible cost classification, basis selection, timing and exact allocation arithmetic remain OPEN. |
+| NUM-07 — Largest Remainder Method | IN SCOPE, LIMITED | §§20.2, 42.27.4 | LRM remains limited to suitable proportional allocation with stable domain-specific tie identity. It is not a universal rule for unit conversion, FIFO, MWA, FX or all quantity arithmetic. Exact stable keys and implementation remain OPEN. |
+| NUM-08 — currency and FX | PARTIAL / DOMAIN-BOUNDED | §§20.2–20.3, 37, 42.8.4, 42.27 | Package E covers currency/FX only where they affect inventory transfer and costing valuation. Transaction-wide FX, provider/fallback, currency policy and journal treatment remain governed by their owning finance/accounting work and are not accepted by this package. |
+| NUM-09 — sales, discount and tax | OUT OF SCOPE | §20.2 | The existing calculation-order, traceability and reconciliation principles remain in force. Sales/tax parameters and rounding acceptance are not covered or closed by CW-11 Package E. |
+| NUM-10 — rounding account | OUT OF SCOPE | §20.2 | The existing restriction on genuine accounting rounding differences remains in force. Account mapping, materiality and journal policy are not covered or closed here. |
+| NUM-11 — bank matching tolerance | OUT OF SCOPE | §20.2 | Tolerance must not rewrite source bank or transaction values. Tolerance values and bank-matching acceptance are not covered or closed here. |
+| NUM-12 — posted history | CROSS-CUTTING | §§20.2–20.3, 42.4–42.8, 42.24, 42.27 | Posted facts and applied snapshots are not silently rewritten; correction uses traceable reversal/compensation. Physical immutability, audit enforcement and executed evidence remain OPEN. |
+
+The phrase “NUM-01–NUM-12 physical/operational details remain OPEN” in §42.27.6 must therefore be read as a carry-forward of each rule's own scope and unresolved parameters, not as a claim that Package E fully specifies all twelve domains. NUM-09–NUM-11 are explicitly outside this inventory/costing package; NUM-08 is covered only for inventory/costing effects; NUM-12 is cross-cutting.
+
+### 42.28.3 Lifecycle-to-acceptance crosswalk
+
+| Lifecycle area | Existing logical contract | Acceptance items that remain OPEN |
+|---|---|---|
+| A01 source event and movement posting | §§42.4, 42.17–42.24 | Physical registry identity/keys, source catalogue activation, canonical digest/version and retention, atomic fan-out, locking/retry/reversal enforcement, tenant security and executed evidence. |
+| Stock count and recount | §§36.4–36.5, 42.5, 42.25.8–42.25.9 | Owner decision on base-unit-only versus non-base-unit entry; attempt-status vocabulary/transitions; cutoff/watermark ordering; accepted-attempt posting policy; all-or-nothing versus item-level posting; idempotency and physical concurrency. |
+| Shipment, transit and disposition | §§37.4–37.5, 42.6, 42.8 | Shared versus per-shipment transit-location policy; physical event identity and paired movement enforcement; over/under-shipment, cancellation, loss/damage/return authorization; transfer closure evidence; transit cost and fee/FX valuation. |
+| A02 reservation request and allocation lifecycle | §§38.3–38.4, 42.7, 42.18–42.24 | Enabled source-family catalogue, exact source-line/cardinality and wave policy, event vocabulary and physical projection, partial-reservation policy, source-amendment/cancellation handling, concurrency/idempotency, tenant enforcement and tests. |
+| FIFO/MWA cost lifecycle | §§38.5–38.6, 42.8, 42.27 | Exact eligible-layer ordering/tie-breaks, numeric precision/capacity, deterministic residual method per operation, source/transit/destination reconciliation, fee/FX/late-adjustment policy, locking and executed evidence. |
+
+These anchors are not substitutes for the detailed contracts. The table is an audit index to prevent a logical description from being mistaken for a closed physical or operational gate.
+
+### 42.28.4 Audit disposition
+
+1. The NUM-01–NUM-12 conceptual baseline remains the controlling scope for its respective domains. Package E does not expand its authority into sales/tax, rounding-account or bank-matching policy.
+2. NUM-03's conceptual deterministic residual principle remains retained. The precise residual algorithm and rounding boundary for FIFO and MWA are still separate OPEN decisions; NUM-07 LRM is not automatically applicable.
+3. The count-attempt, shipment/transit, reservation-event and transfer-cost lifecycle contracts are present as candidate/logical designs. Their identified physical, owner-decision, concurrency, security and evidence gates remain OPEN.
+4. No dependency is closed, no FIX is newly promoted, and no source decision is inferred from a candidate specification.
+5. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.29 Owner decision — Stock Count input accepts Product base unit only (21 November 2026)
+
+### 42.29.1 Decision and scope
+
+The Owner selected **Option A**: Stock Count input accepts only the Product base unit.
+
+1. A physical count value entered for a Product must be expressed in that Product's configured base unit.
+2. Non-base-unit Stock Count input is not supported. Count entry does not invoke an alternate-unit conversion or conversion-factor lookup.
+3. The same restriction applies to recount attempts; each recorded count measurement remains in Product base units.
+4. The existing candidate `stock_count_items.counted_quantity_base` remains the logical quantity representation. This decision does not add raw entered-quantity, entered-unit or conversion-snapshot attributes for Stock Count.
+5. This rule is specific to Stock Count measurement entry. It does not remove the separate requirement for upstream workflows that do accept non-base units to preserve their own input quantity/unit/conversion provenance and provide a validated base-unit context to inventory.
+
+### 42.29.2 Reconciliation with prior OPEN language
+
+The Owner decision resolves the alternative previously stated in §§42.25.8 and 42.28.3: Stock Count is base-unit-only, not a non-base-unit entry flow with retained conversion provenance. Those earlier sections remain historical audit context and must be read with this later explicit decision.
+
+The Stock Count entry-unit policy is therefore **FIX — OWNER-APPROVED / CONCEPTUAL**. It is no longer an unresolved Owner-choice gate. Do not interpret this decision as closing any separate technical acceptance item.
+
+### 42.29.3 Remaining acceptance gates
+
+The following remain OPEN: physical/UI/API enforcement that rejects a non-base unit; count-attempt status vocabulary and valid transitions; immutable attempt history and accepted-attempt selection; snapshot/cutoff watermark ordering; accepted-attempt posting semantics; all-or-nothing versus item-level posting; idempotency, concurrency/locking, tenant/security enforcement; precision/scale/capacity/overflow and rounding; and positive, negative, boundary, replay and reconciliation evidence.
+
+No physical schema, field type, database constraint, authorization grant, implementation, test result or Production readiness is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.30 CW-11 Stock Count lifecycle — candidate state and transition model (21 November 2026)
+
+### 42.30.1 Status and authority
+
+This section consolidates the existing Stock Count attempt, snapshot and variance-posting rules into one **candidate logical lifecycle proposal**. It is not an Owner-approved status catalogue, physical enum, database constraint, authorization grant or implementation. The proposal is intended to make the transition boundaries reviewable while preserving the OPEN status of any decision not explicitly approved.
+
+The Stock Count input-unit rule is already FIX at conceptual level under DOC08-FIX-020: count and recount measurements accept Product base unit only.
+
+### 42.30.2 Parent Stock Count lifecycle proposal
+
+| Candidate state | Meaning / entry condition | Permitted next state(s) | Guard / invariant |
+|---|---|---|---|
+| DRAFT | Scope and location are being prepared; no active count snapshot | COUNTING, CANCELLED | No variance posting; snapshot cutoff is not yet frozen |
+| COUNTING | Snapshot and inclusive Location posting-sequence cutoff have been frozen; measurement attempts may be recorded | SUBMITTED, CANCELLED | Frozen snapshot/cutoff cannot be rewritten; each count attempt is a new immutable row |
+| SUBMITTED | Counter has submitted the count for reconciliation/review | REVIEW_REQUIRED, READY_TO_POST, COUNTING (only through an explicit controlled return for additional count attempts) | NULL remains not counted; zero is a valid measurement; missing required scope lines cannot silently be treated as zero |
+| REVIEW_REQUIRED | Variance or exception requires independent review | READY_TO_POST, COUNTING (controlled return for recount), CANCELLED where no posting has occurred | Review decision and actor/time must be auditable; approval separation follows DOC-05 |
+| READY_TO_POST | Required line attempts have explicit accepted dispositions and snapshot reconciliation is complete | POSTED | No unresolved required line, unreconciled post-cutoff movement or unresolved posting exception |
+| POSTED | The approved variance posting outcome has committed | Terminal | Posted movement/history is immutable; correction uses a separate traceable compensating event, not reopening or editing the count |
+| CANCELLED | Count is stopped before posting | Terminal | Cancellation preserves snapshot and attempt history; no variance movement is emitted |
+
+This parent-state proposal does not decide whether a submitted count can be posted as a whole or by independently accepted item. That posting-unit policy remains an explicit Owner decision (see §42.30.5).
+
+### 42.30.3 Count-attempt disposition proposal
+
+The attempt measurement itself remains immutable. The candidate `attempt_status` describes its controlled disposition and is changed only through an auditable decision; it is not a replacement for attempt history.
+
+| Candidate attempt status | Meaning | Permitted transition(s) |
+|---|---|---|
+| RECORDED | Measurement captured in Product base unit; not yet accepted | REVIEW_REQUIRED, ACCEPTED, REJECTED |
+| REVIEW_REQUIRED | Measurement awaits independent variance/recount review | ACCEPTED, REJECTED |
+| ACCEPTED | This is the sole attempt selected for variance posting for its count line | SUPERSEDED only before any posting has committed for that attempt |
+| REJECTED | Measurement reviewed and not selected | Terminal |
+| SUPERSEDED | A later attempt was accepted instead; this measurement remains retained | Terminal |
+
+Transition invariants:
+
+1. A recount creates a new attempt identity and next serialized sequence; it never overwrites the prior measurement.
+2. At most one attempt per count line is ACCEPTED / `accepted_for_posting = true` at a time.
+3. A transition from ACCEPTED to SUPERSEDED must be auditable and coordinated atomically with acceptance of the replacement attempt. The previous attempt remains queryable and its measurement facts remain unchanged.
+4. Once a variance posting has committed for an accepted attempt, that attempt cannot be superseded or reposted. Any correction requires a separate traceable compensating event.
+5. Rejected and superseded attempts cannot post. A retry for the same accepted attempt and posting purpose must resolve to the same posting outcome under the A01 idempotency contract.
+6. Exact status storage, transition-event representation, actor authority, locking and partial-unique enforcement remain physical/security gates.
+
+### 42.30.4 Snapshot and post-cutoff reconciliation acceptance sequence
+
+1. While DRAFT, the count may have no cutoff watermark.
+2. Before entering COUNTING, freeze the count scope, snapshot instant and inclusive `cutoff_location_posting_sequence` under one consistent Location-level transaction boundary. The cutoff movement locator, if present, must identify that same Location and agree with the sequence; it is not the ordering authority.
+3. The frozen watermark is immutable. A Location with no prior movement must still have an explicit valid initial watermark distinct from an unfrozen/NULL draft value.
+4. Movements with Location posting sequence greater than the frozen cutoff are not discarded or silently included in the original snapshot. Before variance posting, reconcile/replay their net effects against the counted scope so that expected quantity is evaluated at the posting boundary.
+5. The variance basis is the accepted attempt's base-unit measurement compared with the snapshot quantity adjusted for all applicable post-cutoff movements. Exact arithmetic, precision and rounding remain OPEN.
+6. Variance posting is blocked until the accepted attempt, watermark, post-cutoff movement set and resulting variance are reproducible and tenant/Location/Product/Variant/Batch-consistent.
+
+Sequence allocation, snapshot transaction serialization, initial-watermark representation, replay/reconciliation ownership and evidence remain physical design gates; this proposal does not claim they are implemented.
+
+### 42.30.5 Owner decision still required — posting atomicity boundary
+
+Two materially different posting policies remain possible:
+
+- **Option A — Count-session all-or-nothing:** the count session posts only when every required count line has a valid accepted attempt and all resulting variance movements can commit together. Any failure prevents the entire session posting; correction/retry operates on the session as a whole.
+- **Option B — Item-level partial posting:** each count line with a valid accepted attempt may post independently. Unposted lines remain pending/reviewable; the parent count remains partially open until every line is posted, explicitly waived/zero-variance, or otherwise disposed under a separately approved rule. Each line requires independent idempotency and reconciliation.
+
+Neither option is selected by this candidate model. The Owner must choose the posting boundary before the candidate lifecycle can be promoted to an accepted logical FIX.
+
+### 42.30.6 Remaining OPEN acceptance gates
+
+- Owner choice of session all-or-nothing versus item-level partial posting.
+- Final Owner acceptance of the proposed parent and attempt status vocabulary/transitions.
+- Physical/UI/API enforcement of Product base-unit-only input.
+- Snapshot transaction boundary, monotonic Location sequence allocation, initial watermark and cutoff locator consistency.
+- Post-cutoff movement replay/reconciliation ownership and deterministic result.
+- Accepted-attempt uniqueness, transition audit, idempotency and concurrency/locking.
+- Approval/SoD mapping, tenant and Location/Product/Variant/Batch integrity.
+- Numeric precision/scale/capacity/overflow/rounding and executed positive, negative, boundary, replay and reconciliation evidence.
+
+No physical field/type, enum, index, constraint, posting algorithm, test result or implementation is approved here. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+### 42.31 Owner FIX — Stock Count variance posting is count-session all-or-nothing (21 November 2026)
+
+The Owner explicitly selected **Option A — Count-session all-or-nothing** for Stock Count Variance Posting Policy.
+
+1. A Stock Count session may post only when every required count line has a valid accepted attempt and every resulting variance movement can be committed as one atomic session outcome.
+2. All required variance postings for the session commit together, or none commit. If any required line, validation, reconciliation, authorization, or movement write fails, the entire session posting is rolled back; no subset of count lines may remain posted.
+3. The posting/retry boundary is the count session, not an individual count line. A retry must preserve session-level idempotency and must not duplicate any variance movement.
+4. A session is not POSTED until the complete all-or-nothing posting transaction has committed. Partial completion is not a valid terminal or intermediate posted state under this policy.
+5. After successful commit, posted measurement/variance history is not overwritten. Corrections follow the separately governed compensating-event path.
+
+**Decision status:** FIX — OWNER-APPROVED / CONCEPTUAL. This resolves the Owner choice of posting atomicity boundary and supersedes the undecided alternatives recorded in §42.30.5. The parent/attempt state vocabulary and transitions in §42.30 remain candidate design pending separate Owner acceptance.
+
+**Implementation boundary:** This decision does not approve a database transaction design, physical fields/enums/indexes/constraints, API/backend behavior, locking/isolation strategy, authorization/SoD mapping, retries, test evidence or deployment. Atomic transaction feasibility, session-level idempotency, concurrency/locking, failure injection, reconciliation and audit evidence remain OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+### 42.32 Stock Count lifecycle candidate — consistency audit after Owner posting FIX (21 November 2026)
+
+This addendum audits the candidate lifecycle in §42.30 against the now-approved count-session all-or-nothing posting policy in §42.31. It refines the proposal for a further Owner review; it does **not** approve the parent/attempt status catalogue or physical workflow.
+
+#### 42.32.1 Parent transition and cancellation guards
+
+| Current candidate state | Proposed permitted next state(s) | Required guard |
+|---|---|---|
+| DRAFT | COUNTING, CANCELLED | COUNTING begins only after scope, snapshot instant and inclusive Location cutoff are frozen together. DRAFT cancellation emits no variance movement. |
+| COUNTING | SUBMITTED, CANCELLED | Every measurement is a new immutable attempt. Cancellation is allowed only before submission/posting and preserves all attempt facts; it emits no variance movement. |
+| SUBMITTED | REVIEW_REQUIRED, READY_TO_POST, COUNTING, CANCELLED | READY_TO_POST requires every required line to have a valid accepted attempt, complete post-cutoff reconciliation and no unresolved exception. Return to COUNTING is an explicit audited recount decision. Cancellation is permitted only before posting starts and emits no variance movement. |
+| REVIEW_REQUIRED | READY_TO_POST, COUNTING, CANCELLED | Approval/rejection and reason are auditable. Return to COUNTING creates new attempt(s); prior measurement facts remain immutable. Cancellation is permitted only before posting starts and emits no variance movement. |
+| READY_TO_POST | POSTED, REVIEW_REQUIRED, COUNTING, CANCELLED | POSTED only after the single all-or-nothing session transaction commits. A technical transaction failure leaves no partial posting and may be retried against the same session idempotency identity. A business/data exception routes to REVIEW_REQUIRED; recount requires controlled return to COUNTING. Cancellation is permitted only before the posting transaction commits and must serialize against posting so that cancellation and posting cannot both win. |
+| POSTED | Terminal | Complete session posting committed; no reopening, cancellation, mutation or duplicate posting. Corrections use separately governed compensating events. |
+| CANCELLED | Terminal | No variance posting was committed; snapshot and attempt history remain retained. |
+
+No persistent intermediate POSTING state is proposed as an externally visible lifecycle state: the Owner's all-or-nothing rule requires the posting transaction to be atomic. A transaction in progress is not a committed business state. If the transaction fails, the session remains at its pre-commit state; it must never expose a partially POSTED session.
+
+#### 42.32.2 Attempt supersession and acceptance guards
+
+1. RECORDED is a captured immutable measurement, not an approval. It may proceed to REVIEW_REQUIRED, ACCEPTED or REJECTED only through the governed decision path.
+2. REVIEW_REQUIRED may proceed to ACCEPTED or REJECTED; a recount creates a separate attempt identity rather than editing the reviewed attempt.
+3. At most one attempt per count line may be accepted for the session's eventual variance calculation.
+4. Replacing an accepted attempt requires an explicit return to COUNTING and one coordinated, auditable operation that supersedes the old accepted attempt and accepts the replacement. There must be no interval in which two attempts are accepted or the line silently loses its accepted attempt while the session remains eligible for posting.
+5. REJECTED and SUPERSEDED are terminal dispositions and cannot be selected for posting.
+6. Once the session posting transaction commits, no accepted attempt in that session may be superseded, reopened or reposted. A correction is a separate compensating event, not a new count attempt against the committed session.
+
+#### 42.32.3 All-or-nothing POSTED acceptance conditions
+
+A session may transition from READY_TO_POST to POSTED only when all of the following are true within one consistent session-level posting boundary:
+
+- Every required count line is explicitly accounted for and has one valid accepted attempt; NULL/not-counted is never treated as zero.
+- Counted quantities use the Product base unit under DOC08-FIX-020; zero remains a valid measured quantity.
+- Snapshot/cutoff identity is frozen and valid, and every applicable post-cutoff movement has been reconciled.
+- All variance calculations and required movement outputs are reproducible and pass the approved numeric/integrity rules; numeric parameters remain OPEN.
+- Authorization and approval-separation requirements are satisfied.
+- All required variance movements and the session's committed posting identity succeed together. If any required write or guard fails, none of the session's variance movements may remain committed.
+- The session-level idempotency identity resolves retries to the original committed outcome and prevents duplicate movement creation.
+
+A zero-variance line may produce no movement, but it must still be explicitly accounted for in the session acceptance result; it cannot be silently omitted to bypass the all-lines requirement. Exact zero-variance disposition representation remains a candidate logical detail, not a physical field or enum decision.
+
+#### 42.32.4 Remaining Owner review and technical gates
+
+The above is a refined candidate proposal. **Separate Owner acceptance is still required** for the parent and attempt status vocabulary/transitions, including the cancellation and supersession guards and the explicit treatment of zero-variance lines. Physical transaction atomicity, serialization between cancel/post, session idempotency, locking/isolation, authorization/SoD, post-cutoff replay, numeric precision/rounding, and executed failure/replay/reconciliation evidence remain OPEN.
+
+No physical field/type, enum, index, constraint, transaction implementation, API/backend behavior, test result or deployment is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+### 42.33 Owner FIX — Stock Count parent/attempt lifecycle and transition guards accepted (21 November 2026)
+
+The Owner explicitly approved Option A for the four lifecycle items presented after the audit in §42.32. The candidate logical model in §§42.30 and 42.32 is therefore accepted as the conceptual Stock Count lifecycle policy, subject to the following bounded interpretation:
+
+1. **Parent and attempt vocabulary/transitions accepted.** The parent lifecycle vocabulary and permitted transitions in §42.30.2, and attempt disposition vocabulary/transitions and invariants in §42.30.3 and §42.32.2, are Owner-approved conceptual policy. This includes immutable measurement facts, new attempt identity for recount, at most one accepted attempt per count line, and terminal REJECTED/SUPERSEDED dispositions.
+2. **Cancellation guard accepted.** Cancellation is permitted only before the session posting transaction commits. It preserves snapshot and attempt history and emits no variance movement. Cancellation and posting must serialize so only one outcome can win. POSTED and CANCELLED are terminal.
+3. **Supersession sequence accepted.** Replacing an accepted attempt requires an explicit controlled return to COUNTING and a coordinated, auditable operation that supersedes the previous accepted attempt and accepts its replacement. No accepted attempt may be superseded after the session posting transaction commits. Recount never overwrites a prior measurement.
+4. **Zero-variance accounting accepted.** A zero-variance count line may emit no inventory movement, but it must be explicitly accounted for in the session's completed posting result. It cannot be silently omitted. NULL/not-counted is never interpreted as zero; zero remains a valid measurement.
+5. **All-or-nothing POSTED boundary retained.** In accordance with DOC08-FIX-021, the session reaches POSTED only after every required count line is accounted for and all required variance movements and posting identity commit together. Any failure leaves no partial posting. No externally visible intermediate POSTING business state is introduced; failed transactions leave the pre-commit business state available for controlled retry/review.
+
+This FIX accepts the logical lifecycle and guards only. It does not approve physical status enums, fields, constraints, event tables, transaction/locking design, API/backend behavior, authorization implementation, numeric parameters, test evidence or deployment. Snapshot/cutoff enforcement, post-cutoff replay, atomic transaction feasibility, cancel/post serialization, session idempotency, concurrency, security/SoD, numeric precision/rounding and executed positive/negative/boundary/failure/replay/reconciliation evidence remain OPEN.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. The previous Owner-acceptance gate in §§42.30.6 and 42.32.4 is resolved only for the logical lifecycle policy described here. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+Anchors: DOC-08 DOC08-FIX-022; DOC-04 §§42.30–42.33; DOC-09 §§11.14–11.15; Worklist §15.95.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.34 CW-11 Stock Count snapshot/cutoff and post-cutoff reconciliation — consistency audit (21 November 2026)
+
+### 42.34.1 Audit basis and current logical contract
+
+This audit rechecks §§42.5, 42.13–42.15, 42.26–42.30 and Owner FIX decisions DOC08-FIX-020–022. It preserves the existing conceptual rules:
+
+- stock_counts owns scope, snapshot/cutoff and lifecycle context; count quantities belong to the count-line/attempt grain.
+- snapshot_at plus the inclusive cutoff_location_posting_sequence define the snapshot boundary. The sequence is the ordering authority; cutoff_movement_id is only a same-Location locator whose sequence must agree when supplied.
+- A draft may have no frozen watermark. Before COUNTING, scope, snapshot instant and cutoff must be frozen together under one consistent Location-level transaction boundary. The initial watermark for a Location with no earlier movement must be explicit and distinguishable from an unfrozen value.
+- location_posting_sequence is a candidate monotonic order per Business + Location. Movement facts after the cutoff are not silently folded into the original snapshot or discarded.
+- Before variance posting, applicable post-cutoff movement effects must be reconciled against the counted scope. The accepted count remains Product-base-unit input under DOC08-FIX-020.
+- DOC08-FIX-021 and DOC08-FIX-022 require the whole count session to post atomically only after all required lines are accounted for and reconciliation is complete.
+
+### 42.34.2 Consistency findings and documentation clarifications
+
+The existing contract states the correct high-level sequence, but several operationally decisive logical boundaries were not yet explicit. The following clarifications are added without selecting physical mechanisms:
+
+1. **Snapshot quantity provenance:** each count line's system_quantity_snapshot_base must represent the authoritative on-hand quantity for its exact Business + Product + nullable Variant + Location + applicable Batch grain at the same frozen cutoff. A lagging or independently refreshed inventory_balances / inventory_batch_balances projection cannot be assumed to represent that cutoff unless its applied movement watermark is proven to cover the frozen cutoff for the same grain.
+2. **Inclusive/exclusive sequence semantics:** cutoff C is inclusive. The original snapshot contains movement effects through C; the post-cutoff reconciliation set is strictly greater than C. A movement at C must never be applied both in the snapshot and again in the replay set.
+3. **Reconciliation upper boundary:** replay must be bounded by a separately identified reconciliation/posting boundary R for the same Location. The expected quantity used for variance is the snapshot at C plus the signed net effect of all applicable movements in (C, R]. The exact allocation/serialization mechanism for R remains OPEN; wall-clock timestamps or UUID order alone are not substitutes for the Location posting sequence.
+4. **Movement-scope filtering:** the replay set must include every posted movement affecting the counted Product/Variant/Batch/Location scope, regardless of source workflow. It must exclude unrelated Business, Location, Product, Variant or Batch grains. Paired movements across Locations are evaluated against each Location's own sequence and count scope; a source-side movement does not stand in for its destination-side counterpart.
+5. **Concurrent postings and finality:** reconciliation is not complete merely because one scan of post-cutoff movements returned a result. Before variance posting commits, the system must prove that the reconciliation boundary remains complete through the posting decision, with no applicable movement omitted between the last replay and the all-or-nothing session commit. The logical requirement is serialization/finality; no lock, isolation level, queue, retry or physical transaction design is selected here.
+6. **Idempotent replay:** replaying the same (C, R] movement set must reproduce the same expected quantity and must not create inventory movements or mutate original movement facts. Reconciliation is a deterministic calculation/proof step; variance posting remains the separate session-level posting operation governed by DOC08-FIX-021.
+7. **Exception behavior:** missing sequence, duplicate/ambiguous sequence, sequence gap where continuity is required, wrong-Location cutoff locator, projection watermark behind C, missing movement in the replay range, incompatible grain, or unreconciled source-event fan-out blocks READY_TO_POST. No fallback to timestamps, current balance, zero, or partial scope is permitted.
+8. **Batch and non-batch consistency:** when a count line is Batch-scoped, the snapshot and replay must reconcile at that exact Batch grain and also remain consistent with the parent Product/Variant/Location total. Non-Batch count lines must not silently absorb Batch-specific quantities or double-count them. The existing Batch-versus-Product aggregate rules remain applicable.
+9. **Variance basis:** for each accepted attempt, expected_quantity_at_R = system_quantity_snapshot_base_at_C + net_applicable_posted_movement_delta_(C,R]; variance is derived from the accepted base-unit count against that expected quantity under the still-OPEN numeric policy. This statement defines the logical basis only; sign convention, precision, rounding and storage-versus-derivation remain governed by their existing OPEN items.
+
+### 42.34.3 Reconciled acceptance sequence
+
+1. Keep the count in DRAFT while scope and count lines are prepared; no active cutoff is implied.
+2. Establish one Location-consistent snapshot boundary: freeze count scope, snapshot instant, inclusive cutoff C, and per-line snapshot quantities whose provenance proves they represent the same boundary.
+3. Validate any cutoff movement locator against Business, Location and exact sequence C; if no prior movement exists, use an explicit valid initial watermark representation.
+4. During COUNTING and later review, retain all original movement facts. For reconciliation, identify the final Location sequence boundary R and deterministically collect every applicable movement in (C,R].
+5. Reconcile replay completeness, source fan-out, exact Product/Variant/Batch/Location grain, and parent Product/Location plus Batch projection totals. Any exception blocks readiness.
+6. Derive expected quantity at R and variance for each accepted attempt; preserve NULL/not-counted versus valid zero.
+7. Before READY_TO_POST / POSTED, establish that no applicable movement can fall between the proven reconciliation boundary and the session posting commit. The technical serialization solution remains OPEN.
+8. Post all required session variance movements and the session posting identity atomically under DOC08-FIX-021. A failure leaves no partial variance posting; retries must reproduce the same reconciliation result and resolve to the same session posting outcome.
+
+### 42.34.4 Remaining OPEN physical and Owner boundaries
+
+This audit makes no new Owner policy choice and does not approve a new field, status, event, registry, key, constraint, transaction design or implementation. In particular, the following remain OPEN: exact snapshot acquisition/provenance; projection applied-watermark representation; initial watermark representation; monotonic Location sequence allocation and gap/recovery semantics; selection and atomic capture of reconciliation boundary R; serialization of concurrent inventory postings against reconciliation and count posting; A01 source-event completeness/fan-out; exact replay algorithm and exception recovery; Batch/Variant null-safe enforcement; numeric sign/precision/scale/overflow/rounding; audit evidence and executed concurrency/failure/replay/reconciliation tests.
+
+**Disposition:** PASS WITH OPEN DEPENDENCIES for the logical documentation consistency review. The high-level snapshot/cutoff contract is reconciled to DOC08-FIX-020–022; the physical and execution acceptance gates remain OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+Anchors: DOC-04 §§42.5, 42.13–42.15, 42.26–42.30 and 42.34; DOC-09 §11.16; Worklist §15.96.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.

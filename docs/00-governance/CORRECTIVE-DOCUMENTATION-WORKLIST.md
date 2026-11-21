@@ -2991,3 +2991,240 @@ No numeric precision/scale/capacity/overflow, conversion factor precision/versio
 Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no SQL/DDL/DML, database introspection, migrations, RLS/Auth, triggers, API/backend, application source, CI workflow or Vercel configuration changes. Stage 6 implementation NOT AUTHORIZED. Any PR #143 merge will again trigger Production deployment automatically and requires explicit user authorization.
+
+
+## 15.89 PR #143 merge, main read-back and Production deployment handoff (21 November 2026)
+
+### 15.89.1 PR #143 merge and validation
+
+- PR #143: https://github.com/kasirwarkop2026/Pos-Saas-Multi-Usaha/pull/143
+- Final head SHA: `1a510619078623213e8e172ae4e0e4978f17cf00`.
+- GitHub result: CLOSED / MERGED.
+- Merge commit: `c501971a0096e7ca16eb001206575004a8cae30f`.
+- Final scope: DOC-04 §42.27, DOC-09 §11.9 and this Worklist; documentation-only, 3 files, 129 additions, 0 deletions.
+- Documentation CI run `44883789779`: SUCCESS — Documentation structure, Markdown lint and Internal documentation links all SUCCESS.
+- POS SaaS CI run `44883789758`: overall SUCCESS — Detect application changes SUCCESS; Next.js production build, dependency security audit, ESLint and TypeScript typecheck SKIPPED because no application changes were detected. SKIPPED is not PASS.
+- No PR comments or inline review threads were present at final pre-merge verification.
+
+### 15.89.2 Main read-back and Production deployment
+
+- Post-merge fetch from `main` confirms DOC-04 §42.27 and DOC-09 §11.9 are present, along with this Worklist history.
+- Git integration automatically triggered Production deployment `dpl_Dr7Y9ZGkjWnF25PgeNWekrBCbMUL` for merge commit `c501971a0096e7ca16eb001206575004a8cae30f`.
+- Latest observation at this record: **BUILDING**; no READY claim is made. Production alias includes `pos-saas-multi-usaha-warkop-pos.vercel.app`.
+- No manual deployment, promotion, cancellation, rollback or Vercel configuration change was performed.
+
+### 15.89.3 Logical result and acceptance boundary
+
+DOC-04 §42.27 now maps numeric operation ownership and arithmetic boundaries across unit conversion, adjustment posting, movement ledger, projections, stock count, reservation, transfer/shipment, FIFO, MWA, transfer cost carry-forward, landed cost, cost exceptions and FX. It defines ordering/reconciliation invariants and distinguishes operation-specific rounding/residual policies.
+
+This remains a logical documentation map only. Numeric precision/scale/capacity/overflow, conversion factor precision/version, operation-specific rounding/tolerance, currency/FX policy, stock-count non-base-unit entry, transfer transit/loss valuation, physical constraints, concurrency/idempotency enforcement and executed evidence remain OPEN. No dependency is closed and no FIX is promoted.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+### 15.89.4 Next action
+
+Continue a bounded documentation-only review of the remaining CW-11 Package E numeric and lifecycle dependencies without inventing owner decisions or claiming physical acceptance. Any subsequent PR merge will trigger Production deployment automatically and requires explicit user authorization.
+
+
+## 15.90 CW-11 Package E — numeric-scope and lifecycle acceptance audit (21 November 2026)
+
+### 15.90.1 Audit basis and result
+
+Read-back was performed from `main` for:
+- DOC-04 `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, baseline blob `c2a842047fc6f677f513ff231721be86e176858c`;
+- DOC-08 `docs/07-decision-registers/MASTER_FIX_REGISTER.md`, baseline blob `270dbb94efc66a715542c3cbdef59df43fd926ff`;
+- DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md`, baseline blob `bbe1edaa0b0f840247344e5d8188abcbbbf20b4a`;
+- this Worklist from the PR #144 continuation branch, preserving its §15.89 post-merge record.
+
+The audit compared DOC-04 §§20.2–20.7, 35–38 and 42.1–42.27 with DOC-08 FIX-018/019 and DOC-09 ERD-OPEN-05/06 plus §§11.4–11.9.
+
+**Audit findings:**
+1. The numeric map in §42.27 is intentionally inventory/costing-focused, while it references the full NUM-01–NUM-12 baseline. Its exclusions and partial coverage were implicit; a reader could overstate Package E coverage of sales/tax, rounding-account or bank-matching policy.
+2. NUM-03's conceptual deterministic cost-residual principle and the OPEN operation-specific FIFO/MWA residual methods needed an explicit reconciliation so that neither is silently discarded and LRM is not generalized beyond NUM-07.
+3. Existing lifecycle specifications for count attempts, shipment/transit, reservation events, A01 posting and transfer costing were distributed across §§36–38 and 42.4–42.27. A single crosswalk was missing; this was a navigation/acceptance-boundary gap, not evidence that those candidate designs were absent.
+4. The owner decision for stock-count non-base-unit entry, A01/A02 physical enforcement, shipment transit/disposition, transfer fee/FX valuation, numeric precision/rounding, security and executed evidence remain genuine OPEN gates.
+
+### 15.90.2 Append-only correction
+
+- DOC-04 §42.28 adds the NUM-01–NUM-12 coverage crosswalk and lifecycle-to-acceptance crosswalk.
+- DOC-04 §42.28.4 explicitly preserves the conceptual NUM-03 deterministic residual principle while keeping exact FIFO/MWA methods OPEN and LRM limited to suitable proportional allocation.
+- DOC-09 §11.10 records the same scope, exclusions, lifecycle anchors and OPEN gates.
+- No numeric value, physical field/type, algorithm, source-family activation, lifecycle policy or test result was invented or approved.
+- No FIX was added or changed; no dependency was closed.
+
+### 15.90.3 Current status and next bounded work
+
+The correction is limited to DOC-04, DOC-09 and this Worklist. It is documentation-only and append-only. The next substantive owner-decision gate is the stock-count input-unit policy (base-unit-only versus non-base entry with retained input/conversion provenance). That question must be presented to the Owner rather than inferred. Other numeric and physical decisions remain OPEN until supported by an existing accepted source or explicit Owner approval.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+### 15.90.4 Governance
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migrations, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration changes. Stage 6 implementation remains NOT AUTHORIZED. Any merge to `main` triggers the linked Production deployment and requires explicit user authorization.
+
+
+## 15.91 CW-11 Package E — Stock Count Input Policy Owner decision and cross-register reconciliation (21 November 2026)
+
+### 15.91.1 Explicit Owner decision
+
+The Owner selected **Option A**: Stock Count and recount accept Product base unit only. Non-base-unit Stock Count input is not supported, and Stock Count does not perform alternate-unit conversion. The existing logical `counted_quantity_base` representation remains; no raw entered-unit or conversion-snapshot attributes are added for Stock Count.
+
+This is recorded as **DOC08-FIX-020 — FIX / OWNER-APPROVED / CONCEPTUAL**.
+
+### 15.91.2 Append-only documentation updates
+
+- DOC-08 §9 adds DOC08-FIX-020 with the decision scope and explicit conceptual/physical boundary.
+- DOC-04 §42.29 records the base-unit-only rule for count and recount, reconciles earlier OPEN alternatives, and lists remaining technical acceptance gates.
+- DOC-09 §11.11 records the Owner-choice question as resolved at conceptual decision level while retaining physical and operational dependencies as OPEN.
+- Earlier references in DOC-04 §§42.25.8 and 42.28.3 and DOC-09 §§11.7, 11.9 and 11.10 remain preserved as historical audit snapshots; this later Owner decision controls the choice. Upstream source workflows that support non-base units retain their separate conversion/provenance obligations.
+
+### 15.91.3 Bounded disposition
+
+The Owner-choice question is resolved. No physical/UI/API enforcement, schema field, database constraint, permission grant, implementation, numeric parameter, test result or evidence is approved. Count-attempt lifecycle, cutoff/watermark, accepted-attempt posting, partial-posting policy, idempotency, concurrency, tenant/security, numeric precision/rounding and executed evidence remain OPEN.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. No other dependency is closed.
+
+### 15.91.4 Validation and governance
+
+This is a documentation-only, append-only update to the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+PR #144 remains subject to fresh documentation validation and read-back. It is not merged. Any merge to `main` triggers the linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.92 CW-11 Package E — Stock Count lifecycle proposal and posting-boundary Owner gate (21 November 2026)
+
+### 15.92.1 Audit basis
+
+Read-back from the active PR #144 branch reviewed DOC-04 §§36.4–36.6, 42.5, 42.13, 42.15.1 and 42.29; DOC-09 §§11.7–11.12; DOC-06 security/requirements cross-references; and DOC-07's count/variance approval and evidence references.
+
+The audit confirmed that the attempt-row structure, immutable measurement facts, single accepted attempt, frozen Location cutoff sequence and post-cutoff reconciliation principles were already present. The gaps were that parent/attempt state transitions were not consolidated, the snapshot acceptance sequence was distributed, and the variance posting atomicity boundary remained undecided.
+
+### 15.92.2 Append-only correction
+
+- DOC-04 §42.30 adds a candidate parent lifecycle and candidate attempt-disposition model, with explicit guards and terminal states.
+- DOC-04 §42.30.4 consolidates the freeze-before-counting and post-cutoff reconciliation acceptance sequence.
+- DOC-04 §42.30.5 preserves the two posting alternatives without selecting one.
+- DOC-09 §11.12 records the candidate model and explicitly retains Owner approval and technical gates as OPEN.
+- No DOC-08 FIX is added. No physical enum, schema, field, index, constraint, posting algorithm, authorization grant, test result or implementation is approved.
+
+### 15.92.3 Current disposition and next action
+
+Stock Count base-unit-only remains the Owner-approved conceptual FIX in DOC08-FIX-020. The lifecycle state model is a candidate proposal only and is not promoted to FIX. The next required Owner decision is the variance posting boundary: session all-or-nothing or item-level partial posting. Final acceptance of the proposed state vocabulary/transitions also remains OPEN.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+### 15.92.4 Governance
+
+This is a documentation-only, append-only continuation on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; any merge to `main` triggers the linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.93 CW-11 Package E — Stock Count variance posting all-or-nothing Owner FIX (21 November 2026)
+
+### 15.93.1 Owner decision
+
+The Owner explicitly selected **Option A — Count-session all-or-nothing** for Stock Count Variance Posting Policy. Every required count-line variance in one session must commit together, or none may commit. Any failed required line or prerequisite prevents the entire session posting. Item-level partial posting is prohibited. The count session is the posting/retry/idempotency boundary; the session becomes POSTED only after the complete atomic commit.
+
+### 15.93.2 Append-only documentation reconciliation
+
+- DOC-08 §10 records **DOC08-FIX-021 — Stock Count variance posting is count-session all-or-nothing** as FIX / OWNER-APPROVED / CONCEPTUAL.
+- DOC-04 §42.31 records the policy, atomicity boundary, failure behavior, session retry boundary and implementation limitations.
+- DOC-09 §11.13 marks the A-versus-B Owner choice RESOLVED at conceptual level and lists the remaining technical gates.
+- DOC-04 §42.30.5 and DOC-09 §11.12 remain historical proposal/decision-gate entries and are superseded only as to the posting-boundary choice. Candidate parent/attempt state vocabulary and transitions remain OPEN for separate Owner acceptance.
+
+### 15.93.3 Remaining acceptance status
+
+Physical transaction atomicity, locking/isolation, session-level idempotency, rollback/retry behavior, authorization/SoD, tenant/grain enforcement, post-cutoff reconciliation integration, numeric precision/rounding and executed failure/replay/reconciliation evidence remain OPEN. No physical schema, API/backend behavior, implementation, test result or deployment is approved.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. The candidate parent/attempt state vocabulary/transitions still require separate Owner acceptance.
+
+### 15.93.4 Validation and governance
+
+This is a documentation-only, append-only continuation on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; any merge to `main` triggers the linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.94 CW-11 Package E — Stock Count lifecycle consistency audit and candidate refinement (21 November 2026)
+
+### 15.94.1 Audit scope
+
+Re-read DOC-04 §§42.30–42.31 after the Owner approved DOC08-FIX-021 (count-session all-or-nothing variance posting). Audited parent transitions, cancellation, attempt supersession, retry behavior and the meaning of POSTED against the atomic session boundary.
+
+### 15.94.2 Findings and append-only correction
+
+- The prior candidate lifecycle did not explicitly reconcile cancellation from READY_TO_POST with a concurrently starting posting transaction.
+- It did not state whether a persisted intermediate POSTING state was appropriate under all-or-nothing semantics.
+- Attempt supersession needed an explicit controlled return-to-counting and coordinated replacement rule.
+- POSTED acceptance needed a complete all-lines guard, including explicit handling of zero-variance lines and preserving NULL as not-counted.
+- DOC-04 §42.32 now records a refined candidate transition table, cancellation/post serialization guard, no-partial-posting retry behavior, attempt supersession rule and all-or-nothing POSTED acceptance conditions.
+- DOC-09 §11.14 records the same audit disposition, Owner gates and technical dependencies.
+
+### 15.94.3 Decision boundary and next action
+
+This refinement is a candidate proposal only. It does not create a new DOC-08 FIX and does not accept the parent/attempt status catalogue. Owner acceptance remains required for status vocabulary/transitions, cancellation eligibility, supersession sequence and zero-variance line treatment. No implementation or physical design is approved.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. Physical atomicity, cancel/post serialization, session idempotency, concurrency, security, numeric policy and executed evidence remain OPEN.
+
+### 15.94.4 Governance
+
+Documentation-only, append-only update on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.95 CW-11 Package E — Owner approval of Stock Count lifecycle conceptual FIX (21 November 2026)
+
+### 15.95.1 Owner decision
+
+The Owner explicitly selected Option A and approved all four lifecycle items presented for review:
+1. Parent and attempt lifecycle vocabulary and permitted transitions.
+2. Cancellation only before session posting commits, preserving history, emitting no variance movement, and serialized against posting.
+3. Accepted-attempt supersession only through controlled return to COUNTING and coordinated, auditable replacement; recount creates a new immutable attempt.
+4. Zero-variance lines may emit no movement but must be explicitly accounted for; NULL/not-counted is never zero.
+
+The accepted lifecycle also retains DOC08-FIX-021: the session reaches POSTED only after the all-or-nothing posting commit succeeds. No partial posting or externally visible intermediate POSTING business state is allowed.
+
+### 15.95.2 Append-only documentation reconciliation
+
+- DOC-08 §11 records DOC08-FIX-022 as FIX / OWNER-APPROVED / CONCEPTUAL.
+- DOC-04 §42.33 records the accepted logical lifecycle, transition guards and scope limitations.
+- DOC-09 §11.15 records the Owner decision and resolves the conceptual lifecycle approval gates previously recorded in §§11.12 and 11.14.
+- DOC-04 §§42.30 and 42.32 remain the detailed candidate/audit basis and are now accepted conceptually only to the extent bounded by §42.33.
+- Earlier OPEN statements requesting Owner acceptance are historical snapshots and are superseded only for the four lifecycle policy items expressly approved here.
+
+### 15.95.3 Remaining acceptance status
+
+Physical status/transition enforcement, snapshot/cutoff serialization, post-cutoff replay/reconciliation, atomic transaction feasibility, cancel/post serialization, session idempotency, locking/concurrency, approval/SoD, tenant/grain integrity, numeric precision/rounding and executed evidence remain OPEN. No physical schema, API/backend behavior, implementation, test result or deployment is approved.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+### 15.95.4 Governance
+
+Documentation-only, append-only update on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.96 CW-11 Package E — Stock Count snapshot/cutoff and post-cutoff reconciliation consistency audit (21 November 2026)
+
+### 15.96.1 Scope and audit basis
+
+Re-read DOC-04 §§42.5, 42.13–42.15, 42.26–42.30 and Owner FIX DOC08-FIX-020–022. The audit focused on snapshot quantity provenance, inclusive cutoff semantics, Location sequence boundaries, post-cutoff replay completeness, concurrency/finality and Batch/aggregate reconciliation.
+
+### 15.96.2 Findings and append-only corrections
+
+The existing documentation already establishes: scope/snapshot/cutoff freeze before COUNTING; inclusive Location posting-sequence watermark; cutoff movement as a locator only; post-cutoff movement reconciliation before variance posting; exact tenant/Product/Variant/Batch/Location grain; and technical sequence allocation/replay gates remain OPEN.
+
+The audit identified that the high-level sequence did not yet explicitly state:
+- the count-line snapshot quantity must be proven to correspond to the same frozen cutoff, not merely read from a possibly lagging balance projection;
+- replay must use a strict exclusive lower boundary after inclusive cutoff C, plus a separately proven upper reconciliation boundary R;
+- replay must cover every applicable source workflow and exact stock grain, including independent Location effects for paired movements;
+- reconciliation must remain complete against concurrent postings through the all-or-nothing session commit;
+- replay must be deterministic/read-only and must not create inventory movements;
+- stale projections, sequence ambiguity/gaps, incomplete source fan-out and Batch/parent aggregate mismatches block READY_TO_POST.
+
+DOC-04 §42.34 records the refined logical contract and acceptance sequence. DOC-09 §11.16 records PASS WITH OPEN DEPENDENCIES and the unresolved physical/evidence gates.
+
+### 15.96.3 Acceptance disposition
+
+PASS WITH OPEN DEPENDENCIES for logical documentation consistency only. No new Owner FIX was required or inferred. Exact snapshot acquisition, watermark implementation, reconciliation-boundary capture, concurrent-posting serialization, A01 completeness, replay recovery, null-safe grain enforcement, numeric policy and executed evidence remain OPEN.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+### 15.96.4 Governance
+
+Documentation-only, append-only changes on existing PR #144. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
