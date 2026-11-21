@@ -3534,3 +3534,38 @@ Following the Owner's conditional instruction to promote the proposed source-fam
 ### 15.107.4 Governance
 
 Documentation-only, append-only continuation on PR #148 branch `docs/cw11-a01-source-event-catalogue-2026-11-21`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge remain separate gates; merge to `main` requires explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+
+
+## 15.108 CW-11 Package E — A01 Purchase / Goods Receipt adapter contract drafted (22 November 2026)
+
+### 15.108.1 Scope and baseline
+
+Continue one source family at a time following Owner-approved DOC08-FIX-026. This checkpoint drafts the logical Purchase / Goods Receipt adapter contract in DOC-04 §42.46, aligned with DOC08-FIX-018/019/024/025/026 and the existing purchase/receipt direction crosswalk in DOC-04 §42.39.
+
+### 15.108.2 Contract outcomes recorded
+
+- Posting boundary is physical receipt plus applicable acceptance; purchase commitment/order, expected delivery, invoice/payment and unaccepted/rejected quantity do not independently post on-hand.
+- Purchase source document, exact source line, distinct receipt occurrence and accepted receipt-line quantity are required logical lineage; exact physical objects and identifiers remain OPEN.
+- Each independently accepted partial receipt occurrence is separately traceable and append-only; a later receipt must not overwrite an earlier posted occurrence.
+- Accepted quantity must be supplied with reproducible Product base-unit context. Receipt movement is positive at the receiving stock grain under DOC08-FIX-024.
+- Multi-line receipt fan-out must be deterministic, line-attributable and complete. Partial visible fan-out is not a complete committed receipt.
+- One physical receipt effect has one authoritative A01 posting path. Same-identity/same-payload retry resolves to the original outcome; changed payload conflicts; uncertain commit must be resolved before retry.
+- Post-commit corrections remain immutable and exclusively follow DOC08-FIX-025. Costing-only processing does not create another on-hand movement.
+- Business ownership, DOC-05 authorization, A01/A02 separation and projection reconciliation remain required boundaries.
+
+### 15.108.3 Acceptance and OPEN dependencies
+
+**PASS WITH OPEN TECHNICAL CONTRACT DEPENDENCIES — logical adapter contract drafted.** This checkpoint is documentation-only. It does not create a new DOC08 FIX, enable the Purchase / Goods Receipt adapter, approve physical schema, prove runtime correctness or authorize Stage 6.
+
+Still OPEN under ERD-OPEN-05: exact purchase/receipt/source-line/receipt-occurrence objects and identifiers; exact lifecycle states and acceptance/rejection/inspection path; source version and amendment semantics; multi-line event cardinality; authoritative accepted-quantity field and conversion provenance; precision/rounding/tolerance; over-receipt policy; receiving Location and Batch resolution; DOC-05 authorization/SoD; event identity/idempotency/retry/recovery; physical registry/keys/constraints; atomicity/concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. No adapter is enabled.
+
+### 15.108.4 Next gate
+
+Review and close the Purchase / Goods Receipt source identity, eligible lifecycle, accepted-quantity authority, receipt-occurrence cardinality and receiving stock-grain rules in documentation. Then resolve authorization, replay, physical integrity, transaction/recovery and evidence dependencies. Do not proceed to the next A01 source family until this adapter contract is accepted at its documentation gate.
+
+### 15.108.5 Governance
+
+Documentation-only, append-only on branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge are separate gates; no merge is performed by this checkpoint.
