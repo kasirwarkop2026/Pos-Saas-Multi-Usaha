@@ -3504,3 +3504,10 @@ Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT AC
 ### 15.105.5 Governance
 
 Documentation-only, append-only continuation on PR #148 branch `docs/cw11-a01-source-event-catalogue-2026-11-21`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge remain separate gates; merge to `main` requires explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+
+## 15.106 CW-11 Package E — correction of A01 candidate source-family count (22 November 2026)
+
+A reconciliation of DOC-04 §42.42.3 shows **16** candidate source-family rows, not 15. The proposed disposition is therefore **14 INCLUDE + 2 INCLUDE WITH CONDITIONS**. DOC-04 §42.44 and DOC-09 §11.26 record this count correction append-only. It does not change any proposed classification or convert the recommendation into Owner approval. No family is activated; Owner acceptance remains pending; ERD-OPEN-05 remains OPEN; Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
