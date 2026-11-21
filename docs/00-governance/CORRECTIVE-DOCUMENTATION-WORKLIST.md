@@ -3386,3 +3386,58 @@ Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT AC
 ### 15.101.4 Governance
 
 Documentation-only, append-only audit. No new Owner FIX, no source-family activation, no SQL/DDL/DML, database mutation, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, manual deployment or Supabase Preview/Staging. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. Any merge to `main` requires separate explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+
+## 15.102 CW-11 Package E — Inventory Movement Reversal & Compensation Contract Audit (21 November 2026)
+
+### 15.102.1 Audit scope
+
+Following the cross-source signed-movement audit in DOC-04 §42.39 / DOC-09 §11.21, review the correction contract for already-posted immutable `inventory_movements`. Explicitly distinguish movement-ledger reversal/compensation from A12.17 cost-layer consumption compensation.
+
+### 15.102.2 Findings and append-only documentation
+
+- DOC-04 §42.40 records a bounded candidate contract for full reversal, repeated partial reversal, cumulative root-lineage caps, reversal-of-reversal, source-event/movement lineage, idempotency, concurrency and duplicate-compensation prevention.
+- DOC-09 §11.22 records CANDIDATE / OWNER DECISION REQUIRED and the remaining decision/technical gates.
+- A12.17 remains limited to its original cost-layer allocation/consumption compensation domain. Its 1:N relationship and aggregate cap are precedent, not automatic approval of the movement-ledger algorithm.
+- DOC08-FIX-024 is unchanged. No new Owner FIX is added.
+
+### 15.102.3 Disposition and next gate
+
+CANDIDATE — OWNER DECISION REQUIRED. The candidate is not accepted as a FIX, physical schema, enabled A01 event contract or implementation requirement. Owner must accept or revise the logical correction policy before the candidate can be promoted to a scoped conceptual FIX.
+
+Remaining OPEN: correction terminology/event kinds; immediate-target and root-lineage cap arithmetic; nested/branched correction-of-correction; exact source/event/line/movement identity; domain correction handoff and double-post prevention; idempotency payload/key; concurrency/locking/isolation/recovery; authorization/SoD; numeric limits; paired/multi-leg corrections; projection reconciliation; and executed evidence.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.102.4 Governance
+
+Documentation-only, append-only continuation. No new Owner FIX, SQL/DDL/DML, database mutation, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. This PR is stacked on PR #146 and cannot be merged before its base PR is merged. Any merge to `main` requires separate explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+## 15.103 CW-11 Package E — Owner approval and conceptual closure of Inventory Movement reversal/compensation (21 November 2026)
+
+### 15.103.1 Owner decision
+
+The Owner accepted the recommended conceptual policy. DOC08-FIX-025 is recorded in DOC-08 §14 and the accepted contract in DOC-04 §42.41.
+
+### 15.103.2 Finalized conceptual rules
+
+- Posted movements and all corrections are immutable; every correction is a new movement.
+- Correction lineage is a rooted, acyclic, branching tree with one immediate target and one root original per correction.
+- For each node N, E(N) = quantity_delta_base(N) + Σ E(C) across direct correction children. A new child correction is nonzero, opposite-signed and no greater than ABS(E(N)) immediately before posting. The updated effective quantity may reach zero but cannot cross zero or invert sign.
+- This recursive signed cap is recalculated across the full descendant lineage for full, partial, branching and reversal-of-reversal cases.
+- Exact stock grain and Product base unit are preserved; correction identifies immediate target, root original and source-event/source-line lineage.
+- One correction intent has one authoritative posting path; identical retries do not duplicate movement and changed payload conflicts.
+- Source-domain correction and generic ledger reversal cannot both post the same physical effect.
+- No-op outcomes are explicitly distinguished from failed, incomplete, invalid or exhausted corrections.
+
+### 15.103.3 Closure and retained technical dependencies
+
+**CLOSED — conceptual decision and documentation audit.** The former candidate status in DOC-04 §42.40 / DOC-09 §11.22 is superseded within this conceptual scope by DOC08-FIX-025 and DOC-04 §42.41.
+
+**OPEN — technical/physical evidence only:** source/event/line/movement registry and identity; physical lineage constraints; numeric precision/capacity/overflow; persisted idempotency; transaction atomicity, locking/isolation and concurrent cap enforcement; authorization/SoD/tenant enforcement; source adapters/event-kind activation; multi-leg commit/projection reconciliation; and executed tests/evidence.
+
+Therefore, this specific reversal/compensation conceptual audit is CLOSED. CW-11 Package E as a whole is not declared complete: its other source-family, physical data dictionary, canonical ERD and implementation-readiness gates retain their existing status.
+
+### 15.103.4 Governance
+
+Documentation-only, append-only correction on the existing PR #147 branch. No SQL/DDL/DML, database mutation, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #147 remains stacked on PR #146 and must be re-reviewed after its base is merged. Merge to main requires separate explicit Owner instruction because it triggers linked Vercel Production deployment.

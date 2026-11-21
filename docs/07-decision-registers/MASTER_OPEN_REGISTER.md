@@ -791,3 +791,42 @@ DOC-04 §42.39 audits the inventoried inventory-posting source families against 
 The matrix in DOC-04 §42.39 is an expected conceptual direction crosswalk, not an enabled source allowlist or physical acceptance. No Owner FIX is added; DOC08-FIX-024 remains unchanged. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.22 CW-11 Package E — Inventory Movement Reversal & Compensation Contract Audit — CANDIDATE / OWNER DECISION REQUIRED (21 November 2026)
+
+DOC-04 §42.40 separates movement-ledger reversal/compensation from A12.17 cost-layer consumption compensation. A12.17's 1:N partial-compensation cardinality and aggregate cap are relevant precedent, but do not independently approve a movement-ledger correction algorithm.
+
+**Candidate policy for Owner review — NOT FIX:**
+- Original posted movement remains immutable; every correction is a new linked movement.
+- A direct reversal uses the opposite signed quantity at the exact same Business + Product + nullable Variant + Location + applicable Batch grain and Product base unit.
+- Full reversal corrects the eligible remainder; partial reversals may be appended repeatedly, with a cumulative cap across the root original's complete correction lineage.
+- Reversal of a reversal is another immutable opposite-sign correction targeting the immediate correction while retaining root-original lineage. It restores only the amount actually corrected by the target and remains included in root-lineage cap arithmetic.
+- Each correction identifies its original source event, exact movement target and, for nested correction, immediate target. A source event with multiple movement legs must not be corrected wholesale by an ambiguous reference.
+- Same-intent retries must be idempotent; changed payload under the same identity conflicts. Concurrent requests must not jointly exceed the eligible cap.
+- Source-domain correction and generic ledger reversal must not both post the same physical correction. Legitimate zero-effect outcomes are explicitly accounted for; invalid/missing/ambiguous quantities fail closed.
+- Correction approval is separately auditable; authorization is not inherited automatically from the original posting.
+
+**Audit disposition:** CANDIDATE — OWNER DECISION REQUIRED. This is a logical proposal only. No new DOC08 FIX is added; DOC08-FIX-024 remains unchanged. The candidate is not an enabled source contract, physical schema or implementation instruction.
+
+**OPEN / NOT CLOSED:** exact correction terminology/event kinds; direct-target versus root-lineage cap arithmetic; nested/branched correction-of-correction calculation; source-event and source-line identity; domain-level correction handoff and double-post prevention; idempotency identity/payload; concurrency/locking/isolation/recovery; authorization/SoD; numeric limits; paired/multi-leg correction; projection reconciliation; and executed full/partial/reversal-of-reversal/retry/concurrency/failure evidence.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+## 11.23 CW-11 Package E — Inventory Movement reversal/compensation conceptual decision CLOSED; technical gates retained OPEN (21 November 2026)
+
+DOC-08 DOC08-FIX-025 and DOC-04 §42.41 record the Owner-approved conceptual contract for immutable movement correction.
+
+**CLOSED — conceptual decision:** full reversal; repeated partial reversal; recursive signed effective-quantity arithmetic; cumulative cap at each immediate target and root lineage; branching and reversal-of-reversal; acyclic immediate-target/root-original lineage; same Business/Product/Variant/Location/Batch grain and Product base unit; one authoritative correction intent; idempotent retry identity/payload; prevention of source-domain plus generic-ledger double posting; separately auditable correction authorization; explicit no-effect versus invalid/failure outcomes.
+
+**Authoritative arithmetic:** for each movement node N, E(N) = quantity_delta_base(N) + Σ E(C) across its direct correction children. A new correction child must have a nonzero opposite-signed quantity no greater than ABS(E(N)) immediately before posting. The updated E(N) may reach zero but cannot cross zero or invert sign. Recalculate from the full descendant lineage before every correction. This signed effective cap, not gross historical correction magnitude, governs reinstatement and subsequent reversal.
+
+**Supersession:** this closure supersedes the CANDIDATE / OWNER DECISION REQUIRED status of DOC-04 §42.40 and DOC-09 §11.22 only for the conceptual correction contract. Historical candidate wording remains preserved as audit history.
+
+**Technical gates remain OPEN / NOT VERIFIED:** physical A01 source/event/line/movement identity and registry; physical lineage representation/FK/uniqueness/constraints; numeric precision/scale/capacity/overflow; idempotency persistence and payload canonicalization; transaction atomicity, locking/isolation, concurrent cap enforcement and retry recovery; authorization/SoD/tenant enforcement; source-domain adapters and event-kind activation; paired/multi-leg commit and projection reconciliation; and executed positive/negative/full/partial/branching/reversal-of-reversal/retry/concurrency/failure evidence.
+
+No physical schema, implementation, test PASS or deployment is implied. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E overall remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
