@@ -657,3 +657,24 @@ Key proposed clarifications:
 **OPEN / NOT CLOSED:** physical transaction atomicity; cancel/post serialization; session-level idempotency; locking/isolation/concurrency; authorization/SoD; post-cutoff replay/reconciliation; numeric precision/rounding; tenant/grain enforcement; and executed positive, negative, boundary, failure-injection, replay and reconciliation evidence. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.15 Stock Count lifecycle Owner decision recorded — conceptual policy resolved; physical gates remain OPEN (21 November 2026)
+
+The Owner explicitly selected Option A and approved all four lifecycle items in the reviewed candidate. DOC-08 DOC08-FIX-022 and DOC-04 §42.33 record the accepted conceptual policy.
+
+**Resolved at conceptual decision level:**
+- Parent lifecycle vocabulary and permitted transitions in DOC-04 §42.30.2 are accepted.
+- Attempt disposition vocabulary, transitions and invariants in §§42.30.3 and 42.32.2 are accepted.
+- Cancellation is allowed only before session posting commits, preserves history, emits no variance movement and must serialize against posting. POSTED/CANCELLED are terminal.
+- Accepted-attempt replacement requires controlled return to COUNTING and coordinated, auditable supersession/acceptance; recount creates a new immutable attempt; no supersession after posting commits.
+- Zero-variance lines may emit no movement but must be explicitly accounted for. NULL/not-counted is not zero.
+- POSTED requires complete all-or-nothing session commit under DOC08-FIX-021; failed posting leaves no partial variance movement and no externally visible intermediate POSTING business state is introduced.
+
+This resolves the lifecycle Owner-approval questions carried in §§11.12 and 11.14 and DOC-04 §§42.30.6 and 42.32.4. Earlier statements that lifecycle approval remains required are historical snapshots and must be read together with this addendum. The decision does not promote physical implementation or evidence gates.
+
+**OPEN / NOT CLOSED:** physical status/transition enforcement; snapshot/cutoff serialization and watermark allocation; post-cutoff movement replay/reconciliation; atomic transaction feasibility; cancel/post serialization implementation; session idempotency; locking/concurrency; approval/SoD and tenant/grain enforcement; numeric precision/rounding; and executed positive, negative, boundary, failure-injection, replay and reconciliation evidence.
+
+No physical Data Dictionary field, enum, constraint, API/backend implementation, test result or deployment is accepted. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
