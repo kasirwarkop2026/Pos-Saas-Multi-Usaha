@@ -4378,3 +4378,52 @@ Until the Owner explicitly accepts or revises the candidate policy, movement-rev
 Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.41 Owner-approved conceptual closure — Inventory Movement reversal and compensation contract (21 November 2026)
+
+### 42.41.1 Decision and supersession
+
+The Owner accepted the recommended conceptual correction policy, recorded as DOC08-FIX-025 in DOC-08 §14. This addendum supersedes the CANDIDATE / OWNER DECISION REQUIRED disposition in §42.40 only for the conceptual movement-ledger correction contract. Section 42.40 remains the historical audit basis and is read with this accepted closure.
+
+The accepted policy applies to already-posted inventory_movements. It is distinct from A12.17 cost-layer consumption compensation. DOC08-FIX-024 remains the governing signed on-hand convention: positive increases on-hand; negative decreases on-hand.
+
+### 42.41.2 Accepted correction-tree arithmetic
+
+The correction lineage is a rooted, acyclic, branching tree. Every correction movement has exactly one immediate target movement and one root original movement. Every correction must preserve the target's exact Business + Product + nullable Variant + Location + applicable Batch grain and normalized Product base unit.
+
+For each movement node N, define the current effective signed quantity:
+
+**E(N) = quantity_delta_base(N) + Σ E(C)**
+
+where C is each direct correction child of N. Each new correction child must have the opposite sign to the current E(N), with a nonzero absolute quantity no greater than ABS(E(N)) immediately before posting. The updated E(N) may reach zero but must not cross zero or invert sign. Recalculate against the complete existing descendant tree before every new correction.
+
+This recursive rule is the authoritative cap for full, partial, branched and nested correction. It caps the effective signed remainder, not the gross sum of historical correction magnitudes. Gross magnitudes may exceed the root quantity only where a prior correction has been reinstated by a separately linked correction; the effective quantity of every target and the root must never be over-corrected.
+
+### 42.41.3 Accepted lifecycle outcomes
+
+- Full reversal appends an opposite-sign correction equal to the target's entire current effective remainder and leaves E(N)=0.
+- Partial reversal appends an explicitly requested nonzero quantity no greater than the current effective remainder.
+- Reversal of a reversal appends another immutable movement against the immediate correction target, preserving root lineage and restoring only the amount actually corrected by that target.
+- Any later correction recalculates the complete lineage; request-local or stale remainder values cannot authorize a larger correction.
+- A target with E(N)=0 has no remaining correctable quantity.
+- Corrections never edit/delete posted movements. Zero quantity is not a movement; a legitimate no-effect business outcome is separately recorded with a reason.
+
+### 42.41.4 Accepted lineage, idempotency and double-post controls
+
+Every correction logically identifies the immediate target, root original, originating source event/source line and stable correction-intent identity. Correction lineage is acyclic and cannot cross roots or stock grains. Source events with multiple movement legs are corrected by explicit leg and grain; unrelated legs are never implicitly included.
+
+One correction intent has one authoritative posting path. A source-domain correction and a generic/manual reversal must not both post the same physical correction. Same intent identity plus same canonical payload resolves to the same outcome; changed target, quantity, unit, grain or reason under that identity is a conflict. A correction is separately authorized and auditable; original approval is not inherited automatically.
+
+The logical policy requires no movement for NULL/missing/zero quantity, mismatched unit/grain, unposted or ambiguous target, exhausted remainder, invalid lineage, changed idempotency payload or cap violation. A legitimate no-effect outcome is distinguishable from failure or incomplete fan-out.
+
+### 42.41.5 Conceptual acceptance disposition
+
+**CONCEPTUAL CONTRACT CLOSED.**
+
+DOC08-FIX-025 closes the conceptual decision on immutable full/partial reversal, recursive cumulative caps, branching, reversal-of-reversal, same-grain lineage, idempotent correction intent and double-compensation prevention.
+
+The following remain separate technical/evidence gates and are **not** closed by this decision: physical A01 source/event/line/movement identity and registries; physical lineage representation and constraints; numeric type/precision/scale/capacity and overflow; idempotency persistence; transaction atomicity, locking, isolation and concurrent enforcement; authorization/SoD grants and tenant enforcement; projection reconciliation; paired/multi-leg commit behavior; source-domain adapters and event-kind activation; and executed tests/evidence.
+
+No physical schema, SQL/DDL/DML, database mutation, RLS/Auth, trigger, API/backend, application source, CI workflow, deployment or Production change is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E overall remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
