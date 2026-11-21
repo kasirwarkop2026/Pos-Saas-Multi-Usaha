@@ -3807,3 +3807,30 @@ These anchors are not substitutes for the detailed contracts. The table is an au
 5. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.29 Owner decision — Stock Count input accepts Product base unit only (21 November 2026)
+
+### 42.29.1 Decision and scope
+
+The Owner selected **Option A**: Stock Count input accepts only the Product base unit.
+
+1. A physical count value entered for a Product must be expressed in that Product's configured base unit.
+2. Non-base-unit Stock Count input is not supported. Count entry does not invoke an alternate-unit conversion or conversion-factor lookup.
+3. The same restriction applies to recount attempts; each recorded count measurement remains in Product base units.
+4. The existing candidate `stock_count_items.counted_quantity_base` remains the logical quantity representation. This decision does not add raw entered-quantity, entered-unit or conversion-snapshot attributes for Stock Count.
+5. This rule is specific to Stock Count measurement entry. It does not remove the separate requirement for upstream workflows that do accept non-base units to preserve their own input quantity/unit/conversion provenance and provide a validated base-unit context to inventory.
+
+### 42.29.2 Reconciliation with prior OPEN language
+
+The Owner decision resolves the alternative previously stated in §§42.25.8 and 42.28.3: Stock Count is base-unit-only, not a non-base-unit entry flow with retained conversion provenance. Those earlier sections remain historical audit context and must be read with this later explicit decision.
+
+The Stock Count entry-unit policy is therefore **FIX — OWNER-APPROVED / CONCEPTUAL**. It is no longer an unresolved Owner-choice gate. Do not interpret this decision as closing any separate technical acceptance item.
+
+### 42.29.3 Remaining acceptance gates
+
+The following remain OPEN: physical/UI/API enforcement that rejects a non-base unit; count-attempt status vocabulary and valid transitions; immutable attempt history and accepted-attempt selection; snapshot/cutoff watermark ordering; accepted-attempt posting semantics; all-or-nothing versus item-level posting; idempotency, concurrency/locking, tenant/security enforcement; precision/scale/capacity/overflow and rounding; and positive, negative, boundary, replay and reconciliation evidence.
+
+No physical schema, field type, database constraint, authorization grant, implementation, test result or Production readiness is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
