@@ -3757,3 +3757,53 @@ The numeric operation ownership map is now specified at the logical level across
 NUM-01–NUM-12 physical/operational details remain OPEN where not explicitly fixed in their source decisions. Stock-count non-base-unit entry remains an owner decision. A01/A02 physical idempotency, atomicity, tenant/security enforcement and evidence remain OPEN. No dependency is closed; no FIX is promoted; candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.28 CW-11 Package E — numeric-policy coverage and lifecycle acceptance crosswalk (21 November 2026)
+
+### 42.28.1 Audit purpose and boundary
+
+A cross-document audit of DOC-04 §§20.2–20.7, 35–38 and 42.1–42.27 against DOC-08 FIX decisions and DOC-09 §§3C and 11.4–11.9 found that the numeric operation map is correctly scoped to inventory/costing, but its coverage boundary against the full NUM-01–NUM-12 baseline was implicit. The lifecycle rules also existed across the F41 corrections and A01/A02 contracts, but were not indexed together as one acceptance crosswalk.
+
+This addendum makes coverage and exclusions explicit. It does not add a new numeric policy, lifecycle decision, entity, field, physical constraint or test result. Existing FIX decisions retain their scope; unresolved items remain OPEN.
+
+### 42.28.2 NUM-01–NUM-12 coverage crosswalk
+
+| Numeric rule | Package E coverage | Controlling logical anchor | Boundary retained |
+|---|---|---|---|
+| NUM-01 — quantity and Product base unit | IN SCOPE | §§20.2–20.3, 42.25–42.27 | Product base unit remains canonical; per-Product fraction/increment, precision, capacity and physical type remain OPEN. |
+| NUM-02 — unit conversion | IN SCOPE | §§42.25, 42.27.2–42.27.5 | Conversion must be explicit, compatible and reproducible; factor precision/version, allowed graph, overflow and rounding boundary remain OPEN. |
+| NUM-03 — cost and cost layers | IN SCOPE | §§20.2–20.3, 38.5–38.6, 42.8, 42.27 | Total cost remains authoritative and unit cost derived. The conceptual requirement for deterministic residual reconciliation is retained; the exact FIFO/MWA operation, precision, residual method and posting boundary remain OPEN. NUM-07 LRM must not be generalized to FIFO or MWA. |
+| NUM-04 — MWA / FIFO | IN SCOPE | §§20.2–20.3, 38.5–38.6, 42.8.2–42.8.3, 42.27 | MWA default, FIFO alternative and location-scoped pool remain established. Physical ordering keys, precision, residual, locking and execution remain OPEN. |
+| NUM-05 — transfer costing | IN SCOPE | §§37.4–37.5, 42.6, 42.8, 42.27 | Internal transfer carries existing cost through transit; exact transit valuation, partial disposition, fee/FX treatment and rounding remain OPEN. |
+| NUM-06 — landed cost | IN SCOPE | §§20.2, 42.8.4, 42.27 | Direct identifiable cost and verifiable allocation basis remain the conceptual rules; eligible cost classification, basis selection, timing and exact allocation arithmetic remain OPEN. |
+| NUM-07 — Largest Remainder Method | IN SCOPE, LIMITED | §§20.2, 42.27.4 | LRM remains limited to suitable proportional allocation with stable domain-specific tie identity. It is not a universal rule for unit conversion, FIFO, MWA, FX or all quantity arithmetic. Exact stable keys and implementation remain OPEN. |
+| NUM-08 — currency and FX | PARTIAL / DOMAIN-BOUNDED | §§20.2–20.3, 37, 42.8.4, 42.27 | Package E covers currency/FX only where they affect inventory transfer and costing valuation. Transaction-wide FX, provider/fallback, currency policy and journal treatment remain governed by their owning finance/accounting work and are not accepted by this package. |
+| NUM-09 — sales, discount and tax | OUT OF SCOPE | §20.2 | The existing calculation-order, traceability and reconciliation principles remain in force. Sales/tax parameters and rounding acceptance are not covered or closed by CW-11 Package E. |
+| NUM-10 — rounding account | OUT OF SCOPE | §20.2 | The existing restriction on genuine accounting rounding differences remains in force. Account mapping, materiality and journal policy are not covered or closed here. |
+| NUM-11 — bank matching tolerance | OUT OF SCOPE | §20.2 | Tolerance must not rewrite source bank or transaction values. Tolerance values and bank-matching acceptance are not covered or closed here. |
+| NUM-12 — posted history | CROSS-CUTTING | §§20.2–20.3, 42.4–42.8, 42.24, 42.27 | Posted facts and applied snapshots are not silently rewritten; correction uses traceable reversal/compensation. Physical immutability, audit enforcement and executed evidence remain OPEN. |
+
+The phrase “NUM-01–NUM-12 physical/operational details remain OPEN” in §42.27.6 must therefore be read as a carry-forward of each rule's own scope and unresolved parameters, not as a claim that Package E fully specifies all twelve domains. NUM-09–NUM-11 are explicitly outside this inventory/costing package; NUM-08 is covered only for inventory/costing effects; NUM-12 is cross-cutting.
+
+### 42.28.3 Lifecycle-to-acceptance crosswalk
+
+| Lifecycle area | Existing logical contract | Acceptance items that remain OPEN |
+|---|---|---|
+| A01 source event and movement posting | §§42.4, 42.17–42.24 | Physical registry identity/keys, source catalogue activation, canonical digest/version and retention, atomic fan-out, locking/retry/reversal enforcement, tenant security and executed evidence. |
+| Stock count and recount | §§36.4–36.5, 42.5, 42.25.8–42.25.9 | Owner decision on base-unit-only versus non-base-unit entry; attempt-status vocabulary/transitions; cutoff/watermark ordering; accepted-attempt posting policy; all-or-nothing versus item-level posting; idempotency and physical concurrency. |
+| Shipment, transit and disposition | §§37.4–37.5, 42.6, 42.8 | Shared versus per-shipment transit-location policy; physical event identity and paired movement enforcement; over/under-shipment, cancellation, loss/damage/return authorization; transfer closure evidence; transit cost and fee/FX valuation. |
+| A02 reservation request and allocation lifecycle | §§38.3–38.4, 42.7, 42.18–42.24 | Enabled source-family catalogue, exact source-line/cardinality and wave policy, event vocabulary and physical projection, partial-reservation policy, source-amendment/cancellation handling, concurrency/idempotency, tenant enforcement and tests. |
+| FIFO/MWA cost lifecycle | §§38.5–38.6, 42.8, 42.27 | Exact eligible-layer ordering/tie-breaks, numeric precision/capacity, deterministic residual method per operation, source/transit/destination reconciliation, fee/FX/late-adjustment policy, locking and executed evidence. |
+
+These anchors are not substitutes for the detailed contracts. The table is an audit index to prevent a logical description from being mistaken for a closed physical or operational gate.
+
+### 42.28.4 Audit disposition
+
+1. The NUM-01–NUM-12 conceptual baseline remains the controlling scope for its respective domains. Package E does not expand its authority into sales/tax, rounding-account or bank-matching policy.
+2. NUM-03's conceptual deterministic residual principle remains retained. The precise residual algorithm and rounding boundary for FIFO and MWA are still separate OPEN decisions; NUM-07 LRM is not automatically applicable.
+3. The count-attempt, shipment/transit, reservation-event and transfer-cost lifecycle contracts are present as candidate/logical designs. Their identified physical, owner-decision, concurrency, security and evidence gates remain OPEN.
+4. No dependency is closed, no FIX is newly promoted, and no source decision is inferred from a candidate specification.
+5. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
