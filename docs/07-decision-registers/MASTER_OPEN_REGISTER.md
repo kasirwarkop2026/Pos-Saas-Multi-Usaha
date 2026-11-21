@@ -768,3 +768,26 @@ This decision consumes the accepted variance formula in DOC08-FIX-023 and preser
 **OPEN / NOT CLOSED:** movement-kind vocabulary; event-specific sign validation for all source workflows; A01 source-event identity and movement lineage; reversal/compensation semantics and linkage; zero-line accounting enforcement; numeric precision/scale/capacity/overflow, rounding and tolerance; physical enforcement; concurrency, serialization and idempotency; and executed positive/negative/zero/retry/reversal/reconciliation evidence. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.21 CW-11 Package E — cross-source inventory movement sign consistency audit — PASS WITH OPEN DEPENDENCIES (21 November 2026)
+
+DOC-04 §42.39 audits the inventoried inventory-posting source families against DOC08-FIX-024. The conceptual sign baseline is consistent: positive `quantity_delta_base` increases on-hand at the affected Location; negative decreases it. This audit does not claim all source families are implemented or enabled.
+
+**Cross-source direction crosswalk:** purchase/physical receipt positive; physical sales fulfillment/issue negative; adjustment positive or negative according to the approved signed correction; Stock Count surplus positive and shortage negative (FIX-024); transfer dispatch source negative/transit positive; transfer receipt transit negative/destination positive; physical loss/destruction negative once; physically held damage is a Location/availability disposition rather than a net stock loss; accepted physical returns positive at receiving Location; production input consumption negative and accepted output positive; reservation create/release/expiry/cancel no on-hand movement; reservation fulfillment posts its distinct physical issue once; costing layer creation/consumption and MWA recalculation do not create an additional quantity movement; reversal/compensation uses a new linked opposite-sign movement, subject to unreversed-quantity cap and exact grain.
+
+**Resolved at conceptual audit level:** the positive-increases / negative-decreases meaning from DOC08-FIX-024 can be applied uniformly across the source families without changing its Stock Count-specific equality rule.
+
+**PASS WITH OPEN DEPENDENCIES:** existing transfer dispatch/receipt/loss/damage/return event proposals are directionally consistent with the signed ledger convention; reservation and costing documentation distinguish non-physical lifecycle/cost effects from on-hand changes.
+
+**OPEN / NOT CLOSED:**
+- Final A01 enabled source catalogue and source-domain owner/adapter activation.
+- Exact source record + event + source-line identity, event type, lifecycle eligibility and movement fan-out for every enabled family.
+- Event-specific sign validation and movement-kind vocabulary, particularly adjustment reason/kind, receipt/return condition, production input/output/scrap, reservation fulfillment and correction events.
+- Reversal/compensation same-grain inverse arithmetic, partial cap aggregation, correction-of-correction authorization, lineage and concurrency.
+- Zero-effect A01 outcome reason and distinction from failed/incomplete fan-out.
+- Physical registry/movement constraints, sign enforcement, idempotency, transaction/locking/isolation, tenant authorization, projection reconciliation and executed positive/negative/zero/paired/reversal/retry/concurrency evidence.
+
+The matrix in DOC-04 §42.39 is an expected conceptual direction crosswalk, not an enabled source allowlist or physical acceptance. No Owner FIX is added; DOC08-FIX-024 remains unchanged. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
