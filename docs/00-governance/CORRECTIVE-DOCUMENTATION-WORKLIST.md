@@ -3228,3 +3228,33 @@ CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Diction
 ### 15.96.4 Governance
 
 Documentation-only, append-only changes on existing PR #144. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.97 CW-11 Package E — Stock Count variance arithmetic, precision and rounding audit (21 November 2026)
+
+### 15.97.1 Scope
+
+Audit DOC-04 numeric operation matrix and Stock Count snapshot/lifecycle contracts against Owner FIX DOC08-FIX-020–022. Scope is Stock Count quantity/variance only; this does not expand into sales/tax, bank matching, general FX/accounting or unrelated FIFO/MWA arithmetic.
+
+### 15.97.2 Findings and corrections
+
+The audit reconciles the calculation operands and ordering:
+- exact count-line snapshot quantity at inclusive cutoff C;
+- signed net applicable posted movement delta in (C,R];
+- expected quantity at R;
+- the single accepted immutable Product-base-unit count attempt;
+- derived variance, with NULL/not-counted distinct from valid zero.
+
+DOC-04 §42.35 adds a candidate subtraction convention: accepted counted quantity minus expected quantity at R, yielding positive surplus and negative shortage. This is explicitly **not an Owner FIX**; it is queued for confirmation before movement-sign mapping is accepted.
+
+Numeric guardrails are documented without inventing decimal places or limits: no silent rounding/truncation/clamping/coercion; no universal decimal scale; overflow/unrepresentable intermediate values fail closed; no tolerance inferred; LRM and monetary rounding are not generalized to physical Stock Count variance. The candidate design-only cases cover zero, NULL, positive/negative variance, fractional values, cutoff boundaries, overflow, replay and all-or-nothing failure.
+
+### 15.97.3 Acceptance disposition
+
+PASS WITH OPEN OWNER DECISION for bounded logical audit. Owner confirmation is required for the proposed variance sign convention. Product fractional/increment policy, precision/scale/capacity, overflow, rounding boundary/mode, tolerance, variance storage-versus-derivation, movement sign mapping, physical enforcement and executed evidence remain OPEN.
+
+No new FIX, physical schema, implementation or test PASS is inferred. CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+### 15.97.4 Governance
+
+Documentation-only, append-only changes on existing PR #144. No SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, application source, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
