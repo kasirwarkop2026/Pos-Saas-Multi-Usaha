@@ -568,3 +568,23 @@ The map clarifies the following cross-domain boundaries:
 The stock-count non-base-unit entry policy remains an explicit owner decision. A01/A02 physical identity, integrity, security, concurrency and test evidence remain OPEN. This section is a logical ownership/operation map only: no numeric parameter, physical type, algorithm implementation or test PASS is approved. No dependency is closed and no FIX is promoted.
 
 **Disposition:** numeric operation ownership and arithmetic boundaries SPECIFIED at logical level; physical/numeric acceptance remains OPEN. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.10 CW-11 Package E numeric-scope and lifecycle acceptance crosswalk (21 November 2026)
+
+DOC-04 §42.28 records the audit crosswalk between the full NUM-01–NUM-12 conceptual baseline and the narrower inventory/costing scope of CW-11 Package E, and indexes the existing F41/A01/A02 lifecycle contracts.
+
+The scope disposition is:
+
+- NUM-01 through NUM-07 are in scope for inventory quantity, conversion, costing, transfer and suitable proportional allocation, with their exact physical/numeric parameters still OPEN.
+- NUM-08 is covered only for inventory transfer and costing valuation effects. Transaction-wide FX, provider/fallback and journal policy remain with their owning finance/accounting work.
+- NUM-09 sales/discount/tax, NUM-10 rounding-account policy and NUM-11 bank-matching tolerance are outside CW-11 Package E. Their existing conceptual principles remain in force; this package neither specifies their remaining parameters nor closes them.
+- NUM-12 posted-history immutability is cross-cutting. Physical enforcement, audit controls and executed evidence remain OPEN.
+
+NUM-03's conceptual requirement for deterministic cost residual reconciliation remains retained. Exact FIFO/MWA residual methods, precision and operation-specific rounding boundaries remain OPEN. NUM-07 LRM is limited to suitable proportional allocation and is not presumed to govern FIFO, MWA, unit conversion or FX.
+
+The lifecycle crosswalk points to the existing logical contracts for A01 posting (§§42.4, 42.17–42.24), stock-count attempts (§36.4–36.5 and §42.5), shipment/transit/disposition (§§37.4–37.5, 42.6 and 42.8), A02 reservation lifecycle (§§38.3–38.4, 42.7 and 42.18–42.24), and FIFO/MWA transfer costing (§§38.5–38.6, 42.8 and 42.27). These are candidate/logical designs, not physical acceptance.
+
+**OPEN / NOT CLOSED:** stock-count input-unit owner decision; count-attempt state and cutoff enforcement; A01 physical identity, digest/retention, atomic fan-out and concurrency; A02 source-family activation, source-line cardinality/waves, lifecycle and concurrency; shipment transit-location and disposition enforcement; transfer fee/FX/loss valuation; FIFO/MWA precision and residual policy; tenant/security enforcement; and executed positive, negative, boundary, replay and reconciliation evidence.
+
+This crosswalk adds no FIX, does not close any dependency, and does not authorize physical schema or implementation. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
