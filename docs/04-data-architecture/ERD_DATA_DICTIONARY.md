@@ -3913,3 +3913,20 @@ Neither option is selected by this candidate model. The Owner must choose the po
 No physical field/type, enum, index, constraint, posting algorithm, test result or implementation is approved here. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+### 42.31 Owner FIX — Stock Count variance posting is count-session all-or-nothing (21 November 2026)
+
+The Owner explicitly selected **Option A — Count-session all-or-nothing** for Stock Count Variance Posting Policy.
+
+1. A Stock Count session may post only when every required count line has a valid accepted attempt and every resulting variance movement can be committed as one atomic session outcome.
+2. All required variance postings for the session commit together, or none commit. If any required line, validation, reconciliation, authorization, or movement write fails, the entire session posting is rolled back; no subset of count lines may remain posted.
+3. The posting/retry boundary is the count session, not an individual count line. A retry must preserve session-level idempotency and must not duplicate any variance movement.
+4. A session is not POSTED until the complete all-or-nothing posting transaction has committed. Partial completion is not a valid terminal or intermediate posted state under this policy.
+5. After successful commit, posted measurement/variance history is not overwritten. Corrections follow the separately governed compensating-event path.
+
+**Decision status:** FIX — OWNER-APPROVED / CONCEPTUAL. This resolves the Owner choice of posting atomicity boundary and supersedes the undecided alternatives recorded in §42.30.5. The parent/attempt state vocabulary and transitions in §42.30 remain candidate design pending separate Owner acceptance.
+
+**Implementation boundary:** This decision does not approve a database transaction design, physical fields/enums/indexes/constraints, API/backend behavior, locking/isolation strategy, authorization/SoD mapping, retries, test evidence or deployment. Atomic transaction feasibility, session-level idempotency, concurrency/locking, failure injection, reconciliation and audit evidence remain OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
