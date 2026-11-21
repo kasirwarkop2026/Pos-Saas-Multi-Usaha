@@ -3166,3 +3166,34 @@ CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Diction
 ### 15.94.4 Governance
 
 Documentation-only, append-only update on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.95 CW-11 Package E — Owner approval of Stock Count lifecycle conceptual FIX (21 November 2026)
+
+### 15.95.1 Owner decision
+
+The Owner explicitly selected Option A and approved all four lifecycle items presented for review:
+1. Parent and attempt lifecycle vocabulary and permitted transitions.
+2. Cancellation only before session posting commits, preserving history, emitting no variance movement, and serialized against posting.
+3. Accepted-attempt supersession only through controlled return to COUNTING and coordinated, auditable replacement; recount creates a new immutable attempt.
+4. Zero-variance lines may emit no movement but must be explicitly accounted for; NULL/not-counted is never zero.
+
+The accepted lifecycle also retains DOC08-FIX-021: the session reaches POSTED only after the all-or-nothing posting commit succeeds. No partial posting or externally visible intermediate POSTING business state is allowed.
+
+### 15.95.2 Append-only documentation reconciliation
+
+- DOC-08 §11 records DOC08-FIX-022 as FIX / OWNER-APPROVED / CONCEPTUAL.
+- DOC-04 §42.33 records the accepted logical lifecycle, transition guards and scope limitations.
+- DOC-09 §11.15 records the Owner decision and resolves the conceptual lifecycle approval gates previously recorded in §§11.12 and 11.14.
+- DOC-04 §§42.30 and 42.32 remain the detailed candidate/audit basis and are now accepted conceptually only to the extent bounded by §42.33.
+- Earlier OPEN statements requesting Owner acceptance are historical snapshots and are superseded only for the four lifecycle policy items expressly approved here.
+
+### 15.95.3 Remaining acceptance status
+
+Physical status/transition enforcement, snapshot/cutoff serialization, post-cutoff replay/reconciliation, atomic transaction feasibility, cancel/post serialization, session idempotency, locking/concurrency, approval/SoD, tenant/grain integrity, numeric precision/rounding and executed evidence remain OPEN. No physical schema, API/backend behavior, implementation, test result or deployment is approved.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+### 15.95.4 Governance
+
+Documentation-only, append-only update on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
