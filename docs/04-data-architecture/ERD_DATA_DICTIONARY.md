@@ -4048,3 +4048,75 @@ This audit makes no new Owner policy choice and does not approve a new field, st
 Anchors: DOC-04 §§42.5, 42.13–42.15, 42.26–42.30 and 42.34; DOC-09 §11.16; Worklist §15.96.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.35 CW-11 Stock Count variance arithmetic, precision and rounding — bounded numeric audit (21 November 2026)
+
+### 42.35.1 Scope and controlling decisions
+
+This audit is limited to Stock Count quantity and variance arithmetic. It applies DOC08-FIX-020 (Product base-unit-only count/recount input), DOC08-FIX-021 (count-session all-or-nothing posting), DOC08-FIX-022 (accepted-attempt lifecycle and explicit zero-variance accounting), and DOC-04 §42.34 (snapshot at inclusive cutoff C and post-cutoff reconciliation through boundary R).
+
+This is not a general numeric policy for every inventory or financial operation. It does not alter NUM-01–NUM-12 scope or select physical numeric types, precision, scale, capacity, rounding mode, tolerance or Product fractional policy.
+
+### 42.35.2 Stock Count arithmetic facts and ordering
+
+For one count line, the candidate calculation must preserve these distinct facts:
+
+- system_quantity_snapshot_base_at_C: authoritative snapshot quantity for the exact count-line grain at cutoff C.
+- net_applicable_posted_movement_delta_(C,R]: signed sum of all applicable posted movement deltas strictly after C and through R.
+- expected_quantity_at_R: snapshot quantity at C plus the applicable net movement delta in (C,R].
+- accepted_counted_quantity_base: immutable measurement from the one currently accepted attempt, entered in the Product base unit.
+- variance_quantity_base: derived difference between accepted counted quantity and expected quantity at R.
+
+Candidate expression:
+
+expected_quantity_at_R = system_quantity_snapshot_base_at_C + net_applicable_posted_movement_delta_(C,R]
+
+variance_quantity_base = accepted_counted_quantity_base - expected_quantity_at_R
+
+The subtraction order is a proposed semantic convention only and requires explicit Owner confirmation before it becomes FIX. Under this proposed convention, positive variance means physical count exceeds expected stock (surplus); negative variance means physical count is below expected stock (shortage); zero means exact match. The sign of any generated movement must be reconciled to the inventory ledger's established delta convention; do not infer it solely from a label.
+
+The calculation must use one accepted attempt only. RECORDED, REVIEW_REQUIRED, REJECTED and SUPERSEDED attempts do not enter the variance calculation. NULL counted quantity means not counted and blocks readiness for a required line; numeric zero is a valid measurement. A zero variance line is explicitly accounted for under DOC08-FIX-022 even when it emits no movement.
+
+### 42.35.3 Precision and rounding findings
+
+1. **Base-unit consistency:** all operands in the variance equation must already be normalized to the same Product base unit and exact Business/Product/nullable Variant/Location/Batch grain. DOC08-FIX-020 means Stock Count entry itself does not invoke alternate-unit conversion.
+2. **No implicit rounding:** snapshot, movement deltas, replay aggregate, expected quantity and count measurement must not be silently rounded, truncated, clamped or coerced to zero during the variance calculation.
+3. **No universal decimal scale:** a single hard-coded decimal scale or fractional increment cannot be inferred for every Product. Per-Product discrete/fractional eligibility, minimum increment and maximum magnitude remain OPEN under NUM-01.
+4. **Intermediate arithmetic:** the eventual numeric representation must safely represent every permitted source operand and intermediate sum/difference for the approved Product domain. Overflow, underflow, invalid precision or an unrepresentable result must fail closed; it must not wrap, truncate or silently round. Exact type, precision, scale and capacity remain OPEN.
+5. **Rounding boundary:** no rounding boundary or mode is selected for Stock Count variance. If a future approved Product policy requires quantization, it must identify the operation boundary, mode, increment, residual treatment and auditable source/result relationship. Rounding after variance calculation must not alter the immutable counted measurement, snapshot or posted movement fact.
+6. **Tolerance:** no tolerance band is inferred. A near-zero variance is not automatically zero, accepted or ignored. Any operational tolerance requires a separate explicit Owner policy, unit basis, comparison boundary and audit treatment.
+7. **No LRM substitution:** Largest Remainder Method is not a Stock Count variance rounding rule. It remains limited to suitable proportional allocation under NUM-07.
+8. **No monetary rounding leakage:** currency, cost valuation, MWA/FIFO residuals, FX and accounting rounding do not determine physical count quantity or variance. Quantity variance and monetary valuation are separate operations with separate precision and rounding policies.
+9. **Reproducibility:** recomputing from the same immutable accepted attempt, snapshot at C and movement set (C,R] must reproduce the same expected quantity and variance. Replay must not mutate source facts or generate movement events.
+10. **Atomic posting:** the session's required variance movements, zero-variance line dispositions and posting identity must satisfy DOC08-FIX-021/022 together. A numeric failure on any required line blocks the whole session posting.
+
+### 42.35.4 Candidate acceptance cases (design-only, not executed)
+
+| Case | Required logical result |
+|---|---|
+| Count equals expected quantity | Variance is zero; line explicitly accounted for; no movement required solely for zero |
+| Count exceeds expected quantity | Candidate positive surplus under the proposed sign convention; Owner confirmation required |
+| Count below expected quantity | Candidate negative shortage under the proposed sign convention; Owner confirmation required |
+| Required count is NULL | Not counted; block READY_TO_POST |
+| Count is numeric zero | Valid measured quantity; do not treat as NULL |
+| Post-cutoff movement exists | Include exactly once in (C,R] before expected quantity is calculated |
+| Movement exactly at C | Included in snapshot boundary; excluded from post-cutoff replay |
+| Fractional result | Preserve exact value pending Product fractional/increment policy; no silent rounding |
+| Intermediate or final overflow | Fail closed and block the entire session posting |
+| Replay repeated with identical inputs | Same expected quantity and variance; no new movement or mutation |
+| Any required line has numeric/reconciliation error | Entire session posting remains uncommitted under FIX-021 |
+
+These are logical acceptance cases only. No tests have been executed and no PASS evidence is claimed.
+
+### 42.35.5 Owner decision queue and remaining OPEN items
+
+**Owner confirmation required before FIX:** approve or revise the proposed variance sign convention: accepted_counted_quantity_base minus expected_quantity_at_R (positive = surplus; negative = shortage).
+
+**Still OPEN independent of that choice:** Product-specific discrete/fractional policy; minimum increment and maximum magnitude; numeric type, precision, scale and capacity for snapshot, movement, aggregate, expected and variance values; intermediate arithmetic/overflow behavior; any rounding mode/boundary; tolerance policy; variance storage-versus-derivation; movement sign mapping; physical validation and executed positive/negative/zero/fractional/boundary/overflow/replay/failure evidence.
+
+No Owner choice is inferred from this audit. No physical field/type, precision/scale, constraint, API/backend, database transaction, implementation or test result is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+Anchors: DOC-08 DOC08-FIX-020–022; DOC-04 §§20.2, 42.27–42.28, 42.34–42.35; DOC-09 §§11.10–11.16; Worklist §15.97.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
