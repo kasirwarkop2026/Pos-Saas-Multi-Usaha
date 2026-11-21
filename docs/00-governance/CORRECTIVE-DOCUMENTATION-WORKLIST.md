@@ -3089,3 +3089,30 @@ CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Diction
 This is a documentation-only, append-only update to the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
 
 PR #144 remains subject to fresh documentation validation and read-back. It is not merged. Any merge to `main` triggers the linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.92 CW-11 Package E — Stock Count lifecycle proposal and posting-boundary Owner gate (21 November 2026)
+
+### 15.92.1 Audit basis
+
+Read-back from the active PR #144 branch reviewed DOC-04 §§36.4–36.6, 42.5, 42.13, 42.15.1 and 42.29; DOC-09 §§11.7–11.12; DOC-06 security/requirements cross-references; and DOC-07's count/variance approval and evidence references.
+
+The audit confirmed that the attempt-row structure, immutable measurement facts, single accepted attempt, frozen Location cutoff sequence and post-cutoff reconciliation principles were already present. The gaps were that parent/attempt state transitions were not consolidated, the snapshot acceptance sequence was distributed, and the variance posting atomicity boundary remained undecided.
+
+### 15.92.2 Append-only correction
+
+- DOC-04 §42.30 adds a candidate parent lifecycle and candidate attempt-disposition model, with explicit guards and terminal states.
+- DOC-04 §42.30.4 consolidates the freeze-before-counting and post-cutoff reconciliation acceptance sequence.
+- DOC-04 §42.30.5 preserves the two posting alternatives without selecting one.
+- DOC-09 §11.12 records the candidate model and explicitly retains Owner approval and technical gates as OPEN.
+- No DOC-08 FIX is added. No physical enum, schema, field, index, constraint, posting algorithm, authorization grant, test result or implementation is approved.
+
+### 15.92.3 Current disposition and next action
+
+Stock Count base-unit-only remains the Owner-approved conceptual FIX in DOC08-FIX-020. The lifecycle state model is a candidate proposal only and is not promoted to FIX. The next required Owner decision is the variance posting boundary: session all-or-nothing or item-level partial posting. Final acceptance of the proposed state vocabulary/transitions also remains OPEN.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+### 15.92.4 Governance
+
+This is a documentation-only, append-only continuation on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; any merge to `main` triggers the linked Vercel Production deployment and requires separate explicit Owner authorization.
