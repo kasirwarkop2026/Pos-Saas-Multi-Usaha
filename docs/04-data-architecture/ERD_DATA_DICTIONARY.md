@@ -3600,3 +3600,83 @@ The following cases are required for a later executable test plan; listing them 
 | Conversion produces a fractional quantity beyond approved operational precision | Remains blocked pending precision/rounding policy; no silent rounding |
 
 These are design acceptance cases only. No test execution, test PASS, physical constraint or implementation is inferred.
+
+
+## 42.26 CW-11 numeric ownership and quantity-grain reconciliation across the 17 candidate entities
+
+### 42.26.1 Purpose and interpretation
+
+This append-only reconciliation narrows an ambiguity in the earlier §20.4 “numeric relevance” matrix. Numeric relevance does not mean that every related header or identity entity owns a persisted quantity field. The candidate field specifications in §§35–38 and the newer quantity crosswalk in §42.25.7 govern the current candidate ownership interpretation.
+
+Use these distinctions consistently:
+
+- **Owned quantity:** a candidate numeric quantity attribute stored at that entity's own declared grain.
+- **Projection quantity:** a derived/rebuildable aggregate, not an independent source-of-truth event.
+- **Derived aggregate:** a sum or reconciliation over child rows/events; do not duplicate it as a mutable header total unless a separately approved design explicitly requires a snapshot.
+- **Context only:** an entity identifies scope, parent, lifecycle, cutoff or source, but does not itself own stock quantity.
+- **Monetary numeric:** a cost/valuation value, not physical stock quantity; its currency and denominator/basis must remain explicit.
+
+The matrix below classifies candidate semantics only. It does not approve SQL columns, types, precision, scale, nullability, physical schema, constraints or implementation.
+
+### 42.26.2 Reconciled 17-entity numeric ownership matrix
+
+| Candidate entity | Numeric ownership / grain | Quantity or monetary meaning | Reconciliation / boundary |
+|---|---|---|---|
+| `inventory_batches` | Context/identity only; no owned quantity | Physical lot/batch identity and FEFO attributes | Batch quantity belongs to `inventory_batch_balances` projection and posted `inventory_movements`, not a mutable batch-header total |
+| `inventory_movements` | Owned quantity at posted movement grain | Signed `quantity_delta_base` in Product base unit | Immutable physical quantity ledger; corrections use linked reversal/compensation movements |
+| `inventory_balances` | Projection quantity at Business + Product + nullable Variant + Location grain | On-hand and reserved base quantities; available is derived as on-hand minus reserved | Rebuild/reconcile from movement and reservation facts; not an independent source ledger |
+| `inventory_batch_balances` | Projection quantity at physical Batch grain | Batch on-hand and reserved base quantities | Batch projection reconciles to the parent Product/Variant/Location balance; batch identity row owns no quantity |
+| `inventory_adjustments` | Context/lifecycle only; no owned line quantity | Header, reason, approval and posting lifecycle | Any header-level numeric summary is derived from adjustment items/movements; no mutable header total is selected |
+| `inventory_adjustment_items` | Owned source and normalized quantities at adjustment-line grain | Input quantity + input unit + conversion context; signed base-unit delta | Validated conversion precedes posting; each posted item links to its generated movement under idempotent posting rules |
+| `stock_counts` | Context/snapshot only; no owned count quantity | Count session, scope, snapshot/cutoff and lifecycle metadata | Expected, counted and variance quantities belong to `stock_count_items`; post-snapshot movement handling remains separately governed |
+| `stock_count_items` | Owned count quantities at Product/Variant/Batch count-line grain | System snapshot, counted and variance quantities in Product base unit | NULL counted quantity means not counted; zero is a valid count. Whether raw non-base entry is supported remains an owner decision (see §42.25.8) |
+| `stock_transfers` | Context/lifecycle only; no owned quantity | Transfer request, approval and overall lifecycle | Requested quantity belongs to transfer items; dispatched/received/lost/damaged quantities are derived/reconciled from shipment items, not mutable header totals |
+| `stock_transfer_items` | Owned demand quantity at transfer-line grain | Requested base-unit quantity | Approved demand is the cap context for shipment aggregation; source-entry unit provenance remains owned by the upstream workflow if applicable |
+| `stock_transfer_shipments` | Context/lifecycle only; no owned quantity | Shipment/dispatch/receipt leg identity, sequence and lifecycle | Shipment quantity belongs to shipment items; header state must not erase partial dispatch/receipt/exception history |
+| `stock_transfer_shipment_items` | Owned shipment/disposition quantities at shipment-line + batch grain | Dispatched, received, lost and damaged base-unit quantities | Cumulative dispositions reconcile to dispatched quantity under an approved event model; return handling is explicit and not a silent decrement |
+| `inventory_cost_exceptions` | Monetary numeric only; no physical stock quantity owned | Optional resolved unit cost | Cost denominator follows the linked Product base-unit context; currency, precision, resolution history and valuation effect remain OPEN |
+| `inventory_reservations` | Context/source/lifecycle only; no owned allocation quantity | A02 source identity and reservation lifecycle | Reserved/fulfilled/released quantities belong to reservation items; header aggregates are derived, and reservation changes availability rather than on-hand |
+| `inventory_reservation_items` | Owned allocation/lifecycle quantities at allocation-slice grain | Reserved, fulfilled and released base quantities | Fulfilled + released cannot exceed reserved; aggregate active reservation reconciles to eligible item allocations |
+| `inventory_cost_layers` | Owned costing quantity and monetary values at cost-layer grain | Original/remaining base quantity and unit cost | Total cost remains authoritative per NUM-03; quantity pool is Business + Product/Variant + Location; layer identity is not batch identity |
+| `inventory_cost_layer_consumptions` | Owned consumption quantity and monetary snapshots at consumption grain | Consumed base quantity, unit-cost snapshot and extended-cost snapshot | Consumption cannot exceed eligible remaining layer quantity; compensation is traceable; exact cost arithmetic/rounding remains OPEN |
+
+### 42.26.3 Interpretation corrections for the earlier §20.4 matrix
+
+The earlier §20.4 table remains a historical numeric-relevance matrix, but the following phrases must not be interpreted as header-owned quantity columns:
+
+1. “Batch quantity” for `inventory_batches` means quantity associated with a batch through its balance projection and movements; the batch identity entity itself has no quantity column in the candidate specification.
+2. “Adjustment totals” for `inventory_adjustments` means derived reconciliation over adjustment items and posted movements; the header owns lifecycle and approval metadata only.
+3. “Snapshot/cutoff quantities” for `stock_counts` means quantity facts at count-item grain; the count header owns snapshot/cutoff context only.
+4. “Transfer-level requested/dispatched/received reconciliation” for `stock_transfers` means cross-child aggregate reconciliation; requested quantity is owned by transfer items and shipment dispositions by shipment items.
+5. “Dispatch and receipt quantity reconciliation” for `stock_transfer_shipments` means child shipment-item reconciliation; shipment header owns shipment identity and lifecycle only.
+6. Reservation header totals are derived from reservation-item allocations; the reservation header owns source identity and lifecycle, not the allocated quantity values.
+
+This interpretation preserves the more specific candidate field definitions in §§35–38 and aligns the 17-entity map with §42.25.7. It does not remove any legitimate numeric relevance from the earlier matrix; it clarifies the storage grain and source of truth.
+
+### 42.26.4 Shared arithmetic and reconciliation order
+
+For quantity-bearing facts, use this logical sequence:
+
+1. Resolve same-Business, Product, nullable Variant, Location, parent, source-line and applicable Batch grain.
+2. Validate input unit and Product base unit and normalize source quantities before comparison.
+3. Keep source facts distinct from derived projections and child-derived header aggregates.
+4. Compare/aggregate only quantities in the same Product base unit and same applicable grain.
+5. Reconcile movement ledger to Product/Location and Batch projections; reconcile reservation item lifecycle to active reserved quantity; reconcile transfer shipment dispositions to approved transfer demand; reconcile cost-layer consumption to eligible remaining quantity.
+6. Preserve monetary values as monetary values with explicit currency and quantity denominator; do not compare or sum them as physical stock quantities.
+7. Apply approved event-specific sign, zero, cap and lifecycle rules; this section does not invent universal numeric bounds.
+
+### 42.26.5 Numeric decisions and evidence remain OPEN
+
+This ownership reconciliation does NOT select or close:
+
+- Numeric type, precision, scale, capacity, overflow or per-Product fractional/discrete policy.
+- Conversion factor precision, version/effective-time model, allowed conversion graph or reciprocal consistency.
+- Rounding mode, boundary, tolerance or treatment of irreducible fractions.
+- Whether count entry accepts non-base units and, if so, the required raw-entry/conversion provenance.
+- Exact storage versus derivation for count variance, projection values, header aggregates or shipment event decomposition.
+- Cost currency policy, unit-cost/extended-cost arithmetic, MWA residual treatment, FIFO cost snapshot precision or accounting rounding.
+- Physical constraints, transaction/concurrency enforcement, security controls or executed tests.
+
+NUM-01 through NUM-03 remain conceptual principles only where already established. No new FIX is promoted; no OPEN dependency is closed. Candidate Data Dictionary acceptance remains 0/17, canonical physical ERD remains NOT ACCEPTED, and implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.

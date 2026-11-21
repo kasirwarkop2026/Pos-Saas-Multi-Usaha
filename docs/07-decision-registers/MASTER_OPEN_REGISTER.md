@@ -530,3 +530,22 @@ DOC-04 §42.25.9 lists logical acceptance cases for Variant identity, conversion
 **OPEN:** stock-count entry-unit policy and required provenance; upstream source-domain conversion contract/ownership; exact conversion factor/version/effective-time policy; precision/scale/capacity/overflow; rounding/tolerance; physical null-safe Variant enforcement; physical conversion snapshot representation; and executable test evidence. No dependency is closed and no physical or implementation acceptance is implied.
 
 **Disposition:** 17-entity logical crosswalk SPECIFIED; two input-boundary gaps and all physical/numeric/evidence gates remain OPEN. READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.8 Numeric ownership and quantity-grain reconciliation across the 17 candidate entities (21 November 2026)
+
+DOC-04 §42.26 reconciles the earlier §20.4 numeric-relevance matrix against the candidate entity field specifications in §§35–38 and the shared quantity/unit crosswalk in §42.25.7.
+
+The reconciliation distinguishes owned quantities, projection quantities, child-derived aggregates, context-only headers and monetary numeric values. In particular:
+
+- `inventory_batches`, `inventory_adjustments`, `stock_counts`, `stock_transfers`, `stock_transfer_shipments` and `inventory_reservations` are context/identity/lifecycle headers in the current candidate design; they do not own mutable stock quantity totals.
+- Their associated quantity facts belong at the appropriate child/event grain: movements, batch balances, adjustment items, count items, transfer items, shipment items and reservation items.
+- `inventory_balances` and `inventory_batch_balances` are projections, not source ledgers.
+- `inventory_cost_exceptions.resolved_unit_cost` is monetary, not physical stock quantity. Cost-layer and consumption entities carry both quantity and monetary values with explicit currency/denominator requirements.
+- Earlier §20.4 phrases such as “batch quantity”, “adjustment totals”, “snapshot/cutoff quantities” and “transfer-level reconciliation” must be read as domain relevance or derived reconciliation, not as approval for duplicate mutable header totals.
+
+This is a candidate ownership/grain clarification only. It does not approve physical columns/types, exact numeric precision/scale/capacity, overflow, factor precision/versioning, rounding/tolerance, currency policy, event decomposition, constraints, security, concurrency implementation or test evidence.
+
+**OPEN / NOT CLOSED:** all NUM-01/02/03 physical and operational acceptance criteria remain open where they require exact numeric policy, conversion provenance, arithmetic boundaries, physical enforcement or executed evidence. Stock-count non-base-unit entry policy remains an explicit owner decision. No FIX is newly promoted and no physical Data Dictionary or canonical ERD acceptance is claimed.
+
+**Disposition:** logical numeric ownership across 17 candidate entities SPECIFIED; numeric implementation and evidence gates remain OPEN. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.

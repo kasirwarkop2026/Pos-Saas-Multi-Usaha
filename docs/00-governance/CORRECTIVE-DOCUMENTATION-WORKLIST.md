@@ -2911,3 +2911,50 @@ Latest verified PR #141 head for this snapshot: \`23358aa931f077a0b4a8088fd9db32
 **Merge boundary:** PR #141 is technically mergeable as a documentation-only change, but this snapshot does not execute a merge. The repository's Git integration automatically triggers a Vercel Production deployment on merge; any merge must remain subject to explicit user authorization for that Production side effect. No manual deployment or Vercel configuration action is authorized.
 
 **Disposition:** PR #141 documentation refinement and applicable CI PASS; application checks SKIPPED; stock-count entry policy, source-domain conversion contract, exact numeric/rounding policy, physical enforcement and executed evidence remain OPEN. CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Physical Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • \`DB_PUSH_BLOCKED: ACTIVE\`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 15.86 — PR #141 Merge, Main Read-Back & Production Deployment Handoff (2026-11-21)
+
+- PR: #141 — Null-safe Variant equality and unit/quantity normalization contract.
+- Branch: `docs/cw11-package-e-variant-unit-normalization-2026-11-21`.
+- Final head SHA verified before merge: `4dd96d1d3c60e6bc0861c79963c1b0ae7db4d892`.
+- Merge commit: `c61b77091f5f3bcebd39192457552b824b374be3`.
+- GitHub result: CLOSED / MERGED; mergeability was true immediately before merge.
+- Final diff: 3 documentation files; 279 additions; 0 deletions; branch was 7 commits ahead and 0 behind `main`.
+- Review submissions: none; inline review threads: none.
+- Documentation CI run `44801830853`: SUCCESS — Markdown lint, Documentation structure, Internal documentation links all SUCCESS.
+- POS SaaS CI run `44801830978`: overall SUCCESS — Detect application changes SUCCESS; ESLint, TypeScript typecheck, Next.js production build, and dependency security audit SKIPPED because no application changes were detected. SKIPPED is not PASS.
+- Post-merge read-back from `main`: DOC-04, DOC-09, and this Worklist were fetched successfully; DOC-04 §42.25.9, DOC-09 §11.7, and Worklist §15.85 are present.
+- Vercel Git integration automatically created Production deployment `dpl_sL9856oPUVuVHYpto6bmG9pJ4vzT` for merge commit `c61b77091f5f3bcebd39192457552b824b374be3`. Last observed state: BUILDING. No manual deployment, promotion, rollback, cancellation, or configuration change was performed.
+- Logical Variant/unit semantics and 17-entity crosswalk are recorded; they do not constitute physical schema acceptance or implementation authorization.
+- Stock-count non-base-unit entry policy remains OPEN for owner decision. Numeric precision/scale/capacity/overflow, factor precision/versioning, rounding/tolerance, physical enforcement, security, and execution evidence remain OPEN.
+- Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+- Governance unchanged: READ-ONLY / APPEND-ONLY documentation work; `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED; no database push and no production configuration changes.
+- Next action: continue the next bounded documentation remediation only; do not infer or decide the unresolved stock-count input-unit policy.
+
+
+## 15.87 CW-11 Package E — numeric ownership and quantity-grain reconciliation (21 November 2026)
+
+### 15.87.1 Audit finding
+
+A cross-read of DOC-04 §20.4, the candidate entity specifications in §§35–38, and the newer §42.25.7 crosswalk found that the older numeric-relevance matrix could be misread as assigning stored quantity totals to several header/identity entities. The candidate field specifications instead place quantities at movement, projection, item, shipment-item, reservation-item and cost-layer grains. This is a semantic ownership/clarity issue, not evidence of an incorrect deployed schema.
+
+### 15.87.2 Append-only correction
+
+- DOC-04 §42.26 adds a 17-entity numeric ownership matrix distinguishing owned quantity, projection quantity, child-derived aggregate, context-only header and monetary numeric.
+- The section clarifies that `inventory_batches`, `inventory_adjustments`, `stock_counts`, `stock_transfers`, `stock_transfer_shipments` and `inventory_reservations` own no mutable stock quantity totals in the current candidate design.
+- Quantity facts are located at the corresponding child/event grain: movement, batch balance, adjustment item, count item, transfer item, shipment item, reservation item, cost layer or cost-layer consumption.
+- Product and Batch balance tables remain projections; `inventory_movements` remains the immutable physical quantity ledger.
+- `inventory_cost_exceptions.resolved_unit_cost` is monetary, not stock quantity. Cost-layer and consumption entities carry explicit quantity and monetary dimensions.
+- DOC-09 §11.8 records the same interpretation and preserves all NUM-01/02/03 physical/operational gates as OPEN.
+- No numeric type, precision, scale, capacity, overflow, conversion-factor precision/version, rounding mode/tolerance, currency policy, physical constraint or test result is invented or approved.
+
+### 15.87.3 Status and boundary
+
+This correction resolves ambiguity in candidate numeric ownership and quantity grain only. It does not close NUM-01/02/03, decide the stock-count non-base-unit entry policy, accept physical Data Dictionary fields, accept the canonical physical ERD or authorize implementation. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
+
+The Vercel Production deployment automatically triggered by PR #141 merge commit `c61b77091f5f3bcebd39192457552b824b374be3` was subsequently rechecked and reached READY. No manual deployment, promotion, rollback, cancellation or configuration change was performed.
+
+### 15.87.4 Governance
+
+PR #142 now contains the original post-merge record (§15.86) plus this bounded numeric-ownership correction. It remains a documentation-only PR and must pass fresh validation on its latest head. Its merge would again trigger the repository's linked Vercel Production deployment and therefore requires explicit user authorization. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; no SQL/DDL/DML, database introspection, migrations, RLS/Auth, triggers, API/backend, application source, CI workflow or Vercel configuration changes. Stage 6 implementation NOT AUTHORIZED.
