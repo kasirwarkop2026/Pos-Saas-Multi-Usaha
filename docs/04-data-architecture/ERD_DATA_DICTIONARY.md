@@ -3980,3 +3980,22 @@ The above is a refined candidate proposal. **Separate Owner acceptance is still 
 No physical field/type, enum, index, constraint, transaction implementation, API/backend behavior, test result or deployment is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+### 42.33 Owner FIX — Stock Count parent/attempt lifecycle and transition guards accepted (21 November 2026)
+
+The Owner explicitly approved Option A for the four lifecycle items presented after the audit in §42.32. The candidate logical model in §§42.30 and 42.32 is therefore accepted as the conceptual Stock Count lifecycle policy, subject to the following bounded interpretation:
+
+1. **Parent and attempt vocabulary/transitions accepted.** The parent lifecycle vocabulary and permitted transitions in §42.30.2, and attempt disposition vocabulary/transitions and invariants in §42.30.3 and §42.32.2, are Owner-approved conceptual policy. This includes immutable measurement facts, new attempt identity for recount, at most one accepted attempt per count line, and terminal REJECTED/SUPERSEDED dispositions.
+2. **Cancellation guard accepted.** Cancellation is permitted only before the session posting transaction commits. It preserves snapshot and attempt history and emits no variance movement. Cancellation and posting must serialize so only one outcome can win. POSTED and CANCELLED are terminal.
+3. **Supersession sequence accepted.** Replacing an accepted attempt requires an explicit controlled return to COUNTING and a coordinated, auditable operation that supersedes the previous accepted attempt and accepts its replacement. No accepted attempt may be superseded after the session posting transaction commits. Recount never overwrites a prior measurement.
+4. **Zero-variance accounting accepted.** A zero-variance count line may emit no inventory movement, but it must be explicitly accounted for in the session's completed posting result. It cannot be silently omitted. NULL/not-counted is never interpreted as zero; zero remains a valid measurement.
+5. **All-or-nothing POSTED boundary retained.** In accordance with DOC08-FIX-021, the session reaches POSTED only after every required count line is accounted for and all required variance movements and posting identity commit together. Any failure leaves no partial posting. No externally visible intermediate POSTING business state is introduced; failed transactions leave the pre-commit business state available for controlled retry/review.
+
+This FIX accepts the logical lifecycle and guards only. It does not approve physical status enums, fields, constraints, event tables, transaction/locking design, API/backend behavior, authorization implementation, numeric parameters, test evidence or deployment. Snapshot/cutoff enforcement, post-cutoff replay, atomic transaction feasibility, cancel/post serialization, session idempotency, concurrency, security/SoD, numeric precision/rounding and executed positive/negative/boundary/failure/replay/reconciliation evidence remain OPEN.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. The previous Owner-acceptance gate in §§42.30.6 and 42.32.4 is resolved only for the logical lifecycle policy described here. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+Anchors: DOC-08 DOC08-FIX-022; DOC-04 §§42.30–42.33; DOC-09 §§11.14–11.15; Worklist §15.95.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
