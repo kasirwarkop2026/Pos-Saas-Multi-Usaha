@@ -283,3 +283,56 @@ This recursive target-cap rule is the authoritative cumulative cap. It handles p
 It does not approve physical source/event registries, column names, FK/UNIQUE/CHECK constraints, numeric precision/scale/capacity, locking/isolation/transaction implementation, idempotency storage, RLS/Auth/API/backend behavior, role grants, tests, deployment or Production changes. Those technical/evidence gates remain OPEN and must be tracked separately. No implementation is authorized.
 
 Anchors: DOC-04 §§42.40–42.41; DOC-09 §§11.22–11.23; Worklist §§15.102–15.103. Related decisions: DOC08-FIX-005 (immutable movement ledger), DOC08-FIX-024 (signed on-hand delta convention), A12.17 Alternative 1 (separate cost-layer consumption compensation).
+
+
+## 15. A01 inventory posting source-family scope — Owner FIX (22 November 2026)
+
+**DOC08-FIX-026 — Adopt the bounded conceptual A01 source-family scope and explicit non-posting exclusions defined below.**
+
+The Owner directed that the proposed A01 source-family disposition be promoted to FIX if it is aligned with the accepted architecture and has no conceptual conflict. The documentation consistency review found no conceptual conflict with DOC08-FIX-018 (bounded A01 inventory-posting registry, not a universal event bus), DOC08-FIX-019 (separate A02 reservation source identity), DOC08-FIX-024 (canonical positive-increases / negative-decreases signed movement direction), or DOC08-FIX-025 (immutable lineage-linked correction movements). The source-family scope is therefore recorded as the following conceptual Owner FIX.
+
+### 15.1 Accepted A01 source families
+
+The bounded conceptual A01 source-family scope contains 16 catalogue rows:
+
+**INCLUDE (14):**
+1. Purchase / goods receipt — only physically received and accepted quantity.
+2. Sales / fulfillment — only actual physical issue from the issuing Location.
+3. Inventory adjustment — approved signed adjustment under a controlled reason; reason taxonomy and zero-effect policy require per-adapter definition.
+4. Stock Count — only accepted count-session posting under the existing Stock Count FIX lifecycle and DOC08-FIX-024.
+5. Transfer dispatch — paired source-Location decrease and transit-Location increase for actual dispatched quantity.
+6. Transfer receipt — paired transit decrease and destination increase for each actual receipt occurrence.
+7. Transfer loss / destruction — one authorized physical-loss/disposition posting; prevent duplicate loss paths.
+8. Return before transfer receipt — only actual physical return from transit to source/return Location.
+9. Return after transfer receipt — each actual reverse-flow physical leg is separately traceable.
+10. Customer / supplier physical return — only physically received and accepted goods.
+11. Production / assembly input consumption — only actual authorized material issue/consumption.
+12. Production / assembly output — only accepted physical output received into a Location.
+13. Write-off / loss outside transfer — only authorized physical removal/destruction; deduplicate against adjustment and transfer-loss paths.
+14. Approved movement correction — new immutable correction movement under DOC08-FIX-025.
+
+**INCLUDE WITH CONDITIONS (2):**
+15. Damage while still physically held / quality hold — only an actual relocation into an approved hold Location, represented by paired Location effects; not a Business-wide on-hand loss merely because quality status changed.
+16. Reservation fulfillment handoff — only a distinct A02-to-A01 handoff for actual physical issue; reservation lifecycle events do not themselves decrement physical on-hand, and fulfillment must not duplicate a second decrement.
+
+### 15.2 Explicit A01 non-posting exclusions
+
+The following remain outside A01 on-hand posting: purchase commitment/order without physical receipt; sales order/payment/authorization/reservation without physical issue; transfer creation/approval without dispatch; return authorization/refund/credit note without physical receipt; production planning/work order without actual input consumption or accepted output; A02 reservation create/allocate/release/expiry/cancel/reallocation; costing-only layer creation/consumption, FIFO allocation, MWA recalculation and valuation updates; and rejected, invalid, ambiguous or no-effect correction requests. These events may be source-domain evidence or separate domain lifecycle events but do not independently create A01 physical on-hand movement.
+
+### 15.3 Mandatory conceptual safeguards
+
+- A01 remains a finite, server-owned inventory-posting source-event registry, not a universal event bus. Unknown or disabled source mappings fail closed.
+- A01 and A02 remain separate identity and replay boundaries. Reservation fulfillment may hand off one distinct A01 physical-issue event; reservation lifecycle is not an A01 movement.
+- Signed movement semantics follow DOC08-FIX-024: positive increases on-hand and negative decreases on-hand at the affected Location. Transfers and relocations use correctly paired Location effects.
+- One physical effect must not be posted twice through overlapping source paths. Adjustment, transfer loss, write-off and other exception paths must have explicit duplicate-effect prevention.
+- Paired/multi-leg effects must not be represented as a partially committed complete event. Partial receipt, fulfillment, transfer and production occurrences require separately traceable event cardinality.
+- Movement corrections remain immutable and exclusively follow DOC08-FIX-025; a source-domain correction and generic correction path must not both post the same physical effect.
+- Exact source objects/lines, lifecycle states, event cardinality/version, quantity authority, adapter ownership, authorization, idempotency representation, physical registry/integrity, transaction/recovery, concurrency, tenant enforcement and executed evidence must be resolved per adapter before any activation or implementation acceptance.
+
+### 15.4 Status and decision boundary
+
+**STATUS: FIX — OWNER-APPROVED / CONCEPTUAL.** This FIX accepts the 16-row conceptual source-family scope, its two conditional boundaries and the explicit non-posting exclusions. It does not enable any source family or adapter, approve physical schema/fields/FKs/enums/keys, settle per-adapter source contracts, or establish that implementation is already free of technical defects. Physical and implementation dependencies remain OPEN and must be validated before implementation acceptance. No test PASS, security acceptance, deployment or Stage 6 authorization is implied.
+
+Related decisions: DOC08-FIX-018, DOC08-FIX-019, DOC08-FIX-024, DOC08-FIX-025. Anchors: DOC-04 §§42.42–42.44; DOC-09 §§11.24–11.27; Worklist §§15.104–15.107.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
