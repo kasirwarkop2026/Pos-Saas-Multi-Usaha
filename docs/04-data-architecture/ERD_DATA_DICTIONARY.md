@@ -4585,3 +4585,141 @@ DOC08-FIX-026 in DOC-08 §15 records the Owner-approved conceptual disposition o
 No source family or adapter is enabled. No physical table, column, FK, key, enum, digest, retention, numeric or runtime-state choice is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+
+## 42.46 CW-11 Package E — A01 Purchase / Goods Receipt adapter contract (22 November 2026)
+
+### 42.46.1 Scope, authority and governing decisions
+
+This is the first source-family adapter contract under the Owner-approved conceptual A01 scope in DOC08-FIX-026. It defines the logical boundary for Purchase / Goods Receipt only. It is a documentation contract, not a physical schema, implementation specification, source activation or Stage 6 authorization.
+
+Governing baseline:
+- DOC08-FIX-018: A01 is a finite, server-owned inventory-posting source registry, not a universal event bus; unknown or disabled mappings fail closed.
+- DOC08-FIX-019: A01 physical posting identity and A02 reservation-demand identity remain separate.
+- DOC08-FIX-024: positive `inventory_movements.quantity_delta_base` increases on-hand at the affected Location; negative decreases it.
+- DOC08-FIX-026: Purchase / goods receipt is conceptually INCLUDE only for physically received and accepted quantity. Purchase commitment/order without physical receipt is a non-posting exclusion.
+- DOC-04 §§42.39 and 42.45: purchase receipt is positive at the receiving grain; this family is conceptually included, but its exact source identity and partial-receipt contract remain technical OPEN.
+
+### 42.46.2 Authoritative posting boundary
+
+An A01 Purchase / Goods Receipt posting is eligible only when a specific receipt occurrence has physically arrived, its applicable quantity has been accepted under the owning purchase/receiving workflow, and the receipt is authorized for inventory posting.
+
+The following do not independently create an A01 on-hand movement:
+- purchase requisition, purchase order, order approval, supplier commitment or expected delivery;
+- shipment notice, dispatch notice, invoice, payment, supplier bill or accounting recognition without physical receipt and acceptance;
+- a receipt draft, unconfirmed receipt, unaccepted quantity, rejected quantity or quantity merely expected;
+- a correction, duplicate retry or administrative status change that does not represent a new physical receipt.
+
+The exact source-domain lifecycle state(s) that establish physical receipt, acceptance and posting eligibility are **OPEN**. No literal state name or assumption that a generic `posted` flag is sufficient is approved here. Eligibility must be revalidated against the authoritative source at the posting boundary, not inferred from a stale client request or an earlier preview.
+
+### 42.46.3 Logical source identity and atomic grain
+
+The logical source lineage required for a receipt posting is:
+
+1. The owning Business.
+2. The purchase source document and its exact source line.
+3. The distinct physical receipt occurrence associated with that source line.
+4. The exact receipt-line / accepted-quantity fact for that occurrence.
+5. The resulting A01 event identity and its complete movement outcome.
+
+These are semantic identity requirements, not approved physical object or column names. Exact source object names, primary keys, line keys, receipt-occurrence keys, relationship cardinality, source-version token and physical foreign keys remain **OPEN**.
+
+A single purchase line may be received in multiple partial occurrences over time. Each separately accepted physical receipt occurrence must remain independently identifiable and append-only; a later receipt must not overwrite, enlarge or mutate an earlier posted receipt. One receipt occurrence may contain multiple purchase lines, but each line's accepted quantity must be deterministically attributable to its own source-line identity. Aggregating multiple source lines into one ambiguous posting identity is not acceptable.
+
+Whether one receipt occurrence may be amended before posting, and how a post-commit amendment is represented, remain source-domain contract decisions. A committed movement is never edited in place; a post-commit physical correction must use a new authorized correction movement under DOC08-FIX-025.
+
+### 42.46.4 Quantity authority and movement semantics
+
+The posting quantity is the quantity physically received **and accepted** for the exact receipt occurrence and source line. It is not the ordered quantity, invoiced quantity, shipped quantity, expected quantity, or an unaccepted/rejected quantity.
+
+Before A01 admission, the source workflow must supply a validated, reproducible quantity context normalized to the Product base unit. The adapter must not guess a conversion from a display label, mutable conversion factor or current Product configuration. The source domain remains responsible for preserving entered quantity/unit and its conversion provenance wherever such input is accepted; the exact authoritative source field, conversion snapshot/version, precision and rounding contract remain OPEN.
+
+For an eligible accepted receipt quantity:
+- the movement direction is positive under DOC08-FIX-024;
+- the movement is attributed to the receiving Business + Product + nullable Variant + receiving Location + applicable Batch grain;
+- any required Batch identity and receiving Location must be resolved from authoritative receipt/receiving facts, not guessed by the adapter;
+- movement quantity must equal the accepted receipt quantity in Product base units at the selected stock grain;
+- no negative movement is generated by this receipt adapter.
+
+The exact Location selection rule, Batch assignment/creation policy, Variant resolution, over-receipt authority, tolerance, unit conversion source, numeric precision/scale and rounding boundary remain **OPEN**. This contract does not authorize silent acceptance of over-receipt or a default Location/Batch.
+
+### 42.46.5 Partial receipt, fan-out and event cardinality
+
+Each independently accepted partial receipt occurrence is a separate logical A01 posting event. The same purchase line can therefore have multiple receipt events, each with its own accepted quantity and traceable source occurrence. The cumulative received quantity must be reconcilable to the source-domain receipt history, but this contract does not decide purchase-order closure or over-receipt policy.
+
+For one receipt event:
+- every included receipt line must resolve to one unambiguous source line and its accepted base-unit quantity;
+- each line must fan out deterministically to the required stock grain(s), including separate Batch or Location effects where the authoritative receipt facts require them;
+- the event is not complete until all required movement effects for that event are accounted for;
+- no partially visible fan-out may be treated as a committed complete receipt;
+- retries of the same event must resolve to the same logical outcome and must not append duplicate movements.
+
+The exact rule for whether a multi-line receipt is one atomic A01 event or a set of line-scoped A01 events, and the physical transaction boundary for all resulting movements, remain **OPEN**. The logical contract requires deterministic line-level attribution and complete outcome; it does not select a physical transaction design.
+
+### 42.46.6 Duplicate prevention, idempotency and correction
+
+One physical accepted receipt effect has one authoritative A01 posting path. The same quantity must not also be added through a manual inventory adjustment, generic opening-balance entry, supplier-return reversal or another overlapping source adapter. A genuine later physical return or correction is a distinct event with its own source lineage and eligibility; it does not rewrite the original receipt.
+
+The logical retry contract is:
+- same stable event identity and same canonical source payload resolve to the original committed outcome;
+- a retry after an uncertain response must first resolve the prior outcome and must not allocate a new identity merely because the caller timed out;
+- reuse of the same identity with a changed source line, receipt occurrence, Business, Product, Variant, Location, Batch, quantity or unit is a conflict, not a second receipt;
+- an invalid, ambiguous, unauthorized or unaccepted receipt fails closed and creates no movement.
+
+The physical idempotency key, canonical payload/digest representation, source version semantics, retention, concurrent duplicate arbitration and uncertain-commit recovery mechanism remain **OPEN**.
+
+After posting, correction is exclusively governed by DOC08-FIX-025: append a new immutable, lineage-linked opposite-effect correction movement within the recursively recalculated effective-quantity cap and at the exact same stock grain/base unit. Do not edit/delete the original movement or post both a source-domain correction and a generic correction for the same intent.
+
+### 42.46.7 Authorization, tenant boundary and reconciliation
+
+The receipt source must belong to the same Business as the A01 event and every resulting movement. Cross-Business source references fail closed. The actor/action/scope authorization and any required approval or separation-of-duties control must be independently evaluated under DOC-05; purchase approval alone is not presumed to grant inventory-posting authority.
+
+The committed receipt outcome must reconcile:
+- source document/line and each physical receipt occurrence;
+- accepted quantity and Product base-unit context;
+- A01 event identity and each generated movement;
+- Business/Product/Variant/Location/Batch stock grain;
+- resulting `inventory_balances` and applicable batch-balance projections.
+
+Cost-layer creation, FIFO allocation, MWA recalculation and valuation updates are downstream costing concerns and must not create a second on-hand quantity movement. Costing lineage and its own technical contract remain separate.
+
+Exact tenant enforcement, server-side authorization mapping, projection update/rebuild/reconciliation mechanism, audit evidence, monitoring and recovery remain **OPEN**.
+
+### 42.46.8 Decision register — resolved contract versus OPEN details
+
+**Resolved at the logical contract level:**
+- A01 Purchase / Goods Receipt is eligible only for physically received and accepted quantity.
+- Purchase commitment/order and non-physical purchase lifecycle events do not post on-hand.
+- Partial receipt occurrences are independently traceable and append-only.
+- Accepted quantity is normalized to Product base unit using validated source-owned context.
+- Receipt movement is positive at the receiving stock grain under DOC08-FIX-024.
+- One physical receipt effect has one authoritative A01 posting path; retry and fan-out must not duplicate it.
+- Posted movements remain immutable; later correction follows DOC08-FIX-025.
+- A01 remains bounded, separate from A02, tenant-scoped and independently authorized.
+
+**OPEN — must be resolved before this adapter can be accepted or activated:**
+1. Exact purchase, receipt, source-line and receipt-occurrence objects and stable identifiers.
+2. Exact lifecycle state names and authoritative eligibility transition, including acceptance/rejection and any inspection/hold path.
+3. Source version/change semantics and treatment of pre-post amendments versus post-commit correction.
+4. Multi-line receipt event cardinality and exact line-to-movement fan-out.
+5. Authoritative accepted-quantity field, entered unit/conversion provenance, base-unit normalization, precision, rounding and tolerance.
+6. Over-receipt policy and approval authority.
+7. Receiving Location and Batch resolution/assignment policy, including split stock-grain outcomes.
+8. DOC-05 actor/action/scope and approval/SoD mapping.
+9. Stable event identity, idempotency payload, retry, collision and uncertain-commit recovery.
+10. Physical A01 registry, source/movement keys, constraints, transaction atomicity, concurrency and complete fan-out enforcement.
+11. Tenant/source ownership enforcement and projection reconciliation.
+12. Executed evidence for accepted receipt, partial repeat receipt, rejected/unaccepted quantity, duplicate retry, changed-payload collision, multi-line fan-out, failure/recovery, authorization and cross-Business rejection.
+
+No table, column, enum literal, FK, unique key, digest algorithm, retention period, numeric type, runtime state, transaction isolation or physical adapter identifier is selected by this contract.
+
+### 42.46.9 Acceptance disposition and next gate
+
+**PASS WITH OPEN TECHNICAL CONTRACT DEPENDENCIES — logical adapter contract drafted.** The conceptual posting boundary and invariants for Purchase / Goods Receipt are now explicit and aligned with DOC08-FIX-018, DOC08-FIX-019, DOC08-FIX-024, DOC08-FIX-025 and DOC08-FIX-026. This is not adapter implementation acceptance, source activation, physical ERD acceptance, test PASS or Stage 6 authorization.
+
+The next gate is to resolve the OPEN source/line/receipt-occurrence identity and lifecycle/quantity authority decisions for this adapter, then reconcile the resulting contract against DOC-05 authorization and the A01 registry/physical integrity requirements. Do not begin another source family until this adapter's documentation gate is reviewed and its unresolved dependencies are accurately carried forward.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
