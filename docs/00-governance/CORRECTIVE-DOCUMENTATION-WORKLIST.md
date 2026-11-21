@@ -3197,3 +3197,34 @@ CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Diction
 ### 15.95.4 Governance
 
 Documentation-only, append-only update on the existing PR #144 branch. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
+
+
+## 15.96 CW-11 Package E — Stock Count snapshot/cutoff and post-cutoff reconciliation consistency audit (21 November 2026)
+
+### 15.96.1 Scope and audit basis
+
+Re-read DOC-04 §§42.5, 42.13–42.15, 42.26–42.30 and Owner FIX DOC08-FIX-020–022. The audit focused on snapshot quantity provenance, inclusive cutoff semantics, Location sequence boundaries, post-cutoff replay completeness, concurrency/finality and Batch/aggregate reconciliation.
+
+### 15.96.2 Findings and append-only corrections
+
+The existing documentation already establishes: scope/snapshot/cutoff freeze before COUNTING; inclusive Location posting-sequence watermark; cutoff movement as a locator only; post-cutoff movement reconciliation before variance posting; exact tenant/Product/Variant/Batch/Location grain; and technical sequence allocation/replay gates remain OPEN.
+
+The audit identified that the high-level sequence did not yet explicitly state:
+- the count-line snapshot quantity must be proven to correspond to the same frozen cutoff, not merely read from a possibly lagging balance projection;
+- replay must use a strict exclusive lower boundary after inclusive cutoff C, plus a separately proven upper reconciliation boundary R;
+- replay must cover every applicable source workflow and exact stock grain, including independent Location effects for paired movements;
+- reconciliation must remain complete against concurrent postings through the all-or-nothing session commit;
+- replay must be deterministic/read-only and must not create inventory movements;
+- stale projections, sequence ambiguity/gaps, incomplete source fan-out and Batch/parent aggregate mismatches block READY_TO_POST.
+
+DOC-04 §42.34 records the refined logical contract and acceptance sequence. DOC-09 §11.16 records PASS WITH OPEN DEPENDENCIES and the unresolved physical/evidence gates.
+
+### 15.96.3 Acceptance disposition
+
+PASS WITH OPEN DEPENDENCIES for logical documentation consistency only. No new Owner FIX was required or inferred. Exact snapshot acquisition, watermark implementation, reconciliation-boundary capture, concurrent-posting serialization, A01 completeness, replay recovery, null-safe grain enforcement, numeric policy and executed evidence remain OPEN.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+### 15.96.4 Governance
+
+Documentation-only, append-only changes on existing PR #144. No application source, SQL/DDL/DML, database introspection, migration, RLS/Auth, trigger, API/backend, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration is changed. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #144 remains open and unmerged; merge to main triggers linked Vercel Production deployment and requires separate explicit Owner authorization.
