@@ -4120,3 +4120,40 @@ No Owner choice is inferred from this audit. No physical field/type, precision/s
 Anchors: DOC-08 DOC08-FIX-020–022; DOC-04 §§20.2, 42.27–42.28, 42.34–42.35; DOC-09 §§11.10–11.16; Worklist §15.97.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.36 CW-11 Stock Count variance sign convention — Owner-approved conceptual FIX (21 November 2026)
+
+### 42.36.1 Owner decision
+
+The Owner explicitly approved Option A, the recommended subtraction and sign convention, now recorded as DOC08-FIX-023:
+
+`variance_quantity_base = accepted_counted_quantity_base - expected_quantity_at_R`
+
+Interpretation:
+
+- Positive variance = surplus: accepted counted quantity exceeds expected quantity at R.
+- Negative variance = shortage: accepted counted quantity is below expected quantity at R.
+- Zero variance = exact match.
+
+The expected quantity remains:
+
+`expected_quantity_at_R = system_quantity_snapshot_base_at_C + net_applicable_posted_movement_delta_(C,R]`
+
+The operands retain the Product base unit and exact Business/Product/nullable Variant/Location/applicable Batch grain. The single accepted immutable attempt is the count operand; NULL remains not-counted and is not zero. The cutoff and replay boundaries remain inclusive C and strict (C,R], respectively.
+
+### 42.36.2 Decision boundary
+
+This Owner FIX resolves only the variance subtraction order and semantic interpretation of positive/negative/zero. It does **not** define the sign of any generated inventory movement. The mapping from a positive/negative variance to the inventory ledger's movement delta must be separately reconciled against the established ledger convention; no movement mapping is inferred from the surplus/shortage labels alone.
+
+No numeric representation, Product fractional eligibility, minimum increment, maximum magnitude, precision, scale, capacity, intermediate overflow policy, rounding boundary/mode, tolerance, or storage-versus-derivation choice is approved here. The guardrails in §42.35 remain applicable: no silent rounding, truncation, clamping or coercion; unrepresentable arithmetic fails closed; no universal decimal scale or tolerance is inferred.
+
+### 42.36.3 Acceptance and remaining OPEN gates
+
+**Conceptual Owner decision:** RESOLVED by DOC08-FIX-023.
+
+**OPEN / NOT ACCEPTED:** Product-specific discrete/fractional policy; minimum increment and maximum magnitude; numeric type/precision/scale/capacity; intermediate arithmetic and overflow; rounding boundary/mode; tolerance; variance storage versus derivation; movement sign mapping; physical validation/enforcement; and executed positive/negative/zero/fractional/boundary/overflow/replay/failure evidence.
+
+Design cases in §42.35.4 remain NOT EXECUTED. This addendum does not accept a physical Data Dictionary field or ERD, authorize SQL/DDL/DML, database changes, API/backend work, implementation, testing, deployment or Stage 6. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
