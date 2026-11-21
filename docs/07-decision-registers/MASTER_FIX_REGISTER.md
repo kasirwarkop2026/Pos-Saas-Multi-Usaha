@@ -185,3 +185,23 @@ The Owner explicitly selected Option A and approved all four lifecycle items pre
 Physical snapshot/cutoff enforcement, post-cutoff replay, atomic transaction feasibility, cancel/post serialization, session idempotency, concurrency, tenant/security/SoD, numeric precision/rounding and executed evidence remain OPEN. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
 
 Anchors: DOC-04 §42.33; DOC-09 §11.15; Worklist §15.95.
+
+
+## 12. Stock Count variance sign convention — Owner FIX (21 November 2026)
+
+**DOC08-FIX-023 — Stock Count variance is counted quantity minus expected quantity.**
+
+The Owner explicitly approved the recommended Option A:
+
+- `variance_quantity_base = accepted_counted_quantity_base - expected_quantity_at_R`.
+- A positive variance means surplus: the accepted physical count is greater than expected stock at reconciliation boundary R.
+- A negative variance means shortage: the accepted physical count is less than expected stock at R.
+- Zero variance means the accepted count exactly matches expected stock at R.
+- `expected_quantity_at_R` remains the snapshot quantity at inclusive cutoff C plus the signed net applicable posted movement delta in the strict range (C,R], as documented in DOC-04 §42.34.
+- The convention applies only to Stock Count quantity variance in Product base units and the exact count-line grain. It does not by itself define the sign of inventory movement deltas or the mapping from variance to movement direction; that mapping must be reconciled separately against the established inventory-ledger delta convention.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. This resolves the Owner decision gate for the variance subtraction order and its semantic sign interpretation previously recorded in DOC-04 §42.35 and DOC-09 §11.17.
+
+**Explicitly NOT decided:** Product discrete/fractional eligibility, minimum increment, maximum magnitude, numeric type/precision/scale/capacity, intermediate overflow strategy, rounding boundary/mode, tolerance, variance storage-versus-derivation, movement sign mapping, physical enforcement, executed tests or evidence. No physical schema, implementation, test result or deployment is approved. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+Anchors: DOC-04 §§42.34–42.36; DOC-09 §§11.17–11.18; Worklist §§15.97–15.98.
