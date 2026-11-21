@@ -226,3 +226,60 @@ The Owner explicitly approved Option A for the Stock Count variance-to-ledger ma
 **Decision boundary / OPEN:** movement-kind vocabulary; event-specific sign validation for every source workflow; source-event identity and movement lineage; exact reversal/compensation semantics and linkage; zero-line accounting enforcement; numeric representation, precision/scale/capacity, overflow, rounding and tolerance; physical schema/enforcement; concurrency, idempotency and transaction implementation; and executed evidence remain OPEN. This FIX does not approve any physical field, constraint, API/backend behavior, implementation, test result or deployment.
 
 Anchors: DOC-04 §42.38; DOC-09 §11.20; Worklist §15.100. Related decisions: DOC08-FIX-021 (session all-or-nothing), DOC08-FIX-022 (lifecycle and zero-line accounting), DOC08-FIX-023 (variance formula).
+
+## 14. Inventory Movement reversal and compensation — Owner FIX (21 November 2026)
+
+**DOC08-FIX-025 — Posted inventory movements are corrected only through immutable, lineage-linked, opposite-effect correction movements governed by a bounded correction tree.**
+
+The Owner approved the recommended conceptual contract. This FIX applies to correction of posted on-hand quantity movements and is separate from A12.17 cost-layer consumption compensation.
+
+### 14.1 Immutable correction and identity
+
+- The original posted movement and every posted correction movement are immutable. No correction edits, deletes, reuses or silently replaces a posted movement.
+- Each correction is a new movement that identifies exactly one immediate target movement and exactly one root original movement. A root original is not itself a correction.
+- Every correction remains within the exact Business + Product + nullable Variant + Location + applicable Batch grain and the same normalized Product base unit as its target.
+- A correction of a correction targets the immediate correction movement while retaining the root-original identity. A correction may not cross roots or stock grains.
+- The correction lineage is a rooted, acyclic, branching tree: each correction has one immediate parent target; a target may have multiple direct correction children. Self-reference, cycles, missing/unposted targets and ambiguous root ancestry are invalid.
+
+### 14.2 Canonical signed arithmetic and cumulative cap
+
+For any movement node **N**, define its current effective signed quantity **E(N)** recursively as:
+
+**E(N) = quantity_delta_base(N) + SUM(E(C))** for every direct correction child **C** of N.
+
+The sum is signed, uses one normalized Product base unit and the exact same stock grain. A correction child must have an effect opposite to the current sign of E(N), and its absolute quantity must be greater than zero and no greater than ABS(E(N)) immediately before posting.
+
+After the correction is appended, the target's effective quantity becomes the prior E(N) plus the new correction quantity. It may reach zero but may not cross zero or change sign. The rule is re-evaluated against the complete existing descendant tree before every subsequent correction.
+
+This recursive target-cap rule is the authoritative cumulative cap. It handles partial corrections, multiple branches, and corrections of prior corrections without treating the gross sum of all historical correction magnitudes as the cap. Gross historical magnitudes may exceed the root quantity when a prior correction is later reinstated; the signed effective quantity at every target and at the root must never be over-corrected.
+
+### 14.3 Full, partial and correction-of-correction outcomes
+
+- **Full reversal:** append one correction equal to the entire currently effective remainder of the target, with the opposite sign. The target's E(N) becomes zero.
+- **Partial reversal:** append an explicitly requested positive magnitude smaller than or equal to the target's currently effective remainder, with the opposite sign. The target retains its original sign or reaches zero.
+- **Reversal of reversal:** append a new correction against the immediate correction movement. It uses the opposite sign to that target's current effective quantity and cannot exceed that target's effective remainder. It reinstates only the quantity actually corrected by that target; it does not erase the prior correction.
+- **Further correction after reinstatement:** recalculate E(N) from the full lineage and cap the next correction against that recalculated remainder. No cached or request-local remainder can override the lineage result.
+- **Zero remainder:** when E(N) is zero, that target has no remaining correctable quantity. A new movement correction against it is rejected; no zero-quantity movement is created.
+
+### 14.4 Source lineage, idempotency and duplicate prevention
+
+- Each correction records logical references to the immediate target movement, root original movement, originating source event/source line and a stable correction-intent identity. These are conceptual references; this FIX does not prescribe physical column names or schema.
+- A source event that produced multiple movement legs is corrected per exact movement leg and stock grain. Any required multi-leg correction must explicitly enumerate all affected roots; no other leg is implicitly reversed.
+- One correction intent has one authoritative posting path. If the source domain already emits the ledger correction, a separate generic/manual reversal for the same intent is prohibited.
+- A retry using the same stable correction-intent identity and the same canonical payload resolves to the same committed outcome and must not append a duplicate movement. Reuse of that identity with a different target, quantity, unit, grain or reason is a conflict, not a new correction.
+- A correction is separately authorized and auditable; approval of the original movement is not inherited automatically. Actor, reason, source reference, target/root lineage and approval context must be retained conceptually. Exact role grants and separation-of-duties matrix remain technical/security OPEN.
+
+### 14.5 Invalid, no-op and multi-leg outcomes
+
+- Missing/NULL quantity, zero quantity, unit mismatch, grain mismatch, exhausted target, invalid lineage, unposted target, cross-root reference, changed idempotency payload or cap violation does not create a movement.
+- A legitimate business no-op is recorded as an explicit no-effect outcome with a reason; it is not represented by a zero movement and must not be confused with failure or incomplete source fan-out.
+- Each leg of a paired/multi-leg source event is an independently identified movement root. A correction must enumerate the required legs and preserve their respective Location/grain effects. Whether a multi-leg correction is committed atomically is a physical transaction gate, not a reason to omit lineage.
+- Movement correction does not automatically create a second cost-layer consumption compensation. A12.17 retains its separate costing identity and quantity-cap contract; costing records must reconcile to the originating physical movement correction without duplicating on-hand effect.
+
+### 14.6 Status and decision boundary
+
+**Status: FIX — OWNER-APPROVED / CONCEPTUAL.** DOC08-FIX-025 closes the conceptual movement-ledger correction policy, including recursive arithmetic, full/partial correction, branching and reversal-of-reversal. It supersedes the candidate/Owner-decision-required disposition in DOC-04 §42.40 and DOC-09 §11.22 only for this conceptual contract.
+
+It does not approve physical source/event registries, column names, FK/UNIQUE/CHECK constraints, numeric precision/scale/capacity, locking/isolation/transaction implementation, idempotency storage, RLS/Auth/API/backend behavior, role grants, tests, deployment or Production changes. Those technical/evidence gates remain OPEN and must be tracked separately. No implementation is authorized.
+
+Anchors: DOC-04 §§42.40–42.41; DOC-09 §§11.22–11.23; Worklist §§15.102–15.103. Related decisions: DOC08-FIX-005 (immutable movement ledger), DOC08-FIX-024 (signed on-hand delta convention), A12.17 Alternative 1 (separate cost-layer consumption compensation).
