@@ -3680,3 +3680,80 @@ This ownership reconciliation does NOT select or close:
 NUM-01 through NUM-03 remain conceptual principles only where already established. No new FIX is promoted; no OPEN dependency is closed. Candidate Data Dictionary acceptance remains 0/17, canonical physical ERD remains NOT ACCEPTED, and implementation readiness remains NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.27 CW-11 numeric operation and arithmetic-boundary ownership matrix
+
+### 42.27.1 Purpose and status
+
+Section §42.26 reconciles which candidate entity owns each quantity or monetary value. This section advances the next bounded review: identify where authoritative numeric operations occur, which domain owns their inputs and outputs, which invariants must survive the operation, and where an explicit arithmetic/rounding policy is still required.
+
+This is a technology-neutral logical operation map, not a physical schema, algorithm implementation or numeric parameter approval. It must be read together with NUM-01–NUM-12 (§20.2), lifecycle matrix (§20.3), A01/A02 execution contracts (§42.24), and the unit/Variant contract (§42.25).
+
+### 42.27.2 Operation-level numeric boundary matrix
+
+| Operation | Authoritative input facts and owner | Logical operation / output owner | Required invariants | Numeric or implementation decision still OPEN |
+|---|---|---|---|---|
+| Unit conversion | Source workflow owns entered quantity, input unit and immutable conversion context; Product owns its base-unit definition | Normalize to Product base quantity before inventory comparison or posting; adjustment line retains input and normalized context | Product/Variant-compatible approved conversion; direction is input × base-per-input factor; no guessed factor, implicit chain or silent rounding | Factor precision, effective version/provenance, allowed graph, reciprocal consistency, fractional policy, overflow and conversion rounding boundary |
+| Adjustment posting | `inventory_adjustment_items` owns entered quantity/unit and conversion snapshot | Validate and normalize signed base delta; A01 posting creates immutable `inventory_movements` fact | No stock effect before valid posting; each posted line maps idempotently to its movement; correction is compensating/reversal history | Sign/zero policy, quantity capacity, precision/scale, transaction enforcement and exact boundary handling |
+| Movement ledger | A01 posting event supplies validated Business/Product/Variant/Location/Batch and base delta | `inventory_movements.quantity_delta_base` is the immutable physical quantity fact | Same-grain identity; deterministic replay; append-only posted history; correction lineage; no duplicate posting | Numeric type/scale/capacity, event-specific bounds, atomicity, concurrency, reversal arithmetic and executable evidence |
+| Product/location balance projection | Posted movement facts plus reservation lifecycle facts | `inventory_balances` projects on-hand and reserved quantities; available is derived as on-hand minus reserved | Rebuild/reconcile from authoritative facts; same Business/Product/Variant/Location grain; reservation never changes physical on-hand | Projection precision, update/rebuild atomicity, stale-read/reconciliation policy, overflow and permitted discrepancy handling |
+| Batch balance projection | Batch-linked movements and eligible reservation allocations | `inventory_batch_balances` projects physical batch quantity state | Batch grain and parent Product/Variant/Location totals reconcile; batch identity itself stores no mutable stock total | Batch projection precision, cross-projection reconciliation and concurrency |
+| Stock count and variance | Count session owns snapshot/cutoff; count item owns system snapshot and counted base quantity | Count item variance is the difference between counted and expected/snapshot quantity under the approved cutoff model; any posted adjustment flows through adjustment/A01 | NULL counted means not counted; zero is valid; post-snapshot movements must not be lost or double-counted | Count cutoff/watermark, recount event model, base-only versus non-base input policy, variance storage/derivation, precision and rounding |
+| Reservation allocation and lifecycle | A02 request owns source identity; reservation items own allocation, fulfillment and release quantities | Allocate validated base quantities; active reserved quantity is reserved minus fulfilled minus released | Available stock is reduced, not on-hand; fulfilled plus released cannot exceed reserved; aggregate caps and idempotency hold under concurrency | Fractional allocation policy, split allocation residuals, precision/capacity, concurrency/locking and partial lifecycle representation |
+| Transfer demand and shipment | Transfer item owns requested base quantity; shipment item owns dispatch, receipt and disposition quantities | Shipment events reconcile to demand and to source/destination movement facts | Shipment/transfer/item/batch/location grain matches; partial shipment history preserved; received/lost/damaged dispositions cannot exceed dispatch under approved model | Transit representation, event decomposition, over/under shipment exception policy, quantity tolerance, rounding and atomic movement pairing |
+| FIFO cost-layer creation and consumption | Eligible posted movement and cost-source facts; cost layer owns original/remaining base quantity and total cost | FIFO selects eligible layers deterministically; consumption records quantity and immutable unit/extended-cost snapshots | Consumption cannot exceed eligible remaining quantity; layer identity is distinct from physical batch; compensation is traceable | Layer ordering tie-breakers, quantity/cost precision, cost division and residual treatment, lock/recheck and concurrency |
+| MWA pool valuation | Eligible location-scoped inventory quantity and total-cost facts | MWA pool is Business + Product/Variant + Inventory Location; unit cost is derived from total cost / pool quantity | Location pools remain separate; total cost is authoritative; unit cost is derived, not independently authoritative | Exact numeric algorithm, recalculation timing, precision/scale, residual allocation, zero/negative pool behavior and rounding |
+| Transfer cost carry-forward | Source transfer carries eligible source cost and quantity context | Destination receives carried source cost; destination MWA is recalculated in its own location pool | Internal transfer is not new purchase cost or FIFO consumption; source and destination events reconcile; no cross-location MWA pooling | Transfer value precision, transit valuation, partial receipt/loss/damage cost treatment and posting/rounding boundary |
+| Landed-cost allocation | Source cost total and verifiable allocation basis | Allocate shared cost proportionally; LRM resolves representational residual where suitable | Allocated total equals source cost; direct identifiable costs remain direct; no invented allocation basis; stable tie-break identity | Basis eligibility, source/target precision, stable identity, LRM implementation and exact currency rounding boundary |
+| Cost exception resolution | Exception owns source lineage and resolution history | Optional resolved unit cost informs the eligible cost-resolution flow | Unknown cost remains NULL, not zero; resolution must not silently rewrite posted movement or historical consumption | Currency/denominator, precision, resolution adjustment model, immutable history and accounting treatment |
+| Currency / FX | Transaction owns source currency, functional currency and applied FX snapshot | Apply approved rate to transaction value and preserve source/time/rate context | Later reference-rate changes do not rewrite posted history; FX difference is distinct from rounding difference | Currency precision, rate source/type, determination time, fallback, exact rate precision and journal policy |
+
+### 42.27.3 Arithmetic ownership and ordering rules
+
+The following logical ordering is common to operations where applicable:
+
+1. Resolve authoritative owner/source and same-Business context.
+2. Resolve Product, nullable Variant, Location, Batch, parent, source-line and lifecycle grain before arithmetic.
+3. Preserve raw source quantity/unit and immutable conversion provenance where that workflow accepts a non-base unit.
+4. Validate conversion eligibility and normalize to Product base unit before comparing, aggregating, reserving, moving, counting or consuming physical quantity.
+5. Separate authoritative facts from projections, derived aggregates and monetary valuations. Never promote a projection or child-derived header summary into a second independent source of truth.
+6. Apply operation-specific sign, zero, cap, eligibility and lifecycle rules; do not invent one universal positive/non-zero rule for every numeric field.
+7. Preserve currency and denominator/basis for monetary values. Physical quantity and monetary value are distinct dimensions.
+8. Apply rounding only at an explicitly approved operation boundary. A downstream projection or later configuration change must not silently rewrite a posted source fact or snapshot.
+9. Reconcile the operation's output to its authoritative parent/ledger/projection facts and preserve idempotency/reversal lineage.
+
+### 42.27.4 Rounding and residual policy is operation-specific
+
+The existence of one rounding or residual rule must not be generalized to unrelated operations:
+
+- LRM remains scoped to suitable proportional allocation, such as shared landed-cost allocation; it is not the default for unit conversion, MWA, FIFO, FX or every quantity calculation.
+- MWA residual treatment is a distinct costing decision and remains OPEN.
+- FIFO unit-cost and extended-cost snapshots require their own precision, division, residual and compensation rules.
+- Conversion of a physical quantity must not silently round, truncate or distribute a residual unless a future explicit Product/unit policy authorizes that behavior.
+- Currency/FX rounding and accounting rounding are separate from physical quantity conversion and allocation residuals.
+- A rounding account is not a substitute for resolving internal quantity or allocation arithmetic.
+
+### 42.27.5 Acceptance questions and unresolved numeric dependencies
+
+For each operation above, physical/numeric acceptance later requires a bounded answer for the applicable items below:
+
+- Supported minimum increment/fraction and maximum magnitude by Product base unit or monetary domain.
+- Precision, scale, capacity and overflow behavior for every authoritative quantity, cost and rate.
+- Input conversion factor precision, immutable version/effective-time provenance, allowed conversion graph and validation limits.
+- Exact calculation order and the one approved rounding boundary for that operation.
+- Sign, zero, NULL, negative, cap and partial-event semantics.
+- Currency and quantity denominator/basis for monetary fields.
+- Residual reconciliation and deterministic tie-breaking where allocation is genuinely required.
+- Atomicity, concurrency/locking, idempotency, reversal/compensation and historical reproducibility.
+- Physical constraint/security design and executed positive, negative, boundary, overflow, replay and tenant-isolation evidence.
+
+These are acceptance questions, not newly selected values. Do not invent decimal places, precision/scale, tolerance, maximum quantity, conversion factor, currency scale, algorithm implementation or test result.
+
+### 42.27.6 Result and boundary
+
+The numeric operation ownership map is now specified at the logical level across quantity conversion, adjustment, ledger, projections, count, reservation, transfer, FIFO, MWA, landed cost, exception resolution and FX. It clarifies where numeric facts originate and where outputs must reconcile; it does not establish physical types, numeric limits or executable arithmetic.
+
+NUM-01–NUM-12 physical/operational details remain OPEN where not explicitly fixed in their source decisions. Stock-count non-base-unit entry remains an owner decision. A01/A02 physical idempotency, atomicity, tenant/security enforcement and evidence remain OPEN. No dependency is closed; no FIX is promoted; candidate Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; implementation readiness remains NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
