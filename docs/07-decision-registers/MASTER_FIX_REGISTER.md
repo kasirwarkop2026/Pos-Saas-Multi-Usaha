@@ -131,3 +131,77 @@ The project owner explicitly approved the following bounded conceptual decisions
 - A01 and A02 remain separate domains and replay boundaries. Reservation fulfillment creates a distinct A01 posting event; A02 request replay is not interchangeable with A01 posting replay.
 
 **Decision scope limitation:** these are accepted conceptual/logical design directions only. They do not approve physical schema, columns, indexes, constraints, FK strategy, enabled source families, digest/retention choices, RLS/API enforcement, runtime behavior, test evidence or implementation. Corresponding DOC-09 physical/security/evidence dependencies remain OPEN. This entry does not promote any physical or implementation gate and does not authorize Stage 6.
+
+
+## 9. Stock Count input-unit policy — Owner FIX (21 November 2026)
+
+**DOC08-FIX-020 — Stock Count accepts Product base unit only.**
+
+The Owner explicitly selected Option A:
+
+- Stock Count and recount input accept only the relevant Product's configured base unit.
+- Non-base-unit input is not supported for Stock Count; no alternate-unit conversion is performed as part of count entry.
+- The counted quantity remains expressed in Product base units, consistent with the existing candidate `counted_quantity_base` representation.
+- This policy is limited to Stock Count measurement entry. It does not prohibit upstream source workflows from accepting non-base units under their own explicit conversion and provenance contracts.
+- This is a conceptual Owner decision. It does not approve a physical field, UI/API validation implementation, database constraint, authorization grant, runtime behavior, test result or deployment.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. Physical enforcement and evidence remain OPEN. This decision resolves only the Stock Count input-unit policy question; it does not close count-attempt lifecycle, cutoff/watermark, accepted-attempt posting, partial-posting, idempotency, concurrency, security or other CW-11 gates.
+
+Anchors: DOC-04 §§36.4–36.5, 42.5, 42.25.8–42.25.9 and 42.28.3; DOC-09 §§11.10–11.11.
+
+
+## 10. Stock Count variance posting atomicity — Owner FIX (21 November 2026)
+
+**DOC08-FIX-021 — Stock Count variance posting is count-session all-or-nothing.**
+
+The Owner explicitly selected Option A — All-or-nothing:
+
+- Every required count-line variance in a Stock Count session must commit together as one session outcome, or none may commit.
+- If any required count line or posting prerequisite fails, the entire session posting is rejected/rolled back; partial item-level posting is prohibited.
+- The count session is the posting and retry boundary. Session-level idempotency must prevent duplicate variance movements on retry.
+- A session becomes POSTED only after the complete atomic posting succeeds. Post-commit corrections use a separately governed compensating-event path; posted history is not overwritten.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. This resolves only the Stock Count variance posting atomicity choice and supersedes the open A-vs-B choice in DOC-04 §42.30.5 and DOC-09 §11.12. It does not accept the candidate parent/attempt state vocabulary or transitions.
+
+Physical transaction design, API/backend enforcement, locking/isolation, authorization/SoD, session idempotency, failure handling, executed tests and evidence remain OPEN. No schema, implementation, test result or deployment is approved. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+Anchors: DOC-04 §§42.30.5–42.31; DOC-09 §§11.12–11.13; Worklist §15.93.
+
+
+## 11. Stock Count lifecycle policy — Owner FIX (21 November 2026)
+
+**DOC08-FIX-022 — Stock Count parent/attempt lifecycle and transition guards are Owner-approved conceptually.**
+
+The Owner explicitly selected Option A and approved all four lifecycle items presented for review:
+
+- **Lifecycle vocabulary and transitions:** accept the candidate parent states/transitions in DOC-04 §42.30.2 and attempt dispositions/transitions/invariants in §§42.30.3 and 42.32.2 as the conceptual policy.
+- **Cancellation:** allow cancellation only before the session posting transaction commits; preserve snapshot/attempt history; emit no variance movement; serialize cancellation against posting so only one can win. POSTED and CANCELLED are terminal.
+- **Accepted-attempt supersession:** require an explicit controlled return to COUNTING and a coordinated, auditable supersession of the old accepted attempt with acceptance of its replacement. Recount creates a new immutable attempt. No supersession after session posting commits.
+- **Zero variance:** a zero-variance line may emit no movement but must be explicitly accounted for in the session result. NULL/not-counted is not zero; zero is a valid measurement.
+- **POSTED condition:** retain DOC08-FIX-021 all-or-nothing session posting. POSTED is reached only after every required line is accounted for and all required variance movements/posting identity commit together. Failure leaves no partial posting; no externally visible intermediate POSTING business state is introduced.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. This decision accepts the logical lifecycle and guards, not physical status enums/fields/constraints, database transaction design, locking/isolation, API/backend behavior, authorization implementation, numeric parameters, test evidence or deployment.
+
+Physical snapshot/cutoff enforcement, post-cutoff replay, atomic transaction feasibility, cancel/post serialization, session idempotency, concurrency, tenant/security/SoD, numeric precision/rounding and executed evidence remain OPEN. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+Anchors: DOC-04 §42.33; DOC-09 §11.15; Worklist §15.95.
+
+
+## 12. Stock Count variance sign convention — Owner FIX (21 November 2026)
+
+**DOC08-FIX-023 — Stock Count variance is counted quantity minus expected quantity.**
+
+The Owner explicitly approved the recommended Option A:
+
+- `variance_quantity_base = accepted_counted_quantity_base - expected_quantity_at_R`.
+- A positive variance means surplus: the accepted physical count is greater than expected stock at reconciliation boundary R.
+- A negative variance means shortage: the accepted physical count is less than expected stock at R.
+- Zero variance means the accepted count exactly matches expected stock at R.
+- `expected_quantity_at_R` remains the snapshot quantity at inclusive cutoff C plus the signed net applicable posted movement delta in the strict range (C,R], as documented in DOC-04 §42.34.
+- The convention applies only to Stock Count quantity variance in Product base units and the exact count-line grain. It does not by itself define the sign of inventory movement deltas or the mapping from variance to movement direction; that mapping must be reconciled separately against the established inventory-ledger delta convention.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. This resolves the Owner decision gate for the variance subtraction order and its semantic sign interpretation previously recorded in DOC-04 §42.35 and DOC-09 §11.17.
+
+**Explicitly NOT decided:** Product discrete/fractional eligibility, minimum increment, maximum magnitude, numeric type/precision/scale/capacity, intermediate overflow strategy, rounding boundary/mode, tolerance, variance storage-versus-derivation, movement sign mapping, physical enforcement, executed tests or evidence. No physical schema, implementation, test result or deployment is approved. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+Anchors: DOC-04 §§42.34–42.36; DOC-09 §§11.17–11.18; Worklist §§15.97–15.98.
