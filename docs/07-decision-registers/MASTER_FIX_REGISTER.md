@@ -205,3 +205,24 @@ The Owner explicitly approved the recommended Option A:
 **Explicitly NOT decided:** Product discrete/fractional eligibility, minimum increment, maximum magnitude, numeric type/precision/scale/capacity, intermediate overflow strategy, rounding boundary/mode, tolerance, variance storage-versus-derivation, movement sign mapping, physical enforcement, executed tests or evidence. No physical schema, implementation, test result or deployment is approved. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
 
 Anchors: DOC-04 §§42.34–42.36; DOC-09 §§11.17–11.18; Worklist §§15.97–15.98.
+
+
+## 13. Stock Count variance-to-ledger movement sign mapping — Owner FIX (21 November 2026)
+
+**DOC08-FIX-024 — Positive inventory movement delta increases on-hand; negative inventory movement delta decreases on-hand. Stock Count variance maps directly to the signed movement delta.**
+
+The Owner explicitly approved Option A for the Stock Count variance-to-ledger mapping:
+
+- Positive Stock Count variance (surplus) maps to a positive `inventory_movements.quantity_delta_base`, increasing on-hand quantity at the affected inventory grain.
+- Negative Stock Count variance (shortage) maps to a negative `inventory_movements.quantity_delta_base`, decreasing on-hand quantity at the affected inventory grain.
+- Zero variance emits no quantity movement; the zero-variance count line remains explicitly accounted for in the all-or-nothing Stock Count session result. NULL/not-counted is not zero and cannot be treated as a zero-variance line.
+- For Stock Count, `movement_delta_base = variance_quantity_base`, using Product base units and the same exact Business + Product + nullable Variant + Location + applicable Batch grain as the accepted count line.
+- The positive-increases / negative-decreases meaning is the canonical conceptual direction of signed on-hand quantity deltas and must be consistent across all inventory movement source workflows. It is not a Stock Count-only exception.
+- Movement history remains immutable. Reversal/compensation must preserve source-event lineage and follow the ledger's separately governed correction semantics; this FIX does not define the complete reversal/compensation implementation or event vocabulary.
+- Stock Count variance is calculated from the single accepted immutable attempt and expected quantity at R under DOC08-FIX-023. Movement generation must use that accepted result and must not recompute variance from a different attempt or cutoff.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL.
+
+**Decision boundary / OPEN:** movement-kind vocabulary; event-specific sign validation for every source workflow; source-event identity and movement lineage; exact reversal/compensation semantics and linkage; zero-line accounting enforcement; numeric representation, precision/scale/capacity, overflow, rounding and tolerance; physical schema/enforcement; concurrency, idempotency and transaction implementation; and executed evidence remain OPEN. This FIX does not approve any physical field, constraint, API/backend behavior, implementation, test result or deployment.
+
+Anchors: DOC-04 §42.38; DOC-09 §11.20; Worklist §15.100. Related decisions: DOC08-FIX-021 (session all-or-nothing), DOC08-FIX-022 (lifecycle and zero-line accounting), DOC08-FIX-023 (variance formula).

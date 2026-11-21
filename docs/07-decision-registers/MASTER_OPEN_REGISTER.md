@@ -734,3 +734,37 @@ The Owner explicitly approved recommended Option A. DOC-08 DOC08-FIX-023 and DOC
 The sign convention does not itself define inventory movement direction. That mapping requires separate reconciliation with the established ledger delta convention. No physical type, schema, implementation or test result is accepted. Design acceptance cases in DOC-04 §42.35.4 remain NOT EXECUTED. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.19 Stock Count variance-to-ledger movement sign mapping audit — Owner decision required (21 November 2026)
+
+DOC-04 §42.37 reviewed the candidate immutable movement-ledger contract against DOC08-FIX-023. The working Data Dictionary establishes a signed base-quantity delta on `inventory_movements`, but it does not define whether positive delta increases or decreases on-hand. Movement-kind vocabulary, sign validation and Stock Count mapping remain OPEN.
+
+**Candidate for Owner review — NOT FIX:** positive Stock Count variance (surplus) maps to a positive movement delta that increases on-hand; negative variance (shortage) maps to a negative movement delta that decreases on-hand; zero variance emits no movement but is explicitly accounted for. Candidate movement delta equals the accepted variance in Product base units at the exact count-line grain.
+
+This candidate must be reconciled to one canonical ledger convention across all movement source workflows, not approved for Stock Count in isolation. It preserves immutable movement history, FIX-021 all-or-nothing session posting, FIX-022 zero-line accounting/lifecycle, and FIX-023 variance formula. It does not authorize movement-kind vocabulary, reversal implementation, schema or code.
+
+**OWNER DECISION REQUIRED:** approve or revise the positive-increases / negative-decreases convention and the candidate equality of movement delta to accepted variance.
+
+**OPEN / NOT CLOSED:** global ledger sign semantics; movement-kind and event-specific validation; source-event/movement lineage; reversal/compensation sign behavior; zero movement handling; numeric precision/rounding/tolerance; physical enforcement; and executed positive/negative/zero/retry/reversal/reconciliation evidence. Candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.20 Stock Count variance-to-ledger movement sign mapping Owner decision recorded — conceptual gate resolved; ledger-wide and physical gates remain OPEN (21 November 2026)
+
+The Owner explicitly approved Option A. DOC-08 DOC08-FIX-024 and DOC-04 §42.38 record the accepted conceptual mapping:
+
+- Positive variance/surplus → positive `quantity_delta_base` → increase on-hand.
+- Negative variance/shortage → negative `quantity_delta_base` → decrease on-hand.
+- Zero variance → no quantity movement, but explicitly accounted for in the session; NULL/not-counted is not zero.
+- Stock Count `movement_delta_base = variance_quantity_base`, in Product base units and at the exact accepted count-line grain.
+- The positive-increases / negative-decreases meaning is the canonical conceptual interpretation of signed on-hand deltas across all inventory movement source workflows, not a Stock Count-only exception.
+
+This decision consumes the accepted variance formula in DOC08-FIX-023 and preserves DOC08-FIX-021 all-or-nothing session posting and DOC08-FIX-022 lifecycle/zero-line accounting. Movement history remains immutable. Reversal/compensation must retain lineage and follow separately governed correction semantics; the full reversal/compensation contract is not decided here.
+
+**Resolved:** Owner approval of movement direction and the Stock Count movement-delta-equals-variance relationship.
+
+**OPEN / NOT CLOSED:** movement-kind vocabulary; event-specific sign validation for all source workflows; A01 source-event identity and movement lineage; reversal/compensation semantics and linkage; zero-line accounting enforcement; numeric precision/scale/capacity/overflow, rounding and tolerance; physical enforcement; concurrency, serialization and idempotency; and executed positive/negative/zero/retry/reversal/reconciliation evidence. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
