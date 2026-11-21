@@ -869,3 +869,16 @@ READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation 
 ## 11.26 Correction to A01 candidate source-family count (22 November 2026)
 
 Count reconciliation against DOC-04 §42.42.3 confirms **16** candidate source-family rows, not 15: **14 INCLUDE** and **2 INCLUDE WITH CONDITIONS** under the proposed technical disposition in DOC-04 §§42.43–42.44. The two conditional rows remain damage/quality hold and reservation fulfillment handoff. This is a count correction only; no classification, Owner decision, FIX, activation or technical gate changes. Owner acceptance remains pending; ERD-OPEN-05 remains OPEN.
+
+
+## 11.27 A01 source-family conceptual disposition resolved by DOC08-FIX-026 (22 November 2026)
+
+The Owner-approved conceptual source-family scope is now recorded as DOC08-FIX-026 in DOC-08 §15. It accepts the 16 catalogue rows as 14 INCLUDE and two INCLUDE WITH CONDITIONS (damage/quality hold only with physical relocation into an approved hold Location; reservation fulfillment only as a distinct A02-to-A01 handoff for actual physical issue). Explicit non-posting exclusions and cross-family safeguards are part of the FIX.
+
+This resolves the prior Owner-decision dependency for conceptual inclusion/exclusion in DOC-04 §§42.43–42.44 and DOC-09 §§11.24–11.26. Those earlier proposed/pending statements are historical and are superseded only within this conceptual decision scope.
+
+**Not resolved:** source object/line identity, lifecycle states, event cardinality/version, quantity authority, adapter ownership and activation, authorization/SoD, idempotency, physical registry/FK/integrity, atomicity/fan-out/recovery, concurrency, tenant enforcement, projection reconciliation and executed evidence remain OPEN under ERD-OPEN-05. No adapter is enabled; no physical implementation or Stage 6 readiness is approved.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
