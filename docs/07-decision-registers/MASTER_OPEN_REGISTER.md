@@ -637,3 +637,23 @@ This decision supersedes the undecided A-versus-B choice in §11.12 and DOC-04 �
 No physical Data Dictionary field, constraint, API/backend implementation, test result or deployment is accepted. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.14 Stock Count lifecycle transition/cancellation/supersession audit — refined candidate; Owner acceptance remains OPEN (21 November 2026)
+
+DOC-04 §42.32 audits the lifecycle proposal in §42.30 against the Owner-approved all-or-nothing posting FIX in §42.31. The refinement makes the parent-state guards, cancellation boundary, attempt supersession and POSTED acceptance conditions explicit.
+
+Key proposed clarifications:
+- Cancellation is allowed only before the session posting transaction commits, preserves snapshot/attempt history and emits no variance movement. Cancellation and posting must serialize so only one can win.
+- No externally visible intermediate POSTING state is proposed. The posting transaction is atomic; failure leaves no partial posting and preserves the pre-commit business state for controlled retry/review.
+- READY_TO_POST requires all required count lines to be explicitly accounted for, valid accepted attempts, complete post-cutoff reconciliation, no unresolved exception and required authorization.
+- A recount uses a new immutable attempt. Replacing an accepted attempt requires a controlled return to COUNTING and coordinated, auditable supersession/acceptance. No accepted attempt can be superseded after session posting commits.
+- A zero-variance line may emit no movement but must still be explicitly accounted for; NULL/not-counted is never zero.
+
+**Resolved at proposal level:** the candidate lifecycle's cancellation, supersession and all-or-nothing POSTED guards are now stated in one place and reconciled to DOC08-FIX-021. This is not an accepted Owner status catalogue.
+
+**OWNER ACCEPTANCE REQUIRED:** parent/attempt status vocabulary and transitions; cancellation eligibility/guard; supersession sequence; and explicit zero-variance line treatment. The refined candidate does not close these Owner gates.
+
+**OPEN / NOT CLOSED:** physical transaction atomicity; cancel/post serialization; session-level idempotency; locking/isolation/concurrency; authorization/SoD; post-cutoff replay/reconciliation; numeric precision/rounding; tenant/grain enforcement; and executed positive, negative, boundary, failure-injection, replay and reconciliation evidence. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
