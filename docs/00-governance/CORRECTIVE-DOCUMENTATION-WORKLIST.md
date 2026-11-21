@@ -3475,3 +3475,32 @@ The next step is Owner review of the proposed finite source-family inclusion/exc
 ### 15.104.5 Governance
 
 Documentation-only, append-only changes on branch `docs/cw11-a01-source-event-catalogue-2026-11-21`. No SQL/DDL/DML, database introspection or mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge remain separate gates; merge to `main` requires explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+
+## 15.105 CW-11 Package E — A01 source-family technical review and proposed disposition (22 November 2026)
+
+### 15.105.1 Scope and basis
+
+Following the catalogue-only A01 candidate matrix in DOC-04 §42.42 / DOC-09 §11.24, perform a bounded technical review of the proposed inclusion/exclusion set and cross-family posting risks. This checkpoint records a recommendation only; it does not represent Owner approval.
+
+### 15.105.2 Proposed disposition recorded
+
+- DOC-04 §42.43 records a proposed disposition for all 15 candidate source families: 13 INCLUDE and two INCLUDE WITH CONDITIONS.
+- The two conditional candidates are damage/quality hold (only an actual physical relocation into an approved hold Location, with paired Location effects) and reservation fulfillment (only a distinct A02-to-A01 handoff for actual physical issue, with no duplicate reservation decrement).
+- The other 14 families are recommended for inclusion within their existing physical-event boundaries: purchase/receipt; sales/fulfillment; adjustment; Stock Count; transfer dispatch; transfer receipt; transfer loss/destruction; return before transfer receipt; return after transfer receipt; customer/supplier physical return; production input consumption; production output; write-off/loss; approved movement correction.
+- Non-posting lifecycle and costing events remain excluded from A01 on-hand posting as specified in DOC-04 §42.43.3.
+- DOC-09 §11.25 records the proposed disposition and preserves Owner acceptance as pending.
+
+### 15.105.3 Review findings and safeguards
+
+The next adapter work must preserve: no duplicate posting of one physical effect through multiple source paths; no partial visible commit of paired/multi-leg movement sets; stable tenant-scoped event/replay identity; same-Business source ownership; distinct A02 reservation demand and A01 physical issue; and exclusive correction routing under DOC08-FIX-025. Partial receipts, fulfillment slices, transfer legs and production occurrences require explicit event cardinality.
+
+### 15.105.4 Acceptance and status
+
+**TECHNICAL REVIEW: PASS — PROPOSED DISPOSITION RECORDED; OWNER ACCEPTANCE PENDING.** This checkpoint does not create a new DOC08 FIX, approve a final allowlist, activate any adapter, or close ERD-OPEN-05. The exact source object/line, lifecycle eligibility, cardinality, source version, quantity authority, adapter ownership, authorization, idempotency, physical identity/integrity, transaction/recovery, tenant enforcement and executed evidence remain OPEN.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.105.5 Governance
+
+Documentation-only, append-only continuation on PR #148 branch `docs/cw11-a01-source-event-catalogue-2026-11-21`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge remain separate gates; merge to `main` requires explicit Owner instruction because it triggers linked Vercel Production deployment.
