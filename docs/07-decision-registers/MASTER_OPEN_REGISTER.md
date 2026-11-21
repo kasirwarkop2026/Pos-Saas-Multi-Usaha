@@ -622,3 +622,18 @@ The cutoff sequence is clarified: draft may have no watermark; before counting b
 **OPEN / NOT CLOSED:** Owner approval of the proposed state vocabulary/transitions and posting boundary; physical/UI/API enforcement of base-unit-only input; snapshot serialization and watermark sequence allocation; post-cutoff movement replay/reconciliation; accepted-attempt uniqueness and transition audit; idempotency/concurrency; approval/SoD, tenant and grain enforcement; numeric precision/rounding; and executed evidence.
 
 No dependency is closed by this candidate proposal. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.13 Stock Count variance posting boundary — Owner decision resolved; technical acceptance gates remain OPEN (21 November 2026)
+
+The Owner explicitly selected **Option A — Count-session all-or-nothing**, recorded as DOC-08 DOC08-FIX-021 and detailed in DOC-04 §42.31.
+
+**Resolved at conceptual decision level:** all required count-line variance movements for one Stock Count session commit together, or none commit. A failure in any required line or prerequisite prevents the entire session posting. Item-level partial posting is prohibited. The count session is the posting/retry/idempotency boundary; POSTED is reached only after the complete atomic commit.
+
+This decision supersedes the undecided A-versus-B choice in §11.12 and DOC-04 §42.30.5. Those entries remain historical records of the proposal and decision gate before Owner selection; read them together with this addendum. The candidate parent/attempt state vocabulary and transitions remain proposals and are not accepted by this decision.
+
+**OPEN / NOT CLOSED:** physical transaction/atomicity implementation; session-level idempotency and duplicate prevention; locking/isolation/concurrency; failure rollback and retry behavior; post-cutoff replay/reconciliation integration; approval/SoD and tenant/grain enforcement; numeric precision/rounding; executed positive, negative, boundary, failure-injection, replay and reconciliation evidence; and separate Owner acceptance of candidate parent/attempt states/transitions.
+
+No physical Data Dictionary field, constraint, API/backend implementation, test result or deployment is accepted. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
