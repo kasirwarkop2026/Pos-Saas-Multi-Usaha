@@ -3569,3 +3569,36 @@ Review and close the Purchase / Goods Receipt source identity, eligible lifecycl
 ### 15.108.5 Governance
 
 Documentation-only, append-only on branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge are separate gates; no merge is performed by this checkpoint.
+
+
+
+## 15.109 CW-11 Package E — Purchase / Goods Receipt cross-document contract audit (22 November 2026)
+
+### 15.109.1 Audit performed
+
+Audited DOC-04 §42.46 against DOC-02 `CATEGORY_WORKFLOW_MASTER.md` §5–§6, DOC-05 `AUTHORIZATION_MASTER.md` §23.4–§23.6, DOC-04 §§17.2–17.4 and DOC08-FIX-018/019/024/025/026.
+
+### 15.109.2 Findings and clarifications
+
+- PASS: purchase request/PO, approval, physical receiving, discrepancy review and supplier payment are distinct controls. Purchase order, expected delivery, invoice or payment without accepted physical receipt does not create on-hand movement.
+- PASS: only physically received and accepted quantity is eligible; partial receipt occurrences remain separately traceable; movement is positive under DOC08-FIX-024.
+- PASS: inventory ledger is separate from balance projections and costing; purchase approval does not imply inventory-posting authority.
+- Clarified: arrived, accepted-for-inventory, rejected and unresolved/discrepant quantities are conceptually distinct. Only accepted-for-inventory quantity is A01 eligible. Exact source representation, inspection states and partial acceptance model remain OPEN.
+- Clarified: transfer shipment receipt detail's one-movement-per-detail precedent (A12.10/A12.11) is scoped to transfer receipts/returns and must not be generalized to purchase receipts. Purchase receipt-detail-to-movement cardinality and Batch/Location fan-out remain OPEN.
+- Clarified: DOC-05 §23.4 inventory starter keys do not define purchase-receipt-specific permission tuples. No `M08.*` key, grant or role mapping is invented.
+
+### 15.109.3 Disposition and dependencies
+
+**PASS — cross-document conceptual consistency; no contradiction found.** Existing logical contract §42.46 is consistent with the reviewed baselines. No new DOC08 FIX is needed. DOC08-FIX-018/019/024/025/026 remain unchanged.
+
+Still OPEN under ERD-OPEN-05: source domain/object/line/receipt-detail ownership and identity; accepted/rejected/discrepant quantity representation; inspection/discrepancy lifecycle and partial-acceptance split; purchase-specific event cardinality and movement fan-out; source version/amendment; over-receipt policy; receiving Location/Batch resolution; purchase-specific permission/actor/scope/SoD/approver/audit; idempotency/recovery; physical constraints/atomicity/concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+No purchase-receipt permission is granted, no adapter is enabled, and no physical schema/implementation is approved. Candidate Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.109.4 Next gate
+
+Resolve the Purchase / Goods Receipt source ownership and source identity, then its accepted/rejected/discrepant quantity representation, lifecycle and partial-acceptance cardinality. Only after those decisions are stable should the contract map receipt detail to movement fan-out and DOC-05 authorization. Keep physical keys, transaction/recovery, concurrency, tenant enforcement and executed evidence OPEN until separately evidenced.
+
+### 15.109.5 Governance
+
+Documentation-only, append-only continuation on branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains a review gate; no merge is performed by this checkpoint.
