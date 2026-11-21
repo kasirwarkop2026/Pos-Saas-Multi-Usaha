@@ -588,3 +588,18 @@ The lifecycle crosswalk points to the existing logical contracts for A01 posting
 **OPEN / NOT CLOSED:** stock-count input-unit owner decision; count-attempt state and cutoff enforcement; A01 physical identity, digest/retention, atomic fan-out and concurrency; A02 source-family activation, source-line cardinality/waves, lifecycle and concurrency; shipment transit-location and disposition enforcement; transfer fee/FX/loss valuation; FIFO/MWA precision and residual policy; tenant/security enforcement; and executed positive, negative, boundary, replay and reconciliation evidence.
 
 This crosswalk adds no FIX, does not close any dependency, and does not authorize physical schema or implementation. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.11 Stock Count input-unit Owner decision recorded — policy question resolved; technical gates remain OPEN (21 November 2026)
+
+DOC-08 DOC08-FIX-020 records the Owner's explicit selection of Option A: Stock Count and recount accept **Product base unit only**. Non-base-unit Stock Count input and alternate-unit conversion during count entry are not supported. The existing logical `counted_quantity_base` representation remains; no raw input-unit/conversion-snapshot attributes are added for Stock Count.
+
+This resolves the specific OPEN question carried in the earlier input-boundary crosswalks (§§11.7, 11.9 and 11.10) and DOC-04 §§42.25.8, 42.28.3. Those earlier statements are historical snapshots and must now be read with this Owner decision. The upstream source-domain conversion/provenance requirement is unaffected: any upstream workflow that accepts non-base units remains responsible for its own validated conversion context.
+
+**Resolved at conceptual decision level:** Stock Count input-unit choice (base-unit-only).
+
+**OPEN / NOT CLOSED:** physical/UI/API rejection of non-base-unit input; count-attempt states/transitions and immutable attempt enforcement; snapshot/cutoff/watermark ordering; accepted-attempt posting; all-or-nothing versus item-level posting; numeric precision/scale/capacity/overflow and rounding; idempotency, locking/concurrency, tenant/security enforcement; and executed positive, negative, boundary, replay and reconciliation evidence.
+
+No physical Data Dictionary field, constraint, implementation or test is accepted. This addendum closes no physical or operational dependency beyond recording that the Owner-choice question itself is resolved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
