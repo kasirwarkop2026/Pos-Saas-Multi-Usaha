@@ -603,3 +603,22 @@ This resolves the specific OPEN question carried in the earlier input-boundary c
 No physical Data Dictionary field, constraint, implementation or test is accepted. This addendum closes no physical or operational dependency beyond recording that the Owner-choice question itself is resolved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.12 Stock Count lifecycle candidate model and remaining Owner gates (21 November 2026)
+
+DOC-04 §42.30 consolidates a candidate parent Stock Count lifecycle, attempt-disposition vocabulary, snapshot/cutoff acceptance sequence and post-cutoff movement reconciliation boundary.
+
+The candidate parent states are DRAFT → COUNTING → SUBMITTED → REVIEW_REQUIRED / READY_TO_POST → POSTED, with controlled return to COUNTING for additional attempts and cancellation only before posting. POSTED and CANCELLED are terminal. Candidate attempt dispositions are RECORDED → REVIEW_REQUIRED / ACCEPTED / REJECTED; REVIEW_REQUIRED → ACCEPTED / REJECTED; ACCEPTED may become SUPERSEDED only before a posting commits. Measurement facts remain immutable; status/disposition changes require auditable decisions. These are proposals, not accepted status enums or physical transitions.
+
+The cutoff sequence is clarified: draft may have no watermark; before counting begins, freeze scope, snapshot and inclusive Location posting-sequence cutoff; retain the cutoff; reconcile all applicable movements after that cutoff before variance posting. A movement locator is supplementary and must agree with the frozen Location/sequence.
+
+**Resolved at documentation-proposal level:** the existing attempt/snapshot rules are now assembled into one candidate transition and acceptance model. This does not close the Owner approval or physical-enforcement gates.
+
+**OWNER DECISION REQUIRED:** choose the variance posting atomicity boundary:
+- Session all-or-nothing: all required count-line variances commit together, or none do.
+- Item-level partial posting: each eligible count line posts independently and the parent remains open until all lines are disposed.
+
+**OPEN / NOT CLOSED:** Owner approval of the proposed state vocabulary/transitions and posting boundary; physical/UI/API enforcement of base-unit-only input; snapshot serialization and watermark sequence allocation; post-cutoff movement replay/reconciliation; accepted-attempt uniqueness and transition audit; idempotency/concurrency; approval/SoD, tenant and grain enforcement; numeric precision/rounding; and executed evidence.
+
+No dependency is closed by this candidate proposal. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
