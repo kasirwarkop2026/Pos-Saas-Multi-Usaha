@@ -148,3 +148,21 @@ The Owner explicitly selected Option A:
 **Status:** FIX — OWNER-APPROVED / CONCEPTUAL. Physical enforcement and evidence remain OPEN. This decision resolves only the Stock Count input-unit policy question; it does not close count-attempt lifecycle, cutoff/watermark, accepted-attempt posting, partial-posting, idempotency, concurrency, security or other CW-11 gates.
 
 Anchors: DOC-04 §§36.4–36.5, 42.5, 42.25.8–42.25.9 and 42.28.3; DOC-09 §§11.10–11.11.
+
+
+## 10. Stock Count variance posting atomicity — Owner FIX (21 November 2026)
+
+**DOC08-FIX-021 — Stock Count variance posting is count-session all-or-nothing.**
+
+The Owner explicitly selected Option A — All-or-nothing:
+
+- Every required count-line variance in a Stock Count session must commit together as one session outcome, or none may commit.
+- If any required count line or posting prerequisite fails, the entire session posting is rejected/rolled back; partial item-level posting is prohibited.
+- The count session is the posting and retry boundary. Session-level idempotency must prevent duplicate variance movements on retry.
+- A session becomes POSTED only after the complete atomic posting succeeds. Post-commit corrections use a separately governed compensating-event path; posted history is not overwritten.
+
+**Status:** FIX — OWNER-APPROVED / CONCEPTUAL. This resolves only the Stock Count variance posting atomicity choice and supersedes the open A-vs-B choice in DOC-04 §42.30.5 and DOC-09 §11.12. It does not accept the candidate parent/attempt state vocabulary or transitions.
+
+Physical transaction design, API/backend enforcement, locking/isolation, authorization/SoD, session idempotency, failure handling, executed tests and evidence remain OPEN. No schema, implementation, test result or deployment is approved. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+Anchors: DOC-04 §§42.30.5–42.31; DOC-09 §§11.12–11.13; Worklist §15.93.
