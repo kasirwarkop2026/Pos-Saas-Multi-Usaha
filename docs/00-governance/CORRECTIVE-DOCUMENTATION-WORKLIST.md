@@ -3024,3 +3024,40 @@ Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT AC
 ### 15.89.4 Next action
 
 Continue a bounded documentation-only review of the remaining CW-11 Package E numeric and lifecycle dependencies without inventing owner decisions or claiming physical acceptance. Any subsequent PR merge will trigger Production deployment automatically and requires explicit user authorization.
+
+
+## 15.90 CW-11 Package E — numeric-scope and lifecycle acceptance audit (21 November 2026)
+
+### 15.90.1 Audit basis and result
+
+Read-back was performed from `main` for:
+- DOC-04 `docs/04-data-architecture/ERD_DATA_DICTIONARY.md`, baseline blob `c2a842047fc6f677f513ff231721be86e176858c`;
+- DOC-08 `docs/07-decision-registers/MASTER_FIX_REGISTER.md`, baseline blob `270dbb94efc66a715542c3cbdef59df43fd926ff`;
+- DOC-09 `docs/07-decision-registers/MASTER_OPEN_REGISTER.md`, baseline blob `bbe1edaa0b0f840247344e5d8188abcbbbf20b4a`;
+- this Worklist from the PR #144 continuation branch, preserving its §15.89 post-merge record.
+
+The audit compared DOC-04 §§20.2–20.7, 35–38 and 42.1–42.27 with DOC-08 FIX-018/019 and DOC-09 ERD-OPEN-05/06 plus §§11.4–11.9.
+
+**Audit findings:**
+1. The numeric map in §42.27 is intentionally inventory/costing-focused, while it references the full NUM-01–NUM-12 baseline. Its exclusions and partial coverage were implicit; a reader could overstate Package E coverage of sales/tax, rounding-account or bank-matching policy.
+2. NUM-03's conceptual deterministic cost-residual principle and the OPEN operation-specific FIFO/MWA residual methods needed an explicit reconciliation so that neither is silently discarded and LRM is not generalized beyond NUM-07.
+3. Existing lifecycle specifications for count attempts, shipment/transit, reservation events, A01 posting and transfer costing were distributed across §§36–38 and 42.4–42.27. A single crosswalk was missing; this was a navigation/acceptance-boundary gap, not evidence that those candidate designs were absent.
+4. The owner decision for stock-count non-base-unit entry, A01/A02 physical enforcement, shipment transit/disposition, transfer fee/FX valuation, numeric precision/rounding, security and executed evidence remain genuine OPEN gates.
+
+### 15.90.2 Append-only correction
+
+- DOC-04 §42.28 adds the NUM-01–NUM-12 coverage crosswalk and lifecycle-to-acceptance crosswalk.
+- DOC-04 §42.28.4 explicitly preserves the conceptual NUM-03 deterministic residual principle while keeping exact FIFO/MWA methods OPEN and LRM limited to suitable proportional allocation.
+- DOC-09 §11.10 records the same scope, exclusions, lifecycle anchors and OPEN gates.
+- No numeric value, physical field/type, algorithm, source-family activation, lifecycle policy or test result was invented or approved.
+- No FIX was added or changed; no dependency was closed.
+
+### 15.90.3 Current status and next bounded work
+
+The correction is limited to DOC-04, DOC-09 and this Worklist. It is documentation-only and append-only. The next substantive owner-decision gate is the stock-count input-unit policy (base-unit-only versus non-base entry with retained input/conversion provenance). That question must be presented to the Owner rather than inferred. Other numeric and physical decisions remain OPEN until supported by an existing accepted source or explicit Owner approval.
+
+CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; implementation readiness NOT READY.
+
+### 15.90.4 Governance
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`. No SQL/DDL/DML, database introspection, migrations, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, manual deployment, Supabase Preview/Staging or Production configuration changes. Stage 6 implementation remains NOT AUTHORIZED. Any merge to `main` triggers the linked Production deployment and requires explicit user authorization.
