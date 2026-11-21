@@ -3348,3 +3348,41 @@ No SQL/DDL/DML, database mutation, API/backend, application source, CI workflow,
 ### 15.100.4 Governance
 
 Documentation-only, append-only continuation on existing PR #145. No new PR is created. No merge or deployment is performed; merge to main requires separate explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+
+## 15.101 CW-11 Package E — cross-source inventory movement sign consistency audit (21 November 2026)
+
+### 15.101.1 Scope and governing decision
+
+Following PR #145 merge and Owner approval of DOC08-FIX-024, audit the inventoried inventory-posting source families for consistent interpretation of signed on-hand quantity deltas. DOC-04 §42.39 is a documentation-only cross-source consistency audit. No new Owner FIX is introduced.
+
+Governing baseline: positive `quantity_delta_base` increases on-hand at the affected Location; negative decreases on-hand. Stock Count movement delta equals accepted variance. This does not enable every candidate A01 source family or prove physical enforcement.
+
+### 15.101.2 Cross-source findings
+
+The audit crosswalk covers purchase/receipt, sales/fulfillment, adjustment, Stock Count, transfer dispatch/receipt, loss/damage/return, production/consumption, write-off, reservation lifecycle/fulfillment, costing and reversal/compensation.
+
+Conceptual direction is consistent:
+- Physical receipt / accepted physical return / production output: positive at receiving Location.
+- Physical sale issue / production input consumption / loss or destruction: negative at affected Location.
+- Adjustment: direction follows the approved signed correction and event reason, not a generic label.
+- Stock Count: surplus positive, shortage negative, zero no movement but explicitly accounted.
+- Transfer: paired negative source and positive transit/destination effects, each evaluated at its own Location.
+- Damage still physically held: relocate/hold with paired Location effects; do not classify as net loss.
+- Reservation create/release/expiry/cancel and costing-only layer/consumption/valuation updates: no separate on-hand movement.
+- Reservation fulfillment: one distinct physical issue posting; no duplicate decrement.
+- Reversal/compensation: new linked opposite-sign movement, bounded by the unreversed original quantity and same affected grain.
+
+### 15.101.3 Acceptance disposition
+
+**PASS WITH OPEN DEPENDENCIES — conceptual cross-source sign consistency only.**
+
+The audit confirms that DOC08-FIX-024 provides one coherent signed-delta interpretation for the inventoried source families. It does not establish an approved/enabled A01 source allowlist, complete source-specific event contracts, movement-kind vocabulary, physical validation or executed evidence.
+
+Still OPEN: exact source/event/line identity and lifecycle eligibility for every enabled source; source-specific sign validation; adjustment reason/kind; return/receipt condition and disposition; production input/output/scrap; reservation fulfillment handoff; reversal/compensation arithmetic, partial cap, correction-of-correction and concurrency; zero-effect A01 outcome; physical constraints, idempotency, transaction/locking/isolation, tenant authorization, projection reconciliation and executed evidence.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.101.4 Governance
+
+Documentation-only, append-only audit. No new Owner FIX, no source-family activation, no SQL/DDL/DML, database mutation, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, manual deployment or Supabase Preview/Staging. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. Any merge to `main` requires separate explicit Owner instruction because it triggers linked Vercel Production deployment.
