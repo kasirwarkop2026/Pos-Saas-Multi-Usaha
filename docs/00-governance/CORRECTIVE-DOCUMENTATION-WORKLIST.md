@@ -3747,3 +3747,32 @@ Present the proposal to the Owner for approval or revision. Only after the Owner
 ### 15.115.5 Governance
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.116 CW-11 Package E — Owner-approved Batch/Location allocation FIX recorded (22 November 2026)
+
+### 15.116.1 Owner decision recorded
+
+The Owner approved all seven conceptual Batch/Location allocation rules, formalized as DOC08-FIX-031:
+- explicit eligible same-Business receiving Location per allocation portion; no silent Location inference; invalid/unresolved Location blocks A01;
+- multi-Location split only for physically observed and recorded distribution;
+- actual physical Batch/Lot identity for batch-tracked Product/Variant; distinct lots remain distinct and required attributes must be preserved;
+- unbatched path only under explicit Product/Variant policy that does not require Batch tracking;
+- FEFO applies to outbound batch selection, not incoming lot assignment; physical Batch remains separate from FIFO cost layer and MWA valuation;
+- allocation grain is accepted slice + Product/Variant + Location + actual Batch or explicitly permitted unbatched state; one slice may split into portions and each portion maps to one positive movement; allocation and movement totals each conserve accepted quantity in Product base unit;
+- unresolved/invalid/unreconciled required allocation blocks A01; tenant/Product lineage and projection reconciliation boundaries remain; allocation does not grant authority.
+
+### 15.116.2 Disposition and retained OPEN dependencies
+
+**PASS — Owner conceptual Batch/Location allocation decision closed.** DOC-04 §42.54, DOC-08 DOC08-FIX-031 and DOC-09 §11.36 carry the same FIX. The proposal-only status in DOC-04 §42.53 / DOC-09 §11.35 is superseded for the seven approved rules only.
+
+Still OPEN: authoritative Product/Variant batch-tracking policy source/representation; Location taxonomy/eligibility/defaulting detail; exact physical Batch identity/required attribute source and exception handling; whether a physical allocation object is required; physical keys/FKs/constraints; numeric precision/scale/rounding/conversion implementation; purchase-specific DOC-05 authorization tuple; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 remains unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.116.3 Next bounded review
+
+Resolve the remaining Product/Variant batch-tracking policy source and Location eligibility/defaulting details. Do not reopen DOC08-FIX-031 or invent physical schema. Do not advance to another A01 source family before Package E's documentation acceptance gate is met.
+
+### 15.116.4 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
