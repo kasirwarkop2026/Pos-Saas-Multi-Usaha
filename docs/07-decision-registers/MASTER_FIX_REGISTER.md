@@ -399,3 +399,44 @@ The source workflow must preserve the entered quantity and unit and reproducible
 Related anchors: DOC-04 §§42.46–42.49; DOC-09 §§11.28–11.31; Worklist §§15.108–15.112.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## DOC08-FIX-028 — Purchase / Goods Receipt lifecycle separation and quantity-control invariants (Owner-approved conceptual FIX, 22 November 2026)
+
+The Owner explicitly approved five conceptual rules, LIF-01 through QTY-03, for the Purchase / Goods Receipt adapter. These rules refine DOC08-FIX-027-C without changing the four-way quantity disposition or the A01 posting boundary.
+
+### LIF-01 — Separate physical receipt, inspection, disposition and inventory posting
+
+Physical arrival, inspection/review, quantity disposition (accepted, rejected, unresolved/held/discrepant), and A01 inventory posting are distinct conceptual facts/steps. Physical arrival alone is not inventory acceptance; acceptance alone does not bypass A01 authorization and posting controls. No literal physical status names, state machine implementation or physical entities are selected.
+
+### LIF-02 — Partial receipt and partial acceptance are permitted
+
+A purchase line may be received across multiple distinct physical receipt occurrences. Within an occurrence, accepted quantity may be less than arrived quantity. An accepted quantity slice may proceed through A01 without waiting for the entire purchase order or all other receipt lines to complete, provided the slice is independently attributable, authorized, validated and protected against duplicate posting. Remaining quantities retain their own disposition and lineage.
+
+### QTY-01 — Quantity reconciliation invariant
+
+At the same receipt-line observation, same measurement basis and compatible unit, the conceptual quantity partition must reconcile:
+
+**Physically Arrived = Accepted-for-Inventory + Rejected + Unresolved/Held/Discrepant.**
+
+The equation is an invariant, not an approved physical formula, numeric type, rounding policy or conversion implementation. Any unit normalization must use reproducible source-owned conversion provenance. A reconciliation mismatch fails closed for A01 admission until resolved; no residual is silently assigned to accepted quantity.
+
+### QTY-02 — Only accepted quantity may post
+
+Only the validated accepted-for-inventory quantity slice is eligible for positive A01 on-hand movement under DOC08-FIX-024. Rejected and unresolved/held/discrepant quantities are excluded. The accepted quantity must be bounded by the reconciled arrived quantity; the exact over-receipt, shortage and tolerance policies remain separate OPEN decisions.
+
+### QTY-03 — One-time posting and immutable history
+
+Each accepted-for-inventory quantity slice may have only one authoritative A01 posting outcome. Duplicate acceptance or replay must not create another movement. A disposition change before posting must be auditable and revalidated. A change after posting must not silently rewrite the accepted slice or movement; any stock correction follows DOC08-FIX-025 with its required lineage.
+
+### Boundaries and retained OPEN dependencies
+
+This FIX does not select literal lifecycle states, source tables/columns/keys, physical transition model, numeric precision/scale, rounding, conversion snapshot/version, tolerance, over-receipt approval, shortage/shrinkage handling, event-to-movement cardinality, Batch/Location allocation, DOC-05 permission tuple, physical idempotency/recovery, transaction atomicity/concurrency, tenant enforcement, projection reconciliation or executed evidence.
+
+DOC08-FIX-018/019/024/025/026/027 remain unchanged. No permission is granted, no adapter is activated, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. Technical dependencies remain OPEN. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §42.50; DOC-09 §11.32; Worklist §15.112.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
