@@ -3812,3 +3812,35 @@ Present the bounded policy proposal to the Owner. After approval, synchronize DO
 ### 15.117.5 Governance
 
 Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.118 CW-11 Package E — Owner-approved Product/Variant Batch policy and Location eligibility (22 November 2026)
+
+### 15.118.1 Owner decision
+
+**PASS — OWNER APPROVED / CONCEPTUAL FIX.** The Owner approved the proposal previously recorded in DOC-04 §42.55, DOC-09 §11.37 and Worklist §15.117. The approval is formalized as DOC08-FIX-032 in DOC-08 and DOC-04 §42.56.
+
+### 15.118.2 Approved conceptual rules
+
+- Product master owns explicit Batch tracking required / Batch tracking not required policy; unknown, unset, unresolved or conflicting policy blocks A01.
+- Variant inherits Product policy by default; Variant override is allowed only when explicitly authorized and auditable. Silent override is prohibited.
+- Effective policy is resolved for the accepted receipt slice/allocation and preserved as a receipt-time decision/snapshot; later master-data changes do not rewrite historical receipt lineage.
+- Batch-required allocation identifies actual physical Batch/Lot and satisfies applicable required identity/attribute requirements. Unbatched allocation is allowed only under explicit effective not-tracked policy, consistent with DOC08-FIX-031-D.
+- Receiving Location is same-Business, active and explicitly eligible for inventory receiving; server resolves authoritative Location and Business/parent relationship.
+- Receiver confirms actual physical destination. A configured default may prefill a suggestion only; it cannot silently determine physical destination or bypass confirmation.
+- Virtual transit Location is not a normal purchase-receiving destination unless separately approved policy explicitly authorizes it.
+
+### 15.118.3 Acceptance boundary and retained OPEN dependencies
+
+This is conceptual approval only. No literal enum/field/table/configuration structure, snapshot storage, override permission key, Location taxonomy/default algorithm, physical schema/constraint or runtime behavior is approved. No permission is granted and A01 is not activated.
+
+Remain OPEN: physical policy source/representation and audit evidence; Variant override authority; snapshot/version storage; Location lifecycle/type/receiving-capability representation; default precedence and confirmation evidence; transit exception authority; purchase-specific DOC-05 authorization tuple; physical objects/keys/FKs/constraints; numeric implementation; atomicity/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation; and executed evidence.
+
+DOC08-FIX-030 and DOC08-FIX-031 remain unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.118.4 Next gate
+
+Continue the bounded documentation audit of remaining OPEN dependencies for A01 and Package E acceptance. Do not proceed to another A01 source family until Package E documentation acceptance gate is met. Do not infer or implement physical schema from this conceptual FIX.
+
+### 15.118.5 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
