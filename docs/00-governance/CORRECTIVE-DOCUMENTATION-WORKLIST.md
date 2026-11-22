@@ -3688,3 +3688,33 @@ Still OPEN: numeric precision/scale/rounding/conversion provenance; PO amendment
 ### 15.113.3 Governance
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged pending subsequent contract audit and review.
+
+## 15.114 CW-11 Package E — Owner-approved A01 event-to-movement cardinality FIX recorded (22 November 2026)
+
+### 15.114.1 Owner decision recorded
+
+The Owner approved the proposed Purchase / Goods Receipt cardinality contract, formalized as DOC08-FIX-030:
+- One independently attributable Accepted-for-Inventory Quantity Slice maps to exactly one authoritative logical A01 posting event.
+- One successfully committed A01 posting event produces one-or-more Inventory Movement entries (1:N).
+- Each movement belongs to exactly one event and one accepted slice and preserves Business, receipt-occurrence and receipt-line lineage.
+- The sum of positive movement base-quantity deltas equals the accepted slice's validated quantity in Product base unit.
+- The entire deterministic fan-out must be attributable and reconciled; partial fan-out is not a successful complete posting.
+- Same-identity/same-payload retry resolves to the original event and movement set; changed payload conflicts; uncertain commit is reconciled before retry; correction follows DOC08-FIX-025.
+
+The transfer shipment receipt-detail → exactly-one-movement precedent in A12.10/A12.11 remains scoped to transfer receipts/returns and is not generalized to Purchase / Goods Receipt.
+
+### 15.114.2 Disposition and remaining dependencies
+
+**PASS — conceptual event-to-movement cardinality closed by Owner.** DOC-04 §42.52, DOC-08 DOC08-FIX-030 and DOC-09 §11.34 carry the same decision.
+
+Still OPEN: physical event/movement objects and keys/FKs; exact stock grain; Batch/Location allocation; numeric precision/scale/rounding and conversion implementation; purchase-specific DOC-05 authorization tuple; physical idempotency registry, transaction atomicity/isolation/locking/concurrency and retry/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. No adapter is enabled, no permission is granted, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+### 15.114.3 Next gate
+
+Proceed to the separate Batch/Location allocation review. Define the conceptual allocation and quantity-conservation rules without inventing physical keys, exact schema, permission grants or runtime behavior. Keep numeric precision/scale/rounding, physical constraints, authorization, transaction/recovery, concurrency, tenant enforcement, projection reconciliation and executed evidence OPEN until separately resolved.
+
+### 15.114.4 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
