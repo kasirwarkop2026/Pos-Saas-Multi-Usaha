@@ -3874,3 +3874,37 @@ Audit the A01 quantity-conversion and numeric-reconciliation contract against th
 ### 15.119.6 Governance
 
 Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.120 CW-11 Package E — A01 quantity conversion, numeric reconciliation and costing boundary audit (22 November 2026)
+
+### 15.120.1 Audit scope
+
+Read-only cross-check of DOC-04 §§20, 42.25–42.28, 42.49–42.52 and 42.54 against DOC-03 §§3, 5 and 18–19 and DOC08-FIX-027–032.
+
+### 15.120.2 Findings
+
+- Product base unit is the canonical stock reference; source/input unit is distinct. Conversion direction: `quantity_base = quantity_input × conversion_factor_base_per_input`.
+- Conversion must be explicit, valid and Product/Variant-compatible; missing/ambiguous/incompatible/unknown/unapproved conversion fails closed. No guessed factor, implicit chain, label-only match or silent rounding.
+- High internal precision is required for conversion factors; invalid quantity is rejected, not silently rounded.
+- Source/receiving preserves entered quantity, input unit and reproducible conversion provenance. A01 consumes validated accepted quantity in Product base unit; later reference edits do not rewrite historical receipt/movement facts.
+- Per accepted slice, allocation portions and positive movement base deltas each sum to the same accepted quantity. Portions are positive; no over/under/duplicate allocation, unexplained residual or cross-slice offset.
+- Physical Batch, FIFO cost layer and MWA valuation remain distinct. FEFO selects outbound physical batches; FIFO selects cost layers; costing-only work creates no extra on-hand movement.
+- MWA default pool is Business + Product/Variant + Inventory Location; pools do not cross Locations. Total cost is authoritative for a cost layer; unit cost is derived at high internal precision; unknown cost remains NULL. Destination MWA recalculates after receipt from destination quantity and total cost. LRM is not a generic unit-conversion/FIFO/MWA residual rule.
+
+### 15.120.3 Disposition
+
+**PASS — conceptual quantity conversion and reconciliation are internally consistent.** This is a source-consistency audit, not executable test evidence.
+
+**OPEN / NOT ACCEPTED:** numeric type/precision/scale/capacity/overflow; per-Product increment and fractional/discrete policy; conversion factor source/precision/version/effective-time and allowed graph; snapshot representation; operation-specific rounding boundary/mode; FIFO/MWA residual arithmetic; physical constraints/enforcement; atomicity/locking/idempotency/recovery; and executed positive/negative/fractional/boundary/overflow/replay/reconciliation evidence.
+
+DOC08-FIX-029's 0% default receiving tolerance and explicit-policy/authorization-only non-zero exception do not authorize rounding/coercion or altering physically observed/accepted quantity. Tolerance cannot force arithmetic reconciliation.
+
+No new DOC08 FIX. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation or Stage 6 implementation approved.
+
+### 15.120.4 Next bounded review
+
+Audit A01 posting atomicity, idempotency, concurrency and uncertain-commit recovery against the source-native A06/A09 baseline. Keep physical transaction boundary, lock order, isolation, key/payload canonicalization, retention, retry/recovery implementation and executed evidence OPEN. Do not move to another source family before CW-11 Package E acceptance.
+
+### 15.120.5 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
