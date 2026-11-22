@@ -954,3 +954,21 @@ The earlier proposal status in §11.30 is superseded for these three conceptual 
 DOC08-FIX-018/019/024/025/026 unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.32 CW-11 Package E — Owner closed conceptual lifecycle and quantity-control rules via DOC08-FIX-028 (22 November 2026)
+
+**CLOSED AS CONCEPTUAL FIX — DOC08-FIX-028.** The Owner explicitly approved:
+- **LIF-01:** physical arrival, inspection/review, quantity disposition and A01 posting are distinct facts/steps; arrival is not acceptance and acceptance does not bypass authorization/posting.
+- **LIF-02:** partial receipts and partial acceptance are permitted; each accepted slice is independently attributable and may post without waiting for the entire PO, subject to validation, authorization and duplicate prevention.
+- **QTY-01:** arrived quantity must reconcile to accepted + rejected + unresolved/held/discrepant quantity on a compatible measurement basis; mismatch blocks A01.
+- **QTY-02:** only validated accepted-for-inventory quantity may post positive; rejected and unresolved portions are excluded; accepted cannot exceed physically arrived quantity.
+- **QTY-03:** one accepted slice has one authoritative posting outcome; replay cannot duplicate it; history is immutable and post-post correction follows DOC08-FIX-025.
+
+These are conceptual invariants, not physical lifecycle states, numeric implementation or permission grants.
+
+**Remain OPEN:** literal lifecycle states/transitions and physical representation; numeric precision/scale/rounding/conversion snapshot; over-receipt against PO, shortage/shrinkage, tolerance and approval policy; event-to-movement cardinality and Batch/Location allocation; DOC-05 authorization tuple; physical idempotency/recovery, atomicity/concurrency and constraints; tenant enforcement, projection reconciliation and executed evidence.
+
+DOC08-FIX-018/019/024/025/026/027 unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
