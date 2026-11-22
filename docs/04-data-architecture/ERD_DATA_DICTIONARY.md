@@ -4947,3 +4947,30 @@ DOC08-FIX-018/019/024/025/026/027 remain unchanged. No permission is granted, no
 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.51 Purchase / Goods Receipt — Owner-approved over-receipt, shortage and tolerance controls (DOC08-FIX-029)
+
+The Owner approved three conceptual rules for PO quantity variance. They supplement DOC08-FIX-027 and DOC08-FIX-028 and do not change the A01 rule that only validated accepted-for-inventory quantity may post positive.
+
+### 42.51.1 Over-receipt
+
+Physical quantity above the PO ordered quantity is an over-receipt variance. The excess must not automatically be accepted for inventory or posted. It requires specific approval by an authorized party under an explicit policy before the excess can be considered for acceptance. Approval alone is not physical receipt, acceptance, A01 authorization or posting. Until all applicable controls are satisfied, the excess remains separately identifiable and ineligible for A01.
+
+### 42.51.2 Shortage
+
+Physical quantity below the PO ordered quantity is recorded as a shortage/discrepancy against the PO. The missing portion is not physically received, is not accepted-for-inventory, and creates no inventory movement. Only physically arrived and separately accepted quantity may proceed to A01. The shortage remains a procurement/receiving variance; no missing quantity may be fabricated as a receipt or movement.
+
+### 42.51.3 Tolerance
+
+Default tolerance is **0%**. Non-zero tolerance is permitted only under an explicit policy and explicit authorization. Tolerance governs variance handling only; it cannot alter the actual physically arrived quantity or rewrite accepted quantity. Source quantity, unit and reproducible conversion provenance remain truthful and traceable. Tolerance does not itself create receipt, acceptance or movement.
+
+### 42.51.4 Boundaries and retained OPEN dependencies
+
+DOC08-FIX-029 closes the conceptual Owner policy for over-receipt, shortage and tolerance. Numeric precision/scale, rounding, conversion snapshot/version, PO amendment/version semantics, physical source representation and purchase-specific approval actor/scope/SoD/audit enforcement remain OPEN. Event-to-movement cardinality/orchestration and Batch/Location allocation remain OPEN for the next bounded review. Physical keys/constraints, idempotency/recovery, atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence remain OPEN.
+
+DOC08-FIX-018/019/024/025/026/027/028 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
