@@ -429,7 +429,7 @@ Only the validated accepted-for-inventory quantity slice is eligible for positiv
 
 Each accepted-for-inventory quantity slice may have only one authoritative A01 posting outcome. Duplicate acceptance or replay must not create another movement. A disposition change before posting must be auditable and revalidated. A change after posting must not silently rewrite the accepted slice or movement; any stock correction follows DOC08-FIX-025 with its required lineage.
 
-### Boundaries and retained OPEN dependencies
+### FIX-028 — Boundaries and retained OPEN dependencies
 
 This FIX does not select literal lifecycle states, source tables/columns/keys, physical transition model, numeric precision/scale, rounding, conversion snapshot/version, tolerance, over-receipt approval, shortage/shrinkage handling, event-to-movement cardinality, Batch/Location allocation, DOC-05 permission tuple, physical idempotency/recovery, transaction atomicity/concurrency, tenant enforcement, projection reconciliation or executed evidence.
 
@@ -458,7 +458,7 @@ A quantity physically received below the ordered PO quantity is recorded as a sh
 
 The default receiving tolerance is **0%**. A non-zero tolerance may apply only where an explicit policy and explicit authorization permit it. Tolerance is a variance-control rule; it must never alter, inflate, reduce or otherwise rewrite the quantity physically arrived or the quantity actually accepted. Quantity facts and their source/unit-conversion provenance remain truthful and separately traceable. Tolerance does not independently create receipt, acceptance or inventory movement.
 
-### Boundaries and retained OPEN dependencies
+### FIX-029 — Boundaries and retained OPEN dependencies
 
 These rules decide the conceptual Owner policy only. Exact numeric precision/scale, rounding, conversion snapshot/version, PO amendment/version semantics, source representation, approval actor/scope/SoD/audit tuple, and technical enforcement remain OPEN. Event-to-movement cardinality/orchestration and Batch/Location allocation remain OPEN and are the next conceptual contract reviews. Physical keys/constraints, idempotency/recovery, atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence remain OPEN.
 
@@ -490,7 +490,7 @@ The sum of the positive movement base-quantity deltas for an accepted slice must
 
 Same-identity/same-payload retry resolves to the original authoritative event and complete movement set, never a duplicate. Changed payload for the same identity is a conflict; uncertain commit must be reconciled before retry. Posted movement history is immutable; post-post correction follows DOC08-FIX-025 with separately attributable reversal/compensating lineage.
 
-### Boundaries and retained OPEN dependencies
+### FIX-030 — Boundaries and retained OPEN dependencies
 
 This FIX is conceptual only. Exact physical event/movement objects, keys/FKs, stock grain, Batch/Location allocation, numeric implementation, purchase-specific DOC-05 authorization tuple, physical idempotency/recovery, atomicity/isolation/locking/concurrency, tenant enforcement, projection reconciliation and executed evidence remain OPEN. It does not activate the adapter, grant permission, approve physical schema or authorize implementation.
 
@@ -536,7 +536,7 @@ For each accepted slice, allocation-portion quantities and positive movement bas
 
 Unresolved, invalid or unreconciled required Location/Batch allocation blocks A01. Portions remain within one Business and the source slice's Product/Variant. Balance projection is Product/Variant/Location scoped; batch-balance projection reconciles to the parent Location balance. Batch create/hold/release, receiving, discrepancy approval and movement posting remain distinct actions. DOC-05 candidate keys are not grants and do not settle the purchase-specific authorization tuple.
 
-### Boundaries and retained OPEN dependencies
+### FIX-031 — Boundaries and retained OPEN dependencies
 
 This is a conceptual FIX only. Physical allocation object/table/columns/keys/FKs, Location taxonomy/defaulting, authoritative Product batch-tracking policy source, exact physical Batch identity/attributes, exception handling, physical constraints, numeric precision/scale/rounding, purchase-specific DOC-05 actor/scope/approval/SoD/audit tuple, atomicity/isolation/locking/concurrency/idempotency/recovery, tenant enforcement, projection reconciliation implementation and executed evidence remain OPEN.
 
@@ -580,7 +580,7 @@ Receiver confirms the actual physical destination. A configured Location default
 
 A virtual transit Location is not a normal purchase-receiving destination unless a separately approved policy explicitly authorizes that use case. Exception authority and exact transit taxonomy remain OPEN.
 
-### Boundaries and retained OPEN dependencies
+### FIX-032 — Boundaries and retained OPEN dependencies
 
 FIX-032 is conceptual only. It does not approve literal enum values, fields, tables, configuration structures, physical policy snapshot/version storage, override permission keys, Location taxonomy/status representation, default algorithms, physical schema/constraints or runtime behavior. It does not grant receiving, discrepancy, Batch administration or posting permissions and does not activate A01.
 
