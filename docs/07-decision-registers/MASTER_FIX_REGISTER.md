@@ -336,3 +336,66 @@ The following remain outside A01 on-hand posting: purchase commitment/order with
 Related decisions: DOC08-FIX-018, DOC08-FIX-019, DOC08-FIX-024, DOC08-FIX-025. Anchors: DOC-04 §§42.42–42.44; DOC-09 §§11.24–11.27; Worklist §§15.104–15.107.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## DOC08-FIX-027 — Purchase / Goods Receipt source ownership, posting identity and quantity disposition (Owner-approved conceptual FIX, 22 November 2026)
+
+**Decision authority:** Owner explicitly approved all three recommendations recorded in DOC-04 §42.48. This FIX is conceptual/domain-contract authority only. It does not establish physical schema, implementation behavior, permission grants, or adapter activation.
+
+### FIX-027-A — Domain responsibility ownership
+
+The conceptual responsibility split is fixed as follows:
+
+1. **Purchasing / Procurement** owns purchase requests, purchase orders, ordered source lines, supplier commitments and approved commercial amendments. These facts do not prove physical receipt and do not independently create on-hand movements.
+2. **Receiving / Warehouse Operations** owns physical receipt occurrences, receipt-line observations, received quantity/unit, inspection and discrepancy disposition, and the accepted-for-inventory quantity facts. It is authoritative for physical receipt evidence and quantity disposition, but does not directly mutate the inventory ledger.
+3. **Inventory (M06)** owns authorization-checked A01 admission, the bounded server-owned posting registry, A01 posting identity, immutable `inventory_movements` outcome and projection reconciliation. It consumes authoritative receipt facts; it does not own or rewrite procurement/receiving source records.
+4. **Finance / Accounts Payable** owns supplier invoice, payable, payment and settlement facts. Those commercial/accounting facts do not independently create physical on-hand movement.
+
+This is a conceptual responsibility boundary, not a claim that separate implemented modules, services or physical entities already exist.
+
+### FIX-027-B — Logical posting identity and event grain
+
+The canonical conceptual identity/grain for an accepted Purchase / Goods Receipt posting unit is:
+
+**Business + physical Receipt Occurrence + Receipt Line + Accepted-for-Inventory Quantity Slice.**
+
+The lineage meanings are distinct:
+- purchase source document and purchase source line: commercial lineage / what was ordered;
+- physical receipt occurrence: which distinct physical arrival took place, allowing repeated/partial arrivals;
+- receipt line: which ordered line was observed in that occurrence;
+- accepted quantity slice: the exact quantity portion accepted for inventory;
+- A01 event identity: the idempotently resolved posting event/outcome;
+- inventory movement identity: each immutable stock-grain effect.
+
+A later partial arrival is a distinct receipt occurrence. A separately accepted portion is separately attributable as an accepted quantity slice. A01 movement fan-out may be 1:N when authoritative receipt facts require multiple Product/Variant/Location/Batch stock-grain effects. All resulting effects must remain attributable to the source line and accepted slice.
+
+This FIX does **not** decide physical keys, identifier formats, exact event-to-movement cardinality, one-event-per-line versus whole-receipt orchestration, or physical atomicity. The chosen logical grain must be preserved regardless of the eventual physical orchestration pattern.
+
+### FIX-027-C — Quantity disposition boundary
+
+For each physical receipt-line observation, the conceptual quantity dispositions are distinct:
+
+1. **Physically arrived** — quantity actually presented/received at the receiving point.
+2. **Accepted for inventory** — quantity explicitly accepted and eligible for A01 posting.
+3. **Rejected** — quantity explicitly rejected and ineligible for on-hand posting.
+4. **Unresolved / held / discrepant** — quantity awaiting inspection, count resolution, quality decision or another authorized disposition; ineligible until accepted.
+
+Only the accepted-for-inventory quantity may enter A01 and create a positive on-hand movement under DOC08-FIX-024. Ordered, expected, shipped, invoiced, paid, rejected, held and unresolved quantities do not independently post on-hand.
+
+The source workflow must preserve the entered quantity and unit and reproducible conversion provenance to Product base unit. Duplicate acceptance of the same physical quantity is prohibited conceptually. A later disposition change must be auditable and must not silently rewrite an already posted accepted slice. Any post-commit correction remains governed by DOC08-FIX-025.
+
+**Explicitly OPEN:** arithmetic reconciliation and quantity caps; tolerance; shortage/shrinkage treatment; over-receipt authority; precision, rounding and conversion snapshot/version; partial inspection/acceptance lifecycle; physical representation and enforcement. These details are not inferred by this FIX.
+
+### Boundaries and dependencies
+
+- DOC08-FIX-018/019/024/025/026 remain unchanged and continue to govern registry, identity separation, signed movement semantics, correction lineage and source-family scope.
+- No purchase-receipt permission key or grant is created. DOC-05 must still define exact actor/function, scope, state conditions, approval/SoD, execution owner and audit tuple before authorization acceptance.
+- No source adapter is enabled. No physical entity/table/column/key/FK/enum, source version token, digest, numeric type, transaction model, isolation/locking or recovery implementation is approved.
+- Tenant enforcement, atomicity, concurrency, idempotency/recovery, projection reconciliation and executed evidence remain OPEN.
+- No implementation authorization or runtime acceptance is implied.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. Technical contract dependencies remain OPEN. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §§42.46–42.49; DOC-09 §§11.28–11.31; Worklist §§15.108–15.112.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
