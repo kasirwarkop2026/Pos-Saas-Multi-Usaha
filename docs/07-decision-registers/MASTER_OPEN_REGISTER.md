@@ -1006,3 +1006,23 @@ DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged. No permission is gra
 **Next bounded review:** Batch/Location allocation, without reopening DOC08-FIX-030 or prematurely deciding the exact stock grain/physical keys.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 11.35 CW-11 Package E — Batch/Location allocation proposal awaiting Owner decision (22 November 2026)
+
+**PROPOSED / REVIEW — NOT FIX.** Following DOC08-FIX-030, DOC-04 §42.53 records a bounded Batch/Location allocation proposal based on the existing conceptual inventory baseline.
+
+Recommended rules for Owner review:
+- Resolve an explicit, same-Business receiving Location for each allocation portion before A01 posting. Multiple Locations are allowed only when the physical distribution is actually recorded; unknown or invalid Location blocks posting.
+- Where Product/Variant batch tracking applies, allocate to the actual physical Batch/Lot identity received. Distinct physical lots remain separately attributable; do not invent Batch identity from PO or cost-layer identity.
+- An unbatched allocation is allowed only under an explicit Product/Variant policy that does not require Batch tracking. The policy and source remain OPEN.
+- FEFO governs outbound physical-batch selection, not incoming Batch identity. Physical Batch and FIFO cost-layer identities remain distinct; MWA valuation remains location-scoped.
+- Recommended allocation grain is accepted slice + Product/Variant + receiving Location + actual Batch identity or explicitly permitted unbatched state. One accepted slice may split into multiple portions; each portion maps to one positive movement. Allocation and movement totals must equal accepted quantity in Product base unit.
+- Unresolved Location/required Batch identity, quantity mismatch or invalid tenant/Product context blocks posting.
+
+The proposal does not define physical objects/keys, Location taxonomy/defaulting, Product batch-tracking configuration, exact Batch identity matching, purchase-specific permission grants or runtime enforcement. DOC05 candidate inventory keys remain non-granting starter vocabulary.
+
+**Owner decision required:** approve or revise the receiving Location rule, batch-tracked/unbatched rule, physical-lot identity handling, allowed multi-Location/multi-Batch split, and allocation-portion-to-movement cardinality.
+
+DOC08-FIX-030 remains unchanged; no DOC08 FIX is created by this proposal. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
