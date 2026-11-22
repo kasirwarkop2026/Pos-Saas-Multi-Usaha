@@ -5178,3 +5178,38 @@ ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; can
 Related anchors: DOC-09 §11.37; Worklist §15.117.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.56. Owner-approved Product/Variant Batch Policy and Receiving Location Eligibility — DOC08-FIX-032 (22 November 2026)
+
+**FIX — OWNER APPROVED / CONCEPTUAL.** The Owner approved the recommendations previously recorded as PROPOSED / REVIEW in §42.55. This section promotes those recommendations to the conceptual policy contract. DOC08-FIX-031 remains unchanged.
+
+### 42.56.1 Product/Variant Batch-tracking policy
+
+1. The Product master owns an explicit policy outcome: **Batch tracking required** or **Batch tracking not required**.
+2. A Variant inherits the Product policy by default. A Variant-level override is permitted only when explicitly authorized and auditable; an implicit or silent override is prohibited.
+3. The effective policy is resolved for the accepted receipt slice/allocation and preserved as a receipt-time decision/snapshot. Later Product or Variant master-data changes do not rewrite historical accepted slices or posted movements.
+4. Unknown, unset, unresolved inheritance, or conflicting Product/Variant policy fails closed and blocks A01.
+5. Where Batch tracking is required, each allocation portion must identify the actual physical Batch/Lot received and satisfy applicable required identity/attribute requirements. Missing or ambiguous required identity/attributes block A01.
+6. The unbatched path is allowed only when the effective explicit Product/Variant policy says Batch tracking is not required, consistent with DOC08-FIX-031-D.
+
+### 42.56.2 Receiving Location eligibility and confirmation
+
+1. Every receiving Location must belong to the same Business as the accepted slice/source receipt, be active, and be explicitly eligible for inventory receiving under the applicable Business policy.
+2. The server resolves authoritative Location identity and Business/parent relationship; client-supplied identifiers alone are not authoritative.
+3. The receiver confirms the actual physical destination. A configured Location default may prefill a suggestion only; it must not silently determine or override the physical destination or bypass confirmation.
+4. Unknown, inactive, cross-Business, non-receiving or otherwise ineligible Location fails closed and blocks A01.
+5. A virtual transit Location is not a normal purchase-receiving destination unless a separately approved policy explicitly authorizes that use case.
+
+### 42.56.3 Boundaries and unresolved implementation detail
+
+This FIX approves conceptual policy outcomes and fail-closed behavior only. It does **not** approve literal enum values, field/table names, configuration tables, physical policy versioning/snapshot storage, override permission keys, Location type/status taxonomy, default precedence algorithms, physical schema, constraints, or runtime implementation.
+
+Still OPEN: exact policy source/representation and audit evidence; authorization authority for Variant override; receipt-time snapshot representation; Location taxonomy/lifecycle and receiving-capability representation; transit exception authority; purchase-specific DOC-05 actor/scope/approval/SoD/audit tuple; physical objects/keys/FKs/constraints; numeric precision/scale/rounding/conversion; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 and DOC08-FIX-031 remain unchanged. DOC08-FIX-032 does not grant receiving, discrepancy, Batch administration or posting permissions; it does not activate A01 or approve physical/runtime behavior.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-08 DOC08-FIX-032; DOC-09 §11.38; Worklist §15.118.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
