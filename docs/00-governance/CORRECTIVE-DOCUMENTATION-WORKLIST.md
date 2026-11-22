@@ -3776,3 +3776,39 @@ Resolve the remaining Product/Variant batch-tracking policy source and Location 
 ### 15.116.4 Governance
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.117 CW-11 Package E — Product Batch policy and Location eligibility audit completed; Owner decision pending (22 November 2026)
+
+### 15.117.1 Audit performed
+
+Reviewed DOC-01 §§2–3, §7 and §14; DOC-03 §§2–3 and §5; DOC-04 §§3–6, §16.1, §42.53–42.54; and DOC-05 §§23.4–23.6.
+
+Confirmed conceptual support: Business tenant boundary with multiple outlets/warehouses; inventory Location as Business operational subdivision; inventory_batches as physical batch/lot concept with Product/Variant association and production/expiry/state; FEFO physical-batch selection distinct from FIFO cost-layer consumption; location-scoped MWA and balance projections; server-side resolution/validation; and candidate M06 keys are not permission grants.
+
+No reviewed document establishes canonical Product/Variant batch-tracking policy source, required/not-tracked setting, inheritance/override or receipt-time snapshot; nor Location active/receiving eligibility, type taxonomy, default precedence or purchase-receipt authorization tuple.
+
+### 15.117.2 Proposal recorded — not Owner-approved
+
+DOC-04 §42.55 and DOC-09 §11.37 record:
+- Product master owns explicit Batch tracking required / not required policy; unknown/unset/conflict blocks A01.
+- Variant inherits Product policy unless an explicit authorized/auditable override exists; effective policy is preserved at receipt time.
+- Batch-required products need actual physical Batch/Lot identity and applicable attributes; only explicit not-tracked policy permits unbatched allocation.
+- Receiving Location must be same-Business, active and explicitly receiving-eligible; server resolves authoritative context.
+- A Location default may prefill a suggestion only; receiver confirms actual physical destination. Invalid/inactive/cross-Business/non-receiving Location blocks A01.
+- Virtual transit Location is excluded from normal purchase receiving unless separately approved.
+
+This remains PROPOSED / REVIEW, not a FIX.
+
+### 15.117.3 Disposition and Owner gate
+
+**PASS — bounded source audit and recommendation drafting complete; Owner decision remains OPEN.** DOC08-FIX-031 is unchanged. No new DOC08 FIX is created. No contradiction was found with the approved Batch/Location allocation contract.
+
+Owner approval is required for Product/Variant policy ownership, inheritance/override and receipt-time snapshot; Location active/receiving eligibility; receiver confirmation/default behavior; and any transit-location exception. Purchase-specific authorization, physical representation/keys, numeric implementation, atomicity/concurrency/idempotency/recovery, tenant enforcement, projection reconciliation and executed evidence remain OPEN.
+
+### 15.117.4 Next gate
+
+Present the bounded policy proposal to the Owner. After approval, synchronize DOC-04, DOC-08, DOC-09 and Worklist as appropriate. Do not reopen DOC08-FIX-031 or proceed to another A01 source family before Package E's documentation acceptance gate is met.
+
+### 15.117.5 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
