@@ -972,3 +972,19 @@ These are conceptual invariants, not physical lifecycle states, numeric implemen
 DOC08-FIX-018/019/024/025/026/027 unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.33 CW-11 Package E — Owner closed over-receipt, shortage and tolerance policy (DOC08-FIX-029, 22 November 2026)
+
+**CLOSED AS CONCEPTUAL FIX — DOC08-FIX-029.** The Owner explicitly approved:
+- **FIX-029-A — Over-receipt:** quantity above PO ordered quantity is not automatically accepted or posted; the excess requires specific authorized approval under explicit policy before it may be considered for acceptance. Approval does not bypass physical receipt, validation, A01 authorization or posting.
+- **FIX-029-B — Shortage:** quantity missing against the PO is recorded as a discrepancy; it is not physically received, accepted or represented by inventory movement. Only actually arrived and accepted quantity may post.
+- **FIX-029-C — Tolerance:** default is 0%; non-zero tolerance requires explicit policy and authorization and cannot change the actual physically arrived or accepted quantity. Tolerance alone creates no receipt, acceptance or movement.
+
+These decisions close the conceptual policy dependency only. Numeric precision/scale/rounding/conversion provenance, PO amendment/version semantics, physical representation and purchase-specific approval actor/scope/SoD/audit enforcement remain OPEN.
+
+**Next bounded reviews:** event-to-movement cardinality/orchestration, followed by Batch/Location allocation. Physical keys/constraints, idempotency/recovery, atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence remain OPEN.
+
+DOC08-FIX-018/019/024/025/026/027/028 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
