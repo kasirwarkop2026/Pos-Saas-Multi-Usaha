@@ -988,3 +988,21 @@ These decisions close the conceptual policy dependency only. Numeric precision/s
 DOC08-FIX-018/019/024/025/026/027/028 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 11.34 CW-11 Package E — Owner closed conceptual Purchase / Goods Receipt event-to-movement cardinality (DOC08-FIX-030, 22 November 2026)
+
+**CLOSED AS CONCEPTUAL FIX — DOC08-FIX-030.** The Owner approved:
+- **FIX-030-A:** each independently attributable accepted-for-inventory quantity slice has exactly one authoritative logical A01 posting event; one event does not combine accepted slices from different receipt lines/occurrences.
+- **FIX-030-B:** one successfully committed A01 posting event produces one-or-more Inventory Movement entries (1:N); each movement belongs to exactly one event and one accepted slice and preserves receipt-line lineage.
+- **FIX-030-C:** the sum of positive movement base-quantity deltas for a slice equals its validated accepted quantity in Product base unit; the complete deterministic movement set must be attributable and reconciled, not partially represented as a successful posting.
+- **FIX-030-D:** same-identity/same-payload retry resolves to the original event and complete movement set; changed payload conflicts; uncertain commit is reconciled before retry; post-post correction follows immutable DOC08-FIX-025 lineage.
+
+This is a Purchase / Goods Receipt-specific conceptual rule. The A12.10/A12.11 exactly-one-movement precedent remains scoped to transfer shipment receipt/return details and is not generalized.
+
+**Remain OPEN:** exact physical event/movement objects and keys/FKs; stock-grain definition; Batch/Location allocation; numeric precision/scale/rounding and conversion implementation; DOC-05 purchase-specific authorization tuple; physical idempotency registry and retry/recovery; transaction atomicity/isolation/locking/concurrency; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+**Next bounded review:** Batch/Location allocation, without reopening DOC08-FIX-030 or prematurely deciding the exact stock grain/physical keys.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
