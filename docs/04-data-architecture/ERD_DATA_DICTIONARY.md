@@ -4974,3 +4974,41 @@ DOC08-FIX-018/019/024/025/026/027/028 remain unchanged. No permission is granted
 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.52 Purchase / Goods Receipt — accepted-slice to A01 event and movement cardinality (DOC08-FIX-030)
+
+The Owner approved the logical cardinality contract for Purchase / Goods Receipt A01 posting. This section supplements DOC-04 §§42.46, 42.49–42.51 and DOC08-FIX-027/028/029. It is specific to the Purchase / Goods Receipt source family; it does not generalize the transfer shipment receipt-detail cardinality in A12.10/A12.11.
+
+### 42.52.1 FIX-030-A — One accepted quantity slice to one authoritative A01 posting event
+
+Each independently attributable Accepted-for-Inventory Quantity Slice has exactly one authoritative logical A01 posting event/outcome. The event preserves its Business, physical Receipt Occurrence, Receipt Line and accepted-slice lineage under DOC08-FIX-027-B. A single event must not combine accepted slices from different receipt lines or occurrences. A later partial acceptance is a separate accepted slice and receives its own independently traceable posting event.
+
+This is a logical cardinality rule, not a physical event/table/key/schema decision. A01 authorization, validation and the DOC08-FIX-024 positive movement boundary remain mandatory.
+
+### 42.52.2 FIX-030-B — One posting event to one-or-more inventory movements
+
+A successfully committed A01 posting event produces one or more Inventory Movement ledger entries (1:N). Fan-out exists to represent the accepted quantity across the applicable stock-grain effects once Batch/Location allocation is resolved. Each movement belongs to exactly one authoritative A01 event and one accepted quantity slice; a movement must not combine quantity from multiple events or accepted slices. Each movement preserves the originating Business, receipt occurrence and receipt-line lineage.
+
+The exact stock grain, Batch selection/splitting, Location selection/splitting and any physical identity fields remain OPEN for the separate Batch/Location allocation review. This FIX does not choose a physical movement key, source registry schema or FK.
+
+### 42.52.3 FIX-030-C — Quantity conservation and complete fan-out
+
+For one accepted slice, the sum of its positive movement base-quantity deltas must equal that slice's validated accepted quantity normalized to Product base unit, using reproducible conversion provenance. No accepted quantity may be omitted, duplicated, silently rounded into a different accepted amount, or assigned to an unrelated slice. The precise numeric precision, scale and rounding implementation remain OPEN.
+
+A posting outcome is conceptually complete only when its entire deterministic movement set is attributable and reconciled. A partial fan-out must not be represented as a successful complete posting. Physical transaction atomicity, isolation, locking, retry/recovery and concurrency enforcement remain OPEN and are not proven by this conceptual invariant.
+
+### 42.52.4 FIX-030-D — Replay, correction and source-family boundary
+
+A retry for the same accepted-slice identity and same payload resolves to the original authoritative event and its complete movement set; it must not create another event or duplicate movement. A changed payload for the same identity is a conflict requiring controlled resolution. An uncertain commit must be reconciled before retry; it must not be treated as proof that no posting occurred.
+
+Posted movements remain immutable. Any post-post correction follows DOC08-FIX-025 through separately attributable reversal/compensating lineage; the original event and movement history are not overwritten or deleted. The transfer receipt-detail → exactly-one-movement precedent in A12.10/A12.11 remains scoped to transfer receipts/returns and is not the Purchase / Goods Receipt rule established here.
+
+### 42.52.5 Boundaries and retained OPEN dependencies
+
+DOC08-FIX-030 closes only the conceptual cardinality and quantity-conservation contract: one accepted slice → one authoritative A01 event → one-or-more attributable movement entries. It does not approve physical event or movement tables/columns/keys/FKs, exact stock grain, Batch/Location allocation, numeric precision/scale/rounding, DOC-05 purchase-specific authorization tuple, physical idempotency registry, transaction atomicity/isolation/locking, retry/recovery implementation, tenant enforcement, projection reconciliation implementation or executed evidence.
+
+DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
