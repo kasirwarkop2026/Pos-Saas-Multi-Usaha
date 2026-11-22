@@ -3644,3 +3644,25 @@ No permission is granted, no adapter is enabled, and no physical schema/runtime 
 
 ### 15.111.3 Governance
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged pending subsequent contract audit and review.
+
+
+## 15.112 CW-11 Package E — Owner-approved Purchase / Goods Receipt lifecycle and quantity-control FIX (DOC08-FIX-028, 22 November 2026)
+
+### 15.112.1 Owner decision recorded
+
+The Owner approved five conceptual rules as FIX:
+- LIF-01: separate physical arrival, inspection/review, quantity disposition and A01 posting.
+- LIF-02: allow partial receipt and partial acceptance, independently traceable by accepted quantity slice.
+- QTY-01: enforce the conceptual reconciliation partition arrived = accepted + rejected + unresolved/held/discrepant on a compatible measurement basis.
+- QTY-02: only validated accepted quantity posts positive; rejected and unresolved portions are excluded; accepted cannot exceed physically arrived.
+- QTY-03: one authoritative posting outcome per accepted slice; duplicate replay cannot create another movement; history remains immutable and post-post correction follows FIX-025.
+
+### 15.112.2 Audit disposition and remaining work
+
+**PASS — conceptual lifecycle and quantity-control decisions closed by Owner.** DOC-04 §42.50, DOC-09 §11.32 and DOC08-FIX-028 now carry the same decision. Remaining OPEN work is limited to physical state/source representation, numeric precision/conversion implementation, over-receipt/shortage/tolerance policy, event/movement cardinality, Batch/Location allocation, DOC-05 authorization, physical idempotency/recovery/atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence.
+
+Next review: define over-receipt, shortage/shrinkage, tolerance and their approval authority as a separate bounded Owner decision. Then review event-to-movement cardinality and Batch/Location allocation. Do not activate the adapter or advance to another A01 source family until Package E's documentation acceptance gate is met.
+
+### 15.112.3 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged pending subsequent contract audit and review.
