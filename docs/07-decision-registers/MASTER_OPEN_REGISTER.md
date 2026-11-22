@@ -1067,3 +1067,26 @@ These recommendations are NOT FIX. No literal enum, field, physical object, over
 DOC08-FIX-031 remains unchanged and approved. Retained OPEN dependencies also include purchase-specific DOC-05 authorization tuple, physical representation/keys/constraints, numeric implementation, atomicity/concurrency/idempotency/recovery, tenant enforcement, projection reconciliation and executed evidence. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 11.38 CW-11 Package E — Owner-approved Product/Variant Batch policy and Location eligibility (22 November 2026)
+
+**OWNER DECISION: APPROVED — CONCEPTUAL FIX.** The Owner approved the bounded recommendation previously recorded in DOC-04 §42.55 and DOC-09 §11.37. DOC08-FIX-032 is recorded in DOC-08 and DOC-04 §42.56.
+
+Approved policy:
+- Product master owns explicit Batch tracking required / Batch tracking not required policy. Unknown, unset, unresolved or conflicting policy blocks A01.
+- Variant inherits Product policy by default. Variant override is permitted only when explicitly authorized and auditable; silent override is prohibited.
+- Effective policy is resolved for the accepted receipt slice/allocation and preserved as a receipt-time decision/snapshot. Later master-data changes do not rewrite historical receipt lineage.
+- Batch-required allocation identifies the actual physical Batch/Lot and satisfies applicable required identity/attribute requirements. Unbatched allocation is permitted only under explicit effective not-tracked policy, consistent with DOC08-FIX-031-D.
+- Receiving Location must be same-Business, active and explicitly eligible for inventory receiving; server resolves authoritative Location and Business/parent relationship.
+- Receiver confirms actual physical destination. A configured default may prefill a suggestion only and cannot silently determine the physical destination or bypass confirmation.
+- Virtual transit Location is excluded from normal purchase receiving unless a separately approved policy authorizes the use case.
+
+**Scope boundary:** This is conceptual policy approval only. No literal enum, physical field/table/configuration structure, snapshot storage, override permission key, Location taxonomy, default algorithm, physical schema, constraint or runtime behavior is approved. No receiving/discrepancy/Batch-administration/posting permission is granted; A01 is not activated.
+
+**Remain OPEN:** physical policy source/representation and audit evidence; Variant override authority; snapshot/version storage; Location lifecycle/type/receiving-capability representation; default precedence and confirmation evidence; transit exception authority; purchase-specific DOC-05 authorization tuple; physical objects/keys/FKs/constraints; numeric implementation; atomicity/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation; and executed evidence.
+
+DOC08-FIX-030 and DOC08-FIX-031 remain unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §42.56; DOC-08 DOC08-FIX-032; Worklist §15.118.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
