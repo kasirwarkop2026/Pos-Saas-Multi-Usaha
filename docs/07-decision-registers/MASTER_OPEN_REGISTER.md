@@ -938,3 +938,19 @@ DOC-04 §42.48 records a focused source-domain audit and Owner decision proposal
 ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.31 CW-11 Package E — Owner decision closed for conceptual source ownership, identity and quantity disposition (22 November 2026)
+
+**CLOSED AS CONCEPTUAL FIX — DOC08-FIX-027.** The Owner explicitly approved all three recommendations in DOC-04 §42.48:
+- responsibility split across Purchasing/Procurement, Receiving/Warehouse Operations, Inventory (M06), and Finance/AP;
+- canonical logical posting grain: Business + physical Receipt Occurrence + Receipt Line + Accepted-for-Inventory Quantity Slice;
+- distinct physically arrived, accepted-for-inventory, rejected and unresolved/held/discrepant quantity dispositions, with only accepted quantity eligible for positive A01 movement.
+
+The earlier proposal status in §11.30 is superseded for these three conceptual decisions only. No physical source object/key, permission, adapter activation, schema or implementation is approved.
+
+**Remain OPEN:** physical source objects/identifiers; lifecycle vocabulary/transitions and partial inspection/acceptance representation; arithmetic/caps, tolerance, shortage/shrinkage, over-receipt, precision/rounding and conversion snapshot; event-to-movement cardinality/orchestration; Batch/Location resolution; DOC-05 purchase-specific actor/scope/approval/SoD/audit tuple; physical idempotency/recovery, atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence.
+
+DOC08-FIX-018/019/024/025/026 unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
