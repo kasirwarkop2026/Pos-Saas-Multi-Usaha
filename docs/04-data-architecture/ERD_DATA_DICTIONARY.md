@@ -4776,3 +4776,74 @@ No new DOC08 FIX is added. DOC08-FIX-018/019/024/025/026 remain unchanged. No pu
 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+
+## 42.48 CW-11 Package E — Purchase / Goods Receipt source-ownership and identity decision proposal (22 November 2026)
+
+### 42.48.1 Audit result — current documents do not establish a canonical purchase source object
+
+A bounded review of DOC-02 §5–§6, DOC-04 §§17.2–17.4 and §§42.39–42.47, and DOC-05 §§23.4–23.6 plus the available authorization policy baseline finds no approved canonical Purchase Order, Goods Receipt, receipt-line or receipt-occurrence entity name/key. The DOC-04 conceptual inventory entity matrix identifies the source-document context and source identity requirement for `inventory_movements`, but it does not define a purchase-domain object model. DOC-02 defines the procurement → receiving → inventory workflow and separates PO, physical receiving, discrepancy review and supplier payment. DOC-05 places inventory movement under M06 and requires exact action/actor/scope/condition/SoD/approver mapping; it does not transfer ownership of the procurement/receipt facts to M06.
+
+Accordingly, no existing document supports naming a physical table, key, enum, FK or source object as already FIX. The source-ownership and identity decision remains an Owner decision, not a gap that can be closed by inference.
+
+### 42.48.2 Recommended conceptual ownership boundary — PROPOSED, NOT FIX
+
+The recommended responsibility split for Owner review is:
+
+| Domain responsibility | Recommended conceptual owner | Owns / is authoritative for | Explicit boundary |
+|---|---|---|---|
+| Commercial procurement | Purchasing / Procurement | Purchase request, approved purchase order, supplier commitment, ordered source line and approved commercial amendments | Does not assert physical arrival, accepted quantity or create on-hand movement |
+| Physical receiving | Receiving / Warehouse Operations | Physical receipt occurrence, receipt-line observation, received quantity/unit, inspection/discrepancy disposition, accepted-for-inventory quantity and receiving facts | Owns the physical receipt evidence and quantity disposition; does not directly mutate the inventory ledger |
+| Inventory posting | Inventory (M06) | Authorization-checked A01 admission, bounded source registry, posting identity, immutable `inventory_movements` outcome and projection reconciliation | Consumes authoritative receipt facts; does not own or rewrite PO/receipt source records |
+| Supplier invoice and settlement | Finance / Accounts Payable | Supplier invoice, payable, payment and settlement records | Commercial/accounting records do not independently create physical on-hand movement |
+
+This is a responsibility recommendation, not an assertion that these domains already exist as implemented modules or physical entities. It preserves the DOC-02 sequence and DOC-05's M06 ledger boundary without inventing an M08 permission or a new permission grant.
+
+### 42.48.3 Recommended logical source identity and event grain — PROPOSED, NOT FIX
+
+Recommended logical lineage for one accepted posting unit:
+
+1. Owning Business.
+2. Authoritative purchase source document and exact purchase source line (commercial lineage).
+3. Physical receipt occurrence (a distinct arrival/receiving occurrence; never the PO itself).
+4. Receipt-line fact linked to the exact purchase source line.
+5. Accepted-for-inventory quantity slice within that receipt-line fact, where a single line can have mixed acceptance/discrepancy disposition.
+6. A01 posting event identity and the complete resulting movement set.
+
+**Recommended logical event grain:** one A01 posting unit per Business + physical receipt occurrence + receipt-line + accepted quantity slice. The event may fan out to one or more movement legs only where authoritative receiving facts require distinct Product/Variant/Location/Batch stock grains. A purchase document or whole multi-line receipt should not be used as the sole identity for every line's quantity effect. A later partial receipt is a new occurrence; a later accepted slice from the same occurrence is separately identifiable if the source workflow permits staged acceptance.
+
+This recommendation deliberately separates:
+- purchase-line identity (what was ordered);
+- receipt-occurrence identity (which physical arrival);
+- receipt-line identity (which ordered line was observed in that arrival);
+- acceptance-slice identity (which exact quantity was accepted for inventory);
+- A01 event identity (which ledger posting attempt/outcome is idempotently resolved);
+- movement identity (each immutable stock-grain effect).
+
+No physical composite key, identifier format, event cardinality implementation or one-to-one movement cardinality is approved. If the Owner prefers one atomic A01 event for an entire receipt occurrence, the contract must still preserve line/slice-level attribution and complete all-or-nothing movement outcome; this alternative has a larger atomic fan-out boundary and should be selected explicitly rather than assumed.
+
+### 42.48.4 Recommended quantity-disposition model — PROPOSED, NOT FIX
+
+For each physical receipt-line observation, the source workflow should distinguish at least:
+- **Physically arrived:** quantity actually presented/received at the receiving point.
+- **Accepted for inventory:** quantity explicitly accepted and eligible for A01 posting.
+- **Rejected:** quantity explicitly rejected and not eligible for on-hand posting.
+- **Unresolved / held / discrepant:** quantity awaiting inspection, count resolution, quality decision or other authorized disposition; not eligible until accepted.
+
+The source-owned record must preserve the entered quantity and unit, the disposition quantities, and reproducible conversion provenance to Product base unit. The quantity-disposition model must define how partial acceptance is represented and prevent the same physical quantity from being accepted twice. Reconciliation must make the disposition of the physically arrived quantity explainable; exact arithmetic rules, tolerance, shrinkage/shortage treatment, over-receipt, rounding and final disposition remain Owner decisions.
+
+Only the accepted-for-inventory quantity may enter A01. Rejected, held, unresolved, expected, ordered, shipped, invoiced and paid quantities do not post on-hand. A later change from held/rejected to accepted must be represented as an auditable source disposition transition and must not silently rewrite an already posted acceptance slice. A post-commit correction remains subject to DOC08-FIX-025.
+
+### 42.48.5 Owner decision gate — do not silently promote this proposal
+
+Recommended default for Owner consideration:
+- approve the Purchasing / Receiving / Inventory / Finance responsibility split in §42.48.2;
+- approve the receipt-occurrence + receipt-line + accepted-quantity-slice logical identity and event grain in §42.48.3;
+- approve the four-way quantity distinction in §42.48.4, with arithmetic and exceptional disposition details left OPEN for a later focused decision.
+
+Until explicit Owner approval, all items in §§42.48.2–42.48.4 remain **PROPOSED / REVIEW**, not FIX. No DOC08 FIX is created or revised; DOC08-FIX-018/019/024/025/026 remain unchanged. No physical entity/key, permission key/grant, adapter activation, schema or implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
