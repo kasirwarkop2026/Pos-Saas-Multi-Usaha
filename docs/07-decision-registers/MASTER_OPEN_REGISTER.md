@@ -1047,3 +1047,23 @@ DOC08-FIX-030 and DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged. No
 **Next bounded review:** resolve the remaining Product/Variant batch-tracking policy source and Location eligibility/defaulting details, without reopening DOC08-FIX-031 or inventing physical schema.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 11.37 CW-11 Package E — Product/Variant batch-tracking source and Location eligibility remain OPEN (22 November 2026)
+
+**AUDIT PASS — POLICY DECISION STILL OPEN.** A bounded review of DOC-01, DOC-03, DOC-04 and DOC-05 confirms the conceptual inventory baseline but does not identify an approved authoritative Product/Variant batch-tracking policy source or purchase-receipt Location eligibility/defaulting policy.
+
+DOC-04 §42.55 records a PROPOSED / REVIEW recommendation:
+- Product master owns an explicit Batch tracking required / Batch tracking not required policy; unknown/unset/conflicting policy fails closed.
+- Variant inherits Product policy unless an explicit authorized and auditable Variant override exists. Effective policy is resolved and preserved at receipt time; later master-data changes do not rewrite historical accepted slices.
+- Batch-required Product/Variant requires actual physical Batch/Lot identity and applicable required attributes; missing/ambiguous identity blocks A01. Explicit not-tracked policy is the only unbatched path.
+- Receiving Location must be same-Business, active and explicitly eligible for inventory receiving; server resolves Business/parent relationship.
+- A configured Location default may prefill a suggestion but must not silently determine physical destination; receiver confirms actual destination. Unknown/inactive/cross-Business/non-receiving Location blocks A01.
+- Virtual transit Location is not a normal purchase receiving destination unless a separately approved policy explicitly allows it.
+
+These recommendations are NOT FIX. No literal enum, field, physical object, override permission, Location taxonomy, default precedence or technical enforcement is approved.
+
+**Owner decision required:** Product/Variant policy ownership and inheritance/override/snapshot; Location active/receiving eligibility; receiver confirmation/default behavior; and any transit-location exception.
+
+DOC08-FIX-031 remains unchanged and approved. Retained OPEN dependencies also include purchase-specific DOC-05 authorization tuple, physical representation/keys/constraints, numeric implementation, atomicity/concurrency/idempotency/recovery, tenant enforcement, projection reconciliation and executed evidence. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
