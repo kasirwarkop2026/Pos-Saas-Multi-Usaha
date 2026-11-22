@@ -3602,3 +3602,28 @@ Resolve the Purchase / Goods Receipt source ownership and source identity, then 
 ### 15.109.5 Governance
 
 Documentation-only, append-only continuation on branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains a review gate; no merge is performed by this checkpoint.
+
+
+
+## 15.110 CW-11 Package E — Purchase / Goods Receipt source-ownership and identity proposal (22 November 2026)
+
+### 15.110.1 Audit performed
+Reviewed the current PR #149 logical adapter contract and the relevant DOC-02 procurement/receiving workflow, DOC-04 source identity/entity boundaries and DOC-05 M06 inventory action/authorization baseline. The documents do not establish a canonical purchase/receipt source object, source owner for each fact or physical identifier.
+
+### 15.110.2 Recommended conceptual model — pending Owner decision
+- Purchasing / Procurement owns PO, ordered source line and commercial amendments.
+- Receiving / Warehouse Operations owns physical receipt occurrence, receipt-line observation, inspection/discrepancy disposition and accepted-for-inventory quantity.
+- Inventory (M06) owns authorization-checked A01 admission, posting identity, immutable movement ledger and projection reconciliation.
+- Finance / AP owns invoice, payable, payment and settlement.
+- Recommended posting identity/grain: Business + physical receipt occurrence + receipt-line + accepted quantity slice; movement fan-out may be 1:N by valid stock grain.
+- Distinguish physically arrived, accepted, rejected and unresolved/held/discrepant quantity. Only accepted quantity posts; quantity conversion provenance must be reproducible.
+
+These are PROPOSED / REVIEW, not FIX. No physical names, permission keys or grants, source adapter, schema or implementation are approved.
+
+### 15.110.3 Disposition and next gate
+**PASS — bounded source-domain audit completed; Owner decision required.** The recommended model preserves the documented workflow and M06 ledger boundary while avoiding unsupported source object names or permission grants. Do not close the source identity/lifecycle gate or advance to another A01 source family until the Owner approves or revises the responsibility split, event grain and quantity disposition model.
+
+ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.110.4 Governance
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. No merge is performed.
