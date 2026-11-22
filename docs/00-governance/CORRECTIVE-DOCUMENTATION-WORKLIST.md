@@ -3627,3 +3627,20 @@ ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical p
 
 ### 15.110.4 Governance
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. No merge is performed.
+
+
+## 15.111 CW-11 Package E — Owner approval recorded as DOC08-FIX-027 (22 November 2026)
+
+### 15.111.1 Owner-approved conceptual decisions
+The Owner explicitly approved all three recommendations previously recorded as PROPOSED / REVIEW in DOC-04 §42.48. They are now formalized as DOC08-FIX-027:
+- **FIX-027-A:** Purchasing/Procurement owns commercial purchase facts; Receiving/Warehouse Operations owns physical receipt and quantity-disposition facts; Inventory (M06) owns A01 admission/posting/ledger/projection reconciliation; Finance/AP owns invoice/payable/payment/settlement.
+- **FIX-027-B:** canonical logical posting grain is Business + physical Receipt Occurrence + Receipt Line + Accepted-for-Inventory Quantity Slice, preserving distinct source and movement lineage.
+- **FIX-027-C:** physically arrived, accepted-for-inventory, rejected and unresolved/held/discrepant quantities are distinct; only accepted quantity is eligible for A01 positive movement.
+
+### 15.111.2 Scope and dependencies
+The three conceptual decisions are FIX. Physical source objects/keys, lifecycle vocabulary, partial inspection/acceptance implementation, arithmetic/tolerance/over-receipt/rounding, event-to-movement cardinality, Batch/Location resolution, purchase-specific authorization, idempotency/recovery, atomicity/concurrency, tenant enforcement, reconciliation and executed evidence remain OPEN.
+
+No permission is granted, no adapter is enabled, and no physical schema/runtime behavior is approved. DOC08-FIX-018/019/024/025/026 remain unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.111.3 Governance
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged pending subsequent contract audit and review.
