@@ -5012,3 +5012,59 @@ DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged. No permission is gra
 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.53 Purchase / Goods Receipt — Batch and Location allocation proposal (PROPOSED / OWNER REVIEW)
+
+### 42.53.1 Existing conceptual baseline and audit boundary
+
+This proposal follows DOC-04 §§3–6, 42.46 and 42.52; DOC-02 §6; and DOC-05 §§23.4–23.6. The existing baseline establishes that inventory movements are the immutable quantity-change ledger, balances and batch balances are rebuildable projections, batch identity is distinct from cost-layer identity, FEFO selects physical batches, MWA is location-scoped, and batch-level projections reconcile to the parent inventory balance.
+
+The reviewed documents do not establish the Purchase / Goods Receipt-specific allocation policy for receiving Location, batch-tracked versus unbatched products, receipt-to-batch identity matching, multi-location split, or physical allocation objects. This section is therefore a recommendation only, not FIX and not a physical schema specification.
+
+### 42.53.2 Recommended Location allocation — PROPOSED
+
+- Resolve an explicit receiving Inventory Location for every allocation portion before A01 posting. The Location must belong to the same Business/tenant as the accepted slice and be eligible under the applicable receiving policy.
+- A purchase order, supplier, user session or Business default must not silently invent the actual physical receiving Location. A configured default may be used only if an explicit policy resolves it to the actual receiving destination and the receipt record preserves that decision.
+- Split one accepted slice across multiple Locations only when the physical distribution is actually observed and recorded. Do not distribute quantity across Locations merely to balance projections or satisfy a default.
+- If the required receiving Location is unknown, invalid, cross-Business or not eligible, fail closed: do not create the A01 posting event or movements until the allocation is resolved.
+
+No Location type taxonomy, defaulting precedence, physical identifier or permission grant is selected.
+
+### 42.53.3 Recommended Batch allocation — PROPOSED
+
+- Where the Product/Variant is governed by batch tracking, allocate accepted quantity to the actual physical Batch/Lot identity represented by the goods received. A slice may be split across multiple physical batches only when those distinct batches are actually present and separately attributable.
+- Do not merge different supplier/manufacturer lots into one physical Batch merely because Product, Location, expiry date or cost is the same. Do not invent a Batch identity from the PO number or from a cost layer.
+- Preserve source/physical batch attributes such as supplier/manufacturer lot reference, production date and expiry date where applicable and required by the Product's tracking policy. Missing or conflicting required batch identity/attributes block posting until resolved.
+- An unbatched allocation is permissible only where an explicit Product/Variant tracking policy says batch tracking is not required. The batch-tracking policy and its exact source/representation remain OPEN.
+- FEFO is an outbound physical-batch selection rule; it must not be used to invent or choose the identity of an incoming supplier lot. The receiving process records the batch that physically arrived.
+- Physical Batch identity remains separate from FIFO cost-layer identity and MWA valuation. A01 stock allocation must not fabricate a cost layer or create an additional on-hand movement for costing-only processing.
+
+### 42.53.4 Recommended allocation grain and quantity conservation — PROPOSED
+
+Recommended logical allocation portion: one Accepted-for-Inventory Quantity Slice attributed to one Product/Variant, one receiving Location and either one actual physical Batch identity or an explicitly permitted unbatched state. Each portion represents one distinct stock grain.
+
+Recommended cardinality: one accepted slice may produce one-or-more allocation portions; each allocation portion maps to exactly one positive Inventory Movement; the resulting movement set remains under the one-event-to-one-or-more-movements rule in DOC08-FIX-030. Different Locations or physical Batches require separately attributable portions/movements. Do not combine different accepted slices or receipt lines into one allocation portion.
+
+For each accepted slice, the sum of all allocation-portion quantities and the sum of their positive movement base-quantity deltas must each equal the validated accepted quantity in Product base unit. Every portion must be positive; no over-allocation, under-allocation, duplicate allocation or silent residual is permitted. Numeric precision/scale/rounding and physical enforcement remain OPEN.
+
+The exact allocation object, whether a separate logical allocation record is needed, and its physical cardinality/keys are not selected by this proposal.
+
+### 42.53.5 Fail-closed, projection and authorization boundaries — PROPOSED
+
+- No A01 posting while any required Location or Batch allocation remains unresolved, invalid or unreconciled.
+- All allocation portions must remain within one Business and the source accepted slice's Product/Variant identity.
+- Inventory balance projection remains scoped by Product/Variant/Location; batch-balance projections must reconcile to the parent Location balance.
+- Batch create/hold/release and movement posting are distinct actions. DOC-05 candidate inventory keys are not grants and do not define the purchase-specific actor/scope/approval/SoD/audit tuple.
+- Allocation does not authorize a user to receive, approve a discrepancy, create/release a Batch or post inventory. Those authority boundaries remain separately specified.
+
+### 42.53.6 Owner decision gate and retained OPEN dependencies
+
+**PROPOSED / REVIEW — NOT FIX.** Owner approval is required before these recommendations become conceptual decisions. In particular, the Owner must confirm the receiving Location rule, batch-tracked versus unbatched rule, physical-lot identity handling, permitted multi-Location/multi-Batch split, and allocation-portion-to-movement cardinality.
+
+Still OPEN: Product/Variant batch-tracking policy and its authority; Location eligibility/type/defaulting rules; source evidence and identity for physical batches; required batch attributes and exception handling; whether an explicit logical allocation record is needed; exact stock-grain and allocation identity; purchase-specific DOC-05 authorization; numeric precision/scale/rounding; physical keys/constraints; atomicity/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 remains unchanged. No new DOC08 FIX is created by this proposal. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
