@@ -3666,3 +3666,25 @@ Next review: define over-receipt, shortage/shrinkage, tolerance and their approv
 ### 15.112.3 Governance
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged pending subsequent contract audit and review.
+
+
+## 15.113 CW-11 Package E — Owner-approved over-receipt, shortage and tolerance FIX recorded (22 November 2026)
+
+### 15.113.1 Owner decision recorded
+
+The Owner explicitly confirmed all three receiving variance rules as conceptual FIX, formalized as DOC08-FIX-029:
+- Over-receipt above PO quantity is not automatically accepted or posted; the excess requires specific authorized approval under explicit policy before it can be considered for acceptance.
+- Shortage is recorded as a discrepancy against the PO; missing quantity is not treated as received/accepted and creates no inventory movement.
+- Default tolerance is 0%; any non-zero tolerance requires explicit policy and authorization and cannot alter actual physically arrived or accepted quantity.
+
+### 15.113.2 Disposition and next gate
+
+**PASS — Owner conceptual policy decision closed.** DOC-04 §42.51, DOC-08 DOC08-FIX-029 and DOC-09 §11.33 carry the same decision. The policy decision does not approve physical schema, permission grants, adapter activation or runtime behavior.
+
+Next, review and resolve the logical **event-to-movement cardinality/orchestration** contract, preserving accepted-slice identity, exactly-once authoritative posting outcome, deterministic complete fan-out and immutable movement lineage. After that, review **Batch/Location allocation**. Do not advance to another A01 source family until Package E's documentation acceptance gate is met.
+
+Still OPEN: numeric precision/scale/rounding/conversion provenance; PO amendment/version semantics; physical source representation; purchase-specific authorization tuple; event-to-movement cardinality; Batch/Location allocation; physical keys/constraints, idempotency/recovery, atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence.
+
+### 15.113.3 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged pending subsequent contract audit and review.
