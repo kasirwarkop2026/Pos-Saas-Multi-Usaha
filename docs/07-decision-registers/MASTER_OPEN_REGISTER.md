@@ -1026,3 +1026,24 @@ The proposal does not define physical objects/keys, Location taxonomy/defaulting
 DOC08-FIX-030 remains unchanged; no DOC08 FIX is created by this proposal. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 11.36 CW-11 Package E — Owner closed conceptual Batch/Location allocation contract (DOC08-FIX-031, 22 November 2026)
+
+**CLOSED AS CONCEPTUAL FIX — DOC08-FIX-031.** The Owner approved all seven Batch/Location allocation rules:
+- **FIX-031-A:** every allocation portion resolves to an explicit, eligible same-Business receiving Location before A01; no silent inference from PO, supplier, session or Business default; unresolved/invalid/cross-Business Location blocks posting.
+- **FIX-031-B:** multi-Location split is allowed only for observed and recorded physical distribution; each portion remains separately attributable.
+- **FIX-031-C:** batch-tracked Product/Variant allocation identifies the actual physical Batch/Lot received; distinct physical lots remain distinct; no Batch identity is invented from PO or cost-layer identity; required attributes must be present and consistent.
+- **FIX-031-D:** unbatched allocation is allowed only under explicit Product/Variant policy that does not require Batch tracking; no implicit fallback where tracking is required or unknown.
+- **FIX-031-E:** FEFO is outbound batch selection, not incoming lot assignment; physical Batch differs from FIFO cost layer and MWA valuation; costing-only processing creates no additional on-hand movement.
+- **FIX-031-F:** allocation grain is accepted slice + Product/Variant + receiving Location + actual Batch or explicitly permitted unbatched state; one slice may split into multiple portions; each portion maps to exactly one positive movement; allocation and movement totals each equal accepted quantity in Product base unit.
+- **FIX-031-G:** unresolved/invalid/unreconciled required allocation blocks A01; tenant/Product context is preserved; balance projection remains Location-scoped and batch balance reconciles to parent Location balance; allocation does not grant receiving, discrepancy, Batch administration or posting authority.
+
+The earlier PROPOSED / REVIEW status in §11.35 is superseded for these seven conceptual rules only. DOC-04 §42.54 and DOC-08 DOC08-FIX-031 carry the approved decision.
+
+**Remain OPEN:** authoritative Product/Variant batch-tracking policy source/representation; Location taxonomy/eligibility/defaulting detail; exact physical Batch identity and required attribute source/exception handling; whether a physical allocation object is required; physical keys/FKs/constraints; numeric precision/scale/rounding/conversion implementation; purchase-specific DOC-05 authorization tuple; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 and DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+**Next bounded review:** resolve the remaining Product/Variant batch-tracking policy source and Location eligibility/defaulting details, without reopening DOC08-FIX-031 or inventing physical schema.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
