@@ -547,3 +547,47 @@ DOC08-FIX-030 and DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged. No
 Related anchors: DOC-04 §42.54; DOC-09 §11.36; Worklist §15.116.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## DOC08-FIX-032 — Product/Variant Batch Policy and Receiving Location Eligibility (Owner-approved conceptual FIX, 22 November 2026)
+
+The Owner explicitly approved the recommendations in DOC-04 §42.55. This FIX establishes conceptual policy outcomes for Batch tracking and purchase-receipt Location eligibility. It supplements DOC08-FIX-030 and DOC08-FIX-031; neither is reopened or changed.
+
+### FIX-032-A — Explicit Product-owned Batch-tracking policy
+
+Product master owns an explicit policy outcome: Batch tracking required or Batch tracking not required. Unknown, unset or conflicting policy is not equivalent to not-tracked and blocks A01.
+
+### FIX-032-B — Variant inheritance and controlled override
+
+Variant inherits the Product policy by default. A Variant-level override is allowed only when explicitly authorized and auditable. Silent/implicit override is prohibited. The exact authorization key and audit representation remain OPEN.
+
+### FIX-032-C — Receipt-time effective policy preservation
+
+The effective Product/Variant policy is resolved for the accepted receipt slice/allocation and preserved as a receipt-time decision/snapshot. Later master-data changes do not rewrite historical accepted slices or posted movements. Physical snapshot/version representation remains OPEN.
+
+### FIX-032-D — Batch identity and unbatched path
+
+When effective policy requires Batch tracking, every allocation portion identifies the actual physical Batch/Lot received and satisfies applicable required identity/attribute requirements; missing or ambiguous required identity/attributes block A01. Unbatched allocation is permitted only under the explicit effective policy that Batch tracking is not required, consistent with FIX-031-D.
+
+### FIX-032-E — Same-Business active receiving-eligible Location
+
+Each receiving Location must be within the same Business, active, and explicitly eligible for inventory receiving under the applicable Business policy. Server-side resolution of authoritative Location identity and Business/parent relationship is required; client-supplied identifiers alone are insufficient. Unknown, inactive, cross-Business or non-receiving Location blocks A01.
+
+### FIX-032-F — Physical destination confirmation and default behavior
+
+Receiver confirms the actual physical destination. A configured Location default may prefill a suggestion only; it cannot silently determine/override the physical destination or bypass confirmation. Exact default precedence and confirmation evidence remain OPEN.
+
+### FIX-032-G — Virtual transit Location boundary
+
+A virtual transit Location is not a normal purchase-receiving destination unless a separately approved policy explicitly authorizes that use case. Exception authority and exact transit taxonomy remain OPEN.
+
+### Boundaries and retained OPEN dependencies
+
+FIX-032 is conceptual only. It does not approve literal enum values, fields, tables, configuration structures, physical policy snapshot/version storage, override permission keys, Location taxonomy/status representation, default algorithms, physical schema/constraints or runtime behavior. It does not grant receiving, discrepancy, Batch administration or posting permissions and does not activate A01.
+
+Still OPEN: authoritative physical policy source/representation; Variant override authority and audit; snapshot/version representation; Location lifecycle/type/receiving-capability representation; default precedence and confirmation evidence; transit exception authority; purchase-specific DOC-05 actor/scope/approval/SoD/audit tuple; physical objects/keys/FKs/constraints; numeric precision/scale/rounding/conversion; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 and DOC08-FIX-031 remain unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §42.56; DOC-09 §11.38; Worklist §15.118.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
