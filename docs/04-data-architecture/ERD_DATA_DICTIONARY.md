@@ -5300,3 +5300,60 @@ This is a source-consistency audit, not proof of executable behavior or test PAS
 Related anchors: DOC-04 §§20.2–20.5, 42.25–42.28, 42.49–42.52, 42.54; DOC-03 §§5 and 18–19; DOC-09 §11.40; Worklist §15.120.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.59 CW-11 Package E — A01 atomicity, idempotency, concurrency and uncertain-commit recovery audit (22 November 2026)
+
+**AUDIT PASS — CONCEPTUAL SAFEGUARDS RECONCILE; PHYSICAL/OPERATIONAL ENFORCEMENT REMAINS OPEN.** This bounded audit cross-checks DOC-04 §§21.4–21.8, 42.46, 42.52 and 42.57–42.58 against DOC-03 §§18.2–18.4 and 21.5–21.6 and the A06/A09 baseline recorded in the current documentation. It does not choose physical mechanisms or create a new FIX.
+
+### 42.59.1 Source-supported A01 safeguards
+
+1. **Same identity + same payload:** a repeated posting request resolves to the previously stored authoritative result and must not create another A01 event or duplicate movement.
+2. **Same identity + changed payload:** conflict; do not silently reuse, overwrite or mutate the prior result.
+3. **Claim + effects:** operation claim and all posting effects must be atomic. A successful A01 outcome must include the complete deterministic movement fan-out for its accepted slice; partial fan-out must not be represented as complete success.
+4. **Uncertain response/commit:** absence of a client response is not evidence that commit failed. Reconcile the authoritative operation/event and its complete movement set before retry; never blindly create a second event or movement.
+5. **Failure:** A06 baseline requires atomic commit and full rollback on failure. Exact write-set, transaction boundary and treatment of external side effects remain unspecified.
+6. **Concurrency:** A06 baseline requires deterministic locking and revalidation after locks are acquired. Concurrent same-key operations must not both produce posting effects. Eligibility and allocation must be rechecked against authoritative state after relevant serialization/locking.
+7. **Projection:** movement ledger remains the stock truth; balance and batch-balance projections must remain consistent/rebuildable and reconcile to ledger and parent Location balance. Projection failure/rebuild must not create a second stock movement.
+8. **Tenant and ownership:** every command/event/resource resolves server-side to one Business; exact resource-owner authorization applies. Client-supplied identifiers are context hints, not authorization proof. M08 receipt facts remain source-owned; M06 posting effects remain inventory-owned.
+9. **Audit lineage:** command/event lineage preserves Business, aggregate/object identity, version, event type, occurred-at, correlation/idempotency reference and actor/service. Audit decision lineage records actor, action, target, scope, purpose, decision/reason and immutable before/after or event reference as required by classification.
+
+### 42.59.2 A01-specific failure and replay scenarios
+
+The conceptual contract requires the following outcomes; these are acceptance scenarios, not executed tests:
+
+| Scenario | Required conceptual outcome | Technical status |
+|---|---|---|
+| Same accepted-slice identity + same canonical payload, sequential retry | Return same authoritative A01 event/result and same complete movement set; no duplicate effects | Canonical payload and physical registry OPEN |
+| Same identity + changed accepted quantity, conversion provenance, Batch/Location allocation or other material payload | Conflict; preserve original outcome; controlled source correction/disposition required | Canonical payload fields and conflict response OPEN |
+| Two concurrent requests for same accepted slice | At most one authoritative posting outcome and one complete movement set | Atomic claim, uniqueness and lock behavior OPEN |
+| Failure before commit | No partial event, movement or claimed operation remains visible as successful; retry is safely possible | Exact transaction/write-set and rollback evidence OPEN |
+| Commit succeeds but response is lost/timeout occurs | Reconcile stored authoritative result; return/replay same result; do not repost | Lookup/recovery protocol and retention OPEN |
+| Partial fan-out or movement/projection write failure | Must not report complete A01 success; transaction rollback or explicit recoverable incomplete state must preserve invariant | Transaction boundary and recovery state OPEN; no incomplete-success policy approved |
+| Projection update fails after ledger effect | Ledger remains authoritative; projection is repaired/rebuilt and reconciled without a second movement | Projection repair mechanism and evidence OPEN |
+| Cross-Business or unauthorized source/resource | Deny; no claim or posting effect is created | Physical tenant/authorization enforcement OPEN |
+
+### 42.59.3 Explicit technical non-decisions
+
+The reviewed source baseline does not approve:
+- physical A01 operation registry/table, operation-key tuple, uniqueness scope or digest/hash algorithm;
+- canonical payload field set, serialization, normalization or conflict response format;
+- key/event retention duration, expiry, replay window or cleanup policy;
+- transaction boundary, exact write-set, isolation level, lock targets/order/granularity, timeout or deadlock handling;
+- retry count/backoff, uncertain-commit lookup protocol, recovery worker, outbox/inbox or distributed transaction pattern;
+- whether projections are updated synchronously or asynchronously, nor the repair/rebuild orchestration;
+- physical incomplete-state vocabulary, alerting/escalation or manual recovery authority;
+- physical tenant/authorization enforcement or executed positive/negative/concurrency/failure-injection evidence.
+
+No exactly-once transport guarantee is inferred. The requirement is duplicate-safe authoritative effect and deterministic replay under the defined operation identity, not an assumption about delivery semantics.
+
+### 42.59.4 Disposition
+
+**PASS — source-backed A01 atomicity/idempotency/concurrency/recovery safeguards are internally consistent at conceptual level.** Same-key/same-payload replay, changed-payload conflict, atomic operation claim plus effects, deterministic lock/revalidation, full rollback, no blind retry after uncertain commit, complete fan-out and projection reconciliation align across DOC-04 and DOC-03.
+
+**OPEN / NOT ACCEPTED:** physical identity registry/key/payload canonicalization/retention; transaction/write-set boundary; lock order/isolation/timeout/deadlock/retry policy; uncertain-commit reconciliation protocol; projection repair/rebuild; tenant and authorization enforcement; failure-state handling; and executed sequential/concurrent/replay/changed-payload/rollback/timeout/partial-fan-out/projection-failure/tenant-isolation evidence.
+
+This is a source-consistency audit only, not an executable design or test PASS. No new DOC08 FIX is created. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation or Stage 6 implementation is approved.
+
+Related anchors: DOC-03 §§18.2–18.4, 21.5–21.6; DOC-04 §§21.4–21.8, 42.46, 42.52, 42.57–42.58; DOC-09 §11.41; Worklist §15.121.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
