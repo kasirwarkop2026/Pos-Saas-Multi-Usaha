@@ -4900,3 +4900,50 @@ No permission is granted, no adapter is enabled, and no physical schema or runti
 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.50 CW-11 Package E — Owner-approved Purchase / Goods Receipt lifecycle and quantity-control invariants (DOC08-FIX-028, 22 November 2026)
+
+The Owner explicitly approved LIF-01, LIF-02, QTY-01, QTY-02 and QTY-03 as conceptual FIX. This section supplements DOC-04 §42.49 and DOC08-FIX-027; it does not select physical lifecycle states or implementation details.
+
+### 42.50.1 LIF-01 — Distinct lifecycle facts
+
+Physical arrival, inspection/review, quantity disposition, and A01 inventory posting are distinct conceptual facts/steps. Arrival does not imply acceptance; acceptance does not bypass authorization or A01 posting. The four quantity dispositions in FIX-027-C remain: physically arrived, accepted-for-inventory, rejected, and unresolved/held/discrepant. No literal status vocabulary or physical state machine is selected.
+
+### 42.50.2 LIF-02 — Partial receipt and partial acceptance
+
+A purchase line may have multiple independently identifiable physical receipt occurrences. Within one occurrence, only an accepted portion may be eligible for posting while rejected or unresolved portions remain separately attributable. An accepted slice may proceed without waiting for the entire PO or unrelated receipt lines, subject to source validation, authorization, base-unit normalization, complete outcome and duplicate prevention. Later physical arrivals are separate occurrences; a posted slice is not enlarged by a later arrival.
+
+### 42.50.3 QTY-01 — Quantity reconciliation invariant
+
+At the same receipt-line observation and measurement basis, the conceptual partition is:
+
+**Physically Arrived = Accepted-for-Inventory + Rejected + Unresolved/Held/Discrepant.**
+
+All terms must be comparable on a compatible unit basis with reproducible source-owned conversion provenance. A mismatch or unaccounted residual blocks A01 admission; it must not be silently assigned to accepted quantity. This is a conceptual invariant only; numeric precision, scale, rounding and conversion implementation remain OPEN.
+
+### 42.50.4 QTY-02 — Accepted quantity is the only posting-eligible portion
+
+Only the validated accepted-for-inventory quantity slice may create a positive A01 movement under DOC08-FIX-024. Rejected and unresolved/held/discrepant portions are excluded. Accepted quantity cannot exceed the reconciled physically arrived quantity. The policy for over-receipt against ordered quantity, shortage, tolerance and approval authority remains OPEN and is not decided by this cap.
+
+### 42.50.5 QTY-03 — One-time posting and immutable history
+
+Each accepted quantity slice has one authoritative A01 posting outcome. Duplicate acceptance/replay cannot create another movement. A pre-post disposition change must be auditable and revalidated. A post-post change cannot silently rewrite the accepted slice or immutable movement; any required stock correction follows DOC08-FIX-025.
+
+### 42.50.6 Supersession, remaining OPEN dependencies and acceptance boundary
+
+DOC08-FIX-028 closes the conceptual lifecycle separation, partial-receipt/partial-acceptance permission, quantity partition invariant, accepted-only posting boundary, and one-time immutable posting rule. It does not close the following technical or policy dependencies:
+
+- literal lifecycle states/transitions and physical source representation;
+- arithmetic implementation, precision/scale, rounding and conversion snapshot/version;
+- over-receipt against PO, shortage/shrinkage, tolerance and approval policy;
+- event-to-movement cardinality/orchestration and Batch/Location allocation;
+- DOC-05 purchase-specific actor/action/scope/approval/SoD/audit tuple;
+- physical idempotency/retry/recovery, atomicity/concurrency and physical registry constraints;
+- tenant enforcement, projection reconciliation and executed evidence.
+
+DOC08-FIX-018/019/024/025/026/027 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
