@@ -4847,3 +4847,56 @@ Until explicit Owner approval, all items in §§42.48.2–42.48.4 remain **PROPO
 ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.49 CW-11 Package E — Owner approval of Purchase / Goods Receipt conceptual contract (DOC08-FIX-027, 22 November 2026)
+
+The Owner explicitly approved all three recommendations in §42.48. This section records the approved disposition and supersedes the prior **PROPOSED / REVIEW** status of those three conceptual items only.
+
+### 42.49.1 FIX-027-A — Responsibility ownership
+
+**FIX — OWNER APPROVED / CONCEPTUAL.**
+- Purchasing / Procurement owns purchase requests, purchase orders, ordered source lines, supplier commitments and approved commercial amendments.
+- Receiving / Warehouse Operations owns physical receipt occurrences, receipt-line observations, received quantity/unit, inspection/discrepancy disposition and accepted-for-inventory quantity facts.
+- Inventory (M06) owns authorization-checked A01 admission, bounded server-owned posting registry, A01 posting identity, immutable movement outcome and projection reconciliation.
+- Finance / Accounts Payable owns supplier invoice, payable, payment and settlement facts.
+
+Commercial procurement and accounting facts do not independently create on-hand movements. Receiving owns the physical receipt facts but does not directly mutate the inventory ledger. M06 consumes authoritative receipt facts without owning or rewriting the source records.
+
+### 42.49.2 FIX-027-B — Logical posting identity and event grain
+
+**FIX — OWNER APPROVED / CONCEPTUAL.**
+
+Canonical conceptual posting identity/grain:
+
+**Business + physical Receipt Occurrence + Receipt Line + Accepted-for-Inventory Quantity Slice.**
+
+Purchase document/line, physical receipt occurrence, receipt line, accepted quantity slice, A01 event identity and each inventory movement identity remain distinct lineage concepts. A later partial physical arrival is a distinct receipt occurrence. A separately accepted portion is separately attributable. The event may produce multiple immutable movement effects where authoritative receipt facts require distinct Product/Variant/Location/Batch stock grains; every effect must remain traceable to its source line and accepted slice.
+
+This fixes the logical identity and lineage, not a physical key or orchestration strategy. Exact event-to-movement cardinality, one-event-per-line versus whole-receipt orchestration, physical atomicity and identifiers remain OPEN.
+
+### 42.49.3 FIX-027-C — Quantity disposition
+
+**FIX — OWNER APPROVED / CONCEPTUAL.**
+
+Every physical receipt-line observation distinguishes:
+1. Physically arrived quantity.
+2. Accepted-for-inventory quantity.
+3. Rejected quantity.
+4. Unresolved / held / discrepant quantity.
+
+Only accepted-for-inventory quantity is eligible for A01 and a positive on-hand movement under DOC08-FIX-024. Rejected, unresolved/held/discrepant, expected, ordered, shipped, invoiced or paid quantities do not independently post on-hand.
+
+The source workflow preserves entered quantity/unit and reproducible conversion provenance to Product base unit. Duplicate acceptance of the same physical quantity is prohibited conceptually. A later disposition change is auditable and cannot silently rewrite a posted accepted slice. Post-commit correction remains governed by DOC08-FIX-025.
+
+### 42.49.4 Supersession, retained OPEN dependencies and acceptance boundary
+
+DOC-04 §42.48.2–§42.48.4 is now **APPROVED AS FIX** only to the extent formalized in DOC08-FIX-027-A/B/C. Its earlier PROPOSED / REVIEW status is superseded for those three decisions. Any detail not expressly fixed by DOC08-FIX-027 remains OPEN and must not be inferred.
+
+Still OPEN: physical source objects and keys; lifecycle state vocabulary and transitions; partial inspection/acceptance representation; arithmetic reconciliation/caps; tolerance; shortage/shrinkage; over-receipt; precision/rounding/conversion snapshot; exact event-to-movement cardinality and orchestration; Batch/Location resolution; purchase-specific DOC-05 actor/scope/approval/SoD/audit tuple; physical idempotency/recovery; transaction atomicity/concurrency; tenant enforcement; projection reconciliation and executed evidence.
+
+No permission is granted, no adapter is enabled, and no physical schema or runtime behavior is approved. DOC08-FIX-018/019/024/025/026 remain unchanged.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
