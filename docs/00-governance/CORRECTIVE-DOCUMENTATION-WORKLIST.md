@@ -3718,3 +3718,32 @@ Proceed to the separate Batch/Location allocation review. Define the conceptual 
 ### 15.114.4 Governance
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.115 CW-11 Package E — Batch/Location allocation proposal drafted; Owner decision pending (22 November 2026)
+
+### 15.115.1 Audit performed
+
+Reviewed the current DOC-04 inventory/batch/costing baseline (§§3–6), Purchase / Goods Receipt contract (§§42.46–42.52), DOC-02 §6 procurement/receiving controls and DOC-05 §§23.4–23.6 inventory action/authorization baseline. The existing decisions establish immutable movement ledger, rebuildable balance and batch-balance projections, physical Batch distinct from cost layer, FEFO for physical-batch selection, MWA per Business + Product/Variant + Inventory Location, and non-granting candidate M06 inventory keys. They do not establish Purchase / Goods Receipt-specific receiving Location or Batch allocation policy.
+
+### 15.115.2 Proposal recorded — not Owner-approved
+
+DOC-04 §42.53 and DOC-09 §11.35 record a PROPOSED / REVIEW model:
+- explicit same-Business receiving Location per allocation portion; no silent destination inference; unresolved/invalid Location blocks A01;
+- actual physical Batch/Lot identity for batch-tracked Product/Variant; distinct lots remain distinct; unbatched path only where explicit Product/Variant policy permits;
+- FEFO remains outbound batch selection, not incoming lot assignment; Batch identity remains separate from FIFO cost-layer identity and MWA valuation;
+- accepted slice may split across multiple recorded Location/Batch allocation portions; recommended grain is accepted slice + Product/Variant + Location + Batch or explicitly permitted unbatched state;
+- each allocation portion maps to one positive movement; allocation and movement totals equal the accepted quantity in Product base unit.
+
+### 15.115.3 Disposition and Owner gate
+
+**PASS — bounded conceptual proposal and cross-document consistency review completed; Owner decision remains OPEN.** No contradiction was found with DOC-04's existing batch, location, ledger and costing principles. This is not a FIX and does not close the Batch/Location dependency. No DOC08 FIX is created.
+
+Owner approval is required for receiving Location resolution/eligibility, batch-tracked versus unbatched policy, physical-lot identity handling, permitted multi-Location/multi-Batch splits and allocation-portion-to-movement cardinality. Exact physical objects/keys, authorization, numeric implementation, atomicity/concurrency, idempotency/recovery, tenant enforcement, projection reconciliation and executed evidence remain OPEN.
+
+### 15.115.4 Next gate
+
+Present the proposal to the Owner for approval or revision. Only after the Owner decision should DOC-04, DOC-08 and DOC-09 be synchronized to a new FIX. Do not advance to another A01 source family before Package E's documentation acceptance gate is met.
+
+### 15.115.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
