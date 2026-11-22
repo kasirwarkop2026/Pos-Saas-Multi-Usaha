@@ -5120,3 +5120,61 @@ ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; can
 Related anchors: DOC-09 §11.36; Worklist §15.116.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.55 Purchase / Goods Receipt — Product Batch Tracking and Location Eligibility audit proposal (PROPOSED / REVIEW)
+
+### 42.55.1 Bounded source audit result
+
+Reviewed DOC-01 §§2–3, §7 and §14; DOC-03 §§2–3 and §5; DOC-04 §§3–6, §16.1, §42.53–42.54; and DOC-05 §§23.4–23.6.
+
+The current documents support:
+- Business as the tenant boundary, with multiple outlets/branches and warehouses/inventory locations within a Business (DOC-01, DOC-03).
+- An inventory location as an operational subdivision within a Business, with physical model still OPEN (DOC-03 §3).
+- inventory_batches as the conceptual physical batch/lot entity, associated with Product/Variant and production/expiry/state; physical identity and uniqueness remain REVIEW (DOC-04 §§3, 16.1).
+- FEFO as physical-batch selection, separate from FIFO cost-layer consumption and location-scoped MWA (DOC-04 §§4, 6).
+- Location-sensitive balances and batch balances as rebuildable projections (DOC-04 §§3–4).
+- Server-side validation/authorization and tenant-context resolution; client-supplied Business, Outlet, Location or source identifiers are not authorization evidence (DOC-03 §3).
+- DOC-05 inventory action keys as non-granting candidates, not complete purchase-receipt authorization tuples.
+
+Not established by the reviewed documents: a canonical Product/Variant batch-tracking policy field/source; whether policy is required/optional/not-tracked; Product-to-Variant inheritance/override; policy effective-time/version snapshot; Location lifecycle/status taxonomy; Location receiving eligibility/capability; Location default precedence; or a purchase-receipt-specific Location authorization tuple. No physical schema or policy source may be inferred from the conceptual inventory_batches entity.
+
+### 42.55.2 Recommended Product/Variant batch-tracking policy — PROPOSED
+
+Recommended conceptual policy is an explicit Product/Variant-owned tracking decision with two operational outcomes: **Batch tracking required** or **Batch tracking not required**. Unknown, unset or conflicting policy is not equivalent to not-tracked; it fails closed and blocks A01 until resolved.
+
+Recommended policy ownership and evaluation:
+- Product master owns the default tracking policy for the Product.
+- A Variant inherits the Product policy unless an explicit, authorized Variant-level override is defined. The override must be auditable and cannot silently change historical receipt interpretation.
+- The effective policy is resolved and preserved as a receipt-time decision/snapshot for each accepted slice/allocation. Later Product configuration changes do not rewrite historical accepted slices or posted movements.
+- If tracking is required, every allocation portion must reference the actual physical Batch/Lot and satisfy the required identity/attribute policy. If tracking is not required, only the explicit unbatched path approved by DOC08-FIX-031-D is allowed.
+- A Batch-required policy with missing/ambiguous lot identity or required attributes blocks A01. A missing policy, unresolved inheritance or conflicting Product/Variant configuration also blocks A01.
+
+This proposal does not define literal enum values, physical field names, configuration tables, override permission keys or version storage.
+
+### 42.55.3 Recommended Location eligibility and receiving resolution — PROPOSED
+
+Recommended minimum conceptual eligibility:
+- Location belongs to the same Business as the accepted slice and source receipt.
+- Location is active and explicitly eligible for inventory receiving under the Business's configured Location policy.
+- Server resolves the authoritative Location and its Business/parent relationship; client-supplied identifiers alone are insufficient.
+- Receiving Location is selected/confirmed against the actual physical destination. A configured default may prefill a suggestion, but must not silently override the physical destination or bypass receiver confirmation.
+- Unknown, inactive, cross-Business, non-receiving or otherwise ineligible Location blocks A01.
+- A virtual transit Location is not a normal purchase receiving destination unless a separately approved receiving policy explicitly authorizes that use case.
+
+The exact Location type taxonomy, active/inactive lifecycle, receiving capability representation, Outlet/Warehouse parentage, default precedence and exception authority remain OPEN.
+
+### 42.55.4 Relationship to DOC08-FIX-031 and retained dependencies
+
+DOC08-FIX-031 remains unchanged and controlling for the seven approved conceptual Batch/Location allocation rules. This §42.55 is a follow-on proposal to resolve only the remaining policy-source and eligibility details; it does not narrow, expand or reinterpret the approved FIX.
+
+**PROPOSED / REVIEW — NOT FIX.** Owner decision is required before Product/Variant policy ownership/inheritance/override/snapshot and Location eligibility/confirmation/defaulting recommendations become conceptual FIX.
+
+Still OPEN: authoritative Product/Variant policy source; inheritance/override authority and audit; effective policy snapshot; Location status/type/receiving eligibility; receiver confirmation and default precedence; virtual/transit exception policy; purchase-specific DOC-05 authorization tuple; physical representation/keys/constraints; numeric precision/scale/rounding; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030/031 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-09 §11.37; Worklist §15.117.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
