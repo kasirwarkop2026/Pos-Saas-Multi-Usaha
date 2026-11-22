@@ -5252,3 +5252,51 @@ Still OPEN: exact M08 receipt/acceptance action catalogue and actor tuple; exact
 Related anchors: DOC-05 §§23.4–23.6, 25.3–25.4; DOC-03 §§18–19; DOC-09 §11.39; Worklist §15.119.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.58 CW-11 Package E — A01 quantity conversion, numeric reconciliation and costing boundary audit (22 November 2026)
+
+**AUDIT PASS — CONCEPTUAL RULES RECONCILE; NUMERIC/PHYSICAL PARAMETERS REMAIN OPEN.** This bounded audit cross-checks DOC-04 §§20, 42.25–42.28, 42.49–42.52 and 42.54 against DOC-03 §§3 and 5 and DOC08-FIX-027 through FIX-031. It does not create a new FIX or choose implementation parameters.
+
+### 42.58.1 Source-supported quantity and conversion contract
+
+1. Product base unit is the canonical stock reference. All inventory comparisons, allocation totals and movement reconciliation use Product base units.
+2. Source/input unit and Product base unit are distinct. The conceptual conversion direction is `quantity_base = quantity_input × conversion_factor_base_per_input`.
+3. Conversion must be explicit, valid and compatible with the same Product/Variant context. Missing, ambiguous, incompatible, unknown or unapproved conversion fails closed. No guessed factor, implicit conversion chain, label-only match or silent rounding is permitted.
+4. Conversion factor precision is high internal precision. Invalid quantities are rejected; they are not silently rounded to fit an assumed precision.
+5. The source/receiving workflow preserves entered quantity, input unit and reproducible conversion provenance. The accepted-for-inventory slice is validated in Product base units before A01 posting. Later edits to conversion references must not retroactively alter the historical accepted slice or posted movement.
+6. For each accepted slice, the total of its allocation portions and the total of its positive movement base-quantity deltas must each equal the validated accepted quantity in Product base units. Every portion is positive; over-allocation, under-allocation, duplicate allocation and unexplained residual are prohibited.
+7. The sum of positive movement deltas for one accepted slice must reconcile to that slice only. Different receipt lines, receipt occurrences or accepted slices cannot offset one another.
+
+### 42.58.2 Quantity and costing boundary
+
+- A01 quantity posting is the physical stock-ledger effect. Batch/Location allocation partitions that accepted quantity across stock grains; it must not create additional quantity.
+- Physical Batch identity, FIFO cost-layer identity and MWA valuation are separate concepts. FEFO selects outbound physical batches; FIFO selects cost layers. Costing-only processing must not create a second on-hand movement.
+- MWA remains the default valuation method per Business + Product/Variant + Inventory Location; FIFO is the alternative. MWA pools are not combined across Locations.
+- Total cost is the source of truth for a cost layer; unit cost is derived from total cost / quantity at high internal precision. Unknown cost remains NULL, not zero.
+- After receipt, destination-Location MWA is recalculated from destination resulting quantity and total cost. Cost-layer allocation under MWA supports traceability/reconciliation and does not replace MWA valuation.
+- LRM is limited to suitable proportional allocation. It is not a generic unit-conversion, FIFO/MWA, FX or quantity-residual rule.
+
+### 42.58.3 Explicitly unresolved numeric and physical parameters
+
+The reviewed sources do not authorize:
+- universal quantity/cost precision, scale, maximum magnitude or database numeric type;
+- exact per-Product minimum increment, discrete/fractional eligibility values or capacity;
+- exact conversion-factor values/precision, allowed conversion graph, reciprocal consistency, effective-time/version representation or snapshot storage;
+- a universal rounding mode, tolerance, or rounding boundary for all operations;
+- overflow strategy or numeric implementation algorithm;
+- FIFO/MWA residual allocation method, exact arithmetic sequence or concurrency-safe update;
+- physical constraints, atomicity, idempotency, locking, recovery or executed numeric tests.
+
+DOC08-FIX-029's 0% default receiving tolerance and explicit-policy/authorization-only non-zero exception remain variance policy; they do not authorize rounding, coercion or changing the physically observed/accepted quantity. Tolerance must not be used to force arithmetic reconciliation.
+
+### 42.58.4 Reconciliation and disposition
+
+**PASS — conceptual quantity conversion and reconciliation are internally consistent** across the reviewed A01 contract: accepted source quantity → reproducibly normalized Product base quantity → positive allocation portions → positive movement deltas, with each aggregate equal to the same accepted slice. Costing remains separate from quantity posting.
+
+**OPEN / NOT ACCEPTED:** exact numeric representation/precision/scale/capacity/overflow; Product-specific increment/fraction policy; factor source/precision/version/effective-time and allowed conversion path; conversion snapshot representation; operation-specific rounding boundary; FIFO/MWA residual arithmetic; physical validation/constraints; transaction/locking/idempotency/recovery; and executed positive, negative, fractional, boundary, overflow, replay and reconciliation evidence.
+
+This is a source-consistency audit, not proof of executable behavior or test PASS. No new DOC08 FIX is created. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation or Stage 6 implementation is approved.
+
+Related anchors: DOC-04 §§20.2–20.5, 42.25–42.28, 42.49–42.52, 42.54; DOC-03 §§5 and 18–19; DOC-09 §11.40; Worklist §15.120.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
