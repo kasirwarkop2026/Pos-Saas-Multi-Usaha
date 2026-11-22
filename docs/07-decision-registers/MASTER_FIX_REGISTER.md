@@ -469,3 +469,35 @@ DOC08-FIX-018/019/024/025/026/027/028 remain unchanged. No permission is granted
 Related anchors: DOC-04 §42.51; DOC-09 §11.33; Worklist §15.113.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## DOC08-FIX-030 — Purchase / Goods Receipt accepted-slice, A01 event and movement cardinality (Owner-approved conceptual FIX, 22 November 2026)
+
+The Owner approved the logical event-to-movement cardinality recommendation. This FIX supplements DOC08-FIX-027/028/029 and preserves the accepted-only A01 posting boundary and immutable movement ledger.
+
+### FIX-030-A — One accepted slice, one authoritative A01 posting event
+
+Each independently attributable Accepted-for-Inventory Quantity Slice has exactly one authoritative logical A01 posting event/outcome. Its lineage preserves Business + physical Receipt Occurrence + Receipt Line + accepted-slice identity. One event does not combine accepted slices from different receipt lines or occurrences; a later partial acceptance is a distinct slice with its own event.
+
+### FIX-030-B — One event, one-or-more movements
+
+A successfully committed A01 posting event produces one or more Inventory Movement ledger entries (1:N). This permits deterministic fan-out when the accepted quantity is allocated across applicable stock-grain effects. Each movement belongs to exactly one event and one accepted slice and retains its originating receipt occurrence and receipt-line lineage. A movement must not combine quantities from multiple events or accepted slices.
+
+### FIX-030-C — Quantity conservation and complete fan-out
+
+The sum of the positive movement base-quantity deltas for an accepted slice must equal its validated accepted quantity normalized to Product base unit, with reproducible conversion provenance. A posting is conceptually complete only when the entire deterministic movement set is attributable and reconciled; partial fan-out is not a successful complete posting. Numeric precision/scale/rounding and physical transaction atomicity remain OPEN.
+
+### FIX-030-D — Replay and immutable correction lineage
+
+Same-identity/same-payload retry resolves to the original authoritative event and complete movement set, never a duplicate. Changed payload for the same identity is a conflict; uncertain commit must be reconciled before retry. Posted movement history is immutable; post-post correction follows DOC08-FIX-025 with separately attributable reversal/compensating lineage.
+
+### Boundaries and retained OPEN dependencies
+
+This FIX is conceptual only. Exact physical event/movement objects, keys/FKs, stock grain, Batch/Location allocation, numeric implementation, purchase-specific DOC-05 authorization tuple, physical idempotency/recovery, atomicity/isolation/locking/concurrency, tenant enforcement, projection reconciliation and executed evidence remain OPEN. It does not activate the adapter, grant permission, approve physical schema or authorize implementation.
+
+The A12.10/A12.11 exactly-one-movement rule remains scoped to transfer shipment receipt/return details; it is not generalized to Purchase / Goods Receipt. DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §42.52; DOC-09 §11.34; Worklist §15.114.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
