@@ -1114,3 +1114,27 @@ Still OPEN: M08 receipt/acceptance action catalogue and actor tuple; M06 posting
 Related anchors: DOC-03 §§18–19; DOC-05 §§23.4–23.6, 25.3–25.4; DOC-04 §42.57; Worklist §15.119.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 11.40 CW-11 Package E — A01 quantity conversion, numeric reconciliation and costing boundary audit (22 November 2026)
+
+**AUDIT PASS — CONCEPTUAL RULES RECONCILE; NUMERIC/PHYSICAL PARAMETERS OPEN.** Bounded cross-check of DOC-04 §§20, 42.25–42.28, 42.49–42.52 and 42.54 against DOC-03 §§3 and 5 and DOC08-FIX-027–032.
+
+**Source-supported findings**
+- Product base unit is the canonical stock reference. Source/input unit is distinct; conceptual conversion is `quantity_base = quantity_input × conversion_factor_base_per_input`.
+- Conversion must be explicit, valid and Product/Variant-compatible. Missing, ambiguous, incompatible, unknown or unapproved conversions fail closed. No guessed factor, implicit chain, label-only match or silent rounding.
+- Conversion factors use high internal precision; invalid quantities are rejected, not silently rounded.
+- Receiving/source workflow preserves entered quantity, input unit and reproducible conversion provenance. A01 consumes a validated accepted quantity normalized to Product base unit; later conversion-reference edits must not rewrite historical receipt/movement facts.
+- For each accepted slice, allocation-portion quantities and positive movement base deltas each sum exactly to the same validated accepted quantity. Every portion is positive; no over/under/duplicate allocation or unexplained residual. Different accepted slices cannot offset one another.
+- Quantity posting is distinct from costing. Physical Batch, FIFO cost layer and MWA valuation are separate; FEFO selects outbound batches; FIFO selects cost layers; costing-only work creates no extra on-hand movement.
+- MWA default pool remains Business + Product/Variant + Inventory Location; no cross-Location pooling. Total cost is authoritative for a cost layer; unit cost is derived at high internal precision; unknown cost remains NULL. Destination MWA is recalculated after receipt from destination quantity and total cost. LRM is not a generic conversion/FIFO/MWA residual rule.
+
+**Explicit OPEN / NOT ACCEPTED**
+Universal precision/scale/type/capacity; per-Product increment and fractional/discrete policy; conversion factor source/precision/version/effective time and allowed graph; snapshot representation; operation-specific rounding boundary/mode; overflow; FIFO/MWA residual arithmetic; physical constraints/enforcement; atomicity/locking/idempotency/recovery; and executed positive/negative/fractional/boundary/overflow/replay/reconciliation evidence.
+
+DOC08-FIX-029's 0% default receiving tolerance and explicit-policy/authorization-only non-zero exception do not authorize rounding, coercion or alteration of physically observed/accepted quantity. Tolerance cannot be used to force arithmetic reconciliation.
+
+**Disposition:** PASS — conceptual quantity conversion and reconciliation are internally consistent; physical/numeric acceptance remains OPEN. This is a source-consistency audit, not executable test evidence. No new DOC08 FIX; DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation or implementation approved.
+
+Related anchors: DOC-04 §§20.2–20.5, 42.25–42.28, 42.49–42.52, 42.54; DOC-03 §§5, 18–19; DOC-04 §42.58; Worklist §15.120.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
