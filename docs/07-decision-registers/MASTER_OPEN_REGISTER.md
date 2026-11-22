@@ -920,3 +920,21 @@ DOC-04 §42.47 audits the Purchase / Goods Receipt logical contract in §42.46 a
 **PASS — cross-document conceptual consistency; no contradiction found.** No new DOC08 FIX is added; DOC08-FIX-018/019/024/025/026 remain unchanged. No permission is granted and no adapter is enabled. Candidate Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+
+## 11.30 CW-11 Package E — Purchase / Goods Receipt source ownership, identity and quantity model proposal (22 November 2026)
+
+DOC-04 §42.48 records a focused source-domain audit and Owner decision proposal. The current project documents establish the procurement → receiving → inventory sequence and separate supplier payment, but do not establish canonical purchase/receipt source objects, source ownership per fact or physical identifiers.
+
+**Recommended conceptual responsibility split — PROPOSED / REVIEW:** Purchasing owns PO and ordered-line commercial facts; Receiving/Warehouse Operations owns physical receipt occurrence, receipt-line observation and accepted/rejected/held quantity disposition; Inventory (M06) owns authorization-checked A01 admission, posting identity, immutable movement ledger and projection reconciliation; Finance/AP owns invoice/payable/payment/settlement. No domain ownership is silently assigned as FIX.
+
+**Recommended logical event grain — PROPOSED / REVIEW:** Business + physical receipt occurrence + receipt-line + accepted-for-inventory quantity slice. Purchase-line identity remains commercial lineage; receipt occurrence distinguishes partial arrivals; receipt-line links the received fact to the ordered line; accepted-slice identity distinguishes partial acceptance; A01 event identity resolves idempotent posting; movement identity represents each stock-grain effect. Movement fan-out may be 1:N where valid Batch/Location stock-grain splits require it. No physical key or event implementation is selected.
+
+**Recommended quantity disposition — PROPOSED / REVIEW:** distinguish physically arrived, accepted-for-inventory, rejected, and unresolved/held/discrepant quantities. Only accepted-for-inventory quantity posts positive under DOC08-FIX-024. Preserve entered quantity/unit and reproducible base-unit conversion provenance; prevent duplicate acceptance; retain later disposition changes as auditable transitions. Arithmetic/tolerance, shrinkage/shortage, over-receipt, rounding and exceptional disposition remain OPEN.
+
+**Owner decision required:** explicitly approve or revise the responsibility split, logical event grain and quantity distinction before these become conceptual FIX. Until then, they are proposals only. No DOC08 FIX, permission grant, adapter activation, physical schema or implementation is created/approved. DOC08-FIX-018/019/024/025/026 remain unchanged.
+
+ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
