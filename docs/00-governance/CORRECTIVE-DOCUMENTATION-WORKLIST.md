@@ -3844,3 +3844,33 @@ Continue the bounded documentation audit of remaining OPEN dependencies for A01 
 ### 15.118.5 Governance
 
 Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.119 CW-11 Package E — A01 purchase-receipt authorization boundary audit (22 November 2026)
+
+### 15.119.1 Audit scope
+
+Read-only review of DOC-05 §§23.4–23.6, §24, §25.3–25.4 and DOC-03 §§3, 18.2–18.4, 19.3 on PR #149 branch.
+
+### 15.119.2 Findings
+
+- M08 owns procurement/purchase/receiving workflow facts; M06 owns inventory identity, Batch, movement ledger, balance projections and costing. M06 owns authoritative inventory movement posting.
+- DOC-05 §23.4 candidate M06 keys are starter vocabulary only, not grants or a complete A01 authorization catalogue.
+- DOC-05 §23.5 requires an exact key/actor tuple with scope, Business/site/Location/assignment, object-state conditions, data class/purpose, SoD, approver and audit event; missing/ambiguous context means DENY.
+- DOC-05 §25.3's generic movement-recording tuple depends on an already-authorized source command. It does not define the A01-specific M08 acceptance-to-M06 posting handoff.
+- DOC-03 requires server-authoritative tenant/resource resolution, exact owner authorization, idempotency and audit lineage; physical enforcement/evidence remain OPEN.
+
+### 15.119.3 Disposition
+
+**PASS — bounded source audit complete; authorization tuple remains OPEN / NOT ACCEPTED.** M08 receipt/acceptance does not itself grant M06 posting authority. A generic M06 candidate key does not bypass the M08 accepted-slice/source-command boundary. This is an audit interpretation only; no actor, role, action key, approval threshold, SoD policy or permission grant is created. No new DOC08 FIX; DOC08-FIX-030/031/032 remain unchanged.
+
+### 15.119.4 Remaining OPEN dependencies
+
+Exact M08 receipt/acceptance action catalogue and actor tuple; exact M06 posting action tuple and controlled service boundary; approval/SoD; Location/warehouse assignment resolver; Variant override authority; audit event schema/retention; physical authorization enforcement; idempotency/atomicity/concurrency/recovery; tenant enforcement; projection reconciliation; and executed positive/negative authorization evidence.
+
+### 15.119.5 Next bounded review
+
+Audit the A01 quantity-conversion and numeric-reconciliation contract against the controlling quantity/unit and costing decisions. Keep precision, scale, rounding, conversion snapshot/version and physical enforcement OPEN unless a source-backed Owner decision explicitly resolves them. Do not create numeric implementation choices or proceed to another A01 source family before Package E acceptance.
+
+### 15.119.6 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
