@@ -5632,3 +5632,56 @@ This recommendation preserves DOC08-FIX-027 through DOC08-FIX-032 without modifi
 **RECOMMENDATION RECORDED — OWNER ADOPTION PENDING.** ODR-A01-01 through ODR-A01-05 remain PENDING / OPEN. No new FIX, permission grant, physical design approval, adapter activation, or Stage 6 implementation authorization is created. The next gate is explicit Owner adoption, rejection, or revision of each policy recommendation, followed by an authority/scope/consistency audit before any register or FIX is changed.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.65 CW-11 Package E — Owner response to ODR-A01-01 (24 November 2026)
+
+**OWNER PRINCIPLE APPROVED — DETAILED EXCEPTION PARAMETERS REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026. It updates only ODR-A01-01 and does not infer answers to ODR-A01-02 through ODR-A01-05.
+
+### 42.65.1 Attributable Owner decision
+
+The Owner approves the following policy principle for A01 receiving:
+
+1. **Global default:** receiving tolerance is 0% for every Business.
+2. **Non-zero exception path:** a Business that requires non-zero tolerance must have a specific policy for that Business; the policy must be explicitly approved and documented.
+3. **Quantity integrity:** tolerance does not alter the actual physically observed or accepted quantity. It is not rounding, coercion, or permission to silently increase/decrease received stock.
+4. **Over-receipt boundary:** excess is not automatically accepted or posted. Any acceptance of excess remains subject to a separately defined and authorized acceptance decision; this response does not itself authorize automatic posting.
+5. **Shortage boundary:** shortage remains a variance against the PO, not received stock or an inventory movement.
+
+### 42.65.2 Decision scope and unresolved parameters
+
+This is an Owner-approved policy principle, not a complete operational exception policy. The following details remain OPEN and must not be invented:
+
+- permitted circumstances and eligible receiving cases for a non-zero policy;
+- quantity basis, limit/threshold and any per-transaction or cumulative cap;
+- independent approver identity/role, delegation and separation-of-duties requirements;
+- effective date/version, duration, expiry/review and revocation;
+- evidence, rationale and audit requirements for each exception;
+- whether an approved tolerance only records a variance or can permit acceptance of excess, and the separate authority required for that acceptance.
+
+Until these details are explicitly decided and recorded, the restrictive baseline remains: 0% default; no automatic excess acceptance/posting; unresolved exception authority fails closed or remains pending.
+
+### 42.65.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% global default approved; non-zero permitted only through a specific, approved and documented Business policy; physical quantity integrity and no automatic excess acceptance/posting preserved | **PARTIALLY APPROVED — POLICY PRINCIPLE DECIDED; PARAMETERS OPEN** |
+| ODR-A01-02 — Variant Batch-policy override | No response supplied | PENDING / OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | No response supplied | PENDING / OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | No response supplied | PENDING / OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+### 42.65.4 Consistency audit against source baseline
+
+- **DOC08-FIX-029 / DOC-04 §42.51:** consistent with the 0% default, explicit-policy/authorization-only exception path, no automatic over-receipt acceptance/posting, shortage as PO variance, and no alteration of physical quantity.
+- **DOC-04 §42.58:** tolerance is not a rounding or numeric reconciliation mechanism; physical quantities and accepted quantities remain truthful and independently reconciled.
+- **DOC-04 §42.62–42.64:** this response resolves only the ODR-A01-01 policy principle. It does not assign an approver, delegate authority, select physical mechanisms, adopt unrelated ODR recommendations, or close Class B/Class C dependencies.
+- **DOC-05 §25.4:** no independent approver or fallback is inferred. Where independent approval is required and no eligible approver exists, the existing pending/DENY baseline remains.
+
+**Audit disposition: CONSISTENT — no conflict with FIX-027..032 identified.** No new FIX is created and DOC08-FIX-029 is not rewritten. This response does not approve physical design, permission grants, adapter activation, tests, or Stage 6 implementation.
+
+### 42.65.5 Next gate
+
+Continue with ODR-A01-02 using the exact request in §42.63.2. Keep ODR-A01-01's unresolved parameters OPEN for a later bounded clarification; do not treat the policy principle as full exception-policy approval.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
