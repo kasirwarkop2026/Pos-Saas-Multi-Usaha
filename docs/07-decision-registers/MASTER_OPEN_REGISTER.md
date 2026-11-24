@@ -1165,3 +1165,28 @@ No exactly-once transport guarantee is inferred. No physical A01 operation regis
 Related anchors: DOC-03 §§18.2–18.4, 21.5–21.6; DOC-04 §§21.4–21.8, 42.46, 42.52, 42.57–42.59; Worklist §15.121.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+ 
+
+## 11.42 CW-11 Package E — A01 projection reconciliation and evidence-closure audit (24 November 2026)
+
+**AUDIT PASS — CONCEPTUAL PROJECTION INVARIANTS RECONCILE; PHYSICAL/OPERATIONAL ACCEPTANCE OPEN.** Bounded cross-check of DOC-04 §§17.2–17.4, 42.46–42.54 and 42.59 against DOC-03 §§6, 18.3–18.4, 19.3 and 21.5.
+
+**Source-supported findings**
+- Posted `inventory_movements` remain the immutable physical quantity ledger; corrections use linked reversal/compensating movements.
+- `inventory_balances` and applicable `inventory_batch_balances` are rebuildable derived projections, not independent movement sources or write authorities.
+- A01 reconciliation preserves Business/Product/Variant/Location/Batch grain and lineage from accepted receipt slice through source occurrence/line, A01 event and complete movement set.
+- Per-slice movement fan-out and quantity conservation remain mandatory; Batch-balance totals reconcile to the parent Location balance.
+- M08 receipt facts and M06 posting effects retain separate ownership. A downstream projection failure does not erase committed source facts.
+- Projection source owner, version/freshness and reconciliation state must be visible where lag is operationally material.
+- Replay/rebuild must reproduce the derived view without a second A01 event, movement or costing-only quantity effect.
+
+**Evidence required but not executed:** source-to-event-to-movement completeness; no missing/duplicate movement; ledger-to-Location balance; Batch-to-parent Location reconciliation; same-payload replay; repeated deterministic rebuild; projection lag/failure and recovery; event gap/out-of-order/duplicate handling; quantity mismatch; and cross-Business isolation.
+
+**Explicit OPEN / NOT ACCEPTED:** physical projection keys/grain/watermarks/versioning; synchronous/asynchronous strategy and lag policy; reconciliation algorithm/boundary/schedule/ownership; snapshot/checkpoint and replay ordering/gap recovery; retry/quarantine/dead-letter/poison-event/alert/manual-recovery controls; Batch/Location aggregation and null-safe unbatched enforcement; ledger/fan-out/projection transaction boundary; tenant enforcement; audit/monitoring/retention; and executed evidence.
+
+**Disposition:** PASS — source-backed conceptual projection and reconciliation invariants are internally consistent. Physical projection/rebuild/recovery design, tenant enforcement and executed evidence remain OPEN. This is not runtime validation or implementation acceptance. No new DOC08 FIX; DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, projection mechanism, permission, adapter activation or Stage 6 implementation approved.
+
+Related anchors: DOC-03 §§6, 18.3–18.4, 19.3, 21.5.5–21.5.10; DOC-04 §§17.2–17.4, 42.46–42.54, 42.59–42.60; Worklist §15.122.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
