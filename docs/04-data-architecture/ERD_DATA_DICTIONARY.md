@@ -5357,3 +5357,55 @@ This is a source-consistency audit only, not an executable design or test PASS. 
 Related anchors: DOC-03 §§18.2–18.4, 21.5–21.6; DOC-04 §§21.4–21.8, 42.46, 42.52, 42.57–42.58; DOC-09 §11.41; Worklist §15.121.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+ 
+
+## 42.60 CW-11 Package E — A01 projection reconciliation and evidence-closure audit (24 November 2026)
+
+### 42.60.1 Audit scope and source baseline
+
+Read-only cross-check of the A01 receipt contract in §§42.46, 42.52, 42.54 and 42.59 against DOC-03 §§6, 18.3–18.4, 19.3 and 21.5. The review is limited to ledger-to-projection consistency, Batch/Location grain, replay/rebuild safety, source-event attribution and evidence required for Package E acceptance. It does not select a physical projection strategy or perform runtime/database tests.
+
+### 42.60.2 Source-supported invariants
+
+1. **Authoritative stock truth:** posted `inventory_movements` are the immutable physical quantity ledger. Corrections use separately attributable reversal/compensating movements; original posted facts are not rewritten.
+2. **Projection authority boundary:** `inventory_balances` and applicable `inventory_batch_balances` are derived/rebuildable projections, not independent movement sources or write authorities. Rebuilding a projection must not create a second on-hand movement.
+3. **Reconciliation grain:** A01 outcome must remain attributable by Business, Product, nullable/applicable Variant, receiving Location and actual Batch or permitted unbatched state, together with accepted slice, source receipt occurrence/line, A01 event and complete movement set.
+4. **Quantity conservation:** movement fan-out for each accepted slice must be complete and deterministic; movement base deltas reconcile to that accepted slice alone. Batch-level projection totals reconcile to the parent Location balance. Distinct accepted slices/events cannot offset one another.
+5. **Source/projection separation:** M08 receipt facts remain source-owned; M06 ledger effects remain inventory-owned. A downstream projection consumer failure does not erase a committed source-domain fact. Retry, quarantine/dead-letter, replay and reconciliation lifecycle must be explicit in future technical design.
+6. **Freshness and observability:** where projection lag is operationally material, source owner, projection version/freshness and reconciliation state must be visible. A projection cannot mutate source state.
+7. **Replay/rebuild safety:** replaying a source event or rebuilding a read model must reproduce the derived view from authoritative committed facts without creating duplicate A01 events, movements, or costing-only quantity effects.
+
+### 42.60.3 A01 reconciliation/evidence matrix
+
+| Reconciliation assertion | Required evidence to accept | Current disposition |
+|---|---|---|
+| Accepted receipt slice → A01 event → complete movement fan-out | Stable source occurrence/line and accepted-slice lineage; event identity; complete movement membership; no missing/duplicate movement; quantity conservation per slice | Conceptual invariant PASS; physical identity and executed evidence OPEN |
+| Movement ledger → Product/Variant/Location balance | Reproducible ledger-to-projection comparison at exact Business/Product/Variant/Location grain; explicit treatment of pending projection work | Source baseline PASS; physical projection contract and evidence OPEN |
+| Batch movement → Batch balance → parent Location balance | Actual Batch identity where tracking applies; per-Batch quantities reconcile to parent Location total without cross-Business/Product/Variant mixing | Conceptual FIX-031/032 alignment PASS; physical enforcement/evidence OPEN |
+| Retry/replay after committed A01 event | Same operation resolves to same event and movement set; replay does not create a second movement or change accepted quantity | Conceptual rule PASS; physical replay/recovery protocol and tests OPEN |
+| Projection rebuild/repair | Rebuild is deterministic from authoritative ledger and relevant source facts; repeated rebuild is non-additive/idempotent; no new movement is emitted | Required outcome supported; mechanism and executed evidence OPEN |
+| Partial fan-out or failed projection consumer | Incomplete fan-out is not complete success; committed source fact remains authoritative; failed projection work is recoverable, observable and reconcilable | Conceptual boundary PASS; transaction/recovery/quarantine details OPEN |
+| Cross-Business or invalid grain | No projection combines tenant or unrelated Product/Variant/Location/Batch scope; unauthorized/cross-Business source is denied | Conceptual boundary PASS; physical tenant enforcement and negative evidence OPEN |
+
+### 42.60.4 Explicit technical non-decisions and acceptance gaps
+
+Still OPEN / NOT ACCEPTED:
+- exact physical projection objects, keys, unique grain, source watermark/version/cursor and applied-through semantics;
+- synchronous versus asynchronous projection update strategy and permitted/visible lag;
+- deterministic reconciliation query/algorithm, comparison boundary, scheduling and operational ownership;
+- rebuild scope, snapshot/checkpoint provenance, replay ordering, gap detection and recovery from missing/out-of-order/duplicate events;
+- retry, quarantine/dead-letter, poison-event handling, alerting/escalation and manual recovery authority;
+- Batch/Location parent-child aggregation and null-safe unbatched handling at physical level;
+- atomicity boundary between ledger commit, fan-out and projection updates; no distributed transaction or outbox pattern is inferred;
+- tenant isolation, authorization enforcement, monitoring/retention and audit storage;
+- executed positive/negative evidence for duplicate/missing movements, per-slice quantity mismatch, Batch-to-Location mismatch, replay, repeated rebuild, projection lag/failure, event gaps/out-of-order delivery, recovery and cross-Business isolation.
+
+### 42.60.5 Disposition
+
+**PASS — source-backed conceptual projection and reconciliation invariants are internally consistent.** The immutable movement ledger remains authoritative; balance and Batch-balance views remain rebuildable projections; A01 source/event/movement attribution and quantity conservation remain per accepted slice; Batch balances reconcile to parent Location; replay/rebuild must not duplicate physical movement; and downstream projection failure cannot erase the committed source fact.
+
+**OPEN / NOT ACCEPTED — physical projection contract, reconciliation/rebuild protocol, operational recovery/observability, tenant enforcement and executed evidence.** This is a source-consistency audit only, not runtime validation or implementation acceptance. No new DOC08 FIX is created. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, projection mechanism, permission, adapter activation or Stage 6 implementation is approved.
+
+Related anchors: DOC-03 §§6, 18.3–18.4, 19.3, 21.5.5–21.5.10; DOC-04 §§17.2–17.4, 42.46–42.54, 42.59; DOC-09 §11.42; Worklist §15.122.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
