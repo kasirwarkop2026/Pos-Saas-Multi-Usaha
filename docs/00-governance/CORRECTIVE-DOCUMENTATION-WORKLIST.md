@@ -4272,3 +4272,57 @@ Proceed to ODR-A01-04 using DOC-04 §42.63.2. Keep ODR-A01-01..03 unresolved ope
 ### 15.129.5 Governance
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+
+## 15.130 CW-11 Package E — Record and audit Owner response to ODR-A01-04 (24 November 2026)
+
+### 15.130.1 Deliverable completed
+
+Recorded the Owner's explicit agreement to prospective PO amendment treatment in DOC-04 §42.68 and DOC-09 §11.50:
+
+- PO amendments are prospective and do not silently rewrite historical procurement, arrival, inspection, acceptance or inventory-posting facts.
+- Arrival and inspection facts remain preserved with their source context.
+- Accepted receipt facts and quantities are not retroactively rewritten.
+- Posted inventory movements are corrected only through separately authorized correction/reversal lineage.
+- PO version, receipt occurrence/line, inspection and accepted-slice facts remain separately traceable.
+
+### 15.130.2 Consistency audit
+
+| Check | Result |
+|---|---|
+| Consistency with DOC08-FIX-027 / DOC08-FIX-028 | PASS |
+| Consistency with DOC-04 §42.63.2 / §42.64.3 | PASS |
+| Consistency with DOC-03 M08 procurement / M06 inventory ownership | PASS |
+| Consistency with DOC-05 authorization boundary | PASS |
+| New FIX or changed existing FIX | NONE |
+| Amendment classes/fields by lifecycle stage defined | NO — OPEN |
+| Arrived-but-unaccepted treatment and effective-version/concurrency rules defined | NO — OPEN |
+| Exceptional pre-acceptance authority assigned | NO — OPEN |
+| Correction/reversal authority and audit linkage fully defined | NO — OPEN |
+| Physical version/snapshot/lineage mechanism approved | NO — OPEN |
+
+### 15.130.3 Checklist update
+
+| Work item | Status |
+|---|---|
+| ODR-A01-01 policy principle | PARTIALLY APPROVED — detailed parameters OPEN |
+| ODR-A01-01 exception authority/limits/effective period/evidence | OPEN |
+| ODR-A01-02 policy principle | PARTIALLY APPROVED — authority/scope/lifecycle parameters OPEN |
+| ODR-A01-02 override authority/delegation/scope/effective period/revocation/evidence | OPEN |
+| ODR-A01-03 policy principle | PARTIALLY APPROVED — exception authority/conditions/evidence OPEN |
+| ODR-A01-03 exception authority/scope/custody evidence/lifecycle/audit | OPEN |
+| ODR-A01-04 prospective PO amendment principle | PARTIALLY APPROVED — lifecycle/authority details OPEN |
+| ODR-A01-04 amendment classes/version selection/correction authority/lineage | OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | PENDING OWNER |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.130.4 Next bounded gate
+
+Proceed to ODR-A01-05 using DOC-04 §42.63.2. Keep ODR-A01-01..04 unresolved operational parameters OPEN. After all five Owner requests have responses, perform a consolidated authority/scope/consistency audit before final decision dispositions. Do not begin physical design/implementation or move to another A01 source family before Package E acceptance.
+
+### 15.130.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
