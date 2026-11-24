@@ -1409,3 +1409,17 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 **Next step:** ask Owner to decide PGA-01 first — retain all A01 policy authority at Owner level or explicitly delegate named policy scope and lifecycle. Domain analyses may be prepared within documented ownership boundaries but are not binding policy decisions.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+ 
+### 11.54 Owner Decision — PGA-01: A01 Policy Authority Retained by Owner
+
+**Decision date:** 2026-11-24  
+**Status:** OWNER APPROVED — AUTHORITY RETAINED AT OWNER LEVEL.
+
+The Owner approved retaining all A01 policy decision authority for ODR-A01-01..05 at Owner level. No delegation is made to domain owners or other functions. Domain owners may provide bounded factual/technical analysis and recommendations only; these do not constitute policy approval, exception approval, or permission grants.
+
+Any future delegation requires a separate explicit written Owner decision defining the delegate/office, exact scope and limits, effective date/version, duration, review conditions, and revocation mechanism. No implied or fallback delegation is allowed.
+
+**Register effect:** PGA-01 is CLOSED for the authority-retention choice. PGA-02..PGA-06 remain OPEN for detailed Owner policy decisions. ODR-A01-01..05 remain PARTIALLY APPROVED at principle level; their detailed parameters remain unresolved.
+
+No approver, role, permission, SoD exception, physical design, test, adapter activation, schema change, or Stage 6 authorization is created. DB_PUSH_BLOCKED: ACTIVE.
+
