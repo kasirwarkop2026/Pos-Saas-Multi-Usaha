@@ -5739,3 +5739,56 @@ Until these are explicitly decided and reviewed, no override grant is inferred. 
 Continue with ODR-A01-03 using the exact request in §42.63.2. Keep ODR-A01-02's authority, scope, effective-time, review/revocation and evidence parameters OPEN for bounded clarification. Do not treat this principle approval as an operational override authorization.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.67 CW-11 Package E — Owner response to ODR-A01-03 (24 November 2026)
+
+**OWNER POLICY PRINCIPLE APPROVED — EXCEPTION CONDITIONS AND AUTHORITY REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026 to the recommendation in DOC-04 §42.64.3. It addresses ODR-A01-03 only and does not infer responses to ODR-A01-04 or ODR-A01-05.
+
+### 42.67.1 Attributable Owner decision
+
+The Owner approves the following virtual transit Location receiving principle:
+
+1. **Normal receiving exclusion:** a virtual Transit Location is not a normal destination for purchase receiving.
+2. **Exception only for demonstrated need:** an exception may be considered only where a genuine business requirement is demonstrated and the exception is explicitly approved.
+3. **Physical custody evidence:** an exception requires evidence of actual physical custody of the goods and confirmation of the real physical receiving destination.
+4. **No configuration-based relabeling:** a virtual Location must not be treated as a physical Location merely because of a configuration setting or label.
+5. **Default remains restrictive:** absent a defined and approved exception, virtual Transit Locations remain excluded from normal receiving; unresolved authority or physical-custody evidence fails closed.
+
+### 42.67.2 Decision scope and unresolved parameters
+
+This approval adopts the policy principle only. The following details remain OPEN and must not be invented:
+
+- the accountable authority and eligible role that may approve an exception;
+- exact qualifying business circumstances and permitted exception scope;
+- required evidence types, custody chain and proof of final physical destination;
+- effective period, expiry, review and revocation;
+- audit record, rationale and exception monitoring;
+- Location taxonomy/lifecycle and physical-versus-virtual classification enforcement;
+- any physical schema, permission, API, RLS, runtime or workflow mechanism.
+
+No exception is authorized by this principle approval alone. Until the open parameters are defined and approved, the default exclusion remains in force.
+
+### 42.67.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product owns Batch policy; Variant inherits by default; override only as explicit, authorized and auditable exception | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | Normal receiving excluded; exception may be considered only for demonstrated business need, explicit approval and evidence of actual physical custody and destination; no configuration-based relabeling | **PARTIALLY APPROVED — EXCEPTION AUTHORITY / CONDITIONS / EVIDENCE OPEN** |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | No response supplied | PENDING / OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+### 42.67.4 Consistency audit against source baseline
+
+- **DOC08-FIX-032 / DOC-04 §42.56:** consistent with exclusion of virtual Transit Locations from normal receiving, explicit exception-policy boundary, and receiver confirmation of actual physical destination.
+- **DOC-04 §42.62–42.64:** this response resolves the ODR-A01-03 policy principle only. It does not assign an approving authority, establish qualifying circumstances, or select physical/technical mechanisms.
+- **DOC-03 Location ownership and DOC-05 authorization boundary:** no Location ownership or permission is reassigned; no approver or delegated authority is inferred.
+
+**Audit disposition: CONSISTENT — no conflict with FIX-027..032 identified.** No new FIX is created and DOC08-FIX-032 is not rewritten. No physical design, permission grant, adapter activation, test execution or Stage 6 implementation is approved.
+
+### 42.67.5 Next gate
+
+Continue with ODR-A01-04 using the exact request in §42.63.2. Keep ODR-A01-03 exception authority, qualifying circumstances, evidence, lifecycle and enforcement parameters OPEN. Do not treat this principle approval as an operational exception authorization.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
