@@ -1143,7 +1143,7 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 
 **AUDIT PASS — CONCEPTUAL SAFEGUARDS RECONCILE; TECHNICAL ENFORCEMENT OPEN.** Bounded cross-check of DOC-04 §§21.4–21.8, 42.46, 42.52 and 42.57–42.58 against DOC-03 §§18.2–18.4 and 21.5–21.6.
 
-**Source-supported conceptual outcomes**
+### Source-supported conceptual outcomes
 - Same operation identity + same payload replays the previously stored authoritative result; no duplicate A01 event or movement.
 - Same identity + changed payload is a conflict; never silently overwrite/reuse the prior result.
 - Operation claim and all posting effects are atomic. A successful A01 result includes complete deterministic movement fan-out; partial fan-out is not complete success.
@@ -1166,13 +1166,13 @@ Related anchors: DOC-03 §§18.2–18.4, 21.5–21.6; DOC-04 §§21.4–21.8, 42
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
 
- 
+
 
 ## 11.42 CW-11 Package E — A01 projection reconciliation and evidence-closure audit (24 November 2026)
 
 **AUDIT PASS — CONCEPTUAL PROJECTION INVARIANTS RECONCILE; PHYSICAL/OPERATIONAL ACCEPTANCE OPEN.** Bounded cross-check of DOC-04 §§17.2–17.4, 42.46–42.54 and 42.59 against DOC-03 §§6, 18.3–18.4, 19.3 and 21.5.
 
-**Source-supported findings**
+### Source-supported findings
 - Posted `inventory_movements` remain the immutable physical quantity ledger; corrections use linked reversal/compensating movements.
 - `inventory_balances` and applicable `inventory_batch_balances` are rebuildable derived projections, not independent movement sources or write authorities.
 - A01 reconciliation preserves Business/Product/Variant/Location/Batch grain and lineage from accepted receipt slice through source occurrence/line, A01 event and complete movement set.
@@ -1190,7 +1190,7 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 Related anchors: DOC-03 §§6, 18.3–18.4, 19.3, 21.5.5–21.5.10; DOC-04 §§17.2–17.4, 42.46–42.54, 42.59–42.60; Worklist §15.122.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
- 
+
 
 ## 11.43 CW-11 Package E — Consolidated A01 acceptance matrix (24 November 2026)
 
