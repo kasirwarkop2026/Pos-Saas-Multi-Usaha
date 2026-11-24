@@ -5578,3 +5578,57 @@ No Owner response has been supplied in this work item. Preserve all five request
 Related anchors: DOC-04 §§42.49–42.62; DOC-05 §25.4; DOC-09 §§11.38, 11.44–11.45; Worklist §§15.124–15.125.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.64 CW-11 Package E — Multi-Business policy architecture recommendation for A01 (24 November 2026)
+
+### 42.64.1 Purpose and status
+
+This section records a bounded architecture recommendation in response to the Owner's request to proceed with the recommended approach for a POS SaaS serving multiple independent Businesses/Tenants. It is a **RECOMMENDATION FOR OWNER REVIEW**, not an approved policy, a new DOC08 FIX, a physical design decision, or implementation authorization. It does not answer or close ODR-A01-01 through ODR-A01-05 in §42.63. All five remain PENDING / OPEN.
+
+### 42.64.2 Recommended policy model
+
+Recommend the model **Global Core Rules + Business-level Configurable Policies + Controlled Exceptions**:
+
+1. **Global Core Rules (platform-wide invariants).** Apply consistently across all Business/Tenant scopes: tenant isolation; server-side Business scoping and authorization; immutable posted inventory movement history with traceable correction lineage; no silent rewrite of accepted or posted facts; quantity conservation and duplicate-safe logical posting; auditability; and fail-closed behavior for unresolved identity, authority, or eligibility. A Business-level setting must not weaken these platform invariants.
+2. **Business-level Configurable Policies.** Permit only explicitly designated operational policies to vary by Business, within platform-defined permitted values and validation boundaries. A policy must have an identifiable owner/authority, scope, effective period/version, rationale, and audit trail. Configuration is not a permission grant and cannot override platform invariants or source-domain ownership.
+3. **Controlled Exceptions.** An exception is separate from ordinary configuration. It requires an explicitly defined eligible category, authorized independent approver where required, bounded scope/quantity/time, recorded rationale and evidence, and auditable outcome. If policy, authority, or eligible approver is unresolved, fail closed or remain pending under the controlling authorization policy; do not infer a fallback.
+
+This model is intended to support different operating needs across retail, wholesale, food service, pharmacy, and distribution Businesses without creating separate inconsistent transaction-integrity rules. Those examples illustrate possible Business diversity; they do not establish industry-specific defaults or compliance rules.
+
+### 42.64.3 A01 application of the model — recommendation only
+
+| ODR | Recommended direction for Owner consideration | Existing binding baseline while unanswered |
+|---|---|---|
+| ODR-A01-01 — Tolerance / over-receipt | Retain 0% as platform default. If the Owner wants configurability, permit only a Business-scoped, explicitly approved policy with defined circumstance, quantity basis, limit, effective version/period and independent approval. A tolerance must not alter actual arrived/accepted quantities or automatically post excess. | FIX-029: 0% default; excess is not automatically accepted/posted; explicit policy and authorization required; shortage remains PO variance. |
+| ODR-A01-02 — Variant Batch override | Keep Product as policy owner and Variant inheritance as default. Any override should be exceptional, explicitly authorized, scoped, time/version bounded, reviewable/revocable and auditable; do not permit an ungoverned per-Variant switch. | FIX-032: Product-owned policy; Variant inherits by default; authorized/auditable override only. |
+| ODR-A01-03 — Virtual transit Location | Keep virtual transit excluded from normal receiving. If a Business need is demonstrated, consider only a separately authorized, narrowly bounded exception with evidence of actual physical custody and destination; do not relabel a virtual Location as physical by configuration alone. | FIX-032: no normal receiving to virtual transit absent separate explicit policy; receiver confirms actual physical destination. |
+| ODR-A01-04 — PO amendments | Recommend prospective treatment as the default: amendments govern future workflow according to receipt lifecycle; they do not silently rewrite arrived, accepted, or posted facts. Any narrowly permitted pre-acceptance treatment must preserve source/version lineage and explicit authority. Posted movements require established correction lineage, not retroactive rewrite. | FIX-027/028: source facts and accepted slices remain distinct; no retroactive amendment behavior inferred; posted movements are not silently rewritten. |
+| ODR-A01-05 — Independent approver / SoD | Require independent approval for defined high-risk exceptions; the Owner must identify categories, eligibility/independence, delegation and escalation. No self-approval. If no eligible approver exists, remain pending/DENY under DOC-05 §25.4. | DOC-05 §25.4: absent independent eligible approver, pending/DENY; no self-approval or fallback. DOC-05 remains DRAFT / REVIEW REQUIRED / NOT FINAL. |
+
+The recommended directions are not operative rules until the Owner explicitly adopts them and the decision record is updated with authority, scope, effective date/version, rationale and review/expiry conditions.
+
+### 42.64.4 Configuration governance requirements — conceptual, not physical design
+
+For any future approved Business-level policy, require the following conceptual controls before a technical design can be accepted:
+
+- **Policy catalogue:** distinguish platform invariants, Business-configurable policy, and controlled exceptions; identify which policy keys are eligible for Business variation.
+- **Authority and scope:** identify the policy owner, approving authority, Business scope, applicable Product/Variant/Location/transaction scope, and whether delegation is permitted.
+- **Effective-time semantics:** define effective-from/effective-until or version boundaries; preserve which policy decision governed a receipt at the time of decision. Later policy edits must not silently rewrite historical receipt/posting facts.
+- **Validation and precedence:** reject unknown, conflicting, out-of-range, or unauthorized settings; define deterministic precedence without allowing Business configuration to weaken global invariants.
+- **Change and exception audit:** retain actor, authority, prior/new policy value, rationale, effective period, approval, evidence and resulting transaction references as applicable.
+- **Fail-closed behavior:** unresolved policy, scope, authority, or approver must not silently fall back to a permissive value.
+- **Tenant isolation:** a Business can configure only its own permitted policy scope; cross-Business reads/writes or policy inheritance are not implied.
+- **Review and lifecycle:** define review, expiry, revocation and impact handling for exceptions and delegated authorities.
+
+These are conceptual acceptance requirements only. No physical policy table, key, column, enum, inheritance engine, cache, snapshot schema, API, RLS policy, authorization permission, runtime resolver or storage mechanism is selected here.
+
+### 42.64.5 Relationship to existing FIX and acceptance gates
+
+This recommendation preserves DOC08-FIX-027 through DOC08-FIX-032 without modification. It does not reopen source-resolved ownership boundaries in DOC-03, and it does not select physical mechanisms for Class B dependencies. Class C runtime/security/concurrency/reconciliation evidence remains NOT EXECUTED / NOT AUTHORIZED. Physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS — ACCEPTANCE NOT MET.
+
+### 42.64.6 Disposition and next gate
+
+**RECOMMENDATION RECORDED — OWNER ADOPTION PENDING.** ODR-A01-01 through ODR-A01-05 remain PENDING / OPEN. No new FIX, permission grant, physical design approval, adapter activation, or Stage 6 implementation authorization is created. The next gate is explicit Owner adoption, rejection, or revision of each policy recommendation, followed by an authority/scope/consistency audit before any register or FIX is changed.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
