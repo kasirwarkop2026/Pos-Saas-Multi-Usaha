@@ -4581,4 +4581,38 @@ Documentation-only, append-only on PR #149. PR remains open/unmerged. DB_PUSH_BL
 **Next gate:** obtain explicit Owner approval or amendment of DOC-04 §42.75.3. Do not proceed to PGA-04 or implementation as though PGA-03 were closed.
 
 Documentation-only, append-only on PR #149 branch. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+ 
+## 15.138 Owner Decision and Read-only Audit — PGA-03
+
+**Date:** 2026-11-25  
+**Owner decision:** APPROVED — all recommendations in DOC-04 §42.75.3 adopted without amendment.
+
+**Checklist update:**
+- [x] Product policy is authoritative and explicit (Batch tracking required / not required).
+- [x] Variant inheritance from Product is mandatory by default.
+- [x] Variant override is exceptional and case-specific; no standing/self-service override.
+- [x] Exact Owner approval required for Business/Product/Variant, direction and effective period.
+- [x] Both relaxation (required→not required) and strengthening (not required→required) require explicit Owner approval.
+- [x] Until valid override approval exists, Variant inherits Product policy.
+- [x] Override is prospective only; accepted receipt slices, Batch identities and posted movements are not rewritten.
+- [x] Missing, unresolved, expired, conflicting or unsupported policy fails closed and blocks A01.
+- [x] Logical audit evidence requirement adopted; physical schema/storage not selected.
+- [x] Read-only consistency audit completed; PASS against DOC08-FIX-032, PGA-01, DOC-03 §19.1, DOC-05 §25.4 and DOC-02 §6.
+
+**Disposition:** PGA-03 CLOSED at Owner policy-decision level. DOC08-FIX-032 preserved unchanged. No delegation, role/permission, approver assignment, physical design, schema, test, adapter activation, database mutation or Stage 6 authorization is created.
+
+**Master checklist:**
+- [x] PGA-01 — A01 policy authority retained by Owner.
+- [x] PGA-02 — tolerance, over-receipt and shortage policy package approved and audited.
+- [x] PGA-03 — Variant Batch-policy override package approved and audited.
+- [ ] PGA-04 — Virtual Transit Location exception details: OPEN.
+- [ ] PGA-05 — PO amendment lifecycle details: OPEN.
+- [ ] PGA-06 — independent approval / SoD details: OPEN.
+- [ ] Class B physical/technical design: OPEN / NOT APPROVED.
+- [ ] Class C runtime/security/concurrency/reconciliation evidence: NOT EXECUTED / NOT AUTHORIZED.
+- [ ] Package E acceptance: NOT MET; Physical Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED.
+
+**Next bounded step:** prepare the PGA-04 Owner decision packet for Virtual Transit Location exception, preserving the established custody, receiving and inventory-ledger ownership boundaries. Do not infer a technical exception or begin implementation.
+
+Documentation-only, append-only on PR #149 branch. PR remains open/unmerged. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
 
