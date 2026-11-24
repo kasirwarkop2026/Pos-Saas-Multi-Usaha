@@ -1119,7 +1119,7 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 
 **AUDIT PASS — CONCEPTUAL RULES RECONCILE; NUMERIC/PHYSICAL PARAMETERS OPEN.** Bounded cross-check of DOC-04 §§20, 42.25–42.28, 42.49–42.52 and 42.54 against DOC-03 §§3 and 5 and DOC08-FIX-027–032.
 
-### Source-supported findings
+### A01 projection source-supported findings
 - Product base unit is the canonical stock reference. Source/input unit is distinct; conceptual conversion is `quantity_base = quantity_input × conversion_factor_base_per_input`.
 - Conversion must be explicit, valid and Product/Variant-compatible. Missing, ambiguous, incompatible, unknown or unapproved conversions fail closed. No guessed factor, implicit chain, label-only match or silent rounding.
 - Conversion factors use high internal precision; invalid quantities are rejected, not silently rounded.
