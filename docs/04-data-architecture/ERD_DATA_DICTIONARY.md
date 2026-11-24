@@ -5464,3 +5464,68 @@ No new DOC08 FIX is created. DOC08-FIX-027/028/029/030/031/032 remain unchanged.
 Related anchors: DOC-03 §§6, 18–21; DOC-04 §§42.46–42.60; DOC-05 §§23–25; DOC-09 §§11.39–11.42; Worklist §§15.119–15.122.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.62 CW-11 Package E — A01 OPEN-item source and decision-authority triage (24 November 2026)
+
+### 42.62.1 Purpose and method
+
+This is a read-only classification of the OPEN items in §42.61. It identifies the controlling source/domain and the kind of closure required; it does not decide policy, assign individual people, select physical mechanisms or claim implementation evidence. Authority is named only at the documented domain/decision-role level. Where the source does not identify a specific decision owner, that gap is stated explicitly.
+
+### 42.62.2 Items already resolved by the reviewed source baseline — do not reopen
+
+| Topic | Source-backed disposition | Controlling source | Boundary |
+|---|---|---|---|
+| Procurement versus inventory ownership | M08 owns purchase request/order, receiving procurement workflow and procurement commitment; M06 owns inventory identity, Batch, movement ledger, balance projections and costing; M07 owns warehouse/location custody; M02 owns Product catalog/Variant/unit; M16 owns supplier invoice/AP/payment. | DOC-03 §19.1 | Logical ownership is resolved; this does not define physical tables or a new A01 permission tuple. |
+| Ledger and projection authority | Posted inventory movements are immutable stock truth; balances are rebuildable projections, not independent write authorities. | DOC-03 §6; DOC-04 §§17.2–17.4, 42.60 | Do not reopen conceptual authority; physical implementation/reconciliation remains open. |
+| Tenant and domain interaction boundary | Tenant-owned commands/events/resources resolve to one Business; cross-Business access is denied absent an explicit supported relationship and authorization path. | DOC-03 §§18.3–18.5 | Conceptual invariant is established; server/RLS/physical enforcement and tests remain open. |
+| General authorization tuple requirements | DOC-05 §23.5 requires exact key/actor/scope/resource-state/data-purpose/SoD/approver/audit context; ambiguity denies. DOC-05 §25.3 supplies inventory/warehouse resource-family tuples, not a complete A01 M08-to-M06 handoff. | DOC-05 §§23.5, 25.3–25.4; DOC-04 §42.57 | Preserve the general baseline; do not treat candidate keys as grants or claim the A01-specific tuple is resolved. |
+| Conceptual receipt invariants | FIX-027–032 remain the approved conceptual decisions within their stated scope. | DOC-04 §§42.49–42.56; DOC-09 §11.38 | No new FIX or widening of scope. |
+
+### 42.62.3 Class A — Explicit Owner/domain policy decision required
+
+These are unresolved policy choices, not values to be inferred by technical design:
+
+1. **Non-zero tolerance and over-receipt exception policy:** FIX-029 establishes 0% default and requires explicit policy plus authorization for any non-zero exception. The allowed circumstances, limits, effective period and independent approver are not defined in the reviewed A01 sources. Owner policy decision required before any non-zero path can be specified; default remains 0% and excess remains blocked absent approval.
+2. **Variant Batch-policy override authority:** FIX-032 allows an override only when explicitly authorized and auditable. The controlling authority, eligible decision role, scope and revocation/effective-date policy are not identified by the reviewed sources. Owner must assign/approve the policy authority; M02 Product/Variant ownership and M06 inventory enforcement remain distinct.
+3. **Virtual transit Location exception:** FIX-032 excludes virtual transit Locations from normal purchase receiving unless separately approved policy authorizes an exception. The approving authority and permitted exception conditions are not identified. Owner decision required only if the business requires this exception; otherwise the exclusion remains.
+4. **Purchase-order amendment/source-version semantics:** FIX-027 identifies procurement ownership but does not settle which PO amendments can affect an already-arrived, inspected, accepted or posted receipt. M08 is the controlling source domain; the specific policy decision authority and amendment rules are not identified in the reviewed A01 source. Require Owner/domain-owner decision before defining retroactive or post-acceptance behavior.
+5. **Independent approval/SoD for A01 exceptions:** DOC-05 §25.4 requires pending/DENY when no independent eligible approver is assigned and defines no fallback self-approval. A01-specific exception categories and the accountable approver assignment are not established. Owner must assign the policy authority; no self-approval or inferred role is permitted meanwhile.
+
+**Authority gap:** the reviewed documents identify Owner approval for conceptual FIX and logical domain ownership, but do not name individual decision-makers or fully specify delegated authority for the policy items above. Do not invent a person, role grant, approval threshold or fallback. Record an explicit Owner assignment/decision before closing any such item.
+
+### 42.62.4 Class B — Architecture/technical design decision required (not implementation)
+
+| OPEN cluster | Controlling source/domain to consult | Required design output; no choice made here |
+|---|---|---|
+| Physical PO/receipt/source occurrence/line/accepted-slice identity, keys, FKs, amendment linkage and duplicate disposition | M08 source ownership; M06 posting identity; DOC-04 physical dictionary/ERD | Source-to-event lineage and physical relationship/constraint specification. |
+| Receipt lifecycle, partial inspection/acceptance and disposition representation | M08 receiving workflow; M18 inspection/quality where applicable; M06 posting boundary | State/transition and partial-slice representation with authority and audit conditions. |
+| Batch policy source/snapshot, Variant override record and Location lifecycle/receiving eligibility | M02 Product/Variant; M06 Batch/inventory; M07 Location custody | Effective-policy resolution, snapshot provenance, authoritative Location resolver and exception boundary. |
+| Numeric types, precision/scale/capacity/overflow, Product increments/fractions, conversion graph/version/snapshot and operation-specific rounding | M02 unit/Product master; M06 stock quantity/costing; DOC-04 §§20, 42.58 | Reproducible numeric/conversion contract and arithmetic acceptance rules; no numeric parameters are selected by this triage. |
+| A01-specific M08 receipt/acceptance action and M06 posting action, actor/scope/assignment/approver/SoD/audit tuple | M08 and M06 domain owners; DOC-05 authorization/security authority | Exact action catalogue and controlled handoff/authorization specification; candidate keys are not grants. |
+| Atomicity, event/movement fan-out, idempotency identity/payload/retention, locking/isolation/concurrency and uncertain-commit recovery | M06 posting architecture; DOC-03 §§18.3–18.4, 21.5; DOC-04 §42.59 | Transaction/write-set, duplicate-safe retry, conflict and recovery contract. No outbox/inbox/distributed transaction or exactly-once transport is presumed. |
+| Projection grain/watermark/freshness, reconciliation, checkpoint/replay/gap recovery, quarantine/alert/manual recovery | M06 projection/operations ownership; DOC-03 §§6, 18.3, 21.5; DOC-04 §42.60 | Projection lifecycle, reconciliation and operational ownership specification. |
+| Physical tenant enforcement, audit storage/retention and operational observability | M01 tenant boundary; M06/M08 resource owners; security/platform authority; DOC-03 §§18.4–18.5, DOC-05 | Physical enforcement/control design and evidence requirements; no RLS/server mechanism is selected here. |
+
+For each row, if the controlling document does not identify a delegated decision authority, the architecture/data authority must be explicitly assigned by the Owner before the design is accepted. A technical design cannot silently decide unresolved business policy.
+
+### 42.62.5 Class C — Executed evidence required only after separate design/implementation authorization
+
+The following are evidence gates, not requests to execute tests now:
+
+- Source identity, PO amendment, duplicate acceptance and source-to-event lineage.
+- Lifecycle transitions, partial receipt/acceptance, over-receipt, shortage, tolerance and approval/SoD positive/negative cases.
+- Batch-policy inheritance/override/snapshot; valid/invalid Location and Batch; same-Business and cross-Business denial; split allocation and quantity conservation.
+- Numeric valid/invalid/fractional/boundary/overflow/conversion/reconciliation cases.
+- Same-key replay, changed-payload conflict, concurrent duplicate requests, rollback, timeout/lost response, uncertain commit and complete movement fan-out.
+- Ledger-to-balance, Batch-to-parent-Location, repeated rebuild, projection lag/failure, event gap/out-of-order, quarantine/recovery and tenant isolation.
+
+Evidence must be tied to an approved technical design, controlled test environment, test version/commit, expected outcome, actual result and reviewer. No evidence is claimed by this triage. Execution remains blocked until the separate implementation/test authorization gate is granted.
+
+### 42.62.6 Disposition and next gate
+
+**TRIAGE COMPLETE — classification only.** Class A policy decisions remain unmade where stated; Class B technical design remains OPEN; Class C evidence remains NOT EXECUTED and NOT AUTHORIZED. Source-baseline items in §42.62.2 are not reopened. No new DOC08 FIX, no physical design approval, no permission grant, no adapter activation and no implementation authorization are created.
+
+CW-11 Package E remains IN PROGRESS — ACCEPTANCE NOT MET. Continue within A01. The next bounded action is to present only the Class A policy questions to the Owner for explicit decision/authority assignment; do not ask the Owner to approve technical mechanisms or test evidence as a substitute for their separate gates.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
