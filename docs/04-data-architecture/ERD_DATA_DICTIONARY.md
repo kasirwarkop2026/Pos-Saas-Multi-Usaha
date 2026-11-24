@@ -5973,3 +5973,91 @@ No DOC08 FIX is created or modified. No permission, role, approver assignment, d
 Next bounded action: prepare an Owner-facing policy-gap/authority assignment register that groups the unresolved Class A parameters by decision authority and identifies which must return to Owner versus which may be prepared by M08/M06/M02/M07/DOC-05 owners for review. Keep the work documentation-only and do not start Class B physical design until the applicable policy authority and acceptance gate are explicitly resolved.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.71 CW-11 Package E — Owner-facing Policy Gap & Authority Assignment Register (24 November 2026)
+
+**STATUS: PREPARED FOR OWNER REVIEW — NOT AN AUTHORITY APPOINTMENT, DELEGATION, POLICY CLOSURE OR TECHNICAL DESIGN APPROVAL.** This register operationalizes the next action from §42.70. It separates (1) policy choices reserved for explicit Owner decision, (2) domain/security analysis that may be prepared by the respective source owners, and (3) authority/delegation decisions that must be explicitly recorded. A domain owner’s subject-matter ownership does not, by itself, establish policy approval authority.
+
+### 42.71.1 Governing source and authority boundaries
+
+The register is derived from:
+- DOC-03 §19.1: M02 owns Product/Variant catalog policy; M06 owns inventory identity, Batch, stock movement, balance and cost-layer/costing lineage; M07 owns warehouse/location custody; M08 owns supplier, purchase request/order, receiving procurement workflow and procurement commitment; M16 owns supplier invoice/AP obligation and financial posting; M18 owns quality/inspection/compliance evidence.
+- DOC-03 §19.3–19.4: source-domain ownership and explicit handoffs remain separate; supporting domains do not gain co-ownership or implicit write authority.
+- DOC-05 §25.4: eligibility candidates are not grants; absent an independent eligible approver, an operation remains PENDING / DENY; no fallback self-approval.
+- DOC-04 §§42.62–42.70 and DOC08-FIX-027..032: A01 policy principles and separate Class A/B/C gates.
+- DOC-02 §6: request/PO creation, approval, physical receiving, discrepancy review and supplier payment are distinct controls; uncertain authority fails closed.
+
+**Authority rule:** only the Owner may explicitly assign or approve the accountable policy/architecture decision authority unless a controlling approved source already documents a valid delegation. No such A01-specific delegation is identified in the reviewed sources. This register therefore records the accountable authority as **OWNER ASSIGNMENT REQUIRED / NOT YET RECORDED**. It does not assume that an M-domain owner, security reviewer, manager, administrator or receiver can approve exceptions.
+
+### 42.71.2 Three-lane disposition
+
+| Lane | What belongs in this lane | Who may prepare / decide | Current disposition |
+|---|---|---|---|
+| A — Owner policy decisions | Whether an exception is allowed; policy boundaries; risk appetite; approval principle; effective scope; exception/denial outcome | Owner decides, or an explicitly documented delegate within a recorded scope | OPEN — no A01 policy delegate/authority assignment recorded |
+| B — Domain/security requirements and impact analysis | Workflow facts, source ownership, quantity/custody invariants, policy inputs, candidate scenarios, authorization and SoD requirements | Respective domain/security owners may prepare analysis within their source ownership; this is not policy approval | PREPARATION MAY PROCEED AS DOCUMENTATION ONLY; no formal owner assignment or deliverable acceptance inferred |
+| C — Design / implementation / evidence | Physical schema, keys, constraints, permissions, RLS/API enforcement, runtime behavior, test execution, production changes | Separate design and implementation/test approval gates only | BLOCKED / NOT AUTHORIZED under current Package E status |
+
+### 42.71.3 Owner decisions that must be returned to the Owner
+
+| Gap ID | Related ODR | Decision required from Owner | Inputs that may be prepared before the decision | Current status |
+|---|---|---|---|---|
+| PGA-01 — A01 policy authority | All ODR-A01-01..05 | Name/identify the accountable policy decision authority for each policy family, or explicitly retain each decision at Owner level. If delegating, specify delegate identity/office, scope, limits, effective date, duration, revocation and review. | DOC-03 may map source-domain ownership; DOC-05 may identify security/SoD dependencies. Neither may appoint itself. | OWNER DECISION REQUIRED |
+| PGA-02 — Tolerance and over-receipt policy | ODR-A01-01 | Decide permitted circumstances, quantity basis, limits, whether any exception only records variance or may permit acceptance of excess, effective period and approval boundary. Preserve 0% default and no automatic excess acceptance/posting until explicitly decided. | M08 prepares PO/receiving lifecycle and discrepancy scenarios; M06 identifies accepted-only posting, quantity conservation and stock-ledger impacts; DOC-05 prepares approval/SoD questions. | OWNER DECISION REQUIRED |
+| PGA-03 — Variant Batch-policy override | ODR-A01-02 | Decide whether the override may be used, the eligible decision authority, scope, effective time, review/revocation and exception boundaries. Preserve Product ownership and Variant inheritance baseline. | M02 prepares Product/Variant policy ownership and lifecycle requirements; M06 prepares Batch/stock enforcement impacts; DOC-05 prepares authorization/SoD implications. | OWNER DECISION REQUIRED |
+| PGA-04 — Virtual Transit Location exception | ODR-A01-03 | Decide whether exceptions are prohibited entirely or permitted in narrowly defined circumstances; if permitted, approve custody criteria, scope, authority, evidence and lifecycle. Preserve exclusion from normal receiving until decision. | M07 prepares physical custody, Location lifecycle and destination-confirmation scenarios; M08 prepares receiving handoff; M06 identifies stock-ledger and inventory-location effects; DOC-05 prepares approval controls. | OWNER DECISION REQUIRED |
+| PGA-05 — PO amendment by receipt lifecycle | ODR-A01-04 | Decide amendment classes/fields and permitted treatment at each stage: before arrival, arrived/unaccepted, inspected, accepted, and already posted. Decide any exceptional pre-acceptance authority and correction/reversal approval principle. Preserve prospective treatment and no silent rewrite meanwhile. | M08 prepares PO version and receiving-stage scenarios; M18 supplies inspection/quality facts where applicable; M06 prepares accepted-slice, posting and correction-lineage impacts; M16 identifies only the separate supplier invoice/AP/payment boundary. | OWNER DECISION REQUIRED |
+| PGA-06 — Independent approval / SoD policy | ODR-A01-05 | Decide high-risk exception classes/risk tiers, independence/disqualification criteria, authority for appointing/delegating/revoking eligible approvers, escalation and prolonged-pending outcome. Preserve no self-approval and PENDING / DENY if no eligible independent approver. | DOC-05/security authority prepares action/actor/scope/SoD requirements; M08 and M06 provide exception scenarios in their workflows; Owner decides policy and accountable authority. | OWNER DECISION REQUIRED |
+
+### 42.71.4 Domain-owner preparation matrix — analysis, not delegation
+
+| Domain / source | Bounded analysis it may prepare | Explicit exclusions |
+|---|---|---|
+| M08 — Procurement & Supplier | PO amendment types/version lifecycle; request/PO approval vs receiving separation; physical receiving and discrepancy workflow; arrived-but-unaccepted and partial receipt scenarios; supplier commitment/source lineage | Does not decide inventory posting rules, Batch policy, Location custody, AP/payment policy or its own exception approval authority |
+| M06 — Inventory & Material Ledger | Accepted-slice admission; inventory movement and quantity conservation; over-receipt/shortage stock impacts; Batch/Location allocation impacts; correction/reversal lineage; projection/reconciliation requirements | Does not own/rewrite M08 procurement source facts; does not authorize receipt or grant its own posting/exception permission |
+| M02 — Product, Variant & Pricing | Product-owned Batch-tracking policy inputs; Variant inheritance and override lifecycle requirements; effective policy provenance and historical receipt-time policy requirements | Does not grant M06 inventory actions or independently approve Variant override without explicit authority |
+| M07 — Warehouse & Custody | Physical Location classification/custody lifecycle; actual destination confirmation; transit custody and handoff evidence; warehouse receiving eligibility requirements | Does not own inventory ledger posting or convert virtual Location to physical by configuration alone |
+| M18 — Quality / Inspection / Compliance | Inspection/quality checkpoints, disposition evidence, nonconformance and release requirements where applicable | Does not own procurement PO version or inventory ledger effects; does not imply every receipt requires an M18 inspection |
+| M16 — Finance / AP / Payment | Supplier invoice/AP obligation and payment separation; identify whether a PO amendment has downstream financial-source implications | Does not own PO/receipt source workflow or inventory movement; no payable/payment facts are retroactively rewritten by this register |
+| DOC-05 / security authority | Candidate action catalogue, actor/resource/scope/SoD/approver/audit requirements; independence and fail-closed control requirements; evidence checklist | Does not appoint named approvers, grant roles/permissions, finalize DOC-05 or implement RLS/API enforcement |
+| DOC-03 / architecture authority | Validate single-owner boundaries and explicit cross-domain handoffs; identify unresolved architecture/data authority gaps under §42.62.4 | Does not silently transfer domain ownership or approve business policy/physical design |
+
+**Preparation status:** the table defines eligible analysis boundaries based on documented ownership; it is not a task assignment, appointment or confirmation that any domain team has accepted work. A deliverable becomes an accepted input only after its source, owner, scope and review status are recorded.
+
+### 42.71.5 Required format for domain analysis submissions
+
+Each domain analysis should be documentation-only and contain:
+1. Source document and exact section/decision anchor.
+2. Domain-owned facts and explicit non-owned facts.
+3. Lifecycle scenarios and affected stage(s).
+4. Invariants that must remain true, including relevant FIX-027..032.
+5. Options/risks and consequences, without selecting an Owner policy answer.
+6. Required evidence, audit lineage and fail-closed outcome.
+7. Cross-domain dependencies and the exact decision question returned to Owner.
+8. Open assumptions, missing sources and reviewer/status.
+
+No invented numeric limits, approver names, role grants, schema fields, permission keys, physical states or implementation mechanisms.
+
+### 42.71.6 Gate and checklist status
+
+| Gate | Status |
+|---|---|
+| ODR-A01-01..05 principle-level responses | RECORDED — PARTIALLY APPROVED |
+| PGA-01 accountable policy authority / delegation | OPEN — OWNER ASSIGNMENT REQUIRED |
+| PGA-02 tolerance / over-receipt details | OPEN — OWNER DECISION REQUIRED |
+| PGA-03 Variant override details | OPEN — OWNER DECISION REQUIRED |
+| PGA-04 Transit Location exception details | OPEN — OWNER DECISION REQUIRED |
+| PGA-05 PO amendment lifecycle details | OPEN — OWNER DECISION REQUIRED |
+| PGA-06 independent approval / SoD details | OPEN — OWNER DECISION REQUIRED |
+| Domain/security analysis submissions | NOT YET SUBMITTED — bounded preparation may proceed only as documentation |
+| Class B physical/technical design | OPEN — NOT APPROVED |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET; physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED |
+
+### 42.71.7 Next bounded action
+
+The next action is to present the Owner with PGA-01 first: confirm whether A01 policy decisions remain reserved to the Owner or whether specific policy decision authority is delegated, and if delegated, record the exact scope and lifecycle. In parallel only as documentation preparation (not policy approval), domain owners may assemble the bounded input sets in §42.71.4. Do not request all detailed policy decisions as one combined approval before the accountable authority is established.
+
+No DOC08 FIX is created/modified. No role, permission, approver, delegation, account or security configuration is assigned. No physical schema, adapter activation, test execution or Stage 6 implementation is authorized.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
