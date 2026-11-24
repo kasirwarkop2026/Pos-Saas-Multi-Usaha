@@ -5792,3 +5792,58 @@ No exception is authorized by this principle approval alone. Until the open para
 Continue with ODR-A01-04 using the exact request in §42.63.2. Keep ODR-A01-03 exception authority, qualifying circumstances, evidence, lifecycle and enforcement parameters OPEN. Do not treat this principle approval as an operational exception authorization.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.68 CW-11 Package E — Owner response to ODR-A01-04 (24 November 2026)
+
+**OWNER POLICY PRINCIPLE APPROVED — LIFECYCLE-SPECIFIC AMENDMENT DETAILS REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026 to the prospective PO-amendment recommendation in DOC-04 §42.64.3. It addresses ODR-A01-04 only and does not infer a response to ODR-A01-05.
+
+### 42.68.1 Attributable Owner decision
+
+The Owner approves the following PO amendment and receipt lifecycle principles:
+
+1. **Prospective treatment:** PO amendments apply prospectively. They must not silently rewrite historical procurement, arrival, inspection, acceptance or inventory-posting facts.
+2. **Before physical arrival:** changes are governed by the applicable PO version and procurement authority; source/version lineage must remain attributable.
+3. **Arrived, not yet accepted:** preserve the fact and evidence of physical arrival and the applicable PO version. Any permitted treatment of the still-unaccepted quantity must be explicit, authorized and auditable; no retroactive erasure or silent substitution.
+4. **Inspected:** preserve inspection results and their source context. A PO amendment does not erase or silently rewrite completed inspection facts.
+5. **Accepted:** accepted receipt facts and accepted quantities are not retroactively rewritten by a PO amendment. Any correction must follow a separately authorized correction lineage.
+6. **Posted to inventory:** posted inventory movements are never silently rewritten by PO amendment. Correction/reversal must use the established, attributable correction lineage.
+7. **Historical traceability:** source PO version, receipt occurrence/line, inspection and accepted-slice facts remain distinct and traceable.
+
+### 42.68.2 Decision scope and unresolved parameters
+
+This approval adopts the policy principle only. The following details remain OPEN and must not be invented:
+
+- exact amendment classes and fields permitted at each receipt lifecycle stage;
+- handling of an arrived but not yet accepted quantity when the PO is amended;
+- effective-version selection and concurrency/locking behavior;
+- authority and approval conditions for exceptional pre-acceptance treatment;
+- correction/reversal authorization, linkage and audit requirements;
+- physical version, snapshot, key, event or lineage representation and runtime implementation.
+
+Until these details are defined and reviewed, no retroactive amendment behavior or exceptional authority is inferred. Preserve historical facts, apply amendments prospectively, and use separately authorized correction lineage where correction is required.
+
+### 42.68.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product owns Batch policy; Variant inherits by default; override only as explicit, authorized and auditable exception | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | Normal receiving excluded; exception only for demonstrated business need, explicit approval and physical custody/destination evidence | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | Prospective treatment approved; historical arrival, inspection, accepted and posted facts must not be silently rewritten; posted correction follows authorized correction/reversal lineage | **PARTIALLY APPROVED — LIFECYCLE / AUTHORITY DETAILS OPEN** |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+### 42.68.4 Consistency audit against source baseline
+
+- **DOC08-FIX-027 / DOC08-FIX-028:** consistent with distinct PO/source-line, physical receipt occurrence, receipt line, accepted slice and A01 posting facts; no silent rewriting of posted movements.
+- **DOC-04 §42.63.2 and §42.64.3:** consistent with prospective PO amendment treatment and correction through attributable correction lineage.
+- **DOC-03 M08 procurement ownership / M06 inventory posting boundary:** procurement source ownership and inventory posting authority remain distinct; no domain ownership is reassigned.
+- **DOC-05 authorization boundary:** no actor, approver, delegated authority or permission is inferred.
+
+**Audit disposition: CONSISTENT — no conflict with FIX-027..032 identified.** No new FIX is created and existing FIX records are not rewritten. No physical design, permission grant, adapter activation, test execution or Stage 6 implementation is approved.
+
+### 42.68.5 Next gate
+
+Continue with ODR-A01-05 using the exact request in §42.63.2. Keep ODR-A01-04 lifecycle-specific amendment classes, authority, version-selection and correction details OPEN. Do not treat this principle approval as authorization for retroactive PO amendment or inventory mutation.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
