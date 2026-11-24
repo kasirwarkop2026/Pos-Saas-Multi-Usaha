@@ -1388,3 +1388,24 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 No FIX change, physical design, permission/role grant, approver assignment, adapter activation, test execution or Stage 6 implementation is authorized.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 11.53 CW-11 Package E — Owner-facing Policy Gap & Authority Assignment Register (24 November 2026)
+
+**PREPARED FOR OWNER REVIEW — NOT AN AUTHORITY APPOINTMENT OR POLICY CLOSURE.** Detailed register and source mapping: DOC-04 §42.71.
+
+| Gap ID | Subject | Decision / input lane | Current status |
+|---|---|---|---|
+| PGA-01 | Accountable A01 policy authority / delegation across ODR-A01-01..05 | Owner must retain or explicitly delegate authority and record scope, duration, effective date and revocation/review | OWNER DECISION REQUIRED |
+| PGA-02 | Tolerance / over-receipt | Owner policy decision; M08/M06/DOC-05 may prepare workflow, ledger and SoD analysis | OWNER DECISION REQUIRED |
+| PGA-03 | Variant Batch-policy override | Owner policy decision; M02/M06/DOC-05 may prepare policy-source and enforcement impact analysis | OWNER DECISION REQUIRED |
+| PGA-04 | Virtual Transit Location exception | Owner policy decision; M07/M08/M06/DOC-05 may prepare custody, receiving and ledger analysis | OWNER DECISION REQUIRED |
+| PGA-05 | PO amendment lifecycle | Owner policy decision; M08/M18/M06/M16 may prepare source, inspection, posting and AP boundary analysis | OWNER DECISION REQUIRED |
+| PGA-06 | Independent approval / SoD | Owner policy decision; DOC-05/security plus M08/M06 may prepare exception and independence scenarios | OWNER DECISION REQUIRED |
+
+**Domain ownership boundary:** M08 owns procurement/receiving source workflow; M06 owns inventory ledger effects; M02 owns Product/Variant policy inputs; M07 owns warehouse/location custody; M18 owns inspection/quality/compliance evidence where applicable; M16 owns supplier invoice/AP/payment facts; DOC-05 defines authorization/SoD constraints. These are preparation boundaries, not policy approval delegations. No domain owner is presumed to hold A01 exception approval authority.
+
+**Current gate:** all five ODR principles are PARTIALLY APPROVED; PGA-01..06 details remain OPEN; Class B physical design remains OPEN; Class C evidence remains NOT EXECUTED / NOT AUTHORIZED; Package E remains NOT MET. No FIX, permission, approver assignment, delegation, schema, adapter, test or Stage 6 authorization is created.
+
+**Next step:** ask Owner to decide PGA-01 first — retain all A01 policy authority at Owner level or explicitly delegate named policy scope and lifecycle. Domain analyses may be prepared within documented ownership boundaries but are not binding policy decisions.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
