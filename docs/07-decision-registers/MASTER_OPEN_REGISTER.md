@@ -1249,3 +1249,25 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 All five are policy/authority decisions only. Physical design questions remain Class B; test evidence remains Class C and unauthorized. DOC-05 remains DRAFT / REVIEW REQUIRED / NOT FINAL. No new FIX, permission grant, physical design approval or Stage 6 authorization.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.46 CW-11 Package E — Multi-Business A01 policy architecture recommendation (24 November 2026)
+
+**RECOMMENDATION FOR OWNER REVIEW — NOT ADOPTED / NOT A FIX.** DOC-04 §42.64 records the detailed proposal.
+
+| Design layer | Recommendation | Boundary |
+|---|---|---|
+| Global Core Rules | Platform-wide tenant isolation, authorization, immutable posted movement history/correction lineage, quantity conservation, duplicate-safe logical posting, auditability and fail-closed unresolved cases | Business configuration cannot weaken these invariants |
+| Business-level Configurable Policies | Allow only explicitly designated operational policies to vary by Business within validated platform limits; require authority, scope, effective version/period, rationale and audit | Configuration is not a permission grant and cannot change domain ownership |
+| Controlled Exceptions | Separate approval path for bounded high-risk exceptions, with eligible independent approver where required, evidence, rationale, limits and audit | Unresolved authority/approver remains pending/DENY; no self-approval or permissive fallback |
+
+A01 recommendations for Owner consideration:
+- ODR-A01-01: retain 0% as default; any non-zero tolerance is an explicit, bounded Business policy and does not auto-accept/post excess.
+- ODR-A01-02: retain Product-owned Batch policy and Variant inheritance; override only as a controlled, authorized and auditable exception.
+- ODR-A01-03: retain virtual transit exclusion from normal receiving; any exception requires actual physical custody evidence and explicit approval.
+- ODR-A01-04: use prospective PO amendment treatment by default; never silently rewrite arrived/accepted/posted facts; posted correction follows correction lineage.
+- ODR-A01-05: require independent approval for defined high-risk exceptions; no self-approval; no eligible approver means pending/DENY under DOC-05 §25.4.
+
+All five ODRs remain PENDING / OPEN until explicit Owner adoption or revision. Existing FIX-027..032 remain unchanged. This recommendation selects no physical schema/runtime mechanism, grants no permission, does not activate the adapter, and does not authorize Stage 6. Package E acceptance remains NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
