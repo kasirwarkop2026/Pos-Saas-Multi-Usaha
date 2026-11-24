@@ -1328,3 +1328,22 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 **Consistency audit:** response is consistent with DOC08-FIX-032 and DOC-04 §42.56, and does not reassign Location ownership or grant authorization. No new FIX, physical design approval, permission grant, adapter activation, test authorization or Stage 6 authorization is created. ODR-A01-04..05 remain PENDING / OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.50 CW-11 Package E — Owner response: ODR-A01-04 (24 November 2026)
+
+**PARTIALLY APPROVED — PROSPECTIVE POLICY PRINCIPLE DECIDED; LIFECYCLE / AUTHORITY DETAILS OPEN.** Owner response source: explicit agreement in the project conversation on 24 November 2026. Detailed decision and consistency audit: DOC-04 §42.68.
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product owns Batch policy; Variant inherits by default; override only as explicit, authorized and auditable exception | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | Normal receiving excluded; exception only for demonstrated business need, explicit approval and physical custody/destination evidence | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | Prospective treatment; no silent rewrite of arrival, inspection, accepted or posted facts; posted correction uses authorized correction/reversal lineage | **PARTIALLY APPROVED — DETAILS OPEN** |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+**ODR-A01-04 unresolved parameters:** amendment classes/fields by lifecycle stage; handling of arrived but unaccepted quantities; effective PO-version selection and concurrency; authority for exceptional pre-acceptance treatment; correction/reversal authority, linkage and audit; physical version/snapshot/lineage implementation. No retroactive amendment authority is inferred.
+
+**Consistency audit:** response is consistent with DOC08-FIX-027/028, DOC-04 §42.63.2 and §42.64.3, and DOC-03 M08/M06 ownership boundaries. No new FIX, physical design approval, permission grant, adapter activation, test authorization or Stage 6 authorization is created. ODR-A01-05 remains PENDING / OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
