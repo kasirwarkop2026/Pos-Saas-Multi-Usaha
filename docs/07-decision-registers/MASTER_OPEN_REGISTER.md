@@ -1440,3 +1440,21 @@ Fixed baseline from DOC08-FIX-029: default tolerance 0%; non-zero tolerance only
 
 DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
 
+## 11.56 Owner Decision and Audit — PGA-02 Approved
+
+**Decision date:** 2026-11-24  
+**Status:** OWNER APPROVED — POLICY PACKAGE ADOPTED.  
+**Detailed decision and source audit:** DOC-04 §42.74.
+
+The Owner approved all recommendations in DOC-04 §42.73.3:
+- 0% remains the only active default for every Business and PO line.
+- Non-zero tolerance remains inactive until a separate written Owner-approved Business policy defines scope, quantity basis, cap/limits, effective date/version, expiry/review/revocation and evidence. No numeric value is created now.
+- Over-receipt excess is recorded separately and remains ineligible for accepted-for-inventory/A01 until prior explicit Owner exception authorization and a separate physical verification/acceptance decision are evidenced.
+- Shortage records actual arrived quantity and shortage separately; missing quantity never creates receipt, accepted quantity or stock movement.
+- Initiator/receiver cannot self-approve; without a valid independent approval path, exception remains PENDING / DENY per DOC-05 §25.4.
+- Evidence traceability is required at logical level; no physical schema is selected.
+
+**Read-only consistency audit:** PASS against DOC08-FIX-029, FIX-027/028 accepted-only posting boundary, PGA-01 Owner authority retention, DOC-05 §25.4 SoD/fail-closed rules, DOC-02 §6 workflow separation and DOC-03 §19.1 domain ownership. No contradiction identified at conceptual/documentation level.
+
+**Disposition:** PGA-02 CLOSED at policy-decision level. ODR-A01-01 principle/policy package approved; technical and physical parameters remain OPEN. No numeric non-zero tolerance, cap, permission, role, approver assignment, delegation, physical schema, test, adapter activation or Stage 6 authorization is created. Class B remains OPEN; Class C NOT EXECUTED / NOT AUTHORIZED; Package E acceptance NOT MET; DB_PUSH_BLOCKED: ACTIVE.
+
