@@ -1190,3 +1190,29 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 Related anchors: DOC-03 §§6, 18.3–18.4, 19.3, 21.5.5–21.5.10; DOC-04 §§17.2–17.4, 42.46–42.54, 42.59–42.60; Worklist §15.122.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+ 
+
+## 11.43 CW-11 Package E — Consolidated A01 acceptance matrix (24 November 2026)
+
+**CONSOLIDATED DISPOSITION: CONCEPTUAL CONTRACT PASS; PHYSICAL/TECHNICAL ACCEPTANCE NOT ACCEPTED; EXECUTED EVIDENCE NOT PROVIDED; PACKAGE E ACCEPTANCE NOT MET.** This matrix consolidates DOC-04 §42.61 and bounded audits §§42.57–42.60.
+
+| Area | Conceptual status | Physical / technical OPEN | Evidence |
+|---|---|---|---|
+| Source ownership, identity, accepted quantity | PASS — DOC08-FIX-027 | Physical source keys/FKs/versioning/disposition and duplicate-acceptance enforcement | NOT EXECUTED |
+| Lifecycle and partial acceptance | PASS — DOC08-FIX-028 | Literal states/transitions and source representation | NOT EXECUTED |
+| Over-receipt, shortage, tolerance | PASS — DOC08-FIX-029 | Approval authority, policy version/effective time, enforcement/audit | NOT EXECUTED |
+| Accepted slice → A01 event → movement | PASS — DOC08-FIX-030 | Physical identity/registry/FKs/fan-out constraints | NOT EXECUTED |
+| Batch/Location allocation | PASS — DOC08-FIX-031 | Physical allocation/Batch/Location keys and constraints | NOT EXECUTED |
+| Product Batch policy / receiving Location | PASS — DOC08-FIX-032 | Policy snapshot/override, Location eligibility and tenant enforcement | NOT EXECUTED |
+| Authorization / tenant / audit | Conceptual boundary PASS only | A01 M08/M06 actor/action/scope/approval/SoD tuple, server enforcement and tenant isolation | NOT EXECUTED; authorization NOT ACCEPTED |
+| Numeric conversion / costing | Conceptual PASS | Precision/scale/overflow, Product increment, factor/version/snapshot, rounding, FIFO/MWA residuals | NOT EXECUTED |
+| Atomicity / idempotency / concurrency / recovery | Conceptual PASS | Registry/key/payload/retention, transaction/write-set, locks/isolation/retry and recovery | NOT EXECUTED |
+| Projection reconciliation / rebuild | Conceptual PASS | Projection grain/watermark/lag, reconciliation/rebuild/gap/recovery/monitoring | NOT EXECUTED |
+
+**Cross-cutting blockers:** physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; ERD-OPEN-05 OPEN; A01 authorization and tenant enforcement OPEN; numeric implementation OPEN; transaction/idempotency/recovery OPEN; projection operations OPEN; required runtime/security/failure/reconciliation evidence not executed.
+
+The matrix does not approve a physical schema, permission, adapter activation or Stage 6 implementation. No new DOC08 FIX is created; DOC08-FIX-027/028/029/030/031/032 remain unchanged. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
+
+Related anchors: DOC-04 §42.61; DOC-03 §§6, 18–21; DOC-05 §§23–25; Worklist §15.123.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
