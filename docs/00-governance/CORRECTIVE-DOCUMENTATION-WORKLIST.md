@@ -4512,3 +4512,22 @@ This decision does not appoint approvers, create roles/permissions, change SoD, 
 
 **Next bounded step:** prepare separate Owner-facing decision packets for PGA-02..PGA-06, preserving the domain boundaries and distinguishing evidence/recommendations from policy choices. Do not combine them into an implied blanket approval.
 
+## 15.135 PGA-02 — Prepare Owner Decision Packet: Tolerance, Over-receipt and Shortage
+
+**Completed:** source review and preparation of Owner-facing decision packet at DOC-04 §42.73; index recorded at DOC-09 §11.55.
+
+**Fixed baseline preserved:** DOC08-FIX-029 remains unchanged: 0% default; explicit policy and authorization required for non-zero tolerance; excess not automatically accepted/posted; shortage remains PO variance; tolerance cannot rewrite physical or accepted quantity.
+
+**Recommended policy package submitted — awaiting Owner decision:**
+- [ ] Owner confirms 0% remains the only active default for every Business and PO line.
+- [ ] Owner confirms non-zero tolerance stays inactive until a separate written Owner-approved policy defines scope, quantity basis, cap, effective date/version, expiry/review/revocation and evidence.
+- [ ] Owner confirms over-receipt excess is separately recorded and ineligible for accepted-for-inventory/A01 until prior Owner exception authorization and a separate physical acceptance decision are evidenced.
+- [ ] Owner confirms shortage records only actual arrived quantity; missing quantity never creates receipt or stock movement.
+- [ ] Owner confirms no initiator/receiver self-approval and PENDING / DENY if no valid independent approval path exists.
+
+**Open pending response:** PGA-02 remains OWNER DECISION REQUIRED / OPEN. No numeric tolerance, cap, calculation basis, Business scope, approver delegation or effective period is activated or inferred.
+
+**Next gate:** obtain explicit Owner approval or amendment of DOC-04 §42.73.3. Only after the Owner response may the policy record be updated. Do not proceed to PGA-03 or implementation as though PGA-02 were closed.
+
+Documentation-only, append-only on PR #149 branch. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
