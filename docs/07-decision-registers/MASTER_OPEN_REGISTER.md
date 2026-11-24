@@ -1423,3 +1423,20 @@ Any future delegation requires a separate explicit written Owner decision defini
 
 No approver, role, permission, SoD exception, physical design, test, adapter activation, schema change, or Stage 6 authorization is created. DB_PUSH_BLOCKED: ACTIVE.
 
+## 11.55 PGA-02 — Owner-Facing Decision Packet: Tolerance, Over-receipt and Shortage
+
+**Status:** PREPARED FOR OWNER DECISION — NOT APPROVED. Detailed packet: DOC-04 §42.73.
+
+Fixed baseline from DOC08-FIX-029: default tolerance 0%; non-zero tolerance only through explicit policy and authorization; over-receipt excess is not automatically accepted/posted; shortage remains a PO variance and missing quantity creates no movement; tolerance cannot change physical or accepted quantity.
+
+**Recommendation submitted to Owner:**
+- Keep 0% as the only active default for every Business and PO line.
+- Do not activate non-zero tolerance until a separate written Owner-approved policy defines scope, quantity basis, cap, effective date/version, expiry/review/revocation and evidence.
+- Record over-receipt excess separately and keep it ineligible for accepted-for-inventory/A01 until prior Owner exception authorization and a separate physical acceptance decision are both evidenced.
+- Record actual arrived quantity and shortage separately; never create receipt or stock movement for missing quantity.
+- Keep initiator/receiver from self-approval; if no valid independent approval path exists, PENDING / DENY per DOC-05 §25.4.
+
+**Owner response required:** approve or amend the package in DOC-04 §42.73.3. No numeric tolerance/cap or delegation is assumed. No policy closure, physical design, permission grant, approver appointment, test or Stage 6 authorization is implied by preparing this packet.
+
+DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
