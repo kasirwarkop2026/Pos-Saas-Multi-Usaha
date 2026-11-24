@@ -4069,3 +4069,32 @@ All source lineage, lifecycle, approval, Batch/Location, numeric, replay/concurr
 Next: present only the five Class A policy/authority items in §15.124.3 to the Owner for explicit decisions or delegated-authority assignment. Keep Class B technical design and Class C evidence separate. Do not move to another A01 source family; do not declare Package E accepted.
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, deployment or Production change. PR #149 remains open/unmerged; review and merge are separate gates.
+
+
+## 15.125 CW-11 Package E — Owner Decision Request Register (24 November 2026)
+
+### 15.125.1 Deliverable completed
+
+Prepared the Owner Decision Request Register in DOC-04 §42.63, with concise OPEN Register entry in DOC-09 §11.45. The register contains five explicit policy/authority requests; no decision answer is pre-filled.
+
+### 15.125.2 Checklist update
+
+| Work item | Status |
+|---|---|
+| Source-and-Owner-authority gap triage | DONE — DOC-04 §42.62 / DOC-09 §11.44 / Worklist §15.124 |
+| ODR-A01-01 — Non-zero tolerance / over-receipt exception | PENDING OWNER DECISION; FIX-029 default 0% remains |
+| ODR-A01-02 — Variant Batch-policy override authority | PENDING OWNER DECISION; FIX-032 inheritance default remains |
+| ODR-A01-03 — Virtual transit Location exception | PENDING OWNER DECISION; normal exclusion remains |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | PENDING OWNER POLICY; M08 remains source domain; no retroactive behavior inferred |
+| ODR-A01-05 — Independent approver / A01 exception SoD | PENDING OWNER DECISION; DOC-05 §25.4 no-approver pending/DENY remains |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.125.3 Next bounded gate
+
+Present DOC-04 §42.63 to the Owner for explicit decisions or documented delegation. Keep every unanswered item OPEN. After an explicit response, audit its authority, scope and consistency against FIX-027..032 and DOC-05 before updating any decision register or FIX. Do not move to another A01 source family until Package E acceptance is met.
+
+### 15.125.4 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. PR #149 remains open/unmerged. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
