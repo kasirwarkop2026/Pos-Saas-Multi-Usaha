@@ -1232,3 +1232,20 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 No new DOC08 FIX. No OPEN technical item is closed by inference. No physical schema, permission, adapter activation or Stage 6 implementation is approved. Continue only within A01; Package E acceptance remains NOT MET.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.45 CW-11 Package E — A01 Owner policy decisions pending (24 November 2026)
+
+**OWNER DECISION REQUEST REGISTER PREPARED — FIVE ITEMS PENDING.** Detailed requests and response fields: DOC-04 §42.63. No Owner answer is inferred.
+
+| Request | Decision required | Baseline while pending | Status |
+|---|---|---|---|
+| ODR-A01-01 | Whether non-zero tolerance/over-receipt exceptions are permitted; if yes, circumstances, limits, effective period and independent approver | FIX-029: 0% default; excess not automatically accepted/posted; explicit policy and authorization required | PENDING / OPEN |
+| ODR-A01-02 | Whether Variant may override Product Batch policy; authority, scope, timing, revocation and audit | FIX-032: inherit Product policy by default; override only if explicitly authorized and auditable | PENDING / OPEN |
+| ODR-A01-03 | Whether any virtual transit Location receiving exception is needed; conditions, authority and physical custody evidence | FIX-032: excluded from normal receiving absent separate explicit policy | PENDING / OPEN |
+| ODR-A01-04 | Business policy for PO amendments across arrived, inspected, accepted and posted receipt stages | FIX-027/028: source facts and accepted slices remain distinct; posted movements are not silently rewritten | PENDING / OPEN |
+| ODR-A01-05 | Independent approver/SoD policy for A01 exceptions; eligibility, delegation and no-approver outcome | DOC-05 §25.4: no independent eligible approver means pending/DENY; no self-approval or fallback inferred | PENDING / OPEN |
+
+All five are policy/authority decisions only. Physical design questions remain Class B; test evidence remains Class C and unauthorized. DOC-05 remains DRAFT / REVIEW REQUIRED / NOT FINAL. No new FIX, permission grant, physical design approval or Stage 6 authorization.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
