@@ -1476,4 +1476,24 @@ The Owner approved all recommendations in DOC-04 §42.73.3:
 **Owner response required:** approve or amend DOC-04 §42.75.3, especially override availability/direction, Owner approval, scope and lifecycle. No authority delegation, role/permission grant, physical design, test or Stage 6 authorization is implied.
 
 DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+ 
+### 11.58 Owner Decision and Read-only Audit — PGA-03 Approved
+
+**Decision date:** 2026-11-25  
+**Status:** OWNER APPROVED — COMPLETE RECOMMENDATION PACKAGE ADOPTED.  
+**Detailed decision and consistency audit:** DOC-04 §42.76.
+
+The Owner explicitly approved all recommendations in DOC-04 §42.75.3:
+- Product policy is authoritative and must have an explicit required/not-required Batch-tracking outcome.
+- Variant inherits Product policy by default.
+- Variant override is exceptional and case-specific; no standing/self-service override.
+- Exact Owner approval is required for the Business/Product/Variant, direction and effective period. Both relaxation and strengthening require explicit approval.
+- Until valid approval exists, Variant continues to inherit Product policy.
+- Changes apply prospectively only; accepted receipt slices, Batch identities and posted movements are not rewritten.
+- Missing, unresolved, expired, conflicting or unsupported policy fails closed and blocks A01.
+- Logical audit evidence is required; no physical schema is selected.
+
+**Read-only consistency audit:** PASS against DOC08-FIX-032, PGA-01 authority retention, DOC-03 §19.1 domain ownership, DOC-05 §25.4 SoD/fail-closed constraints and DOC-02 §6 workflow/unknown-authority controls. No conceptual contradiction identified.
+
+**Disposition:** PGA-03 CLOSED at Owner policy-decision level. DOC08-FIX-032 remains unchanged. Physical policy/snapshot storage, authorization implementation, independent approver eligibility/assignment, API/RLS/runtime enforcement, tests and Class C evidence remain OPEN or NOT AUTHORIZED as applicable. No role, permission, approver assignment, delegation, schema, migration, adapter activation, test, database mutation or Stage 6 authorization is created. Class B remains OPEN; Class C NOT EXECUTED / NOT AUTHORIZED; Package E acceptance NOT MET; Physical Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED; DB_PUSH_BLOCKED: ACTIVE.
 
