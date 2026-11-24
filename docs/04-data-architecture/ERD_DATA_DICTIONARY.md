@@ -6170,3 +6170,56 @@ ODR-A01-01 moves from PARTIALLY APPROVED to **POLICY PRINCIPLE AND OWNER POLICY 
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
 
+## 42.75 PGA-03 — Owner-Facing Decision Packet: Variant Batch-Policy Override
+
+**Status:** PREPARED FOR OWNER DECISION — NOT APPROVED  
+**Authority:** Under §42.72, all A01 policy decisions remain reserved to the Owner. M02/M06 may prepare analysis only; no delegation is inferred.  
+**Baseline:** DOC-04 §42.56 / DOC08-FIX-032; DOC-03 §19.1; DOC-05 §25.4; DOC-04 §42.71.4–42.71.5.
+
+### 42.75.1 Fixed conceptual baseline — do not reopen
+1. Product master owns an explicit Batch-tracking policy outcome: **Batch tracking required** or **Batch tracking not required**.
+2. Variant inherits the Product policy by default.
+3. Variant-level override is permitted only when explicitly authorized and auditable; implicit or silent override is prohibited.
+4. Effective policy is resolved for the accepted receipt slice/allocation and preserved as a receipt-time decision/snapshot. Later Product/Variant master-data changes do not rewrite historical accepted slices or posted movements.
+5. Unknown, unset, unresolved inheritance, or conflicting Product/Variant policy fails closed and blocks A01.
+6. If Batch tracking is required, each allocation portion must identify the actual physical Batch/Lot received and satisfy applicable required identity/attribute requirements. Missing or ambiguous required identity/attributes block A01.
+7. Unbatched path is allowed only when the effective explicit Product/Variant policy says Batch tracking is not required.
+8. DOC08-FIX-032 does not grant Batch administration, receiving, discrepancy or posting permissions and does not approve physical schema/runtime behavior.
+
+### 42.75.2 Decisions requested from Owner
+
+| Decision ID | Policy question | Recommended default for Owner consideration |
+|---|---|---|
+| PGA-03-A | Should Variant inheritance remain mandatory default? | Yes. Variant always inherits Product policy unless a valid, explicit, auditable override is approved. No implicit local default. |
+| PGA-03-B | Should Variant override be allowed at all? | Allow only as an exceptional, case-specific policy decision; no standing automatic or self-service override. Until explicit Owner approval exists, use Product inheritance. |
+| PGA-03-C | Who may authorize an override? | Owner retains approval authority under §42.72. No Product Manager, M02 operator, receiver, administrator or domain owner is presumed delegated authority. A future delegation requires a separate written Owner decision. |
+| PGA-03-D | May an override relax a Product requirement (required → not required), strengthen it (not required → required), or both? | Do not permit either direction by default. Require explicit Owner decision for the exact Variant and direction. A request that would relax a required Batch policy receives heightened scrutiny and remains blocked absent explicit approval. |
+| PGA-03-E | What scope and lifecycle must an override carry? | Require exact Business, Product and Variant scope; before/after policy outcomes; reason/evidence; effective-from and expiry/review date; approving Owner decision reference; and a traceable policy version. No global or retroactive override. |
+| PGA-03-F | How should unresolved or conflicting policy be handled? | Fail closed and block A01. Do not silently fall back to unbatched or infer a policy from the presence/absence of Batch data. |
+| PGA-03-G | How is historical receipt behavior protected? | Preserve the effective policy and version used for each accepted receipt slice/allocation. Later master-data changes apply prospectively only and do not rewrite historical accepted/posted records. |
+
+### 42.75.3 Recommended policy package
+Adopt the following conservative operating rule unless the Owner explicitly amends it:
+- **Product policy is authoritative:** every Product has an explicit required/not-required outcome; no implicit unknown default.
+- **Variant inheritance is mandatory default:** each Variant follows the current effective Product policy unless a valid override is explicitly approved.
+- **Overrides are exceptional and case-specific:** no standing/self-service override. Owner approval is required for the exact Business/Product/Variant, direction and effective period. Until then, Variant continues to inherit Product policy.
+- **No silent relaxation:** changing a Product-required policy to Variant-not-required is blocked unless the Owner explicitly approves that exact relaxation after considering stock traceability, recall/expiry/quality/costing and operational consequences where relevant. This is a risk-review recommendation, not a claim that all such attributes apply to every Product.
+- **No silent strengthening either:** a not-required to required override also requires explicit approval and a clear effective boundary, so receipt handling is not changed ambiguously mid-process.
+- **Prospective only:** an override applies only from its approved effective boundary. It does not rewrite already accepted receipt slices, existing Batch identities, or posted movements.
+- **Fail closed:** missing Product policy, unresolved inheritance, expired/invalid override, conflicting policy versions or absent required evidence blocks A01; do not assume unbatched.
+- **Audit evidence:** record policy source, Product and Variant identity, Business scope, inherited vs overridden outcome, before/after values, reason, Owner decision reference, effective version/time, expiry/review, actor and audit timestamp. This is a logical evidence recommendation, not physical schema approval.
+
+### 42.75.4 Explicit Owner response required
+The Owner is asked to approve or amend §42.75.3, with particular attention to:
+1. Whether Variant override is allowed only as an exceptional case-specific action.
+2. Whether both relaxation and strengthening require separate explicit Owner approval.
+3. The exact scope/effective-time/evidence requirements.
+4. Whether any additional limits or prohibited override cases should apply.
+
+No approver delegation, permission key, role, numeric threshold, physical policy source, storage field or runtime mechanism is created by this packet.
+
+### 42.75.5 Boundaries and gate
+This packet does not change DOC08-FIX-032. It does not approve enum values, tables/columns, policy version storage, snapshot schema, override permission keys, API/RLS enforcement, Batch administration permissions, tests, adapter activation or Stage 6. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
