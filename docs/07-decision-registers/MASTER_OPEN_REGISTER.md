@@ -1309,3 +1309,22 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 **Consistency audit:** response is consistent with DOC08-FIX-032, DOC-04 §42.56 and the source ownership boundaries in DOC-03. No new FIX, physical design approval, permission grant, adapter activation, test authorization or Stage 6 authorization is created. ODR-A01-03..05 remain PENDING / OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.49 CW-11 Package E — Owner response: ODR-A01-03 (24 November 2026)
+
+**PARTIALLY APPROVED — POLICY PRINCIPLE DECIDED; EXCEPTION AUTHORITY / CONDITIONS / EVIDENCE OPEN.** Owner response source: explicit agreement in the project conversation on 24 November 2026. Detailed decision and consistency audit: DOC-04 §42.67.
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product owns Batch policy; Variant inherits by default; override only as explicit, authorized and auditable exception | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | Normal receiving excluded; exception only for demonstrated business need, explicit approval and evidence of actual physical custody/destination; no configuration-based relabeling | **PARTIALLY APPROVED — PARAMETERS OPEN** |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | No response supplied | PENDING / OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+**ODR-A01-03 unresolved parameters:** approving authority/eligible role; qualifying circumstances and scope; custody and final-destination evidence; effective period, expiry, review and revocation; audit/monitoring; and Location classification/enforcement mechanism. No exception is authorized by this principle approval alone. Default exclusion remains in force.
+
+**Consistency audit:** response is consistent with DOC08-FIX-032 and DOC-04 §42.56, and does not reassign Location ownership or grant authorization. No new FIX, physical design approval, permission grant, adapter activation, test authorization or Stage 6 authorization is created. ODR-A01-04..05 remain PENDING / OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
