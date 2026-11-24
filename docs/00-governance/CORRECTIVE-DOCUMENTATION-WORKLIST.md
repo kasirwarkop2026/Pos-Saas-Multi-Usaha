@@ -3942,3 +3942,37 @@ Audit projection reconciliation and evidence closure for A01, including ledger-t
 ### 15.121.5 Governance
 
 Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+ 
+
+## 15.122 CW-11 Package E — A01 projection reconciliation and evidence-closure audit (24 November 2026)
+
+### 15.122.1 Audit scope
+
+Read-only cross-check of DOC-04 §§17.2–17.4, 42.46–42.54 and 42.59 against DOC-03 §§6, 18.3–18.4, 19.3 and 21.5. Scope: immutable ledger versus derived projections; A01 accepted-slice/event/movement attribution; Batch-to-parent-Location reconciliation; replay/rebuild safety; projection failure/recovery and evidence closure.
+
+### 15.122.2 Findings
+
+- Posted `inventory_movements` remain the immutable physical stock ledger; correction uses linked reversal/compensating movements.
+- `inventory_balances` and applicable `inventory_batch_balances` are rebuildable projections, not independent movement sources or write authorities.
+- Reconciliation preserves exact Business/Product/Variant/Location/Batch grain and accepted-slice/source-occurrence/source-line/A01-event/movement lineage.
+- Each accepted slice's complete movement set conserves its validated base quantity; Batch-balance totals reconcile to the parent Location balance.
+- M08 source receipt facts remain distinct from M06 posting effects. Projection consumer failure cannot erase a committed source-domain fact.
+- Projection owner/version/freshness/reconciliation state must be visible where lag is operationally material.
+- Replay/rebuild must not create duplicate A01 events, inventory movements or costing-only quantity effects.
+
+### 15.122.3 Disposition
+
+**PASS — conceptual projection/reconciliation invariants internally consistent.** This is a source-consistency audit only, not runtime validation.
+
+**OPEN / NOT ACCEPTED:** physical projection keys/grain/watermarks/versioning; sync/async strategy and lag policy; reconciliation algorithm/boundary/schedule/ownership; snapshot/checkpoint and replay ordering/gap recovery; retry/quarantine/dead-letter/poison-event/alert/manual-recovery controls; Batch/Location aggregation and null-safe unbatched enforcement; ledger/fan-out/projection transaction boundary; tenant enforcement; audit/monitoring/retention; and executed evidence for completeness, no duplicates, ledger/balance, Batch/parent-Location, replay/rebuild, lag/failure/recovery, gaps/out-of-order and cross-Business isolation.
+
+No new DOC08 FIX. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, projection mechanism, permission, adapter activation or Stage 6 implementation approved.
+
+### 15.122.4 Next bounded gate
+
+Consolidate the Package E acceptance matrix across source ownership/quantity, lifecycle/disposition, event-to-movement cardinality, Batch/Location allocation, Product Batch policy/Location eligibility, authorization, numeric reconciliation, atomicity/idempotency/concurrency/recovery and projection reconciliation. Mark each row as conceptual PASS, physical/technical OPEN, evidence NOT EXECUTED, or NOT ACCEPTED. Do not declare Package E accepted or move to another source family until all required acceptance gates and evidence are explicitly closed.
+
+### 15.122.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
