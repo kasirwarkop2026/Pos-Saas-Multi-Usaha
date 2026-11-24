@@ -1271,3 +1271,22 @@ A01 recommendations for Owner consideration:
 All five ODRs remain PENDING / OPEN until explicit Owner adoption or revision. Existing FIX-027..032 remain unchanged. This recommendation selects no physical schema/runtime mechanism, grants no permission, does not activate the adapter, and does not authorize Stage 6. Package E acceptance remains NOT MET.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.47 CW-11 Package E — Owner response: ODR-A01-01 (24 November 2026)
+
+**PARTIALLY APPROVED — POLICY PRINCIPLE DECIDED; DETAILED PARAMETERS OPEN.** Owner response source: explicit agreement in the project conversation on 24 November 2026. Detailed decision and consistency audit: DOC-04 §42.65.
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% global default approved. Non-zero tolerance is permitted only through a specific Business policy that is explicitly approved and documented. Tolerance must not change actual physical quantity; excess is not automatically accepted or posted; shortage remains a PO variance, not received stock. | **PARTIALLY APPROVED — PARAMETERS OPEN** |
+| ODR-A01-02 — Variant Batch-policy override | No response supplied | PENDING / OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | No response supplied | PENDING / OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | No response supplied | PENDING / OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+**ODR-A01-01 unresolved parameters:** permitted circumstances, quantity basis and limits; independent approver/delegation/SoD; effective date/version and expiry/review/revocation; evidence and audit requirements; and whether any approved tolerance can permit excess acceptance versus merely recording a variance. No such parameter or authority is inferred. Until resolved, preserve 0% default and fail-closed/pending handling for unresolved exceptions.
+
+**Consistency audit:** response is consistent with DOC08-FIX-029 and DOC-04 §§42.51, 42.58, 42.62–42.64. No new FIX, physical design approval, permission grant, adapter activation, test authorization or Stage 6 authorization is created. ODR-A01-02..05 remain PENDING / OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
