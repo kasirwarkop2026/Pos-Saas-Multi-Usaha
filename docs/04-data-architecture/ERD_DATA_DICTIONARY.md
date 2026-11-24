@@ -6061,3 +6061,22 @@ The next action is to present the Owner with PGA-01 first: confirm whether A01 p
 No DOC08 FIX is created/modified. No role, permission, approver, delegation, account or security configuration is assigned. No physical schema, adapter activation, test execution or Stage 6 implementation is authorized.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+ 
+### 42.72 Owner Decision — PGA-01: A01 Policy Authority Retained by Owner
+
+**Decision date:** 2026-11-24  
+**Decision status:** OWNER APPROVED — AUTHORITY RETAINED AT OWNER LEVEL  
+**Decision scope:** ODR-A01-01 through ODR-A01-05 and related policy gaps PGA-01..PGA-06.
+
+The Owner explicitly selected: **“Setuju: seluruh keputusan kebijakan A01 [tetap pada Owner].”** Accordingly, all A01 policy decisions remain reserved to the Owner. No A01 policy decision authority is delegated to M02, M06, M07, M08, M16, M18, Security, Architecture, or any other domain/function by this decision.
+
+Domain owners and relevant functions may prepare bounded factual/technical analysis, identify impacts, and submit recommendations within the ownership boundaries recorded in §42.71. Such analysis is advisory input only; it is not policy approval, exception approval, authorization to act, or permission to grant access.
+
+Any future delegation requires a separate explicit written Owner decision identifying, at minimum, the delegate/office, exact policy scope and limits, effective date/version, duration, review conditions, and revocation mechanism. Until such a decision exists, the Owner remains the accountable policy decision authority. No implied, temporary, fallback, or domain-derived delegation is permitted.
+
+**Effect on open items:** PGA-01 is CLOSED for the authority-retention choice. PGA-02..PGA-06 remain OPEN for detailed policy decisions by the Owner. ODR-A01-01..05 remain PARTIALLY APPROVED at principle level; this authority decision does not approve their outstanding parameters or operational details.
+
+**No authorization created:** This decision does not appoint approvers, establish roles, grant permissions, authorize self-approval, alter SoD controls, approve physical design, execute tests, activate adapters, change schema, or authorize Stage 6 implementation. Existing fail-closed behavior and DB_PUSH_BLOCKED remain in force.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
