@@ -1347,3 +1347,22 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 **Consistency audit:** response is consistent with DOC08-FIX-027/028, DOC-04 §42.63.2 and §42.64.3, and DOC-03 M08/M06 ownership boundaries. No new FIX, physical design approval, permission grant, adapter activation, test authorization or Stage 6 authorization is created. ODR-A01-05 remains PENDING / OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.51 CW-11 Package E — Owner response: ODR-A01-05 (24 November 2026)
+
+**PARTIALLY APPROVED — INDEPENDENT APPROVAL / SoD PRINCIPLE DECIDED; CLASSIFICATION AND DELEGATION DETAILS OPEN.** Owner response source: explicit agreement in the project conversation on 24 November 2026. Full decision and consistency audit: DOC-04 §42.69.
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product owns Batch policy; Variant inherits by default; override only as explicit, authorized and auditable exception | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | Normal receiving excluded; exception only for demonstrated business need, explicit approval and physical custody/destination evidence | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | Prospective treatment; no silent rewrite of historical facts; posted correction uses authorized correction/reversal lineage | PARTIALLY APPROVED — DETAILS OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | High-risk exceptions require independent approval; initiator/receiver cannot self-approve; no eligible approver means PENDING / DENY; no fallback | **PARTIALLY APPROVED — DETAILS OPEN** |
+
+**ODR-A01-05 unresolved parameters:** exhaustive high-risk exception classes/risk tiers; objective approver independence and disqualification criteria; authority/scope for appointing, delegating, suspending and revoking eligible approvers; escalation and prolonged pending handling; audit evidence, conflict controls and periodic review; effective date/version and organizational applicability.
+
+**Security boundary:** no named approver, role assignment, permission, delegation, account change or security configuration is authorized. DOC-05 §25.4 remains the restrictive baseline and DOC-05 remains DRAFT / REVIEW REQUIRED / NOT FINAL. No FIX-027..032 changes. All five ODRs have principle-level Owner responses; detailed parameters remain open for consolidated audit. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
