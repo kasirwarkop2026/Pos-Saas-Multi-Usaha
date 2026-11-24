@@ -1458,3 +1458,22 @@ The Owner approved all recommendations in DOC-04 §42.73.3:
 
 **Disposition:** PGA-02 CLOSED at policy-decision level. ODR-A01-01 principle/policy package approved; technical and physical parameters remain OPEN. No numeric non-zero tolerance, cap, permission, role, approver assignment, delegation, physical schema, test, adapter activation or Stage 6 authorization is created. Class B remains OPEN; Class C NOT EXECUTED / NOT AUTHORIZED; Package E acceptance NOT MET; DB_PUSH_BLOCKED: ACTIVE.
 
+## 11.57 PGA-03 — Owner-Facing Decision Packet: Variant Batch-Policy Override
+
+**Status:** PREPARED FOR OWNER DECISION — NOT APPROVED. Detailed packet: DOC-04 §42.75.
+
+**Fixed baseline from DOC08-FIX-032:** Product owns explicit Batch-tracking required/not-required policy; Variant inherits by default; override only when explicitly authorized and auditable; effective policy is preserved at receipt time; unresolved/conflicting policy fails closed; required Batch identity must be actual physical Batch/Lot; unbatched path only when explicit effective policy says not required.
+
+**Recommendation submitted to Owner:**
+- Keep Product policy authoritative and Variant inheritance mandatory by default.
+- Permit Variant override only as an exceptional, case-specific action; no standing/self-service override.
+- Require explicit Owner approval for exact Business/Product/Variant, direction (required→not required or not required→required), rationale/evidence and effective period.
+- Until valid approval exists, Variant inherits Product policy.
+- Apply changes prospectively only; preserve receipt-time effective policy/version for historical accepted slices and posted movements.
+- Unknown, expired, conflicting or unresolved policy fails closed and blocks A01.
+- Maintain logical audit evidence; no physical schema is selected.
+
+**Owner response required:** approve or amend DOC-04 §42.75.3, especially override availability/direction, Owner approval, scope and lifecycle. No authority delegation, role/permission grant, physical design, test or Stage 6 authorization is implied.
+
+DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
