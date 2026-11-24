@@ -6124,3 +6124,49 @@ This packet does not change DOC08-FIX-029 or other FIX records. It does not sele
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
 
+## 42.74 Owner Decision and Read-only Consistency Audit — PGA-02 (24 November 2026)
+
+**OWNER DECISION: APPROVED — RECOMMENDED PGA-02 POLICY PACKAGE ADOPTED.**  
+**Authority:** Owner, consistent with §42.72.  
+**Scope:** PGA-02-A..F; tolerance, over-receipt and shortage handling for A01 Purchase / Goods Receipt.
+
+The Owner explicitly stated: **“Saya menyetujui seluruh rekomendasi PGA-02. Catat sebagai keputusan Owner dan lanjutkan audit dokumentasi.”** The complete recommended policy package in §42.73.3 is adopted as follows:
+
+1. **Default tolerance:** 0% remains the only active default for every Business and PO line.
+2. **Non-zero tolerance:** inactive unless and until a separate written Owner-approved Business policy explicitly defines applicability/scope, quantity basis, cap/limits, effective date/version, expiry/review/revocation and required evidence. No numeric tolerance, cap or calculation is created by this decision.
+3. **Over-receipt:** physically arrived excess is recorded separately against the PO line and remains excluded from accepted-for-inventory quantity and A01 posting until both (a) prior explicit Owner exception authorization for the applicable case and (b) a separate physical verification/acceptance decision are evidenced. Authorization is not itself receipt, acceptance or posting.
+4. **Shortage:** record actual physically arrived quantity and shortage separately against the PO line. Missing quantity is never fabricated as receipt, accepted quantity or inventory movement. Shortage closure/waiver is procurement variance disposition, not inventory receipt.
+5. **Separation of duties:** initiator/receiver cannot approve their own exception. If no valid independent approval path exists, the exception remains PENDING / DENY under DOC-05 §25.4. No fallback approver or delegated authority is inferred.
+6. **Evidence:** retain traceable evidence candidates including PO line and ordered quantity/unit; physically arrived and accepted quantities/units; variance type/amount; reproducible conversion provenance; policy version; Owner authorization reference; actor/time/rationale; and subsequent disposition. This is a logical evidence requirement, not a physical schema selection.
+
+### 42.74.1 Read-only documentation consistency audit
+
+Reviewed the current PR #149 branch source records:
+- DOC-04 §42.51 (DOC08-FIX-029) and §42.73 (PGA-02 decision packet).
+- DOC-09 §11.54–§11.55 (PGA-01 authority retention and PGA-02 proposal).
+- DOC-05 AUTHORIZATION_MASTER.md §25.4 (no grant from design text; no self-approval fallback; PENDING/DENY where no independent eligible approver exists).
+- DOC-02 CATEGORY_WORKFLOW_MASTER.md §6 (procurement/receiving request, PO creation/approval, physical receiving, discrepancy review and supplier payment are distinct controls; unknown authority fails closed).
+- DOC-03 SYSTEM_ARCHITECTURE.md §19.1 (M08 procurement/receiving source workflow; M06 inventory ledger effects; M07 location custody; M16 AP/payment; M02 product/unit policy boundaries).
+
+**Audit findings:**
+- **FIX-029 consistency: PASS.** 0% default, explicit policy/authorization for non-zero tolerance, no automatic excess acceptance/posting, shortage as PO variance, and no rewriting of physical/accepted quantity are preserved.
+- **FIX-027/028 accepted-only posting boundary: PASS.** Only physically arrived and separately accepted quantity may proceed to A01; approval alone does not create receipt, acceptance or posting.
+- **PGA-01 authority consistency: PASS.** The Owner remains the policy authority. The stricter prior Owner authorization requirement for an over-receipt exception is consistent with retained Owner authority; it does not delegate approval to a domain.
+- **DOC-05 §25.4 SoD/fail-closed consistency: PASS.** No self-approval and PENDING/DENY when no valid independent approval path exists are preserved. This decision does not assign or create an independent approver.
+- **DOC-02 / DOC-03 domain-boundary consistency: PASS.** M08 remains source workflow owner; M06 owns stock-ledger effects; M07 physical custody; M16 AP/payment boundary. These responsibilities do not confer A01 policy authority or permissions.
+- **Physical/technical implementation: NOT AUDITED / NOT AUTHORIZED.** No schema, runtime, API/RLS, permissions, tests, or Production behavior is inferred or claimed.
+
+### 42.74.2 Disposition and retained OPEN items
+
+PGA-02 is **CLOSED at the policy-decision level** for the exact package approved above. The following remain OPEN and are not activated by this approval:
+- Any actual non-zero tolerance value, cap or numeric calculation; applicability and effective period for a future non-zero policy.
+- Physical representation, numeric precision/scale, conversion/rounding enforcement and audit storage.
+- Detailed implementation of approval actor/action/scope/SoD controls and evidence enforcement.
+- Physical receiving, posting, atomicity/concurrency/idempotency/recovery, tenant enforcement, projection reconciliation and executed evidence.
+
+ODR-A01-01 moves from PARTIALLY APPROVED to **POLICY PRINCIPLE AND OWNER POLICY PACKAGE APPROVED; technical/physical parameters remain OPEN**. DOC08-FIX-029 is not rewritten or expanded into a numeric tolerance. No new DOC08 FIX is created by this decision.
+
+**Governance:** append-only documentation record. No roles, permissions, approver assignments, delegation, schema, adapter activation, tests, database mutation, migration or Stage 6 implementation are authorized. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET; DB_PUSH_BLOCKED: ACTIVE.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
