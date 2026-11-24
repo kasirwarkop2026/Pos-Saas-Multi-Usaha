@@ -3976,3 +3976,46 @@ Consolidate the Package E acceptance matrix across source ownership/quantity, li
 ### 15.122.5 Governance
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+ 
+
+## 15.123 CW-11 Package E — Consolidated A01 acceptance matrix and gate disposition (24 November 2026)
+
+### 15.123.1 Consolidation scope
+
+Consolidates DOC-04 §§42.46–42.60 and DOC-09 §§11.39–11.42 into one acceptance matrix. The detailed area-by-area matrix is DOC-04 §42.61; DOC-09 §11.43 records its concise open-dependency view.
+
+### 15.123.2 Consolidated status
+
+| Area | Conceptual | Physical / technical | Evidence |
+|---|---|---|---|
+| Source ownership / identity / quantity | PASS — FIX-027 | OPEN | NOT EXECUTED |
+| Lifecycle / partial acceptance | PASS — FIX-028 | OPEN | NOT EXECUTED |
+| Over-receipt / shortage / tolerance | PASS — FIX-029 | OPEN | NOT EXECUTED |
+| Event-to-movement cardinality | PASS — FIX-030 | OPEN | NOT EXECUTED |
+| Batch / Location allocation | PASS — FIX-031 | OPEN | NOT EXECUTED |
+| Product Batch policy / Location eligibility | PASS — FIX-032 | OPEN | NOT EXECUTED |
+| Authorization / tenant / audit | Boundary PASS only | NOT ACCEPTED / OPEN | NOT EXECUTED |
+| Numeric conversion / costing | PASS | OPEN | NOT EXECUTED |
+| Atomicity / idempotency / concurrency / recovery | PASS | OPEN | NOT EXECUTED |
+| Projection reconciliation / rebuild | PASS | OPEN | NOT EXECUTED |
+
+### 15.123.3 Acceptance blockers
+
+- Physical Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; ERD-OPEN-05 OPEN.
+- A01-specific authorization tuple, approval/SoD, server-side enforcement and tenant isolation remain OPEN.
+- Numeric precision/scale/capacity/overflow, Product increment/fraction, conversion factor/version/snapshot and operation-specific rounding remain OPEN.
+- Physical idempotency registry/key/payload/retention, transaction/write-set, locking/isolation/retry, uncertain-commit recovery and incomplete-state authority remain OPEN.
+- Projection watermark/version/lag, reconciliation boundary/algorithm, rebuild/replay/gap recovery, monitoring/alerting and operational ownership remain OPEN.
+- No required A01 runtime, integration, concurrency, failure-injection, authorization, tenant-isolation or projection-reconciliation evidence has been executed/reviewed in this audit.
+
+### 15.123.4 Disposition and next bounded step
+
+**CONCEPTUAL CONTRACT: PASS. PHYSICAL / TECHNICAL ACCEPTANCE: NOT ACCEPTED. EXECUTED EVIDENCE: NOT PROVIDED / NOT EXECUTED. CW-11 PACKAGE E: IN PROGRESS — ACCEPTANCE NOT MET.**
+
+Next step is a source-and-Owner-authority gap triage for the OPEN decisions, grouped by the controlling document/decision owner. Do not invent physical mechanisms or close any OPEN item by inference. Request Owner decisions only where the source baseline leaves a policy choice unresolved; keep physical implementation and Stage 6 blocked until separate approval and evidence gates are met. Do not move to another source family before Package E acceptance.
+
+No new DOC08 FIX. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation, SQL/DDL/DML, database mutation or implementation is approved.
+
+### 15.123.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
