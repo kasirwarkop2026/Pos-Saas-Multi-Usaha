@@ -5847,3 +5847,57 @@ Until these details are defined and reviewed, no retroactive amendment behavior 
 Continue with ODR-A01-05 using the exact request in §42.63.2. Keep ODR-A01-04 lifecycle-specific amendment classes, authority, version-selection and correction details OPEN. Do not treat this principle approval as authorization for retroactive PO amendment or inventory mutation.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.69 CW-11 Package E — Owner response to ODR-A01-05 (24 November 2026)
+
+**OWNER APPROVAL — INDEPENDENT APPROVAL / SoD PRINCIPLE ADOPTED; EXCEPTION CLASSIFICATION AND DELEGATION DETAILS REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026 to the proposed independent-approver principles for A01 exceptions.
+
+### 42.69.1 Attributable Owner decision
+
+The Owner approves the following principles:
+
+1. **Independent approval for high-risk exceptions:** A01 exceptions classified as high risk require independent approval. The exact exception classes and risk classification criteria remain OPEN and must be defined in the controlled policy; do not invent the list.
+2. **No self-approval:** the actor who initiates or performs the receiving operation may not approve that same exception.
+3. **Explicit eligibility:** approver independence and eligibility must be explicitly defined, reviewable and auditable; mere role/title or system access is not proof of independence.
+4. **Controlled delegation:** the authority responsible for appointing or delegating eligible approvers must be explicitly identified and recorded before the delegation is relied upon.
+5. **No eligible approver:** if no eligible independent approver is available, the exception operation remains **PENDING / DENY**.
+6. **No fallback:** no self-approval, implicit approval, timeout approval or substitute fallback is inferred. Escalation may be defined by policy, but it cannot convert the operation into approval without an eligible independent approver.
+
+### 42.69.2 Unresolved policy and authority parameters
+
+This is principle-level approval only. Keep the following OPEN:
+
+- exhaustive A01 exception classes requiring independent approval and their risk tiers;
+- objective independence criteria and disqualifying relationships/roles;
+- named authority and scope for appointing, delegating, suspending and revoking eligible approvers;
+- escalation path, service-level expectations and handling of prolonged PENDING / DENY;
+- evidence, audit trail, periodic review and conflict-of-interest controls;
+- policy effective date/version and applicability across Businesses / outlets / organizational scopes.
+
+No named person, role assignment, permission, delegation, account change or security configuration is authorized by this decision.
+
+### 42.69.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product owns Batch policy; Variant inherits by default; override only as explicit, authorized and auditable exception | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | Normal receiving excluded; exception only for demonstrated business need, explicit approval and physical custody/destination evidence | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | Prospective treatment approved; historical facts preserved; posted correction follows authorized correction/reversal lineage | PARTIALLY APPROVED — DETAILS OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | High-risk exceptions require independent approval; initiator/receiver cannot self-approve; no eligible approver means PENDING / DENY; no fallback | **PARTIALLY APPROVED — CLASSIFICATION / DELEGATION DETAILS OPEN** |
+
+### 42.69.4 Consistency audit and security boundary
+
+- **DOC-05 §25.4:** consistent with the existing restrictive baseline: absent an independent eligible approver, operation remains PENDING / DENY; no self-approval or fallback.
+- **Authorization / SoD boundary:** this decision defines policy principles only. It does not grant a permission, assign an approver, create a role, or change an authorization matrix.
+- **DOC08-FIX-027..032:** no conflict identified; no FIX is created or modified.
+- **Class B / Class C boundary:** approver eligibility, delegation mechanics and enforcement remain subject to controlled policy and design review; runtime/security evidence is not executed or authorized.
+
+**Audit disposition: CONSISTENT — DOC-05 §25.4 restrictive baseline preserved.** DOC-05 remains DRAFT / REVIEW REQUIRED / NOT FINAL. No account, permission, RLS/Auth, API/backend, database, production or Stage 6 change is authorized.
+
+### 42.69.5 Consolidation gate
+
+All five ODR-A01 requests now have Owner principle-level responses. Their detailed operational parameters remain open as stated above. Proceed to a consolidated authority/scope/consistency audit of ODR-A01-01..05 and affected source documents. Do not infer full operational policy closure or Package E acceptance from these principle approvals.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
