@@ -4437,3 +4437,55 @@ Do not assume a domain owner automatically has policy approval authority. Do not
 ### 15.132.6 Governance
 
 Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged.
+
+## 15.133 CW-11 Package E — Prepare Owner-facing Policy Gap & Authority Assignment Register (24 November 2026)
+
+### 15.133.1 Deliverable completed
+
+Prepared the policy gap and authority assignment register in DOC-04 §42.71 and the concise status index in DOC-09 §11.53. The register separates Owner policy decisions, domain/security analysis inputs and the blocked design/evidence gates.
+
+### 15.133.2 Owner decision queue
+
+| Gap | Scope | Status |
+|---|---|---|
+| PGA-01 | Accountable policy decision authority / delegation across ODR-A01-01..05 | OWNER DECISION REQUIRED |
+| PGA-02 | Tolerance and over-receipt policy details | OWNER DECISION REQUIRED |
+| PGA-03 | Variant Batch-policy override details | OWNER DECISION REQUIRED |
+| PGA-04 | Virtual Transit Location exception details | OWNER DECISION REQUIRED |
+| PGA-05 | PO amendment lifecycle details | OWNER DECISION REQUIRED |
+| PGA-06 | Independent approval / SoD policy details | OWNER DECISION REQUIRED |
+
+### 15.133.3 Domain analysis boundaries
+
+- M08: procurement/PO and receiving lifecycle; not inventory posting or AP/payment authority.
+- M06: accepted-slice admission, stock ledger, Batch/Location inventory effects and correction lineage; not PO source ownership.
+- M02: Product/Variant Batch-policy source and lifecycle inputs; not inventory permission grants.
+- M07: warehouse/location custody and physical destination evidence; not stock-ledger posting.
+- M18: inspection/quality/compliance facts where applicable; not PO or inventory ownership.
+- M16: supplier invoice/AP/payment boundary; not PO/receipt source ownership.
+- DOC-05/security: action/actor/scope/SoD/approver/audit requirements; not appointment of approvers or permission grants.
+- DOC-03/architecture: cross-domain ownership and handoff validation; not silent ownership transfer or Owner policy approval.
+
+These are documented preparation boundaries only. No domain team has been assigned or recorded as accepting a deliverable, and no policy approval authority is inferred from domain ownership.
+
+### 15.133.4 Governance and acceptance status
+
+| Control | Status |
+|---|---|
+| ODR-A01-01..05 principle responses | PARTIALLY APPROVED |
+| PGA-01..06 detailed policy/authority decisions | OPEN |
+| Domain/security analysis inputs | NOT YET SUBMITTED |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Class B physical/technical design | OPEN — NOT APPROVED |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| Physical Data Dictionary acceptance | 0/17 |
+| Canonical physical ERD | NOT ACCEPTED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.133.5 Next bounded gate
+
+Present PGA-01 to the Owner first: retain all A01 policy authority at Owner level or explicitly delegate a bounded policy scope and lifecycle. Record the exact decision, accountable authority, scope, effective date/version, duration and revocation/review conditions. Only after that authority record is explicit should PGA-02..06 be routed for policy decisions. Domain analysis may be prepared as documentation within source ownership, but must not be treated as binding approval.
+
+### 15.133.6 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged.
