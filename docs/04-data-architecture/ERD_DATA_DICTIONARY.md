@@ -6080,3 +6080,47 @@ Any future delegation requires a separate explicit written Owner decision identi
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
 
+## 42.73 PGA-02 — Owner-Facing Decision Packet: Tolerance, Over-receipt and Shortage
+
+**Status:** PREPARED FOR OWNER DECISION — NOT APPROVED  
+**Authority:** Per §42.72, all A01 policy decisions remain reserved to the Owner. Domain analysis is advisory only.  
+**Baseline:** DOC-04 §42.51 / DOC08-FIX-029; DOC-04 §§42.49–42.50 / FIX-027/028; DOC-05 authorization and SoD boundary.
+
+### 42.73.1 Fixed baseline — do not reopen
+1. Default tolerance is 0%.
+2. Non-zero tolerance requires an explicit policy and explicit authorization.
+3. Over-receipt excess is not automatically accepted for inventory or posted. It remains separately identifiable and ineligible for A01 until applicable controls are satisfied.
+4. Shortage is a PO discrepancy; the missing quantity is not physically received, not accepted-for-inventory, and creates no inventory movement.
+5. Tolerance cannot change actual physical quantity, rewrite accepted quantity, or itself create receipt, acceptance, or movement.
+6. Approval alone is not physical receipt, acceptance, A01 authorization, or posting.
+
+### 42.73.2 Decisions requested from Owner
+
+| Decision ID | Policy question | Recommended default for Owner consideration |
+|---|---|---|
+| PGA-02-A | Should non-zero tolerance be available as a standing/default Business setting, or only through a separately approved exception policy? | Keep 0% as the only active default. Do not enable non-zero tolerance until the Owner approves a written Business policy with scope, limits, effective period and review/revocation. |
+| PGA-02-B | What is the treatment of an over-receipt? | Record the physically arrived excess separately against the PO line. Do not include it in accepted quantity or A01 posting until explicit prior Owner authorization for the applicable exception and a separate acceptance decision after physical verification. |
+| PGA-02-C | What quantity basis and calculation may a non-zero tolerance use? | No numeric calculation is active yet. If the Owner later permits non-zero tolerance, define its denominator, unit/base-unit conversion, rounding, per-line vs per-PO aggregation and maximum cap explicitly before activation. |
+| PGA-02-D | How should shortage be handled? | Record actual arrived quantity and shortage separately against the PO line. Never create receipt or stock movement for missing quantity. Shortage closure/waiver is a procurement variance disposition, not inventory receipt. |
+| PGA-02-E | Who may authorize a non-zero tolerance or over-receipt exception? | Under §42.72, Owner approval remains required. No domain owner, receiver, initiator or system default may be treated as delegated approval authority. Any future delegation requires a separate written Owner decision. |
+| PGA-02-F | When must exception approval occur? | Before the excess is accepted for inventory or made eligible for A01. Approval must not be inferred retrospectively from a posted movement; any already-posted error follows controlled correction/reversal lineage. |
+
+### 42.73.3 Recommended policy package
+Adopt the following conservative operating rule unless the Owner explicitly chooses otherwise:
+- **Default:** 0% tolerance for every Business and PO line.
+- **Non-zero tolerance:** inactive unless a separate written Owner-approved policy defines applicability, quantity basis, cap, effective date/version, expiry/review/revocation and required evidence.
+- **Over-receipt:** physical excess is recorded as a distinct discrepancy; it is quarantined from accepted-for-inventory quantity and A01 posting until explicit Owner exception authorization and a separate physical acceptance decision are both evidenced.
+- **Shortage:** record only what physically arrived; missing quantity remains a PO variance and never becomes receipt or stock.
+- **Separation of duties:** the initiator/receiver does not self-approve. If no valid independent approval path exists, keep the exception PENDING / DENY under DOC-05 §25.4. No fallback approver is inferred.
+- **Audit:** preserve PO line, ordered quantity/unit, physically arrived quantity/unit, accepted quantity/unit, variance type/amount, conversion provenance, policy version, Owner authorization reference, actor, timestamp, rationale and subsequent disposition as required evidence candidates. This is a logical evidence recommendation, not a physical schema decision.
+
+### 42.73.4 Explicit Owner response required
+The Owner is asked to approve or amend the recommended policy package in §42.73.3, especially the rule that no non-zero tolerance is active without a separate written Owner-approved policy and that over-receipt requires prior Owner exception authorization plus separate physical acceptance.
+
+Any future numeric tolerance, percentage, cap, quantity calculation, Business scope or effective period must be separately specified; this packet does not invent or activate such values.
+
+### 42.73.5 Boundaries and gate
+This packet does not change DOC08-FIX-029 or other FIX records. It does not select physical tables/columns/constraints, numeric precision/scale/rounding implementation, permission tuples, approver assignments, RLS/API enforcement, tests, adapter activation or Stage 6 implementation. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
