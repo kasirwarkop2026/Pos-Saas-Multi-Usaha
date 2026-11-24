@@ -5685,3 +5685,57 @@ Until these details are explicitly decided and recorded, the restrictive baselin
 Continue with ODR-A01-02 using the exact request in §42.63.2. Keep ODR-A01-01's unresolved parameters OPEN for a later bounded clarification; do not treat the policy principle as full exception-policy approval.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.66 CW-11 Package E — Owner response to ODR-A01-02 (24 November 2026)
+
+**OWNER POLICY PRINCIPLE APPROVED — AUTHORITY AND OPERATIONAL PARAMETERS REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026 to the recommendation in DOC-04 §42.64.3. It addresses ODR-A01-02 only and does not infer responses to ODR-A01-03 through ODR-A01-05.
+
+### 42.66.1 Attributable Owner decision
+
+The Owner approves the following Variant Batch-policy principle:
+
+1. **Policy ownership:** the Product remains the owner of the explicit Batch-tracking policy.
+2. **Default inheritance:** a Variant inherits the Product's Batch policy by default.
+3. **Controlled override:** a Variant-level override is permitted only as an explicit, authorized and auditable exception. An implicit, silent, or ungoverned per-Variant override is not permitted.
+4. **Receipt-time integrity:** the effective policy applicable to an accepted receipt slice remains a receipt-time decision; later Product or Variant master-data changes must not silently rewrite historical accepted slices or posted movements.
+5. **Fail-closed baseline:** unresolved, unset, conflicting or unauthorized policy resolution continues to block A01 under the existing FIX-032 baseline.
+
+### 42.66.2 Decision scope and unresolved parameters
+
+This approval adopts the policy principle only. The following details remain OPEN and must not be invented:
+
+- the controlling authority and eligible decision role for approving a Variant override;
+- whether and how that authority may be delegated;
+- permitted Business/Product/Variant scope and any limits on the override;
+- effective date/version, duration, expiry, review and revocation rules;
+- required rationale, evidence, audit fields and review responsibility;
+- exact policy source/representation and receipt-time snapshot mechanism;
+- technical enforcement, physical objects/keys/FKs, permissions, APIs, RLS or runtime resolution.
+
+Until these are explicitly decided and reviewed, no override grant is inferred. Product ownership and Variant inheritance remain the default; an unresolved override request must not bypass the existing fail-closed rule.
+
+### 42.66.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed exception parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product remains policy owner; Variant inherits by default; override allowed only as explicit, authorized and auditable exception | **PARTIALLY APPROVED — AUTHORITY / SCOPE / LIFECYCLE PARAMETERS OPEN** |
+| ODR-A01-03 — Virtual transit Location receiving exception | No response supplied | PENDING / OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | No response supplied | PENDING / OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+### 42.66.4 Consistency audit against source baseline
+
+- **DOC08-FIX-032 / DOC-04 §42.56:** consistent with Product-owned explicit Batch policy, Variant inheritance by default, authorized/auditable override only, receipt-time policy preservation, and fail-closed handling for unresolved or conflicting policy.
+- **DOC-04 §42.62–42.64:** this response resolves the ODR-A01-02 policy principle only. It does not assign an authority/delegate, define scope or lifecycle, or select physical/technical mechanisms.
+- **DOC-03 domain ownership:** Product/Variant policy ownership remains with the Product domain; inventory enforcement and receiving boundaries are not reassigned.
+- **DOC-05 authorization boundary:** no permission or eligible approver is inferred. Existing authorization and fail-closed requirements remain unchanged.
+
+**Audit disposition: CONSISTENT — no conflict with FIX-027..032 identified.** No new FIX is created and DOC08-FIX-032 is not rewritten. No physical design, permission grant, adapter activation, test execution or Stage 6 implementation is approved.
+
+### 42.66.5 Next gate
+
+Continue with ODR-A01-03 using the exact request in §42.63.2. Keep ODR-A01-02's authority, scope, effective-time, review/revocation and evidence parameters OPEN for bounded clarification. Do not treat this principle approval as an operational override authorization.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
