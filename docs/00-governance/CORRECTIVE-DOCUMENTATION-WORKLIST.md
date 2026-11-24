@@ -4561,3 +4561,24 @@ Documentation-only, append-only on PR #149 branch. No SQL/DDL/DML, database muta
 
 Documentation-only, append-only on PR #149. PR remains open/unmerged. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
 
+## 15.137 PGA-03 — Prepare Owner Decision Packet: Variant Batch-Policy Override
+
+**Completed:** read-only source audit of DOC-04 §42.56 / DOC08-FIX-032, DOC-03 §19.1, DOC-05 §25.4 and the PGA-01 authority decision; Owner-facing packet prepared at DOC-04 §42.75 and indexed at DOC-09 §11.57.
+
+**Fixed baseline preserved:** Product owns explicit Batch policy; Variant inherits by default; override only when explicitly authorized and auditable; receipt-time effective policy is preserved; unknown/unresolved/conflicting policy fails closed; actual physical Batch/Lot identity is required when tracking is required; unbatched path only when explicit effective policy says not required.
+
+**Recommended policy package submitted — awaiting Owner decision:**
+- [ ] Product policy remains authoritative; Variant inheritance is mandatory default.
+- [ ] Variant override is exceptional and case-specific; no standing/self-service override.
+- [ ] Owner approval is required for the exact Business/Product/Variant and override direction; no domain delegation inferred.
+- [ ] Both relaxation and strengthening require explicit approval; no silent override.
+- [ ] Override carries rationale/evidence, effective boundary, expiry/review and traceable policy version.
+- [ ] Changes are prospective only; historical accepted slices and posted movements retain receipt-time policy.
+- [ ] Missing, expired, conflicting or unresolved policy fails closed and blocks A01.
+
+**Open pending response:** PGA-03 remains OWNER DECISION REQUIRED / OPEN. DOC08-FIX-032 remains unchanged. No approver, permission, role, policy storage schema, physical field, API/RLS enforcement or runtime behavior is approved.
+
+**Next gate:** obtain explicit Owner approval or amendment of DOC-04 §42.75.3. Do not proceed to PGA-04 or implementation as though PGA-03 were closed.
+
+Documentation-only, append-only on PR #149 branch. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
