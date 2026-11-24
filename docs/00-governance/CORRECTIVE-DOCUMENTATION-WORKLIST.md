@@ -4098,3 +4098,32 @@ Present DOC-04 §42.63 to the Owner for explicit decisions or documented delegat
 ### 15.125.4 Governance
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. PR #149 remains open/unmerged. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 15.126 CW-11 Package E — Multi-Business A01 policy architecture recommendation (24 November 2026)
+
+### 15.126.1 Deliverable completed
+
+Recorded the recommendation **Global Core Rules + Business-level Configurable Policies + Controlled Exceptions** in DOC-04 §42.64 and summarized it in DOC-09 §11.46. This is a recommendation for Owner review only; it is not an adopted policy, new FIX, physical design approval or implementation authorization.
+
+### 15.126.2 Checklist and status
+
+| Work item | Status |
+|---|---|
+| Define platform-wide Global Core Rules | DONE — recommendation recorded; adoption pending |
+| Define bounded Business-level Configurable Policies | DONE — conceptual requirements recorded; physical design OPEN |
+| Define Controlled Exceptions governance | DONE — conceptual recommendation recorded; Owner policy/authority decisions OPEN |
+| Map recommendation to ODR-A01-01..05 | DONE — DOC-04 §42.64.3 / DOC-09 §11.46 |
+| Owner adoption/revision of five ODR recommendations | PENDING OWNER |
+| Preserve DOC08-FIX-027..032 unchanged | PASS |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.126.3 Next bounded gate
+
+Present DOC-04 §42.64 to the Owner for explicit adoption, rejection or revision of each recommendation. Until then, keep ODR-A01-01..05 PENDING / OPEN and preserve existing restrictive baselines. If the Owner responds, audit attribution, delegated authority, scope and consistency against DOC08-FIX-027..032 and DOC-05 before updating any decision register or FIX. Do not begin physical design/implementation or move to another A01 source family before Package E acceptance.
+
+### 15.126.4 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
