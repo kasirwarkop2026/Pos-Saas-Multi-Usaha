@@ -6222,4 +6222,50 @@ No approver delegation, permission key, role, numeric threshold, physical policy
 This packet does not change DOC08-FIX-032. It does not approve enum values, tables/columns, policy version storage, snapshot schema, override permission keys, API/RLS enforcement, Batch administration permissions, tests, adapter activation or Stage 6. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+## 42.76 Owner Decision and Read-only Audit — PGA-03 Variant Batch-Policy Override
+
+**Decision date:** 2026-11-25  
+**Status:** OWNER APPROVED — COMPLETE RECOMMENDATION PACKAGE ADOPTED.  
+**Decision authority:** Owner, consistent with §42.72.  
+**Decision basis:** Owner explicitly approved all recommendations in §42.75.3 without amendment.
+
+### 42.76.1 Adopted Owner policy
+
+1. **Product policy is authoritative.** Every Product must resolve to an explicit Batch-tracking-required or Batch-tracking-not-required outcome. No implicit unknown default is accepted.
+2. **Variant inheritance is mandatory by default.** A Variant follows its Product's effective policy unless a valid explicit override has been approved.
+3. **Override is exceptional and case-specific.** No standing or self-service override exists. Owner approval is required for the exact Business, Product, Variant, override direction and effective period. Until valid approval exists, the Variant inherits the Product policy.
+4. **Both directions require explicit Owner approval.** Neither required→not-required relaxation nor not-required→required strengthening may occur silently. A relaxation must receive heightened risk review, considering traceability, recall, expiry, quality, costing and operational consequences where relevant.
+5. **Prospective effect only.** The override applies from its approved effective boundary and does not rewrite already accepted receipt slices, Batch identities or posted movements.
+6. **Fail closed.** Missing Product policy, unresolved inheritance, expired/invalid override, conflicting policy versions or absent required evidence blocks A01. No silent fallback to unbatched handling is permitted.
+7. **Logical audit evidence.** Evidence must identify policy source, Product and Variant, Business scope, inherited/overridden outcome, before/after values, reason, Owner decision reference, effective version/time, expiry/review, actor and audit timestamp. This is a logical evidence requirement, not approval of physical fields or storage design.
+
+### 42.76.2 Read-only documentation consistency audit
+
+Reviewed the PR #149 branch source records:
+- DOC-04 §42.56 / DOC08-FIX-032 and §42.75.3.
+- DOC-03 §19.1: M02 owns Product/Variant catalog policy inputs; M06 owns Batch/inventory identity and ledger effects; M07 owns physical warehouse/location custody; M08 owns procurement/receiving workflow; M18 owns inspection/quality/compliance evidence where applicable.
+- DOC-05 §25.4: eligibility candidates do not grant permissions; no self-approval fallback; where no independent eligible approver exists, operation remains PENDING/DENY; design text does not establish RLS/API/runtime behavior.
+- DOC-02 §6: category/workflow classification does not grant authority; procurement/receiving and discrepancy review remain distinct; unknown authority fails closed.
+
+**Audit findings:**
+- **DOC08-FIX-032 consistency: PASS.** Product policy authority, Variant default inheritance, explicit/auditable override, receipt-time effective policy preservation, fail-closed unresolved state and actual physical Batch/Lot identity requirements are preserved.
+- **PGA-01 authority consistency: PASS.** Owner remains the A01 policy authority. No delegation to M02, M06, M07, M08, M18, Security or another function is inferred.
+- **DOC-03 ownership consistency: PASS.** Catalog policy input, inventory ledger, physical custody, procurement workflow and quality evidence remain within their documented domain boundaries; no ownership transfer is introduced.
+- **DOC-05 SoD/fail-closed consistency: PASS.** No role, grant, approver assignment or self-approval exception is created. Any approval execution path without a valid independent eligible approver remains PENDING/DENY.
+- **Historical immutability consistency: PASS.** The prospective-only override rule preserves the receipt-time policy decision and does not rewrite accepted or posted history.
+- **Physical/technical implementation: NOT AUDITED / NOT AUTHORIZED.** No schema, enum, field, policy-version storage, snapshot representation, permission key, API/RLS enforcement, runtime behavior, test or Production result is claimed.
+
+### 42.76.3 Disposition and retained OPEN items
+
+PGA-03 is **CLOSED at the Owner policy-decision level** for the complete package in §42.75.3. DOC08-FIX-032 remains unchanged. The following remain OPEN:
+- Physical source and storage of Product/Variant policy and approved override evidence.
+- Physical representation/versioning of receipt-time policy snapshots.
+- Exact technical effective-time/expiry enforcement and conflict resolution.
+- Authorization implementation and independent approver eligibility/assignment.
+- Batch identity/attribute constraints, tenant enforcement, API/RLS and runtime fail-closed enforcement.
+- Concurrency, idempotency, recovery, reconciliation and executed Class C evidence.
+
+No role, permission, approver, delegation, schema, migration, adapter activation, test execution, database mutation or Stage 6 implementation is authorized. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET; Physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; DB_PUSH_BLOCKED: ACTIVE.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
 
