@@ -1290,3 +1290,22 @@ READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation
 **Consistency audit:** response is consistent with DOC08-FIX-029 and DOC-04 §§42.51, 42.58, 42.62–42.64. No new FIX, physical design approval, permission grant, adapter activation, test authorization or Stage 6 authorization is created. ODR-A01-02..05 remain PENDING / OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.48 CW-11 Package E — Owner response: ODR-A01-02 (24 November 2026)
+
+**PARTIALLY APPROVED — POLICY PRINCIPLE DECIDED; AUTHORITY / SCOPE / LIFECYCLE PARAMETERS OPEN.** Owner response source: explicit agreement in the project conversation on 24 November 2026. Detailed decision and consistency audit: DOC-04 §42.66.
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed exception parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product remains owner of explicit Batch policy; Variant inherits by default; override permitted only as explicit, authorized and auditable exception | **PARTIALLY APPROVED — PARAMETERS OPEN** |
+| ODR-A01-03 — Virtual transit Location receiving exception | No response supplied | PENDING / OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | No response supplied | PENDING / OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+**ODR-A01-02 unresolved parameters:** controlling approval authority and eligible role; delegation; Business/Product/Variant scope; effective date/version and duration; expiry, review and revocation; rationale/evidence/audit requirements; and physical/technical policy source and receipt-time snapshot mechanism. No override permission or authority is inferred. Product ownership, Variant inheritance and fail-closed handling remain the baseline.
+
+**Consistency audit:** response is consistent with DOC08-FIX-032, DOC-04 §42.56 and the source ownership boundaries in DOC-03. No new FIX, physical design approval, permission grant, adapter activation, test authorization or Stage 6 authorization is created. ODR-A01-03..05 remain PENDING / OPEN. Package E remains IN PROGRESS / ACCEPTANCE NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
