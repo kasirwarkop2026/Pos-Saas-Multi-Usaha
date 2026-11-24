@@ -1496,4 +1496,24 @@ The Owner explicitly approved all recommendations in DOC-04 §42.75.3:
 **Read-only consistency audit:** PASS against DOC08-FIX-032, PGA-01 authority retention, DOC-03 §19.1 domain ownership, DOC-05 §25.4 SoD/fail-closed constraints and DOC-02 §6 workflow/unknown-authority controls. No conceptual contradiction identified.
 
 **Disposition:** PGA-03 CLOSED at Owner policy-decision level. DOC08-FIX-032 remains unchanged. Physical policy/snapshot storage, authorization implementation, independent approver eligibility/assignment, API/RLS/runtime enforcement, tests and Class C evidence remain OPEN or NOT AUTHORIZED as applicable. No role, permission, approver assignment, delegation, schema, migration, adapter activation, test, database mutation or Stage 6 authorization is created. Class B remains OPEN; Class C NOT EXECUTED / NOT AUTHORIZED; Package E acceptance NOT MET; Physical Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED; DB_PUSH_BLOCKED: ACTIVE.
+ 
+### 11.59 PGA-04 — Owner-Facing Decision Packet: Virtual Transit Location Exception
+
+**Status:** PREPARED FOR OWNER DECISION — NOT APPROVED.  
+**Detailed packet and source audit basis:** DOC-04 §42.77.
+
+**Fixed baseline:** DOC08-FIX-031/032 require an explicit same-Business, active and receiving-eligible Location for A01 allocation; receiver confirms the actual physical destination; Virtual Transit Location is not a normal purchase-receiving destination unless a separately approved policy explicitly authorizes the use case. Inventory transfer concepts distinguish dispatch to transit from receipt at destination, preserve separate shipment events and require reconciled disposition before closure.
+
+**Recommendation submitted to Owner:**
+- Keep Virtual Transit Location excluded from normal A01 purchase-receiving destinations by default.
+- Permit only narrow, case-specific, separately Owner-approved exceptions for a defined Business and documented operational use case; no global/standing/self-service exception.
+- Treat any permitted transit use as a custody/staging step, not proof of physical arrival at a final destination and not a bypass of receiver confirmation.
+- Preserve distinct dispatch, transit custody, destination receipt, discrepancy/investigation, return/loss and closure events; unresolved quantity/custody discrepancy blocks closure and unsupported posting.
+- Require explicit scope, purpose, source/destination context, effective boundary, expiry/review/revocation and logical custody/shipment evidence.
+- Do not post A01 merely because a virtual transit Location is selected; until approved policy and evidence conditions are satisfied, fail closed.
+- Preserve M07 custody, M08 procurement/receiving and M06 inventory-ledger ownership boundaries.
+
+**Owner response required:** approve or amend DOC-04 §42.77.3. No authority delegation, role/permission grant, physical Location taxonomy/schema, event model, test or Stage 6 authorization is implied.
+
+DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
 
