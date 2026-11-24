@@ -1216,3 +1216,19 @@ The matrix does not approve a physical schema, permission, adapter activation or
 Related anchors: DOC-04 §42.61; DOC-03 §§6, 18–21; DOC-05 §§23–25; Worklist §15.123.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 11.44 CW-11 Package E — A01 OPEN-item authority triage (24 November 2026)
+
+**TRIAGE COMPLETE — CLASSIFICATION ONLY; PACKAGE E ACCEPTANCE NOT MET.** Detailed mapping: DOC-04 §42.62; work tracking: Worklist §15.124.
+
+| Classification | A01 items | Authority / disposition |
+|---|---|---|
+| Already resolved by source baseline | M08 procurement/receiving ownership; M06 inventory ledger/posting ownership; M07 Location custody; M02 Product/Variant/unit ownership; M16 AP/payment; immutable movement ledger; rebuildable projections; one-Business tenant boundary; general DOC-05 authorization tuple requirements; FIX-027–032 conceptual scope. | Preserve DOC-03 §§6, 18.3–18.5, 19.1; DOC-05 §§23.5, 25.3–25.4; DOC-04 §§42.49–42.60. Do not reopen these conceptual decisions. Their physical enforcement remains open. |
+| Class A — Owner/domain policy decision | Non-zero tolerance/over-receipt exception conditions; Variant Batch-policy override authority; virtual transit Location exception; PO amendment/source-version effect on receipt lifecycle; A01 independent approval/SoD assignment. | Unresolved policy. Owner must explicitly decide or assign the delegated authority. No individual, threshold, role grant or fallback is inferred. Default 0% tolerance and normal receiving exclusion for virtual transit remain. |
+| Class B — architecture/technical design | Physical source/receipt/slice identity and amendment linkage; lifecycle/disposition representation; Batch policy snapshot and Location resolver; numeric/conversion contract; A01 M08/M06 action tuple and controlled handoff; atomicity/idempotency/concurrency/recovery; projection/reconciliation/operations; physical tenant/audit enforcement. | Domain owners and architecture/data/security authorities must produce source-backed designs after policy inputs are settled. Where delegation is not documented, Owner assignment is required. No physical mechanism is selected or approved. |
+| Class C — executed evidence | Source/lineage, lifecycle/approval, Batch/Location, numeric, replay/concurrency/rollback/recovery, projection/rebuild and tenant-isolation scenarios. | NOT EXECUTED / NOT AUTHORIZED until separate design and implementation approval. Evidence must be versioned, reproducible and reviewed. |
+
+No new DOC08 FIX. No OPEN technical item is closed by inference. No physical schema, permission, adapter activation or Stage 6 implementation is approved. Continue only within A01; Package E acceptance remains NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
