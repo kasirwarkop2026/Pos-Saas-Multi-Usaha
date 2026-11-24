@@ -5529,3 +5529,52 @@ Evidence must be tied to an approved technical design, controlled test environme
 CW-11 Package E remains IN PROGRESS — ACCEPTANCE NOT MET. Continue within A01. The next bounded action is to present only the Class A policy questions to the Owner for explicit decision/authority assignment; do not ask the Owner to approve technical mechanisms or test evidence as a substitute for their separate gates.
 
 READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.63 CW-11 Package E — A01 Owner Decision Request Register (24 November 2026)
+
+### 42.63.1 Purpose and authority boundary
+
+This register converts only the five Class A items identified in §42.62.3 into explicit Owner decision requests. It is a request for policy decisions or assignment of delegated decision authority, not a technical design proposal. No answer is presumed. The Owner may decide “not permitted / no exception” where applicable; an unanswered item remains OPEN and the existing restrictive baseline continues.
+
+Decision record fields for each request: Owner decision (PENDING), decision authority/delegate (PENDING where applicable), effective date/version (PENDING where policy is adopted), rationale (PENDING), and any review/expiry condition (PENDING). These are record fields to complete after an explicit decision, not new physical schema requirements.
+
+### 42.63.2 Decision request register
+
+| ID | Decision requested from Owner | Explicit choices / questions requiring an answer | Existing baseline until decision | Required record after decision |
+|---|---|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | Decide whether any receiving tolerance or over-receipt exception is permitted beyond the existing 0% default, and define the policy boundary. | (a) Is non-zero tolerance permitted at all? (b) If yes, for which receiving circumstances and quantity basis? (c) What limit(s), effective period and exception conditions apply? (d) Who is the independent approver and may the receiver/initiator ever approve their own exception? (e) Does an approved exception permit acceptance of excess, or merely record a variance pending separate acceptance? | FIX-029 remains: default tolerance 0%; excess is not automatically accepted or posted; any non-zero exception requires explicit policy and authorization. Shortage remains a PO variance, not received stock. No rounding or tolerance changes actual physical quantity. | Explicit allow/deny; scope and limits if allowed; approver/delegation; effective date/version; audit requirement. |
+| ODR-A01-02 — Variant Batch-policy override | Decide whether a Variant may override the Product-owned Batch-tracking policy and assign the authority for any permitted override. | (a) Is override allowed, or must Variant always inherit Product policy? (b) If allowed, which delegated authority may approve it? (c) What Business/Product/Variant scope and effective timing apply? (d) What review, revocation and audit conditions apply? | FIX-032 remains: Product owns the explicit Batch policy; Variant inherits by default; override only if explicitly authorized and auditable. No override grant is inferred. | Allow/deny; authorized decision authority; scope; effective/revocation rules; audit requirements. |
+| ODR-A01-03 — Virtual transit Location receiving exception | Decide whether the business requires any exception to the normal exclusion of virtual transit Locations from purchase receiving. | (a) Is any exception required? (b) If yes, in which precisely bounded physical custody/operational circumstances? (c) Who may authorize the exception? (d) What evidence must confirm actual custody and final receiving destination? | FIX-032 remains: virtual transit Location is not a normal purchase receiving destination unless a separate explicit policy approves an exception. Receiver confirmation of actual physical destination remains required; a default is only a suggestion. | Explicit no-exception or bounded exception policy; approving authority; physical custody conditions; evidence and audit requirements. |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | Decide the business-policy principles for how PO amendments/version changes relate to receipts already arrived, inspected, accepted or posted. M08 remains the source domain responsible for procurement workflow; this request does not ask the Owner to select physical versioning mechanisms. | (a) Which classes of PO amendment may affect only future receipts? (b) Can any amendment affect an arrived but not yet accepted quantity? (c) Can any amendment affect an already accepted slice? (d) Are changes after A01 posting strictly prospective, with correction handled through separately authorized correction lineage? (e) Who may authorize exceptional treatment and what audit trail is required? | FIX-027/028 remain: PO/source line, physical receipt occurrence, receipt line, accepted slice and A01 posting are distinct facts. Posted inventory movements are not silently rewritten; corrections follow the established correction/reversal lineage. No retroactive amendment behavior is inferred. | Owner-approved prospective/retroactive policy boundaries; exception authority; treatment by lifecycle stage; audit/correction principles. |
+| ODR-A01-05 — Independent approver / A01 exception SoD | Assign or approve the policy authority/delegation for independent approval of A01 exceptions and define the independence principle. | (a) Which exception classes require independent approval? (b) What makes an approver independent from the initiating/receiving actor? (c) Which authority may assign eligible approvers? (d) What happens if no eligible independent approver is available? (e) Is escalation required, or must the operation remain pending/denied? | DOC-05 §25.4 remains: absent an independent eligible approver, the operation is pending/DENY; no self-approval or fallback is inferred. DOC-05 remains DRAFT / REVIEW REQUIRED / NOT FINAL; this is not a permission grant. | Exception-to-approval policy; independent eligibility principle; delegation authority; no-approver outcome; audit and escalation rule. |
+
+### 42.63.3 Owner response record
+
+No Owner response has been supplied in this work item. Preserve all five requests as **PENDING / OPEN** until an explicit answer is received and attributable to the Owner or a documented delegate.
+
+| Request ID | Owner decision | Delegated authority | Effective date/version | Status |
+|---|---|---|---|---|
+| ODR-A01-01 | PENDING | PENDING | PENDING | OPEN |
+| ODR-A01-02 | PENDING | PENDING | PENDING | OPEN |
+| ODR-A01-03 | PENDING | PENDING | PENDING | OPEN |
+| ODR-A01-04 | PENDING | PENDING | PENDING | OPEN |
+| ODR-A01-05 | PENDING | PENDING | PENDING | OPEN |
+
+### 42.63.4 Handling rules and non-decisions
+
+1. Do not infer consent from silence, prior conceptual FIX approval or “Ok lakukan”; those approvals authorize preparation of this register, not the policy answers.
+2. A “not permitted / no exception” answer is a valid decision and preserves the restrictive baseline.
+3. Where the Owner delegates a decision, record the delegated authority and scope before treating the answer as binding.
+4. M08/M07/M06/M02/M16 and DOC-05 domain/security authorities may supply requirements and impact analysis within their ownership; they do not silently substitute for Owner policy approval.
+5. Technical details (physical keys/FKs, numeric precision, state encoding, idempotency, transaction isolation, locking, RLS/server enforcement, projection protocol) remain Class B design questions and are not part of this Owner decision form.
+6. Tests and runtime evidence remain Class C and are not authorized by completing this register.
+7. No new DOC08 FIX is created until a decision is explicit, attributable and reviewed against affected source documents.
+
+### 42.63.5 Gate disposition
+
+**REGISTER PREPARED — ALL FIVE OWNER DECISIONS PENDING.** CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Existing FIX-027..032 remain unchanged. No physical design, permission, adapter activation, test execution or Stage 6 implementation is approved.
+
+Related anchors: DOC-04 §§42.49–42.62; DOC-05 §25.4; DOC-09 §§11.38, 11.44–11.45; Worklist §§15.124–15.125.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
