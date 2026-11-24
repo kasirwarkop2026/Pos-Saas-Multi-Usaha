@@ -4489,3 +4489,26 @@ Present PGA-01 to the Owner first: retain all A01 policy authority at Owner leve
 ### 15.133.6 Governance
 
 Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged.
+ 
+### 15.134 Owner Decision Recorded — PGA-01 Authority Retained at Owner Level
+
+**Date:** 2026-11-24  
+**Decision:** Owner approved that all A01 policy decisions for ODR-A01-01..05 remain with the Owner. No policy decision authority is delegated to domain owners or other functions.
+
+**Permitted preparation:** Domain owners/functions may prepare bounded factual and technical analysis and recommendations within documented source ownership boundaries. Such work is advisory only and cannot be treated as policy approval, exception approval, authorization, or permission grant.
+
+**Future delegation control:** Any future delegation requires a separate explicit written Owner decision that identifies the delegate/office, exact scope and limits, effective date/version, duration, review conditions, and revocation mechanism. Until then, no implied, temporary, fallback, or domain-derived delegation exists.
+
+**Checklist / gate status:**
+- [x] PGA-01 — Owner decision on accountable A01 policy authority: CLOSED (authority retained at Owner level).
+- [ ] PGA-02 — tolerance and over-receipt policy details: OPEN; Owner decision required.
+- [ ] PGA-03 — Variant Batch-policy override details: OPEN; Owner decision required.
+- [ ] PGA-04 — Virtual Transit Location exception details: OPEN; Owner decision required.
+- [ ] PGA-05 — PO amendment lifecycle policy details: OPEN; Owner decision required.
+- [ ] PGA-06 — independent approval / SoD policy details: OPEN; Owner decision required.
+- [ ] ODR-A01-01..05 detailed policy parameters: remain OPEN / PARTIALLY APPROVED at principle level.
+
+This decision does not appoint approvers, create roles/permissions, change SoD, approve physical design, execute tests, activate adapters, change schema, or authorize Stage 6. PR #149 remains documentation-only and open/unmerged; DB_PUSH_BLOCKED: ACTIVE.
+
+**Next bounded step:** prepare separate Owner-facing decision packets for PGA-02..PGA-06, preserving the domain boundaries and distinguishing evidence/recommendations from policy choices. Do not combine them into an implied blanket approval.
+
