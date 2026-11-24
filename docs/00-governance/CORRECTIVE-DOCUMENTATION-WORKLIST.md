@@ -3534,3 +3534,1106 @@ Following the Owner's conditional instruction to promote the proposed source-fam
 ### 15.107.4 Governance
 
 Documentation-only, append-only continuation on PR #148 branch `docs/cw11-a01-source-event-catalogue-2026-11-21`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge remain separate gates; merge to `main` requires explicit Owner instruction because it triggers linked Vercel Production deployment.
+
+
+
+## 15.108 CW-11 Package E — A01 Purchase / Goods Receipt adapter contract drafted (22 November 2026)
+
+### 15.108.1 Scope and baseline
+
+Continue one source family at a time following Owner-approved DOC08-FIX-026. This checkpoint drafts the logical Purchase / Goods Receipt adapter contract in DOC-04 §42.46, aligned with DOC08-FIX-018/019/024/025/026 and the existing purchase/receipt direction crosswalk in DOC-04 §42.39.
+
+### 15.108.2 Contract outcomes recorded
+
+- Posting boundary is physical receipt plus applicable acceptance; purchase commitment/order, expected delivery, invoice/payment and unaccepted/rejected quantity do not independently post on-hand.
+- Purchase source document, exact source line, distinct receipt occurrence and accepted receipt-line quantity are required logical lineage; exact physical objects and identifiers remain OPEN.
+- Each independently accepted partial receipt occurrence is separately traceable and append-only; a later receipt must not overwrite an earlier posted occurrence.
+- Accepted quantity must be supplied with reproducible Product base-unit context. Receipt movement is positive at the receiving stock grain under DOC08-FIX-024.
+- Multi-line receipt fan-out must be deterministic, line-attributable and complete. Partial visible fan-out is not a complete committed receipt.
+- One physical receipt effect has one authoritative A01 posting path. Same-identity/same-payload retry resolves to the original outcome; changed payload conflicts; uncertain commit must be resolved before retry.
+- Post-commit corrections remain immutable and exclusively follow DOC08-FIX-025. Costing-only processing does not create another on-hand movement.
+- Business ownership, DOC-05 authorization, A01/A02 separation and projection reconciliation remain required boundaries.
+
+### 15.108.3 Acceptance and OPEN dependencies
+
+**PASS WITH OPEN TECHNICAL CONTRACT DEPENDENCIES — logical adapter contract drafted.** This checkpoint is documentation-only. It does not create a new DOC08 FIX, enable the Purchase / Goods Receipt adapter, approve physical schema, prove runtime correctness or authorize Stage 6.
+
+Still OPEN under ERD-OPEN-05: exact purchase/receipt/source-line/receipt-occurrence objects and identifiers; exact lifecycle states and acceptance/rejection/inspection path; source version and amendment semantics; multi-line event cardinality; authoritative accepted-quantity field and conversion provenance; precision/rounding/tolerance; over-receipt policy; receiving Location and Batch resolution; DOC-05 authorization/SoD; event identity/idempotency/retry/recovery; physical registry/keys/constraints; atomicity/concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. No adapter is enabled.
+
+### 15.108.4 Next gate
+
+Review and close the Purchase / Goods Receipt source identity, eligible lifecycle, accepted-quantity authority, receipt-occurrence cardinality and receiving stock-grain rules in documentation. Then resolve authorization, replay, physical integrity, transaction/recovery and evidence dependencies. Do not proceed to the next A01 source family until this adapter contract is accepted at its documentation gate.
+
+### 15.108.5 Governance
+
+Documentation-only, append-only on branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR review and merge are separate gates; no merge is performed by this checkpoint.
+
+
+
+## 15.109 CW-11 Package E — Purchase / Goods Receipt cross-document contract audit (22 November 2026)
+
+### 15.109.1 Audit performed
+
+Audited DOC-04 §42.46 against DOC-02 `CATEGORY_WORKFLOW_MASTER.md` §5–§6, DOC-05 `AUTHORIZATION_MASTER.md` §23.4–§23.6, DOC-04 §§17.2–17.4 and DOC08-FIX-018/019/024/025/026.
+
+### 15.109.2 Findings and clarifications
+
+- PASS: purchase request/PO, approval, physical receiving, discrepancy review and supplier payment are distinct controls. Purchase order, expected delivery, invoice or payment without accepted physical receipt does not create on-hand movement.
+- PASS: only physically received and accepted quantity is eligible; partial receipt occurrences remain separately traceable; movement is positive under DOC08-FIX-024.
+- PASS: inventory ledger is separate from balance projections and costing; purchase approval does not imply inventory-posting authority.
+- Clarified: arrived, accepted-for-inventory, rejected and unresolved/discrepant quantities are conceptually distinct. Only accepted-for-inventory quantity is A01 eligible. Exact source representation, inspection states and partial acceptance model remain OPEN.
+- Clarified: transfer shipment receipt detail's one-movement-per-detail precedent (A12.10/A12.11) is scoped to transfer receipts/returns and must not be generalized to purchase receipts. Purchase receipt-detail-to-movement cardinality and Batch/Location fan-out remain OPEN.
+- Clarified: DOC-05 §23.4 inventory starter keys do not define purchase-receipt-specific permission tuples. No `M08.*` key, grant or role mapping is invented.
+
+### 15.109.3 Disposition and dependencies
+
+**PASS — cross-document conceptual consistency; no contradiction found.** Existing logical contract §42.46 is consistent with the reviewed baselines. No new DOC08 FIX is needed. DOC08-FIX-018/019/024/025/026 remain unchanged.
+
+Still OPEN under ERD-OPEN-05: source domain/object/line/receipt-detail ownership and identity; accepted/rejected/discrepant quantity representation; inspection/discrepancy lifecycle and partial-acceptance split; purchase-specific event cardinality and movement fan-out; source version/amendment; over-receipt policy; receiving Location/Batch resolution; purchase-specific permission/actor/scope/SoD/approver/audit; idempotency/recovery; physical constraints/atomicity/concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+No purchase-receipt permission is granted, no adapter is enabled, and no physical schema/implementation is approved. Candidate Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.109.4 Next gate
+
+Resolve the Purchase / Goods Receipt source ownership and source identity, then its accepted/rejected/discrepant quantity representation, lifecycle and partial-acceptance cardinality. Only after those decisions are stable should the contract map receipt detail to movement fan-out and DOC-05 authorization. Keep physical keys, transaction/recovery, concurrency, tenant enforcement and executed evidence OPEN until separately evidenced.
+
+### 15.109.5 Governance
+
+Documentation-only, append-only continuation on branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains a review gate; no merge is performed by this checkpoint.
+
+
+
+## 15.110 CW-11 Package E — Purchase / Goods Receipt source-ownership and identity proposal (22 November 2026)
+
+### 15.110.1 Audit performed
+Reviewed the current PR #149 logical adapter contract and the relevant DOC-02 procurement/receiving workflow, DOC-04 source identity/entity boundaries and DOC-05 M06 inventory action/authorization baseline. The documents do not establish a canonical purchase/receipt source object, source owner for each fact or physical identifier.
+
+### 15.110.2 Recommended conceptual model — pending Owner decision
+- Purchasing / Procurement owns PO, ordered source line and commercial amendments.
+- Receiving / Warehouse Operations owns physical receipt occurrence, receipt-line observation, inspection/discrepancy disposition and accepted-for-inventory quantity.
+- Inventory (M06) owns authorization-checked A01 admission, posting identity, immutable movement ledger and projection reconciliation.
+- Finance / AP owns invoice, payable, payment and settlement.
+- Recommended posting identity/grain: Business + physical receipt occurrence + receipt-line + accepted quantity slice; movement fan-out may be 1:N by valid stock grain.
+- Distinguish physically arrived, accepted, rejected and unresolved/held/discrepant quantity. Only accepted quantity posts; quantity conversion provenance must be reproducible.
+
+These are PROPOSED / REVIEW, not FIX. No physical names, permission keys or grants, source adapter, schema or implementation are approved.
+
+### 15.110.3 Disposition and next gate
+**PASS — bounded source-domain audit completed; Owner decision required.** The recommended model preserves the documented workflow and M06 ledger boundary while avoiding unsupported source object names or permission grants. Do not close the source identity/lifecycle gate or advance to another A01 source family until the Owner approves or revises the responsibility split, event grain and quantity disposition model.
+
+ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.110.4 Governance
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. No merge is performed.
+
+
+## 15.111 CW-11 Package E — Owner approval recorded as DOC08-FIX-027 (22 November 2026)
+
+### 15.111.1 Owner-approved conceptual decisions
+The Owner explicitly approved all three recommendations previously recorded as PROPOSED / REVIEW in DOC-04 §42.48. They are now formalized as DOC08-FIX-027:
+- **FIX-027-A:** Purchasing/Procurement owns commercial purchase facts; Receiving/Warehouse Operations owns physical receipt and quantity-disposition facts; Inventory (M06) owns A01 admission/posting/ledger/projection reconciliation; Finance/AP owns invoice/payable/payment/settlement.
+- **FIX-027-B:** canonical logical posting grain is Business + physical Receipt Occurrence + Receipt Line + Accepted-for-Inventory Quantity Slice, preserving distinct source and movement lineage.
+- **FIX-027-C:** physically arrived, accepted-for-inventory, rejected and unresolved/held/discrepant quantities are distinct; only accepted quantity is eligible for A01 positive movement.
+
+### 15.111.2 Scope and dependencies
+The three conceptual decisions are FIX. Physical source objects/keys, lifecycle vocabulary, partial inspection/acceptance implementation, arithmetic/tolerance/over-receipt/rounding, event-to-movement cardinality, Batch/Location resolution, purchase-specific authorization, idempotency/recovery, atomicity/concurrency, tenant enforcement, reconciliation and executed evidence remain OPEN.
+
+No permission is granted, no adapter is enabled, and no physical schema/runtime behavior is approved. DOC08-FIX-018/019/024/025/026 remain unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.111.3 Governance
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged pending subsequent contract audit and review.
+
+
+## 15.112 CW-11 Package E — Owner-approved Purchase / Goods Receipt lifecycle and quantity-control FIX (DOC08-FIX-028, 22 November 2026)
+
+### 15.112.1 Owner decision recorded
+
+The Owner approved five conceptual rules as FIX:
+- LIF-01: separate physical arrival, inspection/review, quantity disposition and A01 posting.
+- LIF-02: allow partial receipt and partial acceptance, independently traceable by accepted quantity slice.
+- QTY-01: enforce the conceptual reconciliation partition arrived = accepted + rejected + unresolved/held/discrepant on a compatible measurement basis.
+- QTY-02: only validated accepted quantity posts positive; rejected and unresolved portions are excluded; accepted cannot exceed physically arrived.
+- QTY-03: one authoritative posting outcome per accepted slice; duplicate replay cannot create another movement; history remains immutable and post-post correction follows FIX-025.
+
+### 15.112.2 Audit disposition and remaining work
+
+**PASS — conceptual lifecycle and quantity-control decisions closed by Owner.** DOC-04 §42.50, DOC-09 §11.32 and DOC08-FIX-028 now carry the same decision. Remaining OPEN work is limited to physical state/source representation, numeric precision/conversion implementation, over-receipt/shortage/tolerance policy, event/movement cardinality, Batch/Location allocation, DOC-05 authorization, physical idempotency/recovery/atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence.
+
+Next review: define over-receipt, shortage/shrinkage, tolerance and their approval authority as a separate bounded Owner decision. Then review event-to-movement cardinality and Batch/Location allocation. Do not activate the adapter or advance to another A01 source family until Package E's documentation acceptance gate is met.
+
+### 15.112.3 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged pending subsequent contract audit and review.
+
+
+## 15.113 CW-11 Package E — Owner-approved over-receipt, shortage and tolerance FIX recorded (22 November 2026)
+
+### 15.113.1 Owner decision recorded
+
+The Owner explicitly confirmed all three receiving variance rules as conceptual FIX, formalized as DOC08-FIX-029:
+- Over-receipt above PO quantity is not automatically accepted or posted; the excess requires specific authorized approval under explicit policy before it can be considered for acceptance.
+- Shortage is recorded as a discrepancy against the PO; missing quantity is not treated as received/accepted and creates no inventory movement.
+- Default tolerance is 0%; any non-zero tolerance requires explicit policy and authorization and cannot alter actual physically arrived or accepted quantity.
+
+### 15.113.2 Disposition and next gate
+
+**PASS — Owner conceptual policy decision closed.** DOC-04 §42.51, DOC-08 DOC08-FIX-029 and DOC-09 §11.33 carry the same decision. The policy decision does not approve physical schema, permission grants, adapter activation or runtime behavior.
+
+Next, review and resolve the logical **event-to-movement cardinality/orchestration** contract, preserving accepted-slice identity, exactly-once authoritative posting outcome, deterministic complete fan-out and immutable movement lineage. After that, review **Batch/Location allocation**. Do not advance to another A01 source family until Package E's documentation acceptance gate is met.
+
+Still OPEN: numeric precision/scale/rounding/conversion provenance; PO amendment/version semantics; physical source representation; purchase-specific authorization tuple; event-to-movement cardinality; Batch/Location allocation; physical keys/constraints, idempotency/recovery, atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence.
+
+### 15.113.3 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged pending subsequent contract audit and review.
+
+## 15.114 CW-11 Package E — Owner-approved A01 event-to-movement cardinality FIX recorded (22 November 2026)
+
+### 15.114.1 Owner decision recorded
+
+The Owner approved the proposed Purchase / Goods Receipt cardinality contract, formalized as DOC08-FIX-030:
+- One independently attributable Accepted-for-Inventory Quantity Slice maps to exactly one authoritative logical A01 posting event.
+- One successfully committed A01 posting event produces one-or-more Inventory Movement entries (1:N).
+- Each movement belongs to exactly one event and one accepted slice and preserves Business, receipt-occurrence and receipt-line lineage.
+- The sum of positive movement base-quantity deltas equals the accepted slice's validated quantity in Product base unit.
+- The entire deterministic fan-out must be attributable and reconciled; partial fan-out is not a successful complete posting.
+- Same-identity/same-payload retry resolves to the original event and movement set; changed payload conflicts; uncertain commit is reconciled before retry; correction follows DOC08-FIX-025.
+
+The transfer shipment receipt-detail → exactly-one-movement precedent in A12.10/A12.11 remains scoped to transfer receipts/returns and is not generalized to Purchase / Goods Receipt.
+
+### 15.114.2 Disposition and remaining dependencies
+
+**PASS — conceptual event-to-movement cardinality closed by Owner.** DOC-04 §42.52, DOC-08 DOC08-FIX-030 and DOC-09 §11.34 carry the same decision.
+
+Still OPEN: physical event/movement objects and keys/FKs; exact stock grain; Batch/Location allocation; numeric precision/scale/rounding and conversion implementation; purchase-specific DOC-05 authorization tuple; physical idempotency registry, transaction atomicity/isolation/locking/concurrency and retry/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY. No adapter is enabled, no permission is granted, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+### 15.114.3 Next gate
+
+Proceed to the separate Batch/Location allocation review. Define the conceptual allocation and quantity-conservation rules without inventing physical keys, exact schema, permission grants or runtime behavior. Keep numeric precision/scale/rounding, physical constraints, authorization, transaction/recovery, concurrency, tenant enforcement, projection reconciliation and executed evidence OPEN until separately resolved.
+
+### 15.114.4 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.115 CW-11 Package E — Batch/Location allocation proposal drafted; Owner decision pending (22 November 2026)
+
+### 15.115.1 Audit performed
+
+Reviewed the current DOC-04 inventory/batch/costing baseline (§§3–6), Purchase / Goods Receipt contract (§§42.46–42.52), DOC-02 §6 procurement/receiving controls and DOC-05 §§23.4–23.6 inventory action/authorization baseline. The existing decisions establish immutable movement ledger, rebuildable balance and batch-balance projections, physical Batch distinct from cost layer, FEFO for physical-batch selection, MWA per Business + Product/Variant + Inventory Location, and non-granting candidate M06 inventory keys. They do not establish Purchase / Goods Receipt-specific receiving Location or Batch allocation policy.
+
+### 15.115.2 Proposal recorded — not Owner-approved
+
+DOC-04 §42.53 and DOC-09 §11.35 record a PROPOSED / REVIEW model:
+- explicit same-Business receiving Location per allocation portion; no silent destination inference; unresolved/invalid Location blocks A01;
+- actual physical Batch/Lot identity for batch-tracked Product/Variant; distinct lots remain distinct; unbatched path only where explicit Product/Variant policy permits;
+- FEFO remains outbound batch selection, not incoming lot assignment; Batch identity remains separate from FIFO cost-layer identity and MWA valuation;
+- accepted slice may split across multiple recorded Location/Batch allocation portions; recommended grain is accepted slice + Product/Variant + Location + Batch or explicitly permitted unbatched state;
+- each allocation portion maps to one positive movement; allocation and movement totals equal the accepted quantity in Product base unit.
+
+### 15.115.3 Disposition and Owner gate
+
+**PASS — bounded conceptual proposal and cross-document consistency review completed; Owner decision remains OPEN.** No contradiction was found with DOC-04's existing batch, location, ledger and costing principles. This is not a FIX and does not close the Batch/Location dependency. No DOC08 FIX is created.
+
+Owner approval is required for receiving Location resolution/eligibility, batch-tracked versus unbatched policy, physical-lot identity handling, permitted multi-Location/multi-Batch splits and allocation-portion-to-movement cardinality. Exact physical objects/keys, authorization, numeric implementation, atomicity/concurrency, idempotency/recovery, tenant enforcement, projection reconciliation and executed evidence remain OPEN.
+
+### 15.115.4 Next gate
+
+Present the proposal to the Owner for approval or revision. Only after the Owner decision should DOC-04, DOC-08 and DOC-09 be synchronized to a new FIX. Do not advance to another A01 source family before Package E's documentation acceptance gate is met.
+
+### 15.115.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.116 CW-11 Package E — Owner-approved Batch/Location allocation FIX recorded (22 November 2026)
+
+### 15.116.1 Owner decision recorded
+
+The Owner approved all seven conceptual Batch/Location allocation rules, formalized as DOC08-FIX-031:
+- explicit eligible same-Business receiving Location per allocation portion; no silent Location inference; invalid/unresolved Location blocks A01;
+- multi-Location split only for physically observed and recorded distribution;
+- actual physical Batch/Lot identity for batch-tracked Product/Variant; distinct lots remain distinct and required attributes must be preserved;
+- unbatched path only under explicit Product/Variant policy that does not require Batch tracking;
+- FEFO applies to outbound batch selection, not incoming lot assignment; physical Batch remains separate from FIFO cost layer and MWA valuation;
+- allocation grain is accepted slice + Product/Variant + Location + actual Batch or explicitly permitted unbatched state; one slice may split into portions and each portion maps to one positive movement; allocation and movement totals each conserve accepted quantity in Product base unit;
+- unresolved/invalid/unreconciled required allocation blocks A01; tenant/Product lineage and projection reconciliation boundaries remain; allocation does not grant authority.
+
+### 15.116.2 Disposition and retained OPEN dependencies
+
+**PASS — Owner conceptual Batch/Location allocation decision closed.** DOC-04 §42.54, DOC-08 DOC08-FIX-031 and DOC-09 §11.36 carry the same FIX. The proposal-only status in DOC-04 §42.53 / DOC-09 §11.35 is superseded for the seven approved rules only.
+
+Still OPEN: authoritative Product/Variant batch-tracking policy source/representation; Location taxonomy/eligibility/defaulting detail; exact physical Batch identity/required attribute source and exception handling; whether a physical allocation object is required; physical keys/FKs/constraints; numeric precision/scale/rounding/conversion implementation; purchase-specific DOC-05 authorization tuple; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 remains unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.116.3 Next bounded review
+
+Resolve the remaining Product/Variant batch-tracking policy source and Location eligibility/defaulting details. Do not reopen DOC08-FIX-031 or invent physical schema. Do not advance to another A01 source family before Package E's documentation acceptance gate is met.
+
+### 15.116.4 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.117 CW-11 Package E — Product Batch policy and Location eligibility audit completed; Owner decision pending (22 November 2026)
+
+### 15.117.1 Audit performed
+
+Reviewed DOC-01 §§2–3, §7 and §14; DOC-03 §§2–3 and §5; DOC-04 §§3–6, §16.1, §42.53–42.54; and DOC-05 §§23.4–23.6.
+
+Confirmed conceptual support: Business tenant boundary with multiple outlets/warehouses; inventory Location as Business operational subdivision; inventory_batches as physical batch/lot concept with Product/Variant association and production/expiry/state; FEFO physical-batch selection distinct from FIFO cost-layer consumption; location-scoped MWA and balance projections; server-side resolution/validation; and candidate M06 keys are not permission grants.
+
+No reviewed document establishes canonical Product/Variant batch-tracking policy source, required/not-tracked setting, inheritance/override or receipt-time snapshot; nor Location active/receiving eligibility, type taxonomy, default precedence or purchase-receipt authorization tuple.
+
+### 15.117.2 Proposal recorded — not Owner-approved
+
+DOC-04 §42.55 and DOC-09 §11.37 record:
+- Product master owns explicit Batch tracking required / not required policy; unknown/unset/conflict blocks A01.
+- Variant inherits Product policy unless an explicit authorized/auditable override exists; effective policy is preserved at receipt time.
+- Batch-required products need actual physical Batch/Lot identity and applicable attributes; only explicit not-tracked policy permits unbatched allocation.
+- Receiving Location must be same-Business, active and explicitly receiving-eligible; server resolves authoritative context.
+- A Location default may prefill a suggestion only; receiver confirms actual physical destination. Invalid/inactive/cross-Business/non-receiving Location blocks A01.
+- Virtual transit Location is excluded from normal purchase receiving unless separately approved.
+
+This remains PROPOSED / REVIEW, not a FIX.
+
+### 15.117.3 Disposition and Owner gate
+
+**PASS — bounded source audit and recommendation drafting complete; Owner decision remains OPEN.** DOC08-FIX-031 is unchanged. No new DOC08 FIX is created. No contradiction was found with the approved Batch/Location allocation contract.
+
+Owner approval is required for Product/Variant policy ownership, inheritance/override and receipt-time snapshot; Location active/receiving eligibility; receiver confirmation/default behavior; and any transit-location exception. Purchase-specific authorization, physical representation/keys, numeric implementation, atomicity/concurrency/idempotency/recovery, tenant enforcement, projection reconciliation and executed evidence remain OPEN.
+
+### 15.117.4 Next gate
+
+Present the bounded policy proposal to the Owner. After approval, synchronize DOC-04, DOC-08, DOC-09 and Worklist as appropriate. Do not reopen DOC08-FIX-031 or proceed to another A01 source family before Package E's documentation acceptance gate is met.
+
+### 15.117.5 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.118 CW-11 Package E — Owner-approved Product/Variant Batch policy and Location eligibility (22 November 2026)
+
+### 15.118.1 Owner decision
+
+**PASS — OWNER APPROVED / CONCEPTUAL FIX.** The Owner approved the proposal previously recorded in DOC-04 §42.55, DOC-09 §11.37 and Worklist §15.117. The approval is formalized as DOC08-FIX-032 in DOC-08 and DOC-04 §42.56.
+
+### 15.118.2 Approved conceptual rules
+
+- Product master owns explicit Batch tracking required / Batch tracking not required policy; unknown, unset, unresolved or conflicting policy blocks A01.
+- Variant inherits Product policy by default; Variant override is allowed only when explicitly authorized and auditable. Silent override is prohibited.
+- Effective policy is resolved for the accepted receipt slice/allocation and preserved as a receipt-time decision/snapshot; later master-data changes do not rewrite historical receipt lineage.
+- Batch-required allocation identifies actual physical Batch/Lot and satisfies applicable required identity/attribute requirements. Unbatched allocation is allowed only under explicit effective not-tracked policy, consistent with DOC08-FIX-031-D.
+- Receiving Location is same-Business, active and explicitly eligible for inventory receiving; server resolves authoritative Location and Business/parent relationship.
+- Receiver confirms actual physical destination. A configured default may prefill a suggestion only; it cannot silently determine physical destination or bypass confirmation.
+- Virtual transit Location is not a normal purchase-receiving destination unless separately approved policy explicitly authorizes it.
+
+### 15.118.3 Acceptance boundary and retained OPEN dependencies
+
+This is conceptual approval only. No literal enum/field/table/configuration structure, snapshot storage, override permission key, Location taxonomy/default algorithm, physical schema/constraint or runtime behavior is approved. No permission is granted and A01 is not activated.
+
+Remain OPEN: physical policy source/representation and audit evidence; Variant override authority; snapshot/version storage; Location lifecycle/type/receiving-capability representation; default precedence and confirmation evidence; transit exception authority; purchase-specific DOC-05 authorization tuple; physical objects/keys/FKs/constraints; numeric implementation; atomicity/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation; and executed evidence.
+
+DOC08-FIX-030 and DOC08-FIX-031 remain unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+### 15.118.4 Next gate
+
+Continue the bounded documentation audit of remaining OPEN dependencies for A01 and Package E acceptance. Do not proceed to another A01 source family until Package E documentation acceptance gate is met. Do not infer or implement physical schema from this conceptual FIX.
+
+### 15.118.5 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.119 CW-11 Package E — A01 purchase-receipt authorization boundary audit (22 November 2026)
+
+### 15.119.1 Audit scope
+
+Read-only review of DOC-05 §§23.4–23.6, §24, §25.3–25.4 and DOC-03 §§3, 18.2–18.4, 19.3 on PR #149 branch.
+
+### 15.119.2 Findings
+
+- M08 owns procurement/purchase/receiving workflow facts; M06 owns inventory identity, Batch, movement ledger, balance projections and costing. M06 owns authoritative inventory movement posting.
+- DOC-05 §23.4 candidate M06 keys are starter vocabulary only, not grants or a complete A01 authorization catalogue.
+- DOC-05 §23.5 requires an exact key/actor tuple with scope, Business/site/Location/assignment, object-state conditions, data class/purpose, SoD, approver and audit event; missing/ambiguous context means DENY.
+- DOC-05 §25.3's generic movement-recording tuple depends on an already-authorized source command. It does not define the A01-specific M08 acceptance-to-M06 posting handoff.
+- DOC-03 requires server-authoritative tenant/resource resolution, exact owner authorization, idempotency and audit lineage; physical enforcement/evidence remain OPEN.
+
+### 15.119.3 Disposition
+
+**PASS — bounded source audit complete; authorization tuple remains OPEN / NOT ACCEPTED.** M08 receipt/acceptance does not itself grant M06 posting authority. A generic M06 candidate key does not bypass the M08 accepted-slice/source-command boundary. This is an audit interpretation only; no actor, role, action key, approval threshold, SoD policy or permission grant is created. No new DOC08 FIX; DOC08-FIX-030/031/032 remain unchanged.
+
+### 15.119.4 Remaining OPEN dependencies
+
+Exact M08 receipt/acceptance action catalogue and actor tuple; exact M06 posting action tuple and controlled service boundary; approval/SoD; Location/warehouse assignment resolver; Variant override authority; audit event schema/retention; physical authorization enforcement; idempotency/atomicity/concurrency/recovery; tenant enforcement; projection reconciliation; and executed positive/negative authorization evidence.
+
+### 15.119.5 Next bounded review
+
+Audit the A01 quantity-conversion and numeric-reconciliation contract against the controlling quantity/unit and costing decisions. Keep precision, scale, rounding, conversion snapshot/version and physical enforcement OPEN unless a source-backed Owner decision explicitly resolves them. Do not create numeric implementation choices or proceed to another A01 source family before Package E acceptance.
+
+### 15.119.6 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.120 CW-11 Package E — A01 quantity conversion, numeric reconciliation and costing boundary audit (22 November 2026)
+
+### 15.120.1 Audit scope
+
+Read-only cross-check of DOC-04 §§20, 42.25–42.28, 42.49–42.52 and 42.54 against DOC-03 §§3, 5 and 18–19 and DOC08-FIX-027–032.
+
+### 15.120.2 Findings
+
+- Product base unit is the canonical stock reference; source/input unit is distinct. Conversion direction: `quantity_base = quantity_input × conversion_factor_base_per_input`.
+- Conversion must be explicit, valid and Product/Variant-compatible; missing/ambiguous/incompatible/unknown/unapproved conversion fails closed. No guessed factor, implicit chain, label-only match or silent rounding.
+- High internal precision is required for conversion factors; invalid quantity is rejected, not silently rounded.
+- Source/receiving preserves entered quantity, input unit and reproducible conversion provenance. A01 consumes validated accepted quantity in Product base unit; later reference edits do not rewrite historical receipt/movement facts.
+- Per accepted slice, allocation portions and positive movement base deltas each sum to the same accepted quantity. Portions are positive; no over/under/duplicate allocation, unexplained residual or cross-slice offset.
+- Physical Batch, FIFO cost layer and MWA valuation remain distinct. FEFO selects outbound physical batches; FIFO selects cost layers; costing-only work creates no extra on-hand movement.
+- MWA default pool is Business + Product/Variant + Inventory Location; pools do not cross Locations. Total cost is authoritative for a cost layer; unit cost is derived at high internal precision; unknown cost remains NULL. Destination MWA recalculates after receipt from destination quantity and total cost. LRM is not a generic unit-conversion/FIFO/MWA residual rule.
+
+### 15.120.3 Disposition
+
+**PASS — conceptual quantity conversion and reconciliation are internally consistent.** This is a source-consistency audit, not executable test evidence.
+
+**OPEN / NOT ACCEPTED:** numeric type/precision/scale/capacity/overflow; per-Product increment and fractional/discrete policy; conversion factor source/precision/version/effective-time and allowed graph; snapshot representation; operation-specific rounding boundary/mode; FIFO/MWA residual arithmetic; physical constraints/enforcement; atomicity/locking/idempotency/recovery; and executed positive/negative/fractional/boundary/overflow/replay/reconciliation evidence.
+
+DOC08-FIX-029's 0% default receiving tolerance and explicit-policy/authorization-only non-zero exception do not authorize rounding/coercion or altering physically observed/accepted quantity. Tolerance cannot force arithmetic reconciliation.
+
+No new DOC08 FIX. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation or Stage 6 implementation approved.
+
+### 15.120.4 Next bounded review
+
+Audit A01 posting atomicity, idempotency, concurrency and uncertain-commit recovery against the source-native A06/A09 baseline. Keep physical transaction boundary, lock order, isolation, key/payload canonicalization, retention, retry/recovery implementation and executed evidence OPEN. Do not move to another source family before CW-11 Package E acceptance.
+
+### 15.120.5 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+## 15.121 CW-11 Package E — A01 atomicity, idempotency, concurrency and uncertain-commit recovery audit (22 November 2026)
+
+### 15.121.1 Audit scope
+
+Read-only cross-check of DOC-04 §§21.4–21.8, 42.46, 42.52 and 42.57–42.58 against DOC-03 §§18.2–18.4 and 21.5–21.6, covering A06/A09 baseline safeguards and A01-specific outcomes.
+
+### 15.121.2 Findings
+
+- Same operation identity + same payload replays the stored authoritative result without duplicate A01 event/movement.
+- Same identity + changed payload conflicts; no silent overwrite or reuse.
+- Operation claim and all posting effects are atomic. Complete deterministic movement fan-out is required for successful A01 outcome.
+- Lost response/timeout does not prove failed commit. Reconcile authoritative event/result and full movement set before retry; no blind repost.
+- A06 requires deterministic locking, post-lock revalidation, atomic commit and full rollback on failure.
+- Concurrent same-key requests must not both produce posting effects.
+- Ledger remains stock truth; projections are rebuildable and must reconcile without creating a second movement.
+- Server resolves each command/event/resource to one Business and authorizes exact resource owner. M08 source facts and M06 posting effects remain separate.
+- Event/audit lineage includes Business/object/version/type/time/correlation/idempotency/actor-service and actor/action/target/scope/purpose/decision evidence.
+
+### 15.121.3 Disposition
+
+**PASS — conceptual safeguards internally consistent; physical/operational acceptance OPEN.** The A01 sequential retry, changed-payload conflict, concurrent request, pre-commit failure, lost-response, partial-fan-out, projection-failure and cross-Business denial scenarios are specified in DOC-04 §42.59.2 as acceptance scenarios only, not executed evidence.
+
+**OPEN / NOT ACCEPTED:** physical operation registry/key/payload canonicalization/digest/retention; transaction/write-set boundary; lock targets/order/granularity/isolation/timeout/deadlock/retry; uncertain-commit reconciliation protocol; projection repair/rebuild; tenant/authorization enforcement; incomplete-state/manual recovery authority; and executed sequential/concurrent/replay/conflict/rollback/timeout/partial-fan-out/projection-failure/tenant-isolation evidence.
+
+No exactly-once transport guarantee or physical registry/key/hash/payload/retention/transaction/lock/retry/outbox/inbox/distributed-transaction mechanism is inferred. No new DOC08 FIX; DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation or Stage 6 implementation approved.
+
+### 15.121.4 Next bounded review
+
+Audit projection reconciliation and evidence closure for A01, including ledger-to-balance and batch-balance-to-parent-Location consistency, replay/rebuild behavior, source-event-to-movement attribution and evidence required to prove complete posting. Keep physical projection update strategy, reconciliation tolerances, rebuild protocol, monitoring/alerting and executed evidence OPEN. Do not move to another source family before CW-11 Package E acceptance.
+
+### 15.121.5 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+
+
+## 15.122 CW-11 Package E — A01 projection reconciliation and evidence-closure audit (24 November 2026)
+
+### 15.122.1 Audit scope
+
+Read-only cross-check of DOC-04 §§17.2–17.4, 42.46–42.54 and 42.59 against DOC-03 §§6, 18.3–18.4, 19.3 and 21.5. Scope: immutable ledger versus derived projections; A01 accepted-slice/event/movement attribution; Batch-to-parent-Location reconciliation; replay/rebuild safety; projection failure/recovery and evidence closure.
+
+### 15.122.2 Findings
+
+- Posted `inventory_movements` remain the immutable physical stock ledger; correction uses linked reversal/compensating movements.
+- `inventory_balances` and applicable `inventory_batch_balances` are rebuildable projections, not independent movement sources or write authorities.
+- Reconciliation preserves exact Business/Product/Variant/Location/Batch grain and accepted-slice/source-occurrence/source-line/A01-event/movement lineage.
+- Each accepted slice's complete movement set conserves its validated base quantity; Batch-balance totals reconcile to the parent Location balance.
+- M08 source receipt facts remain distinct from M06 posting effects. Projection consumer failure cannot erase a committed source-domain fact.
+- Projection owner/version/freshness/reconciliation state must be visible where lag is operationally material.
+- Replay/rebuild must not create duplicate A01 events, inventory movements or costing-only quantity effects.
+
+### 15.122.3 Disposition
+
+**PASS — conceptual projection/reconciliation invariants internally consistent.** This is a source-consistency audit only, not runtime validation.
+
+**OPEN / NOT ACCEPTED:** physical projection keys/grain/watermarks/versioning; sync/async strategy and lag policy; reconciliation algorithm/boundary/schedule/ownership; snapshot/checkpoint and replay ordering/gap recovery; retry/quarantine/dead-letter/poison-event/alert/manual-recovery controls; Batch/Location aggregation and null-safe unbatched enforcement; ledger/fan-out/projection transaction boundary; tenant enforcement; audit/monitoring/retention; and executed evidence for completeness, no duplicates, ledger/balance, Batch/parent-Location, replay/rebuild, lag/failure/recovery, gaps/out-of-order and cross-Business isolation.
+
+No new DOC08 FIX. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, projection mechanism, permission, adapter activation or Stage 6 implementation approved.
+
+### 15.122.4 Next bounded gate
+
+Consolidate the Package E acceptance matrix across source ownership/quantity, lifecycle/disposition, event-to-movement cardinality, Batch/Location allocation, Product Batch policy/Location eligibility, authorization, numeric reconciliation, atomicity/idempotency/concurrency/recovery and projection reconciliation. Mark each row as conceptual PASS, physical/technical OPEN, evidence NOT EXECUTED, or NOT ACCEPTED. Do not declare Package E accepted or move to another source family until all required acceptance gates and evidence are explicitly closed.
+
+### 15.122.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains unmerged; review and merge are separate gates.
+
+
+## 15.123 CW-11 Package E — Consolidated A01 acceptance matrix and gate disposition (24 November 2026)
+
+### 15.123.1 Consolidation scope
+
+Consolidates DOC-04 §§42.46–42.60 and DOC-09 §§11.39–11.42 into one acceptance matrix. The detailed area-by-area matrix is DOC-04 §42.61; DOC-09 §11.43 records its concise open-dependency view.
+
+### 15.123.2 Consolidated status
+
+| Area | Conceptual | Physical / technical | Evidence |
+|---|---|---|---|
+| Source ownership / identity / quantity | PASS — FIX-027 | OPEN | NOT EXECUTED |
+| Lifecycle / partial acceptance | PASS — FIX-028 | OPEN | NOT EXECUTED |
+| Over-receipt / shortage / tolerance | PASS — FIX-029 | OPEN | NOT EXECUTED |
+| Event-to-movement cardinality | PASS — FIX-030 | OPEN | NOT EXECUTED |
+| Batch / Location allocation | PASS — FIX-031 | OPEN | NOT EXECUTED |
+| Product Batch policy / Location eligibility | PASS — FIX-032 | OPEN | NOT EXECUTED |
+| Authorization / tenant / audit | Boundary PASS only | NOT ACCEPTED / OPEN | NOT EXECUTED |
+| Numeric conversion / costing | PASS | OPEN | NOT EXECUTED |
+| Atomicity / idempotency / concurrency / recovery | PASS | OPEN | NOT EXECUTED |
+| Projection reconciliation / rebuild | PASS | OPEN | NOT EXECUTED |
+
+### 15.123.3 Acceptance blockers
+
+- Physical Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; ERD-OPEN-05 OPEN.
+- A01-specific authorization tuple, approval/SoD, server-side enforcement and tenant isolation remain OPEN.
+- Numeric precision/scale/capacity/overflow, Product increment/fraction, conversion factor/version/snapshot and operation-specific rounding remain OPEN.
+- Physical idempotency registry/key/payload/retention, transaction/write-set, locking/isolation/retry, uncertain-commit recovery and incomplete-state authority remain OPEN.
+- Projection watermark/version/lag, reconciliation boundary/algorithm, rebuild/replay/gap recovery, monitoring/alerting and operational ownership remain OPEN.
+- No required A01 runtime, integration, concurrency, failure-injection, authorization, tenant-isolation or projection-reconciliation evidence has been executed/reviewed in this audit.
+
+### 15.123.4 Disposition and next bounded step
+
+**CONCEPTUAL CONTRACT: PASS. PHYSICAL / TECHNICAL ACCEPTANCE: NOT ACCEPTED. EXECUTED EVIDENCE: NOT PROVIDED / NOT EXECUTED. CW-11 PACKAGE E: IN PROGRESS — ACCEPTANCE NOT MET.**
+
+Next step is a source-and-Owner-authority gap triage for the OPEN decisions, grouped by the controlling document/decision owner. Do not invent physical mechanisms or close any OPEN item by inference. Request Owner decisions only where the source baseline leaves a policy choice unresolved; keep physical implementation and Stage 6 blocked until separate approval and evidence gates are met. Do not move to another source family before Package E acceptance.
+
+No new DOC08 FIX. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation, SQL/DDL/DML, database mutation or implementation is approved.
+
+### 15.123.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+
+## 15.124 CW-11 Package E — A01 source-and-Owner-authority gap triage (24 November 2026)
+
+### 15.124.1 Scope and result
+
+Completed a read-only classification of DOC-04 §42.61 OPEN blockers against DOC-03 §§6, 18–19, DOC-05 §§23–25 and the existing A01 FIX/audit baseline. Detailed source/authority mapping is DOC-04 §42.62; concise Open Register view is DOC-09 §11.44.
+
+### 15.124.2 Checklist disposition
+
+| Work item | Classification | Status |
+|---|---|---|
+| Preserve source-resolved domain/ledger/projection/tenant/authorization conceptual boundaries | Existing baseline; do not reopen | DONE — source anchors recorded in DOC-04 §42.62.2 |
+| Identify unresolved Owner/domain policy decisions | Class A | OPEN — Owner decision/authority assignment required |
+| Group physical/technical design dependencies by controlling domain | Class B | DONE — grouped in DOC-04 §42.62.4; designs remain OPEN |
+| Separate post-authorization test/evidence requirements | Class C | DONE — scenarios listed in DOC-04 §42.62.5; NOT EXECUTED / NOT AUTHORIZED |
+| Confirm no inferred role, threshold, physical mechanism, permission or implementation | Governance check | PASS |
+| CW-11 Package E acceptance | Overall gate | NOT MET |
+
+### 15.124.3 Class A decision items awaiting Owner
+
+1. Whether and under what explicit policy non-zero receiving tolerance/over-receipt exception may exist; default remains 0%.
+2. Who has authority to approve and audit a Variant Batch-policy override.
+3. Whether any separately approved virtual transit Location receiving exception is required; otherwise normal exclusion remains.
+4. How PO amendments/version changes affect receipts already arrived, inspected, accepted or posted; M08 is source domain, but specific policy is unresolved.
+5. Who is the independent approver for A01 exception/SoD cases; no self-approval or fallback.
+
+The reviewed source does not identify individual decision-makers or complete delegated authority for these items. Owner must explicitly decide or assign the authority. Do not invent named people, role grants, approval thresholds or default exceptions.
+
+### 15.124.4 Class B design work (blocked pending policy inputs and separate authorization)
+
+- Physical source/receipt/accepted-slice identity, amendment linkage, keys/FKs and duplicate-acceptance constraints.
+- Lifecycle/disposition representation and transition authorization/audit.
+- Product/Variant Batch-policy effective snapshot; Location lifecycle/receiving eligibility and authoritative resolver.
+- Numeric types/precision/scale/capacity/overflow, Product increments/fractions, conversion provenance/version/snapshot and rounding.
+- A01-specific M08 receipt/acceptance and M06 posting action/actor/scope/approval/SoD/audit tuple and controlled handoff.
+- Atomicity, write-set, idempotency identity/payload/retention, locks/isolation/concurrency and uncertain-commit recovery.
+- Projection grain/watermark/freshness, reconciliation/rebuild/gap recovery, quarantine/alerts/manual recovery and physical tenant/audit enforcement.
+
+No technical choice is approved by this work item. Where a delegated design authority is absent from source, Owner assignment is required.
+
+### 15.124.5 Class C evidence gate
+
+All source lineage, lifecycle, approval, Batch/Location, numeric, replay/concurrency/rollback/recovery, projection/rebuild and tenant-isolation evidence remains NOT EXECUTED / NOT AUTHORIZED. Execution requires separate approval of design and implementation, controlled test environment, versioned reproducible evidence and review.
+
+### 15.124.6 Next bounded step and governance
+
+Next: present only the five Class A policy/authority items in §15.124.3 to the Owner for explicit decisions or delegated-authority assignment. Keep Class B technical design and Class C evidence separate. Do not move to another A01 source family; do not declare Package E accepted.
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, deployment or Production change. PR #149 remains open/unmerged; review and merge are separate gates.
+
+
+## 15.125 CW-11 Package E — Owner Decision Request Register (24 November 2026)
+
+### 15.125.1 Deliverable completed
+
+Prepared the Owner Decision Request Register in DOC-04 §42.63, with concise OPEN Register entry in DOC-09 §11.45. The register contains five explicit policy/authority requests; no decision answer is pre-filled.
+
+### 15.125.2 Checklist update
+
+| Work item | Status |
+|---|---|
+| Source-and-Owner-authority gap triage | DONE — DOC-04 §42.62 / DOC-09 §11.44 / Worklist §15.124 |
+| ODR-A01-01 — Non-zero tolerance / over-receipt exception | PENDING OWNER DECISION; FIX-029 default 0% remains |
+| ODR-A01-02 — Variant Batch-policy override authority | PENDING OWNER DECISION; FIX-032 inheritance default remains |
+| ODR-A01-03 — Virtual transit Location exception | PENDING OWNER DECISION; normal exclusion remains |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | PENDING OWNER POLICY; M08 remains source domain; no retroactive behavior inferred |
+| ODR-A01-05 — Independent approver / A01 exception SoD | PENDING OWNER DECISION; DOC-05 §25.4 no-approver pending/DENY remains |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.125.3 Next bounded gate
+
+Present DOC-04 §42.63 to the Owner for explicit decisions or documented delegation. Keep every unanswered item OPEN. After an explicit response, audit its authority, scope and consistency against FIX-027..032 and DOC-05 before updating any decision register or FIX. Do not move to another A01 source family until Package E acceptance is met.
+
+### 15.125.4 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. PR #149 remains open/unmerged. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED.
+
+
+## 15.126 CW-11 Package E — Multi-Business A01 policy architecture recommendation (24 November 2026)
+
+### 15.126.1 Deliverable completed
+
+Recorded the recommendation **Global Core Rules + Business-level Configurable Policies + Controlled Exceptions** in DOC-04 §42.64 and summarized it in DOC-09 §11.46. This is a recommendation for Owner review only; it is not an adopted policy, new FIX, physical design approval or implementation authorization.
+
+### 15.126.2 Checklist and status
+
+| Work item | Status |
+|---|---|
+| Define platform-wide Global Core Rules | DONE — recommendation recorded; adoption pending |
+| Define bounded Business-level Configurable Policies | DONE — conceptual requirements recorded; physical design OPEN |
+| Define Controlled Exceptions governance | DONE — conceptual recommendation recorded; Owner policy/authority decisions OPEN |
+| Map recommendation to ODR-A01-01..05 | DONE — DOC-04 §42.64.3 / DOC-09 §11.46 |
+| Owner adoption/revision of five ODR recommendations | PENDING OWNER |
+| Preserve DOC08-FIX-027..032 unchanged | PASS |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.126.3 Next bounded gate
+
+Present DOC-04 §42.64 to the Owner for explicit adoption, rejection or revision of each recommendation. Until then, keep ODR-A01-01..05 PENDING / OPEN and preserve existing restrictive baselines. If the Owner responds, audit attribution, delegated authority, scope and consistency against DOC08-FIX-027..032 and DOC-05 before updating any decision register or FIX. Do not begin physical design/implementation or move to another A01 source family before Package E acceptance.
+
+### 15.126.4 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database introspection/mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, Supabase Preview/Staging, manual deployment or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+
+## 15.127 CW-11 Package E — Record and audit Owner response to ODR-A01-01 (24 November 2026)
+
+### 15.127.1 Deliverable completed
+
+Recorded the Owner's explicit response in DOC-04 §42.65 and DOC-09 §11.47. The Owner approved the policy principle: 0% receiving tolerance is the default for every Business; non-zero tolerance is permitted only through a specific Business policy that is explicitly approved and documented. Tolerance must not alter actual physical quantity; excess is not automatically accepted or posted; shortage remains a PO variance, not received stock.
+
+### 15.127.2 Consistency audit
+
+| Check | Result |
+|---|---|
+| Consistency with DOC08-FIX-029 / DOC-04 §42.51 | PASS |
+| Consistency with numeric and quantity integrity audit, DOC-04 §42.58 | PASS |
+| Consistency with authority triage and recommendation boundary, DOC-04 §§42.62–42.64 | PASS |
+| New FIX or changed existing FIX | NONE |
+| Approver/delegation/SoD assigned | NO — OPEN |
+| Exception circumstances, quantity basis and limits defined | NO — OPEN |
+| Effective period/version, expiry/review/revocation defined | NO — OPEN |
+| Evidence/audit detail and excess acceptance semantics fully defined | NO — OPEN |
+
+### 15.127.3 Checklist update
+
+| Work item | Status |
+|---|---|
+| ODR-A01-01 policy principle | PARTIALLY APPROVED — detailed parameters OPEN |
+| ODR-A01-01 exception authority/limits/effective period/evidence | OPEN |
+| ODR-A01-02 — Variant Batch-policy override | PENDING OWNER |
+| ODR-A01-03 — Virtual transit Location exception | PENDING OWNER |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | PENDING OWNER |
+| ODR-A01-05 — Independent approver / A01 exception SoD | PENDING OWNER |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.127.4 Next bounded gate
+
+Proceed to ODR-A01-02 using DOC-04 §42.63.2. Keep ODR-A01-01's detailed parameters OPEN for later clarification. After all five Owner requests have responses, perform a consolidated authority/scope/consistency audit before updating final decision dispositions. Do not begin physical design/implementation or move to another A01 source family before Package E acceptance.
+
+### 15.127.5 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+
+## 15.128 CW-11 Package E — Record and audit Owner response to ODR-A01-02 (24 November 2026)
+
+### 15.128.1 Deliverable completed
+
+Recorded the Owner's explicit agreement to the Variant Batch-policy recommendation in DOC-04 §42.66 and DOC-09 §11.48:
+
+- Product remains the owner of the explicit Batch-tracking policy.
+- Variant inherits Product policy by default.
+- Variant override is permitted only as an explicit, authorized and auditable exception.
+- Receipt-time policy integrity and the existing fail-closed baseline are preserved.
+
+### 15.128.2 Consistency audit
+
+| Check | Result |
+|---|---|
+| Consistency with DOC08-FIX-032 / DOC-04 §42.56 | PASS |
+| Consistency with DOC-03 Product/Variant ownership boundary | PASS |
+| Consistency with DOC-04 §§42.62–42.64 recommendation boundary | PASS |
+| New FIX or changed existing FIX | NONE |
+| Override approval authority/delegation assigned | NO — OPEN |
+| Business/Product/Variant scope and limits defined | NO — OPEN |
+| Effective date/version, expiry/review/revocation defined | NO — OPEN |
+| Evidence/audit detail defined | NO — OPEN |
+| Physical policy source/snapshot or runtime mechanism approved | NO — OPEN |
+
+### 15.128.3 Checklist update
+
+| Work item | Status |
+|---|---|
+| ODR-A01-01 policy principle | PARTIALLY APPROVED — detailed parameters OPEN |
+| ODR-A01-01 exception authority/limits/effective period/evidence | OPEN |
+| ODR-A01-02 policy principle | PARTIALLY APPROVED — authority/scope/lifecycle parameters OPEN |
+| ODR-A01-02 override authority/delegation/scope/effective period/revocation/evidence | OPEN |
+| ODR-A01-03 — Virtual transit Location exception | PENDING OWNER |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | PENDING OWNER |
+| ODR-A01-05 — Independent approver / A01 exception SoD | PENDING OWNER |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.128.4 Next bounded gate
+
+Proceed to ODR-A01-03 using DOC-04 §42.63.2. Keep ODR-A01-01 and ODR-A01-02 unresolved operational parameters OPEN. After all five Owner requests have responses, perform a consolidated authority/scope/consistency audit before final decision dispositions. Do not begin physical design/implementation or move to another A01 source family before Package E acceptance.
+
+### 15.128.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+
+## 15.129 CW-11 Package E — Record and audit Owner response to ODR-A01-03 (24 November 2026)
+
+### 15.129.1 Deliverable completed
+
+Recorded the Owner's explicit agreement to the virtual Transit Location receiving recommendation in DOC-04 §42.67 and DOC-09 §11.49:
+
+- Virtual Transit Location remains excluded from normal purchase receiving.
+- An exception may be considered only for a demonstrated business need and explicit approval.
+- Actual physical custody and the real physical receiving destination must be evidenced.
+- A virtual Location must not be treated as physical merely through configuration or labeling.
+- The default exclusion remains until a bounded exception policy is fully defined and approved.
+
+### 15.129.2 Consistency audit
+
+| Check | Result |
+|---|---|
+| Consistency with DOC08-FIX-032 / DOC-04 §42.56 | PASS |
+| Consistency with DOC-03 Location ownership boundary | PASS |
+| Consistency with DOC-05 authorization boundary | PASS |
+| New FIX or changed existing FIX | NONE |
+| Exception authority/eligible role assigned | NO — OPEN |
+| Qualifying circumstances and scope defined | NO — OPEN |
+| Physical custody/final destination evidence specified | NO — OPEN |
+| Effective period, expiry/review/revocation defined | NO — OPEN |
+| Audit/monitoring and enforcement mechanism defined | NO — OPEN |
+
+### 15.129.3 Checklist update
+
+| Work item | Status |
+|---|---|
+| ODR-A01-01 policy principle | PARTIALLY APPROVED — detailed parameters OPEN |
+| ODR-A01-01 exception authority/limits/effective period/evidence | OPEN |
+| ODR-A01-02 policy principle | PARTIALLY APPROVED — authority/scope/lifecycle parameters OPEN |
+| ODR-A01-02 override authority/delegation/scope/effective period/revocation/evidence | OPEN |
+| ODR-A01-03 policy principle | PARTIALLY APPROVED — exception authority/conditions/evidence OPEN |
+| ODR-A01-03 exception authority/scope/custody evidence/lifecycle/audit | OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | PENDING OWNER |
+| ODR-A01-05 — Independent approver / A01 exception SoD | PENDING OWNER |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.129.4 Next bounded gate
+
+Proceed to ODR-A01-04 using DOC-04 §42.63.2. Keep ODR-A01-01..03 unresolved operational parameters OPEN. After all five Owner requests have responses, perform a consolidated authority/scope/consistency audit before final decision dispositions. Do not begin physical design/implementation or move to another A01 source family before Package E acceptance.
+
+### 15.129.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+
+## 15.130 CW-11 Package E — Record and audit Owner response to ODR-A01-04 (24 November 2026)
+
+### 15.130.1 Deliverable completed
+
+Recorded the Owner's explicit agreement to prospective PO amendment treatment in DOC-04 §42.68 and DOC-09 §11.50:
+
+- PO amendments are prospective and do not silently rewrite historical procurement, arrival, inspection, acceptance or inventory-posting facts.
+- Arrival and inspection facts remain preserved with their source context.
+- Accepted receipt facts and quantities are not retroactively rewritten.
+- Posted inventory movements are corrected only through separately authorized correction/reversal lineage.
+- PO version, receipt occurrence/line, inspection and accepted-slice facts remain separately traceable.
+
+### 15.130.2 Consistency audit
+
+| Check | Result |
+|---|---|
+| Consistency with DOC08-FIX-027 / DOC08-FIX-028 | PASS |
+| Consistency with DOC-04 §42.63.2 / §42.64.3 | PASS |
+| Consistency with DOC-03 M08 procurement / M06 inventory ownership | PASS |
+| Consistency with DOC-05 authorization boundary | PASS |
+| New FIX or changed existing FIX | NONE |
+| Amendment classes/fields by lifecycle stage defined | NO — OPEN |
+| Arrived-but-unaccepted treatment and effective-version/concurrency rules defined | NO — OPEN |
+| Exceptional pre-acceptance authority assigned | NO — OPEN |
+| Correction/reversal authority and audit linkage fully defined | NO — OPEN |
+| Physical version/snapshot/lineage mechanism approved | NO — OPEN |
+
+### 15.130.3 Checklist update
+
+| Work item | Status |
+|---|---|
+| ODR-A01-01 policy principle | PARTIALLY APPROVED — detailed parameters OPEN |
+| ODR-A01-01 exception authority/limits/effective period/evidence | OPEN |
+| ODR-A01-02 policy principle | PARTIALLY APPROVED — authority/scope/lifecycle parameters OPEN |
+| ODR-A01-02 override authority/delegation/scope/effective period/revocation/evidence | OPEN |
+| ODR-A01-03 policy principle | PARTIALLY APPROVED — exception authority/conditions/evidence OPEN |
+| ODR-A01-03 exception authority/scope/custody evidence/lifecycle/audit | OPEN |
+| ODR-A01-04 prospective PO amendment principle | PARTIALLY APPROVED — lifecycle/authority details OPEN |
+| ODR-A01-04 amendment classes/version selection/correction authority/lineage | OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | PENDING OWNER |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.130.4 Next bounded gate
+
+Proceed to ODR-A01-05 using DOC-04 §42.63.2. Keep ODR-A01-01..04 unresolved operational parameters OPEN. After all five Owner requests have responses, perform a consolidated authority/scope/consistency audit before final decision dispositions. Do not begin physical design/implementation or move to another A01 source family before Package E acceptance.
+
+### 15.130.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+
+## 15.131 CW-11 Package E — Record Owner response to ODR-A01-05 and prepare consolidated audit (24 November 2026)
+
+### 15.131.1 Deliverable completed
+
+Recorded Owner approval of the A01 independent-approval / SoD principles in DOC-04 §42.69 and DOC-09 §11.51:
+
+- High-risk A01 exceptions require independent approval; exact classes/risk tiers remain OPEN.
+- Initiating or performing receiver cannot approve the same exception.
+- Approver eligibility and independence must be explicit, reviewable and auditable.
+- Appointment/delegation authority must be explicitly identified and recorded.
+- If no eligible independent approver exists, the operation remains PENDING / DENY.
+- No self-approval, implicit approval, timeout approval or substitute fallback is permitted.
+
+### 15.131.2 Consistency audit
+
+| Check | Result |
+|---|---|
+| Consistency with DOC-05 §25.4 restrictive baseline | PASS |
+| No self-approval / no fallback principle | PASS |
+| Permission, role or approver assignment authorized | NO |
+| DOC-05 finalization authorized | NO — remains DRAFT / REVIEW REQUIRED / NOT FINAL |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Runtime/security enforcement evidence | NOT EXECUTED / NOT AUTHORIZED |
+
+### 15.131.3 Updated Owner-decision checklist
+
+| Work item | Status |
+|---|---|
+| ODR-A01-01 | PARTIALLY APPROVED — detailed parameters OPEN |
+| ODR-A01-02 | PARTIALLY APPROVED — authority/scope/lifecycle parameters OPEN |
+| ODR-A01-03 | PARTIALLY APPROVED — exception authority/conditions/evidence OPEN |
+| ODR-A01-04 | PARTIALLY APPROVED — lifecycle/authority details OPEN |
+| ODR-A01-05 | PARTIALLY APPROVED — classification/delegation/eligibility details OPEN |
+| Owner responses for all five ODR-A01 requests | DONE — principle-level responses recorded |
+| Consolidated authority/scope/consistency audit ODR-A01-01..05 | NEXT — NOT STARTED |
+| ODR-A01-01..05 detailed operational parameters | OPEN |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.131.4 Next bounded gate
+
+Perform a consolidated audit of all five ODR-A01 principle decisions against the exact request wording and affected source documents, including DOC-03 domain ownership, DOC-05 authorization/SoD boundary, DOC-08 FIX-027..032 and DOC-04 data/receipt contract. Identify remaining policy gaps, contradictions and evidence requirements without filling gaps by inference. Do not mark detailed policy closure or Package E acceptance. Do not start physical design, implementation, tests or another A01 source family before the applicable acceptance gate.
+
+### 15.131.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+## 15.132 CW-11 Package E — Complete consolidated read-only audit of ODR-A01-01..05 (24 November 2026)
+
+### 15.132.1 Audit performed
+
+Reviewed current PR #149 branch content from DOC-04 §§42.49–42.70, DOC-08 FIX-027..032, DOC-05 AUTHORIZATION_MASTER.md §25.4, DOC-09 §§11.45–11.52 and the current worklist. This was a source/documentation audit only; no runtime or physical schema inspection/test was performed.
+
+### 15.132.2 Results
+
+| Audit dimension | Result |
+|---|---|
+| ODR-A01-01 principle vs FIX-029 | PASS — 0% default, no automatic excess acceptance/posting, shortage variance, physical quantity integrity |
+| ODR-A01-02 principle vs FIX-031/032 | PASS — Product policy owner, Variant inheritance, controlled auditable override |
+| ODR-A01-03 principle vs FIX-032 | PASS — virtual transit excluded from normal receiving; actual physical custody/destination remains required |
+| ODR-A01-04 principle vs FIX-027/028 | PASS — prospective amendment treatment; historical receipt/accepted/posted facts preserved; correction lineage |
+| ODR-A01-05 principle vs DOC-05 §25.4 | PASS — independent approval for high-risk exceptions; no self-approval; no eligible approver means PENDING / DENY |
+| Cross-source conceptual consistency | PASS — no contradiction found |
+| Class A policy details | OPEN — all five ODRs remain PARTIALLY APPROVED |
+| DOC-04 §42.62.4 authority assignment | OPEN — no accountable architecture/data decision authority or delegate is recorded in Owner responses |
+| Class B physical/technical design | OPEN — separate gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| FIX-027..032 | PRESERVED — no change |
+| Package E acceptance | NOT MET |
+
+### 15.132.3 Historical register discrepancy and authoritative status
+
+DOC-04 §42.63.3 and DOC-09 §11.45 retain pre-response PENDING rows. They are historical snapshots and remain unchanged under append-only governance. The later attributable response records DOC-04 §§42.65–42.69 and DOC-09 §§11.47–11.51 supersede those older PENDING statuses only to the extent of the adopted principle. All unresolved parameters remain OPEN. Do not treat the historical rows as current dispositions or the later partial approvals as full closure.
+
+### 15.132.4 Consolidated policy gap checklist
+
+| Work item | Status |
+|---|---|
+| ODR-A01-01 — policy principle | PARTIALLY APPROVED |
+| ODR-A01-01 — circumstances/limits/quantity basis/authority/effective period/evidence | OPEN |
+| ODR-A01-02 — policy principle | PARTIALLY APPROVED |
+| ODR-A01-02 — authority/delegation/scope/effective time/revocation/evidence | OPEN |
+| ODR-A01-03 — policy principle | PARTIALLY APPROVED |
+| ODR-A01-03 — no-exception/bounded conditions/authority/custody proof/effective period/audit | OPEN |
+| ODR-A01-04 — policy principle | PARTIALLY APPROVED |
+| ODR-A01-04 — amendment classes/lifecycle/version concurrency/correction authority/lineage | OPEN |
+| ODR-A01-05 — independent approval / SoD principle | PARTIALLY APPROVED |
+| ODR-A01-05 — risk classes/independence/delegation/escalation/evidence/review | OPEN |
+| Accountable policy/architecture decision authority per DOC-04 §42.62.4 | OPEN — Owner assignment not recorded |
+| DOC08-FIX-027..032 | PRESERVED |
+| Class B physical/technical design | OPEN |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.132.5 Next bounded gate
+
+Prepare an Owner-facing policy-gap and authority-assignment register. Group each unresolved Class A item by its legitimate domain/security authority (M08 procurement/receiving workflow; M06 inventory posting/ledger; M02 Product/Variant policy; M07 Location custody; DOC-05 authorization/SoD) and distinguish:
+- policy decisions that must return to Owner;
+- technical requirements/impact analysis that domain owners may prepare within their ownership;
+- authority/delegation assignments that require explicit Owner record;
+- evidence requirements that remain Class C and not executable now.
+
+Do not assume a domain owner automatically has policy approval authority. Do not create or grant permissions, assign named approvers, select physical schema, execute tests or move to Stage 6.
+
+### 15.132.6 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged.
+
+## 15.133 CW-11 Package E — Prepare Owner-facing Policy Gap & Authority Assignment Register (24 November 2026)
+
+### 15.133.1 Deliverable completed
+
+Prepared the policy gap and authority assignment register in DOC-04 §42.71 and the concise status index in DOC-09 §11.53. The register separates Owner policy decisions, domain/security analysis inputs and the blocked design/evidence gates.
+
+### 15.133.2 Owner decision queue
+
+| Gap | Scope | Status |
+|---|---|---|
+| PGA-01 | Accountable policy decision authority / delegation across ODR-A01-01..05 | OWNER DECISION REQUIRED |
+| PGA-02 | Tolerance and over-receipt policy details | OWNER DECISION REQUIRED |
+| PGA-03 | Variant Batch-policy override details | OWNER DECISION REQUIRED |
+| PGA-04 | Virtual Transit Location exception details | OWNER DECISION REQUIRED |
+| PGA-05 | PO amendment lifecycle details | OWNER DECISION REQUIRED |
+| PGA-06 | Independent approval / SoD policy details | OWNER DECISION REQUIRED |
+
+### 15.133.3 Domain analysis boundaries
+
+- M08: procurement/PO and receiving lifecycle; not inventory posting or AP/payment authority.
+- M06: accepted-slice admission, stock ledger, Batch/Location inventory effects and correction lineage; not PO source ownership.
+- M02: Product/Variant Batch-policy source and lifecycle inputs; not inventory permission grants.
+- M07: warehouse/location custody and physical destination evidence; not stock-ledger posting.
+- M18: inspection/quality/compliance facts where applicable; not PO or inventory ownership.
+- M16: supplier invoice/AP/payment boundary; not PO/receipt source ownership.
+- DOC-05/security: action/actor/scope/SoD/approver/audit requirements; not appointment of approvers or permission grants.
+- DOC-03/architecture: cross-domain ownership and handoff validation; not silent ownership transfer or Owner policy approval.
+
+These are documented preparation boundaries only. No domain team has been assigned or recorded as accepting a deliverable, and no policy approval authority is inferred from domain ownership.
+
+### 15.133.4 Governance and acceptance status
+
+| Control | Status |
+|---|---|
+| ODR-A01-01..05 principle responses | PARTIALLY APPROVED |
+| PGA-01..06 detailed policy/authority decisions | OPEN |
+| Domain/security analysis inputs | NOT YET SUBMITTED |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Class B physical/technical design | OPEN — NOT APPROVED |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| Physical Data Dictionary acceptance | 0/17 |
+| Canonical physical ERD | NOT ACCEPTED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.133.5 Next bounded gate
+
+Present PGA-01 to the Owner first: retain all A01 policy authority at Owner level or explicitly delegate a bounded policy scope and lifecycle. Record the exact decision, accountable authority, scope, effective date/version, duration and revocation/review conditions. Only after that authority record is explicit should PGA-02..06 be routed for policy decisions. Domain analysis may be prepared as documentation within source ownership, but must not be treated as binding approval.
+
+### 15.133.6 Governance
+
+Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged.
+ 
+### 15.134 Owner Decision Recorded — PGA-01 Authority Retained at Owner Level
+
+**Date:** 2026-11-24  
+**Decision:** Owner approved that all A01 policy decisions for ODR-A01-01..05 remain with the Owner. No policy decision authority is delegated to domain owners or other functions.
+
+**Permitted preparation:** Domain owners/functions may prepare bounded factual and technical analysis and recommendations within documented source ownership boundaries. Such work is advisory only and cannot be treated as policy approval, exception approval, authorization, or permission grant.
+
+**Future delegation control:** Any future delegation requires a separate explicit written Owner decision that identifies the delegate/office, exact scope and limits, effective date/version, duration, review conditions, and revocation mechanism. Until then, no implied, temporary, fallback, or domain-derived delegation exists.
+
+**Checklist / gate status:**
+- [x] PGA-01 — Owner decision on accountable A01 policy authority: CLOSED (authority retained at Owner level).
+- [ ] PGA-02 — tolerance and over-receipt policy details: OPEN; Owner decision required.
+- [ ] PGA-03 — Variant Batch-policy override details: OPEN; Owner decision required.
+- [ ] PGA-04 — Virtual Transit Location exception details: OPEN; Owner decision required.
+- [ ] PGA-05 — PO amendment lifecycle policy details: OPEN; Owner decision required.
+- [ ] PGA-06 — independent approval / SoD policy details: OPEN; Owner decision required.
+- [ ] ODR-A01-01..05 detailed policy parameters: remain OPEN / PARTIALLY APPROVED at principle level.
+
+This decision does not appoint approvers, create roles/permissions, change SoD, approve physical design, execute tests, activate adapters, change schema, or authorize Stage 6. PR #149 remains documentation-only and open/unmerged; DB_PUSH_BLOCKED: ACTIVE.
+
+**Next bounded step:** prepare separate Owner-facing decision packets for PGA-02..PGA-06, preserving the domain boundaries and distinguishing evidence/recommendations from policy choices. Do not combine them into an implied blanket approval.
+
+## 15.135 PGA-02 — Prepare Owner Decision Packet: Tolerance, Over-receipt and Shortage
+
+**Completed:** source review and preparation of Owner-facing decision packet at DOC-04 §42.73; index recorded at DOC-09 §11.55.
+
+**Fixed baseline preserved:** DOC08-FIX-029 remains unchanged: 0% default; explicit policy and authorization required for non-zero tolerance; excess not automatically accepted/posted; shortage remains PO variance; tolerance cannot rewrite physical or accepted quantity.
+
+**Recommended policy package submitted — awaiting Owner decision:**
+- [ ] Owner confirms 0% remains the only active default for every Business and PO line.
+- [ ] Owner confirms non-zero tolerance stays inactive until a separate written Owner-approved policy defines scope, quantity basis, cap, effective date/version, expiry/review/revocation and evidence.
+- [ ] Owner confirms over-receipt excess is separately recorded and ineligible for accepted-for-inventory/A01 until prior Owner exception authorization and a separate physical acceptance decision are evidenced.
+- [ ] Owner confirms shortage records only actual arrived quantity; missing quantity never creates receipt or stock movement.
+- [ ] Owner confirms no initiator/receiver self-approval and PENDING / DENY if no valid independent approval path exists.
+
+**Open pending response:** PGA-02 remains OWNER DECISION REQUIRED / OPEN. No numeric tolerance, cap, calculation basis, Business scope, approver delegation or effective period is activated or inferred.
+
+**Next gate:** obtain explicit Owner approval or amendment of DOC-04 §42.73.3. Only after the Owner response may the policy record be updated. Do not proceed to PGA-03 or implementation as though PGA-02 were closed.
+
+Documentation-only, append-only on PR #149 branch. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+## 15.136 Owner Decision and Read-only Audit — PGA-02
+
+**Date:** 2026-11-24  
+**Owner decision:** APPROVED — all recommendations in DOC-04 §42.73.3 adopted.
+
+**Checklist update:**
+- [x] 0% remains the only active default for every Business and PO line.
+- [x] Non-zero tolerance remains inactive pending separate written Owner-approved policy defining scope, quantity basis, cap/limits, effective date/version, expiry/review/revocation and evidence.
+- [x] Over-receipt excess recorded separately; prior explicit Owner exception authorization and separate physical verification/acceptance required before accepted-for-inventory/A01 eligibility.
+- [x] Shortage records actual arrived quantity and variance; missing quantity never creates receipt, accepted quantity or stock movement.
+- [x] Initiator/receiver self-approval prohibited; absent valid independent approval path, PENDING / DENY.
+- [x] Read-only documentation consistency audit completed; no conceptual contradiction found against FIX-029, FIX-027/028, PGA-01, DOC-05 §25.4, DOC-02 §6 and DOC-03 §19.1.
+
+**Disposition:** PGA-02 CLOSED at policy-decision level. ODR-A01-01 policy package approved; detailed technical/physical parameters remain OPEN. No numeric non-zero tolerance or cap is activated or invented. No approver/permission/role/delegation, schema, adapter, test, database or Stage 6 authorization is created.
+
+**Master checklist:**
+- [x] PGA-01 — A01 policy authority retained by Owner.
+- [x] PGA-02 — tolerance, over-receipt and shortage policy package approved and audited.
+- [ ] PGA-03 — Variant Batch-policy override details: OPEN.
+- [ ] PGA-04 — Virtual Transit Location exception details: OPEN.
+- [ ] PGA-05 — PO amendment lifecycle details: OPEN.
+- [ ] PGA-06 — independent approval / SoD policy details: OPEN.
+- [ ] Class B physical/technical design: OPEN / NOT APPROVED.
+- [ ] Class C runtime/security/concurrency/reconciliation evidence: NOT EXECUTED / NOT AUTHORIZED.
+- [ ] Package E acceptance: NOT MET; Physical Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED.
+
+**Next bounded step:** prepare the Owner-facing decision packet for PGA-03 (Variant Batch-policy override), using existing DOC-04/DOC08-FIX-032 and Product/Variant ownership sources. Do not alter implementation or treat technical parameters as approved.
+
+Documentation-only, append-only on PR #149. PR remains open/unmerged. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+
+## 15.137 PGA-03 — Prepare Owner Decision Packet: Variant Batch-Policy Override
+
+**Completed:** read-only source audit of DOC-04 §42.56 / DOC08-FIX-032, DOC-03 §19.1, DOC-05 §25.4 and the PGA-01 authority decision; Owner-facing packet prepared at DOC-04 §42.75 and indexed at DOC-09 §11.57.
+
+**Fixed baseline preserved:** Product owns explicit Batch policy; Variant inherits by default; override only when explicitly authorized and auditable; receipt-time effective policy is preserved; unknown/unresolved/conflicting policy fails closed; actual physical Batch/Lot identity is required when tracking is required; unbatched path only when explicit effective policy says not required.
+
+**Recommended policy package submitted — awaiting Owner decision:**
+- [ ] Product policy remains authoritative; Variant inheritance is mandatory default.
+- [ ] Variant override is exceptional and case-specific; no standing/self-service override.
+- [ ] Owner approval is required for the exact Business/Product/Variant and override direction; no domain delegation inferred.
+- [ ] Both relaxation and strengthening require explicit approval; no silent override.
+- [ ] Override carries rationale/evidence, effective boundary, expiry/review and traceable policy version.
+- [ ] Changes are prospective only; historical accepted slices and posted movements retain receipt-time policy.
+- [ ] Missing, expired, conflicting or unresolved policy fails closed and blocks A01.
+
+**Open pending response:** PGA-03 remains OWNER DECISION REQUIRED / OPEN. DOC08-FIX-032 remains unchanged. No approver, permission, role, policy storage schema, physical field, API/RLS enforcement or runtime behavior is approved.
+
+**Next gate:** obtain explicit Owner approval or amendment of DOC-04 §42.75.3. Do not proceed to PGA-04 or implementation as though PGA-03 were closed.
+
+Documentation-only, append-only on PR #149 branch. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+ 
+## 15.138 Owner Decision and Read-only Audit — PGA-03
+
+**Date:** 2026-11-25  
+**Owner decision:** APPROVED — all recommendations in DOC-04 §42.75.3 adopted without amendment.
+
+**Checklist update:**
+- [x] Product policy is authoritative and explicit (Batch tracking required / not required).
+- [x] Variant inheritance from Product is mandatory by default.
+- [x] Variant override is exceptional and case-specific; no standing/self-service override.
+- [x] Exact Owner approval required for Business/Product/Variant, direction and effective period.
+- [x] Both relaxation (required→not required) and strengthening (not required→required) require explicit Owner approval.
+- [x] Until valid override approval exists, Variant inherits Product policy.
+- [x] Override is prospective only; accepted receipt slices, Batch identities and posted movements are not rewritten.
+- [x] Missing, unresolved, expired, conflicting or unsupported policy fails closed and blocks A01.
+- [x] Logical audit evidence requirement adopted; physical schema/storage not selected.
+- [x] Read-only consistency audit completed; PASS against DOC08-FIX-032, PGA-01, DOC-03 §19.1, DOC-05 §25.4 and DOC-02 §6.
+
+**Disposition:** PGA-03 CLOSED at Owner policy-decision level. DOC08-FIX-032 preserved unchanged. No delegation, role/permission, approver assignment, physical design, schema, test, adapter activation, database mutation or Stage 6 authorization is created.
+
+**Master checklist:**
+- [x] PGA-01 — A01 policy authority retained by Owner.
+- [x] PGA-02 — tolerance, over-receipt and shortage policy package approved and audited.
+- [x] PGA-03 — Variant Batch-policy override package approved and audited.
+- [ ] PGA-04 — Virtual Transit Location exception details: OPEN.
+- [ ] PGA-05 — PO amendment lifecycle details: OPEN.
+- [ ] PGA-06 — independent approval / SoD details: OPEN.
+- [ ] Class B physical/technical design: OPEN / NOT APPROVED.
+- [ ] Class C runtime/security/concurrency/reconciliation evidence: NOT EXECUTED / NOT AUTHORIZED.
+- [ ] Package E acceptance: NOT MET; Physical Data Dictionary 0/17; canonical physical ERD NOT ACCEPTED.
+
+**Next bounded step:** prepare the PGA-04 Owner decision packet for Virtual Transit Location exception, preserving the established custody, receiving and inventory-ledger ownership boundaries. Do not infer a technical exception or begin implementation.
+
+Documentation-only, append-only on PR #149 branch. PR remains open/unmerged. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+ 
+## 15.139 PGA-04 — Prepare Owner Decision Packet: Virtual Transit Location Exception
+
+**Completed:** bounded read-only source review of DOC-04 §§42.54.1–42.54.2, §42.54.7, §42.56.2–42.56.3 and §16.3–§16.5; DOC-03 §19.1; DOC-05 §25.4; DOC-02 §6. Owner-facing packet prepared at DOC-04 §42.77 and indexed at DOC-09/decision register §11.59.
+
+**Fixed baseline preserved:** normal A01 receiving requires an explicit, active, same-Business and receiving-eligible Location; receiver confirms actual physical destination; Virtual Transit Location is excluded from normal purchase receiving unless separately approved. Transfer dispatch, transit custody and destination receipt are distinct conceptual events; closure requires reconciled disposition and unresolved investigation blocks closure.
+
+**Recommended policy package submitted — awaiting Owner decision:**
+- [ ] Keep Virtual Transit Location excluded from normal A01 purchase-receiving destinations by default.
+- [ ] Allow only narrow, case-specific exceptions explicitly approved by Owner for exact Business/use case.
+- [ ] Treat exception only as evidenced transit/custody staging; never as substitute for physical arrival or final destination confirmation.
+- [ ] Preserve separate dispatch, transit custody, destination receipt, discrepancy/investigation, return/loss and closure events.
+- [ ] Require exact scope, purpose, source/destination context, effective boundary, expiry/review/revocation and custody/shipment evidence.
+- [ ] No A01 posting merely because virtual transit is selected; fail closed until valid policy and evidence conditions are met.
+- [ ] Preserve M07 custody, M08 procurement/receiving and M06 inventory-ledger ownership boundaries.
+
+**Open pending response:** PGA-04 remains OWNER DECISION REQUIRED / OPEN. No Location taxonomy, virtual-location flag, event schema, approval key, permission, role, approver assignment, runtime enforcement or physical design is approved.
+
+**Next gate:** obtain explicit Owner approval or amendment of DOC-04 §42.77.3. Do not proceed to PGA-05 or implementation as though PGA-04 were closed.
+
+Documentation-only, append-only on PR #149 branch. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+

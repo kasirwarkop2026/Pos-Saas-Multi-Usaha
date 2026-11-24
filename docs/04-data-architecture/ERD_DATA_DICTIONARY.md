@@ -4585,3 +4585,1738 @@ DOC08-FIX-026 in DOC-08 §15 records the Owner-approved conceptual disposition o
 No source family or adapter is enabled. No physical table, column, FK, key, enum, digest, retention, numeric or runtime-state choice is approved. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+
+## 42.46 CW-11 Package E — A01 Purchase / Goods Receipt adapter contract (22 November 2026)
+
+### 42.46.1 Scope, authority and governing decisions
+
+This is the first source-family adapter contract under the Owner-approved conceptual A01 scope in DOC08-FIX-026. It defines the logical boundary for Purchase / Goods Receipt only. It is a documentation contract, not a physical schema, implementation specification, source activation or Stage 6 authorization.
+
+Governing baseline:
+- DOC08-FIX-018: A01 is a finite, server-owned inventory-posting source registry, not a universal event bus; unknown or disabled mappings fail closed.
+- DOC08-FIX-019: A01 physical posting identity and A02 reservation-demand identity remain separate.
+- DOC08-FIX-024: positive `inventory_movements.quantity_delta_base` increases on-hand at the affected Location; negative decreases it.
+- DOC08-FIX-026: Purchase / goods receipt is conceptually INCLUDE only for physically received and accepted quantity. Purchase commitment/order without physical receipt is a non-posting exclusion.
+- DOC-04 §§42.39 and 42.45: purchase receipt is positive at the receiving grain; this family is conceptually included, but its exact source identity and partial-receipt contract remain technical OPEN.
+
+### 42.46.2 Authoritative posting boundary
+
+An A01 Purchase / Goods Receipt posting is eligible only when a specific receipt occurrence has physically arrived, its applicable quantity has been accepted under the owning purchase/receiving workflow, and the receipt is authorized for inventory posting.
+
+The following do not independently create an A01 on-hand movement:
+- purchase requisition, purchase order, order approval, supplier commitment or expected delivery;
+- shipment notice, dispatch notice, invoice, payment, supplier bill or accounting recognition without physical receipt and acceptance;
+- a receipt draft, unconfirmed receipt, unaccepted quantity, rejected quantity or quantity merely expected;
+- a correction, duplicate retry or administrative status change that does not represent a new physical receipt.
+
+The exact source-domain lifecycle state(s) that establish physical receipt, acceptance and posting eligibility are **OPEN**. No literal state name or assumption that a generic `posted` flag is sufficient is approved here. Eligibility must be revalidated against the authoritative source at the posting boundary, not inferred from a stale client request or an earlier preview.
+
+### 42.46.3 Logical source identity and atomic grain
+
+The logical source lineage required for a receipt posting is:
+
+1. The owning Business.
+2. The purchase source document and its exact source line.
+3. The distinct physical receipt occurrence associated with that source line.
+4. The exact receipt-line / accepted-quantity fact for that occurrence.
+5. The resulting A01 event identity and its complete movement outcome.
+
+These are semantic identity requirements, not approved physical object or column names. Exact source object names, primary keys, line keys, receipt-occurrence keys, relationship cardinality, source-version token and physical foreign keys remain **OPEN**.
+
+A single purchase line may be received in multiple partial occurrences over time. Each separately accepted physical receipt occurrence must remain independently identifiable and append-only; a later receipt must not overwrite, enlarge or mutate an earlier posted receipt. One receipt occurrence may contain multiple purchase lines, but each line's accepted quantity must be deterministically attributable to its own source-line identity. Aggregating multiple source lines into one ambiguous posting identity is not acceptable.
+
+Whether one receipt occurrence may be amended before posting, and how a post-commit amendment is represented, remain source-domain contract decisions. A committed movement is never edited in place; a post-commit physical correction must use a new authorized correction movement under DOC08-FIX-025.
+
+### 42.46.4 Quantity authority and movement semantics
+
+The posting quantity is the quantity physically received **and accepted** for the exact receipt occurrence and source line. It is not the ordered quantity, invoiced quantity, shipped quantity, expected quantity, or an unaccepted/rejected quantity.
+
+Before A01 admission, the source workflow must supply a validated, reproducible quantity context normalized to the Product base unit. The adapter must not guess a conversion from a display label, mutable conversion factor or current Product configuration. The source domain remains responsible for preserving entered quantity/unit and its conversion provenance wherever such input is accepted; the exact authoritative source field, conversion snapshot/version, precision and rounding contract remain OPEN.
+
+For an eligible accepted receipt quantity:
+- the movement direction is positive under DOC08-FIX-024;
+- the movement is attributed to the receiving Business + Product + nullable Variant + receiving Location + applicable Batch grain;
+- any required Batch identity and receiving Location must be resolved from authoritative receipt/receiving facts, not guessed by the adapter;
+- movement quantity must equal the accepted receipt quantity in Product base units at the selected stock grain;
+- no negative movement is generated by this receipt adapter.
+
+The exact Location selection rule, Batch assignment/creation policy, Variant resolution, over-receipt authority, tolerance, unit conversion source, numeric precision/scale and rounding boundary remain **OPEN**. This contract does not authorize silent acceptance of over-receipt or a default Location/Batch.
+
+### 42.46.5 Partial receipt, fan-out and event cardinality
+
+Each independently accepted partial receipt occurrence is a separate logical A01 posting event. The same purchase line can therefore have multiple receipt events, each with its own accepted quantity and traceable source occurrence. The cumulative received quantity must be reconcilable to the source-domain receipt history, but this contract does not decide purchase-order closure or over-receipt policy.
+
+For one receipt event:
+- every included receipt line must resolve to one unambiguous source line and its accepted base-unit quantity;
+- each line must fan out deterministically to the required stock grain(s), including separate Batch or Location effects where the authoritative receipt facts require them;
+- the event is not complete until all required movement effects for that event are accounted for;
+- no partially visible fan-out may be treated as a committed complete receipt;
+- retries of the same event must resolve to the same logical outcome and must not append duplicate movements.
+
+The exact rule for whether a multi-line receipt is one atomic A01 event or a set of line-scoped A01 events, and the physical transaction boundary for all resulting movements, remain **OPEN**. The logical contract requires deterministic line-level attribution and complete outcome; it does not select a physical transaction design.
+
+### 42.46.6 Duplicate prevention, idempotency and correction
+
+One physical accepted receipt effect has one authoritative A01 posting path. The same quantity must not also be added through a manual inventory adjustment, generic opening-balance entry, supplier-return reversal or another overlapping source adapter. A genuine later physical return or correction is a distinct event with its own source lineage and eligibility; it does not rewrite the original receipt.
+
+The logical retry contract is:
+- same stable event identity and same canonical source payload resolve to the original committed outcome;
+- a retry after an uncertain response must first resolve the prior outcome and must not allocate a new identity merely because the caller timed out;
+- reuse of the same identity with a changed source line, receipt occurrence, Business, Product, Variant, Location, Batch, quantity or unit is a conflict, not a second receipt;
+- an invalid, ambiguous, unauthorized or unaccepted receipt fails closed and creates no movement.
+
+The physical idempotency key, canonical payload/digest representation, source version semantics, retention, concurrent duplicate arbitration and uncertain-commit recovery mechanism remain **OPEN**.
+
+After posting, correction is exclusively governed by DOC08-FIX-025: append a new immutable, lineage-linked opposite-effect correction movement within the recursively recalculated effective-quantity cap and at the exact same stock grain/base unit. Do not edit/delete the original movement or post both a source-domain correction and a generic correction for the same intent.
+
+### 42.46.7 Authorization, tenant boundary and reconciliation
+
+The receipt source must belong to the same Business as the A01 event and every resulting movement. Cross-Business source references fail closed. The actor/action/scope authorization and any required approval or separation-of-duties control must be independently evaluated under DOC-05; purchase approval alone is not presumed to grant inventory-posting authority.
+
+The committed receipt outcome must reconcile:
+- source document/line and each physical receipt occurrence;
+- accepted quantity and Product base-unit context;
+- A01 event identity and each generated movement;
+- Business/Product/Variant/Location/Batch stock grain;
+- resulting `inventory_balances` and applicable batch-balance projections.
+
+Cost-layer creation, FIFO allocation, MWA recalculation and valuation updates are downstream costing concerns and must not create a second on-hand quantity movement. Costing lineage and its own technical contract remain separate.
+
+Exact tenant enforcement, server-side authorization mapping, projection update/rebuild/reconciliation mechanism, audit evidence, monitoring and recovery remain **OPEN**.
+
+### 42.46.8 Decision register — resolved contract versus OPEN details
+
+**Resolved at the logical contract level:**
+- A01 Purchase / Goods Receipt is eligible only for physically received and accepted quantity.
+- Purchase commitment/order and non-physical purchase lifecycle events do not post on-hand.
+- Partial receipt occurrences are independently traceable and append-only.
+- Accepted quantity is normalized to Product base unit using validated source-owned context.
+- Receipt movement is positive at the receiving stock grain under DOC08-FIX-024.
+- One physical receipt effect has one authoritative A01 posting path; retry and fan-out must not duplicate it.
+- Posted movements remain immutable; later correction follows DOC08-FIX-025.
+- A01 remains bounded, separate from A02, tenant-scoped and independently authorized.
+
+**OPEN — must be resolved before this adapter can be accepted or activated:**
+1. Exact purchase, receipt, source-line and receipt-occurrence objects and stable identifiers.
+2. Exact lifecycle state names and authoritative eligibility transition, including acceptance/rejection and any inspection/hold path.
+3. Source version/change semantics and treatment of pre-post amendments versus post-commit correction.
+4. Multi-line receipt event cardinality and exact line-to-movement fan-out.
+5. Authoritative accepted-quantity field, entered unit/conversion provenance, base-unit normalization, precision, rounding and tolerance.
+6. Over-receipt policy and approval authority.
+7. Receiving Location and Batch resolution/assignment policy, including split stock-grain outcomes.
+8. DOC-05 actor/action/scope and approval/SoD mapping.
+9. Stable event identity, idempotency payload, retry, collision and uncertain-commit recovery.
+10. Physical A01 registry, source/movement keys, constraints, transaction atomicity, concurrency and complete fan-out enforcement.
+11. Tenant/source ownership enforcement and projection reconciliation.
+12. Executed evidence for accepted receipt, partial repeat receipt, rejected/unaccepted quantity, duplicate retry, changed-payload collision, multi-line fan-out, failure/recovery, authorization and cross-Business rejection.
+
+No table, column, enum literal, FK, unique key, digest algorithm, retention period, numeric type, runtime state, transaction isolation or physical adapter identifier is selected by this contract.
+
+### 42.46.9 Acceptance disposition and next gate
+
+**PASS WITH OPEN TECHNICAL CONTRACT DEPENDENCIES — logical adapter contract drafted.** The conceptual posting boundary and invariants for Purchase / Goods Receipt are now explicit and aligned with DOC08-FIX-018, DOC08-FIX-019, DOC08-FIX-024, DOC08-FIX-025 and DOC08-FIX-026. This is not adapter implementation acceptance, source activation, physical ERD acceptance, test PASS or Stage 6 authorization.
+
+The next gate is to resolve the OPEN source/line/receipt-occurrence identity and lifecycle/quantity authority decisions for this adapter, then reconcile the resulting contract against DOC-05 authorization and the A01 registry/physical integrity requirements. Do not begin another source family until this adapter's documentation gate is reviewed and its unresolved dependencies are accurately carried forward.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+
+## 42.47 CW-11 Package E — Purchase / Goods Receipt cross-document contract audit (22 November 2026)
+
+### 42.47.1 Audit basis
+
+This audit checks DOC-04 §42.46 against the current project-authored workflow and authorization baselines:
+- DOC-02 `CATEGORY_WORKFLOW_MASTER.md` §5 (Retail & Distribution pattern: procurement → receiving → inventory) and §6 (procurement/receiving controls).
+- DOC-05 `AUTHORIZATION_MASTER.md` §23.4–§23.6 (inventory action catalogue starter, role/scope/approval completion rules and explicit non-grant boundary).
+- DOC-04 §§17.2–17.4 (historical conceptual entity matrix, quantity/source identity/lifecycle groups and unresolved physical specification protocol).
+- DOC08-FIX-018/019/024/025/026.
+
+The audit is documentation-only. It does not create a new FIX, assign a permission, establish an unrecorded source entity or authorize implementation.
+
+### 42.47.2 Cross-document consistency findings
+
+**PASS — physical receipt is distinct from procurement commitment and payment.** DOC-02 §6 explicitly separates request/PO creation, approval, physical receiving, discrepancy review and supplier payment. DOC-04 §42.46 correctly prevents purchase order, expected delivery, invoice or payment from independently increasing on-hand. The receiving event must be based on the physical receipt and applicable acceptance outcome, not on commercial or accounting lifecycle alone.
+
+**PASS — receipt acceptance is a quantity boundary, not a whole-document assumption.** DOC08-FIX-026 limits purchase/receipt posting to physically received and accepted quantity. DOC-04 §42.46's receipt-line and partial-occurrence treatment is consistent with that boundary. Where a receipt contains accepted, rejected, disputed or not-yet-inspected quantities, only the quantity actually accepted for inventory posting may enter A01. The exact inspection/discrepancy lifecycle and whether accepted quantity is split into multiple receipt details remain OPEN; this audit does not invent those states.
+
+**PASS — inventory ledger remains distinct from procurement and projections.** DOC-04 §§17.2–17.4 preserve `inventory_movements` as immutable ledger facts and `inventory_balances` / batch balances as rebuildable projections. DOC-04 §42.46 correctly requires a positive receiving-grain movement and reconciliation, while costing-only processing does not create another on-hand movement.
+
+**PASS — independent authorization is required; purchase approval is not inventory-posting authority by implication.** DOC-02 §6 separates request/PO, approval, physical receiving, discrepancy review and supplier payment. DOC-05 §23.5 requires exact action, actor, scope, state, SoD, approver and audit rows; §23.6 states that the starter catalogue does not grant permissions. DOC-04 §42.46 correctly does not assume that PO approval grants A01 posting authority.
+
+**PASS — no unsupported purchase permission key is inferred.** DOC-05 §23.4 provides candidate M06 inventory keys but does not supply a complete purchase-receipt-specific permission tuple. No `M08.*` or other purchase-receipt permission literal is created by this audit. Exact procurement/receiving actor functions, permission keys, scope, conditions, approver/SoD and audit tuple remain OPEN.
+
+### 42.47.3 Contract clarifications and boundaries
+
+1. **Quantity partition:** physical arrived quantity, accepted-for-inventory quantity, rejected quantity and unresolved/discrepant quantity are conceptually distinct. Only accepted-for-inventory quantity is eligible for the A01 receipt movement. Their exact source representation and arithmetic/caps remain OPEN.
+2. **Discrepancy workflow:** discrepancy review is a separate control from physical receiving and supplier payment. An unresolved discrepancy cannot be silently treated as accepted inventory. The exact rule for partial acceptance, inspection hold, supplier claim and subsequent disposition remains OPEN.
+3. **Source ownership:** DOC-02 establishes the procurement/receiving workflow pattern and DOC-05 establishes independent action authorization, but the reviewed documents do not yet name the exact authoritative source domain/object or its owner for each receipt fact. Purchasing/receiving source ownership and M06 ledger command boundary must be explicitly mapped before adapter acceptance.
+4. **Line and movement cardinality:** DOC-04 §17.2's exact one-movement-per-receipt-detail precedent is scoped to transfer shipment receipt/return details (A12.10/A12.11); it must not be silently generalized to Purchase / Goods Receipt. For purchase receipt, one receipt detail to one or multiple movements, including Batch/Location splits, remains OPEN and requires its own source-specific decision.
+5. **Authorization:** do not reuse inventory-adjustment approval/post keys as purchase-receipt authorization without an explicit mapping. DOC-05 §23.5 requires a separate row for exact key/actor/scope/state/SoD/approver/audit. Purchase approval, discrepancy approval and inventory posting remain distinct until an explicit policy says otherwise.
+6. **Batch and cost:** physical Batch tracking and cost-layer creation are distinct identities. A received quantity may need stock-grain allocation and downstream cost-layer provenance, but neither Batch nor cost-layer identity may be invented from a purchase document number. Exact receipt-to-Batch and receipt-to-cost-layer cardinality remain OPEN.
+
+### 42.47.4 Decision disposition
+
+**PASS — cross-document conceptual consistency; no contradiction found.** DOC-04 §42.46 remains a valid logical adapter-contract draft under DOC08-FIX-026. The following matters are sufficiently settled conceptually and should not be reopened without a specific conflict:
+- purchase commitment/order and payment/invoice without accepted physical receipt create no A01 on-hand movement;
+- only physically received and accepted quantity is eligible;
+- accepted quantity produces a positive movement under DOC08-FIX-024 at the authoritative receiving stock grain;
+- partial receipt occurrences remain independently traceable and append-only;
+- procurement/receiving approval, discrepancy review, supplier payment and inventory posting are distinct control actions;
+- inventory movement ledger and its projections/costing remain separate concerns.
+
+**NOT CLOSED — source-specific contract decisions:** exact source ownership/object/line/receipt detail identity; accepted/rejected/discrepant quantity representation; inspection and discrepancy lifecycle; partial acceptance split and event cardinality; receipt-detail-to-movement cardinality and Batch/Location fan-out; source version/amendment semantics; over-receipt authority; receiving Location/Batch policy; purchase-receipt permission key and actor/scope/SoD/approver/audit tuple; idempotency/recovery; physical constraints/atomicity/concurrency; tenant enforcement; projection reconciliation; and executed evidence.
+
+No new DOC08 FIX is added. DOC08-FIX-018/019/024/025/026 remain unchanged. No purchase-receipt permission is granted, no adapter is enabled, and no physical schema or runtime behavior is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+
+## 42.48 CW-11 Package E — Purchase / Goods Receipt source-ownership and identity decision proposal (22 November 2026)
+
+### 42.48.1 Audit result — current documents do not establish a canonical purchase source object
+
+A bounded review of DOC-02 §5–§6, DOC-04 §§17.2–17.4 and §§42.39–42.47, and DOC-05 §§23.4–23.6 plus the available authorization policy baseline finds no approved canonical Purchase Order, Goods Receipt, receipt-line or receipt-occurrence entity name/key. The DOC-04 conceptual inventory entity matrix identifies the source-document context and source identity requirement for `inventory_movements`, but it does not define a purchase-domain object model. DOC-02 defines the procurement → receiving → inventory workflow and separates PO, physical receiving, discrepancy review and supplier payment. DOC-05 places inventory movement under M06 and requires exact action/actor/scope/condition/SoD/approver mapping; it does not transfer ownership of the procurement/receipt facts to M06.
+
+Accordingly, no existing document supports naming a physical table, key, enum, FK or source object as already FIX. The source-ownership and identity decision remains an Owner decision, not a gap that can be closed by inference.
+
+### 42.48.2 Recommended conceptual ownership boundary — PROPOSED, NOT FIX
+
+The recommended responsibility split for Owner review is:
+
+| Domain responsibility | Recommended conceptual owner | Owns / is authoritative for | Explicit boundary |
+|---|---|---|---|
+| Commercial procurement | Purchasing / Procurement | Purchase request, approved purchase order, supplier commitment, ordered source line and approved commercial amendments | Does not assert physical arrival, accepted quantity or create on-hand movement |
+| Physical receiving | Receiving / Warehouse Operations | Physical receipt occurrence, receipt-line observation, received quantity/unit, inspection/discrepancy disposition, accepted-for-inventory quantity and receiving facts | Owns the physical receipt evidence and quantity disposition; does not directly mutate the inventory ledger |
+| Inventory posting | Inventory (M06) | Authorization-checked A01 admission, bounded source registry, posting identity, immutable `inventory_movements` outcome and projection reconciliation | Consumes authoritative receipt facts; does not own or rewrite PO/receipt source records |
+| Supplier invoice and settlement | Finance / Accounts Payable | Supplier invoice, payable, payment and settlement records | Commercial/accounting records do not independently create physical on-hand movement |
+
+This is a responsibility recommendation, not an assertion that these domains already exist as implemented modules or physical entities. It preserves the DOC-02 sequence and DOC-05's M06 ledger boundary without inventing an M08 permission or a new permission grant.
+
+### 42.48.3 Recommended logical source identity and event grain — PROPOSED, NOT FIX
+
+Recommended logical lineage for one accepted posting unit:
+
+1. Owning Business.
+2. Authoritative purchase source document and exact purchase source line (commercial lineage).
+3. Physical receipt occurrence (a distinct arrival/receiving occurrence; never the PO itself).
+4. Receipt-line fact linked to the exact purchase source line.
+5. Accepted-for-inventory quantity slice within that receipt-line fact, where a single line can have mixed acceptance/discrepancy disposition.
+6. A01 posting event identity and the complete resulting movement set.
+
+**Recommended logical event grain:** one A01 posting unit per Business + physical receipt occurrence + receipt-line + accepted quantity slice. The event may fan out to one or more movement legs only where authoritative receiving facts require distinct Product/Variant/Location/Batch stock grains. A purchase document or whole multi-line receipt should not be used as the sole identity for every line's quantity effect. A later partial receipt is a new occurrence; a later accepted slice from the same occurrence is separately identifiable if the source workflow permits staged acceptance.
+
+This recommendation deliberately separates:
+- purchase-line identity (what was ordered);
+- receipt-occurrence identity (which physical arrival);
+- receipt-line identity (which ordered line was observed in that arrival);
+- acceptance-slice identity (which exact quantity was accepted for inventory);
+- A01 event identity (which ledger posting attempt/outcome is idempotently resolved);
+- movement identity (each immutable stock-grain effect).
+
+No physical composite key, identifier format, event cardinality implementation or one-to-one movement cardinality is approved. If the Owner prefers one atomic A01 event for an entire receipt occurrence, the contract must still preserve line/slice-level attribution and complete all-or-nothing movement outcome; this alternative has a larger atomic fan-out boundary and should be selected explicitly rather than assumed.
+
+### 42.48.4 Recommended quantity-disposition model — PROPOSED, NOT FIX
+
+For each physical receipt-line observation, the source workflow should distinguish at least:
+- **Physically arrived:** quantity actually presented/received at the receiving point.
+- **Accepted for inventory:** quantity explicitly accepted and eligible for A01 posting.
+- **Rejected:** quantity explicitly rejected and not eligible for on-hand posting.
+- **Unresolved / held / discrepant:** quantity awaiting inspection, count resolution, quality decision or other authorized disposition; not eligible until accepted.
+
+The source-owned record must preserve the entered quantity and unit, the disposition quantities, and reproducible conversion provenance to Product base unit. The quantity-disposition model must define how partial acceptance is represented and prevent the same physical quantity from being accepted twice. Reconciliation must make the disposition of the physically arrived quantity explainable; exact arithmetic rules, tolerance, shrinkage/shortage treatment, over-receipt, rounding and final disposition remain Owner decisions.
+
+Only the accepted-for-inventory quantity may enter A01. Rejected, held, unresolved, expected, ordered, shipped, invoiced and paid quantities do not post on-hand. A later change from held/rejected to accepted must be represented as an auditable source disposition transition and must not silently rewrite an already posted acceptance slice. A post-commit correction remains subject to DOC08-FIX-025.
+
+### 42.48.5 Owner decision gate — do not silently promote this proposal
+
+Recommended default for Owner consideration:
+- approve the Purchasing / Receiving / Inventory / Finance responsibility split in §42.48.2;
+- approve the receipt-occurrence + receipt-line + accepted-quantity-slice logical identity and event grain in §42.48.3;
+- approve the four-way quantity distinction in §42.48.4, with arithmetic and exceptional disposition details left OPEN for a later focused decision.
+
+Until explicit Owner approval, all items in §§42.48.2–42.48.4 remain **PROPOSED / REVIEW**, not FIX. No DOC08 FIX is created or revised; DOC08-FIX-018/019/024/025/026 remain unchanged. No physical entity/key, permission key/grant, adapter activation, schema or implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.49 CW-11 Package E — Owner approval of Purchase / Goods Receipt conceptual contract (DOC08-FIX-027, 22 November 2026)
+
+The Owner explicitly approved all three recommendations in §42.48. This section records the approved disposition and supersedes the prior **PROPOSED / REVIEW** status of those three conceptual items only.
+
+### 42.49.1 FIX-027-A — Responsibility ownership
+
+**FIX — OWNER APPROVED / CONCEPTUAL.**
+- Purchasing / Procurement owns purchase requests, purchase orders, ordered source lines, supplier commitments and approved commercial amendments.
+- Receiving / Warehouse Operations owns physical receipt occurrences, receipt-line observations, received quantity/unit, inspection/discrepancy disposition and accepted-for-inventory quantity facts.
+- Inventory (M06) owns authorization-checked A01 admission, bounded server-owned posting registry, A01 posting identity, immutable movement outcome and projection reconciliation.
+- Finance / Accounts Payable owns supplier invoice, payable, payment and settlement facts.
+
+Commercial procurement and accounting facts do not independently create on-hand movements. Receiving owns the physical receipt facts but does not directly mutate the inventory ledger. M06 consumes authoritative receipt facts without owning or rewriting the source records.
+
+### 42.49.2 FIX-027-B — Logical posting identity and event grain
+
+**FIX — OWNER APPROVED / CONCEPTUAL.**
+
+Canonical conceptual posting identity/grain:
+
+**Business + physical Receipt Occurrence + Receipt Line + Accepted-for-Inventory Quantity Slice.**
+
+Purchase document/line, physical receipt occurrence, receipt line, accepted quantity slice, A01 event identity and each inventory movement identity remain distinct lineage concepts. A later partial physical arrival is a distinct receipt occurrence. A separately accepted portion is separately attributable. The event may produce multiple immutable movement effects where authoritative receipt facts require distinct Product/Variant/Location/Batch stock grains; every effect must remain traceable to its source line and accepted slice.
+
+This fixes the logical identity and lineage, not a physical key or orchestration strategy. Exact event-to-movement cardinality, one-event-per-line versus whole-receipt orchestration, physical atomicity and identifiers remain OPEN.
+
+### 42.49.3 FIX-027-C — Quantity disposition
+
+**FIX — OWNER APPROVED / CONCEPTUAL.**
+
+Every physical receipt-line observation distinguishes:
+1. Physically arrived quantity.
+2. Accepted-for-inventory quantity.
+3. Rejected quantity.
+4. Unresolved / held / discrepant quantity.
+
+Only accepted-for-inventory quantity is eligible for A01 and a positive on-hand movement under DOC08-FIX-024. Rejected, unresolved/held/discrepant, expected, ordered, shipped, invoiced or paid quantities do not independently post on-hand.
+
+The source workflow preserves entered quantity/unit and reproducible conversion provenance to Product base unit. Duplicate acceptance of the same physical quantity is prohibited conceptually. A later disposition change is auditable and cannot silently rewrite a posted accepted slice. Post-commit correction remains governed by DOC08-FIX-025.
+
+### 42.49.4 Supersession, retained OPEN dependencies and acceptance boundary
+
+DOC-04 §42.48.2–§42.48.4 is now **APPROVED AS FIX** only to the extent formalized in DOC08-FIX-027-A/B/C. Its earlier PROPOSED / REVIEW status is superseded for those three decisions. Any detail not expressly fixed by DOC08-FIX-027 remains OPEN and must not be inferred.
+
+Still OPEN: physical source objects and keys; lifecycle state vocabulary and transitions; partial inspection/acceptance representation; arithmetic reconciliation/caps; tolerance; shortage/shrinkage; over-receipt; precision/rounding/conversion snapshot; exact event-to-movement cardinality and orchestration; Batch/Location resolution; purchase-specific DOC-05 actor/scope/approval/SoD/audit tuple; physical idempotency/recovery; transaction atomicity/concurrency; tenant enforcement; projection reconciliation and executed evidence.
+
+No permission is granted, no adapter is enabled, and no physical schema or runtime behavior is approved. DOC08-FIX-018/019/024/025/026 remain unchanged.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.50 CW-11 Package E — Owner-approved Purchase / Goods Receipt lifecycle and quantity-control invariants (DOC08-FIX-028, 22 November 2026)
+
+The Owner explicitly approved LIF-01, LIF-02, QTY-01, QTY-02 and QTY-03 as conceptual FIX. This section supplements DOC-04 §42.49 and DOC08-FIX-027; it does not select physical lifecycle states or implementation details.
+
+### 42.50.1 LIF-01 — Distinct lifecycle facts
+
+Physical arrival, inspection/review, quantity disposition, and A01 inventory posting are distinct conceptual facts/steps. Arrival does not imply acceptance; acceptance does not bypass authorization or A01 posting. The four quantity dispositions in FIX-027-C remain: physically arrived, accepted-for-inventory, rejected, and unresolved/held/discrepant. No literal status vocabulary or physical state machine is selected.
+
+### 42.50.2 LIF-02 — Partial receipt and partial acceptance
+
+A purchase line may have multiple independently identifiable physical receipt occurrences. Within one occurrence, only an accepted portion may be eligible for posting while rejected or unresolved portions remain separately attributable. An accepted slice may proceed without waiting for the entire PO or unrelated receipt lines, subject to source validation, authorization, base-unit normalization, complete outcome and duplicate prevention. Later physical arrivals are separate occurrences; a posted slice is not enlarged by a later arrival.
+
+### 42.50.3 QTY-01 — Quantity reconciliation invariant
+
+At the same receipt-line observation and measurement basis, the conceptual partition is:
+
+**Physically Arrived = Accepted-for-Inventory + Rejected + Unresolved/Held/Discrepant.**
+
+All terms must be comparable on a compatible unit basis with reproducible source-owned conversion provenance. A mismatch or unaccounted residual blocks A01 admission; it must not be silently assigned to accepted quantity. This is a conceptual invariant only; numeric precision, scale, rounding and conversion implementation remain OPEN.
+
+### 42.50.4 QTY-02 — Accepted quantity is the only posting-eligible portion
+
+Only the validated accepted-for-inventory quantity slice may create a positive A01 movement under DOC08-FIX-024. Rejected and unresolved/held/discrepant portions are excluded. Accepted quantity cannot exceed the reconciled physically arrived quantity. The policy for over-receipt against ordered quantity, shortage, tolerance and approval authority remains OPEN and is not decided by this cap.
+
+### 42.50.5 QTY-03 — One-time posting and immutable history
+
+Each accepted quantity slice has one authoritative A01 posting outcome. Duplicate acceptance/replay cannot create another movement. A pre-post disposition change must be auditable and revalidated. A post-post change cannot silently rewrite the accepted slice or immutable movement; any required stock correction follows DOC08-FIX-025.
+
+### 42.50.6 Supersession, remaining OPEN dependencies and acceptance boundary
+
+DOC08-FIX-028 closes the conceptual lifecycle separation, partial-receipt/partial-acceptance permission, quantity partition invariant, accepted-only posting boundary, and one-time immutable posting rule. It does not close the following technical or policy dependencies:
+
+- literal lifecycle states/transitions and physical source representation;
+- arithmetic implementation, precision/scale, rounding and conversion snapshot/version;
+- over-receipt against PO, shortage/shrinkage, tolerance and approval policy;
+- event-to-movement cardinality/orchestration and Batch/Location allocation;
+- DOC-05 purchase-specific actor/action/scope/approval/SoD/audit tuple;
+- physical idempotency/retry/recovery, atomicity/concurrency and physical registry constraints;
+- tenant enforcement, projection reconciliation and executed evidence.
+
+DOC08-FIX-018/019/024/025/026/027 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.51 Purchase / Goods Receipt — Owner-approved over-receipt, shortage and tolerance controls (DOC08-FIX-029)
+
+The Owner approved three conceptual rules for PO quantity variance. They supplement DOC08-FIX-027 and DOC08-FIX-028 and do not change the A01 rule that only validated accepted-for-inventory quantity may post positive.
+
+### 42.51.1 Over-receipt
+
+Physical quantity above the PO ordered quantity is an over-receipt variance. The excess must not automatically be accepted for inventory or posted. It requires specific approval by an authorized party under an explicit policy before the excess can be considered for acceptance. Approval alone is not physical receipt, acceptance, A01 authorization or posting. Until all applicable controls are satisfied, the excess remains separately identifiable and ineligible for A01.
+
+### 42.51.2 Shortage
+
+Physical quantity below the PO ordered quantity is recorded as a shortage/discrepancy against the PO. The missing portion is not physically received, is not accepted-for-inventory, and creates no inventory movement. Only physically arrived and separately accepted quantity may proceed to A01. The shortage remains a procurement/receiving variance; no missing quantity may be fabricated as a receipt or movement.
+
+### 42.51.3 Tolerance
+
+Default tolerance is **0%**. Non-zero tolerance is permitted only under an explicit policy and explicit authorization. Tolerance governs variance handling only; it cannot alter the actual physically arrived quantity or rewrite accepted quantity. Source quantity, unit and reproducible conversion provenance remain truthful and traceable. Tolerance does not itself create receipt, acceptance or movement.
+
+### 42.51.4 Boundaries and retained OPEN dependencies
+
+DOC08-FIX-029 closes the conceptual Owner policy for over-receipt, shortage and tolerance. Numeric precision/scale, rounding, conversion snapshot/version, PO amendment/version semantics, physical source representation and purchase-specific approval actor/scope/SoD/audit enforcement remain OPEN. Event-to-movement cardinality/orchestration and Batch/Location allocation remain OPEN for the next bounded review. Physical keys/constraints, idempotency/recovery, atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence remain OPEN.
+
+DOC08-FIX-018/019/024/025/026/027/028 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.52 Purchase / Goods Receipt — accepted-slice to A01 event and movement cardinality (DOC08-FIX-030)
+
+The Owner approved the logical cardinality contract for Purchase / Goods Receipt A01 posting. This section supplements DOC-04 §§42.46, 42.49–42.51 and DOC08-FIX-027/028/029. It is specific to the Purchase / Goods Receipt source family; it does not generalize the transfer shipment receipt-detail cardinality in A12.10/A12.11.
+
+### 42.52.1 FIX-030-A — One accepted quantity slice to one authoritative A01 posting event
+
+Each independently attributable Accepted-for-Inventory Quantity Slice has exactly one authoritative logical A01 posting event/outcome. The event preserves its Business, physical Receipt Occurrence, Receipt Line and accepted-slice lineage under DOC08-FIX-027-B. A single event must not combine accepted slices from different receipt lines or occurrences. A later partial acceptance is a separate accepted slice and receives its own independently traceable posting event.
+
+This is a logical cardinality rule, not a physical event/table/key/schema decision. A01 authorization, validation and the DOC08-FIX-024 positive movement boundary remain mandatory.
+
+### 42.52.2 FIX-030-B — One posting event to one-or-more inventory movements
+
+A successfully committed A01 posting event produces one or more Inventory Movement ledger entries (1:N). Fan-out exists to represent the accepted quantity across the applicable stock-grain effects once Batch/Location allocation is resolved. Each movement belongs to exactly one authoritative A01 event and one accepted quantity slice; a movement must not combine quantity from multiple events or accepted slices. Each movement preserves the originating Business, receipt occurrence and receipt-line lineage.
+
+The exact stock grain, Batch selection/splitting, Location selection/splitting and any physical identity fields remain OPEN for the separate Batch/Location allocation review. This FIX does not choose a physical movement key, source registry schema or FK.
+
+### 42.52.3 FIX-030-C — Quantity conservation and complete fan-out
+
+For one accepted slice, the sum of its positive movement base-quantity deltas must equal that slice's validated accepted quantity normalized to Product base unit, using reproducible conversion provenance. No accepted quantity may be omitted, duplicated, silently rounded into a different accepted amount, or assigned to an unrelated slice. The precise numeric precision, scale and rounding implementation remain OPEN.
+
+A posting outcome is conceptually complete only when its entire deterministic movement set is attributable and reconciled. A partial fan-out must not be represented as a successful complete posting. Physical transaction atomicity, isolation, locking, retry/recovery and concurrency enforcement remain OPEN and are not proven by this conceptual invariant.
+
+### 42.52.4 FIX-030-D — Replay, correction and source-family boundary
+
+A retry for the same accepted-slice identity and same payload resolves to the original authoritative event and its complete movement set; it must not create another event or duplicate movement. A changed payload for the same identity is a conflict requiring controlled resolution. An uncertain commit must be reconciled before retry; it must not be treated as proof that no posting occurred.
+
+Posted movements remain immutable. Any post-post correction follows DOC08-FIX-025 through separately attributable reversal/compensating lineage; the original event and movement history are not overwritten or deleted. The transfer receipt-detail → exactly-one-movement precedent in A12.10/A12.11 remains scoped to transfer receipts/returns and is not the Purchase / Goods Receipt rule established here.
+
+### 42.52.5 Boundaries and retained OPEN dependencies
+
+DOC08-FIX-030 closes only the conceptual cardinality and quantity-conservation contract: one accepted slice → one authoritative A01 event → one-or-more attributable movement entries. It does not approve physical event or movement tables/columns/keys/FKs, exact stock grain, Batch/Location allocation, numeric precision/scale/rounding, DOC-05 purchase-specific authorization tuple, physical idempotency registry, transaction atomicity/isolation/locking, retry/recovery implementation, tenant enforcement, projection reconciliation implementation or executed evidence.
+
+DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.53 Purchase / Goods Receipt — Batch and Location allocation proposal (PROPOSED / OWNER REVIEW)
+
+### 42.53.1 Existing conceptual baseline and audit boundary
+
+This proposal follows DOC-04 §§3–6, 42.46 and 42.52; DOC-02 §6; and DOC-05 §§23.4–23.6. The existing baseline establishes that inventory movements are the immutable quantity-change ledger, balances and batch balances are rebuildable projections, batch identity is distinct from cost-layer identity, FEFO selects physical batches, MWA is location-scoped, and batch-level projections reconcile to the parent inventory balance.
+
+The reviewed documents do not establish the Purchase / Goods Receipt-specific allocation policy for receiving Location, batch-tracked versus unbatched products, receipt-to-batch identity matching, multi-location split, or physical allocation objects. This section is therefore a recommendation only, not FIX and not a physical schema specification.
+
+### 42.53.2 Recommended Location allocation — PROPOSED
+
+- Resolve an explicit receiving Inventory Location for every allocation portion before A01 posting. The Location must belong to the same Business/tenant as the accepted slice and be eligible under the applicable receiving policy.
+- A purchase order, supplier, user session or Business default must not silently invent the actual physical receiving Location. A configured default may be used only if an explicit policy resolves it to the actual receiving destination and the receipt record preserves that decision.
+- Split one accepted slice across multiple Locations only when the physical distribution is actually observed and recorded. Do not distribute quantity across Locations merely to balance projections or satisfy a default.
+- If the required receiving Location is unknown, invalid, cross-Business or not eligible, fail closed: do not create the A01 posting event or movements until the allocation is resolved.
+
+No Location type taxonomy, defaulting precedence, physical identifier or permission grant is selected.
+
+### 42.53.3 Recommended Batch allocation — PROPOSED
+
+- Where the Product/Variant is governed by batch tracking, allocate accepted quantity to the actual physical Batch/Lot identity represented by the goods received. A slice may be split across multiple physical batches only when those distinct batches are actually present and separately attributable.
+- Do not merge different supplier/manufacturer lots into one physical Batch merely because Product, Location, expiry date or cost is the same. Do not invent a Batch identity from the PO number or from a cost layer.
+- Preserve source/physical batch attributes such as supplier/manufacturer lot reference, production date and expiry date where applicable and required by the Product's tracking policy. Missing or conflicting required batch identity/attributes block posting until resolved.
+- An unbatched allocation is permissible only where an explicit Product/Variant tracking policy says batch tracking is not required. The batch-tracking policy and its exact source/representation remain OPEN.
+- FEFO is an outbound physical-batch selection rule; it must not be used to invent or choose the identity of an incoming supplier lot. The receiving process records the batch that physically arrived.
+- Physical Batch identity remains separate from FIFO cost-layer identity and MWA valuation. A01 stock allocation must not fabricate a cost layer or create an additional on-hand movement for costing-only processing.
+
+### 42.53.4 Recommended allocation grain and quantity conservation — PROPOSED
+
+Recommended logical allocation portion: one Accepted-for-Inventory Quantity Slice attributed to one Product/Variant, one receiving Location and either one actual physical Batch identity or an explicitly permitted unbatched state. Each portion represents one distinct stock grain.
+
+Recommended cardinality: one accepted slice may produce one-or-more allocation portions; each allocation portion maps to exactly one positive Inventory Movement; the resulting movement set remains under the one-event-to-one-or-more-movements rule in DOC08-FIX-030. Different Locations or physical Batches require separately attributable portions/movements. Do not combine different accepted slices or receipt lines into one allocation portion.
+
+For each accepted slice, the sum of all allocation-portion quantities and the sum of their positive movement base-quantity deltas must each equal the validated accepted quantity in Product base unit. Every portion must be positive; no over-allocation, under-allocation, duplicate allocation or silent residual is permitted. Numeric precision/scale/rounding and physical enforcement remain OPEN.
+
+The exact allocation object, whether a separate logical allocation record is needed, and its physical cardinality/keys are not selected by this proposal.
+
+### 42.53.5 Fail-closed, projection and authorization boundaries — PROPOSED
+
+- No A01 posting while any required Location or Batch allocation remains unresolved, invalid or unreconciled.
+- All allocation portions must remain within one Business and the source accepted slice's Product/Variant identity.
+- Inventory balance projection remains scoped by Product/Variant/Location; batch-balance projections must reconcile to the parent Location balance.
+- Batch create/hold/release and movement posting are distinct actions. DOC-05 candidate inventory keys are not grants and do not define the purchase-specific actor/scope/approval/SoD/audit tuple.
+- Allocation does not authorize a user to receive, approve a discrepancy, create/release a Batch or post inventory. Those authority boundaries remain separately specified.
+
+### 42.53.6 Owner decision gate and retained OPEN dependencies
+
+**PROPOSED / REVIEW — NOT FIX.** Owner approval is required before these recommendations become conceptual decisions. In particular, the Owner must confirm the receiving Location rule, batch-tracked versus unbatched rule, physical-lot identity handling, permitted multi-Location/multi-Batch split, and allocation-portion-to-movement cardinality.
+
+Still OPEN: Product/Variant batch-tracking policy and its authority; Location eligibility/type/defaulting rules; source evidence and identity for physical batches; required batch attributes and exception handling; whether an explicit logical allocation record is needed; exact stock-grain and allocation identity; purchase-specific DOC-05 authorization; numeric precision/scale/rounding; physical keys/constraints; atomicity/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 remains unchanged. No new DOC08 FIX is created by this proposal. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.54 Purchase / Goods Receipt — Owner-approved Batch and Location allocation contract (DOC08-FIX-031)
+
+The Owner approved the seven Batch/Location allocation rules proposed in §42.53. This section is the controlling conceptual FIX addendum and supersedes the PROPOSED / OWNER REVIEW disposition in §42.53 only for the seven rules expressly approved below. It does not supersede or silently close the retained technical dependencies.
+
+### 42.54.1 FIX-031-A — Explicit receiving Location per allocation portion
+
+Every allocation portion must resolve to an explicit receiving Inventory Location before A01 posting. The Location must belong to the same Business/tenant as the accepted slice and be eligible under the applicable receiving policy. A PO, supplier, user session or Business default does not silently establish the actual physical receiving Location. A configured default is permissible only when an explicit policy resolves it to the actual receiving destination and the receipt preserves that decision. Unknown, invalid, cross-Business or ineligible Location blocks A01.
+
+### 42.54.2 FIX-031-B — Multiple Locations only for observed physical distribution
+
+One accepted slice may be split across multiple Locations only when the physical distribution is actually observed and recorded. Quantity must not be distributed across Locations merely to balance projections or satisfy a default. Each Location portion remains separately attributable to its accepted slice and source lineage.
+
+### 42.54.3 FIX-031-C — Actual physical Batch/Lot identity for batch-tracked Product/Variant
+
+Where the Product/Variant is governed by batch tracking, allocation must identify the actual physical Batch/Lot represented by the goods received. Distinct physical supplier/manufacturer lots remain separately attributable; they must not be merged merely because Product, Location, expiry date or cost is the same. Batch identity must not be invented from a PO number or cost-layer identity. Required source/physical attributes, such as supplier/manufacturer lot reference, production date and expiry date, must be preserved where applicable under the tracking policy. Missing or conflicting required identity/attributes block posting until resolved.
+
+### 42.54.4 FIX-031-D — Unbatched path only under explicit Product/Variant policy
+
+An unbatched allocation is permissible only where an explicit Product/Variant tracking policy says batch tracking is not required. The conceptual permission for an unbatched path is FIX; the authoritative policy source, physical representation and technical enforcement remain OPEN. No implicit unbatched fallback is allowed when batch tracking is required or unknown.
+
+### 42.54.5 FIX-031-E — FEFO, physical Batch and cost-layer separation
+
+FEFO governs outbound physical-batch selection; it does not select or invent incoming supplier-lot identity. The receiving process records the physical Batch/Lot that actually arrived. Physical Batch identity remains distinct from FIFO cost-layer identity and MWA valuation. A01 stock allocation must not fabricate a cost layer or create an additional on-hand movement for costing-only processing.
+
+### 42.54.6 FIX-031-F — Allocation grain, cardinality and quantity conservation
+
+The approved logical allocation grain is one Accepted-for-Inventory Quantity Slice attributed to one Product/Variant, one receiving Location and either one actual physical Batch identity or an explicitly permitted unbatched state. Each allocation portion represents one distinct stock grain.
+
+One accepted slice may produce one-or-more allocation portions. Each allocation portion maps to exactly one positive Inventory Movement. The resulting movement set remains under DOC08-FIX-030: one accepted slice → one authoritative A01 posting event → one-or-more attributable movements. Different Locations or physical Batches require separately attributable portions/movements. Allocation portions must not combine different accepted slices or receipt lines.
+
+For each accepted slice, the sum of allocation-portion quantities and the sum of positive movement base-quantity deltas must each equal the validated accepted quantity in Product base unit. Every portion is positive. Over-allocation, under-allocation, duplicate allocation and silent residual are prohibited. Numeric precision/scale/rounding and physical enforcement remain OPEN.
+
+### 42.54.7 FIX-031-G — Fail-closed allocation, projection and authority boundary
+
+A01 posting is blocked while any required Location or Batch allocation is unresolved, invalid or unreconciled. All portions remain within one Business and the source accepted slice's Product/Variant identity. Inventory balance projection remains scoped by Product/Variant/Location; batch-balance projections reconcile to the parent Location balance.
+
+Batch create/hold/release, physical receiving, discrepancy approval and inventory movement posting are distinct actions. DOC-05 candidate inventory keys remain non-granting starter vocabulary and do not establish the purchase-specific actor/scope/approval/SoD/audit tuple. Allocation FIX does not grant authority to receive, approve a discrepancy, create/release a Batch or post inventory.
+
+### 42.54.8 Supersession and retained OPEN dependencies
+
+DOC08-FIX-031 closes the conceptual Purchase / Goods Receipt Batch/Location allocation contract only. It supersedes the proposal-only status of §42.53 for the seven approved rules above. It does not define a physical allocation object, table, column, identifier, key, FK, Location taxonomy/defaulting precedence, Product batch-tracking configuration source, exact physical constraints or runtime enforcement.
+
+Still OPEN: authoritative source/representation for Product/Variant batch-tracking policy; Location type/eligibility/defaulting policy details; source evidence and physical identity resolution for Batch/Lot; exact required attribute set and exception handling; whether a separate physical allocation record is needed; numeric precision/scale/rounding/conversion implementation; purchase-specific DOC-05 authorization tuple; physical keys/constraints; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 remains unchanged. DOC08-FIX-018/019/024/025/026/027/028/029/030 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-09 §11.36; Worklist §15.116.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.55 Purchase / Goods Receipt — Product Batch Tracking and Location Eligibility audit proposal (PROPOSED / REVIEW)
+
+### 42.55.1 Bounded source audit result
+
+Reviewed DOC-01 §§2–3, §7 and §14; DOC-03 §§2–3 and §5; DOC-04 §§3–6, §16.1, §42.53–42.54; and DOC-05 §§23.4–23.6.
+
+The current documents support:
+- Business as the tenant boundary, with multiple outlets/branches and warehouses/inventory locations within a Business (DOC-01, DOC-03).
+- An inventory location as an operational subdivision within a Business, with physical model still OPEN (DOC-03 §3).
+- inventory_batches as the conceptual physical batch/lot entity, associated with Product/Variant and production/expiry/state; physical identity and uniqueness remain REVIEW (DOC-04 §§3, 16.1).
+- FEFO as physical-batch selection, separate from FIFO cost-layer consumption and location-scoped MWA (DOC-04 §§4, 6).
+- Location-sensitive balances and batch balances as rebuildable projections (DOC-04 §§3–4).
+- Server-side validation/authorization and tenant-context resolution; client-supplied Business, Outlet, Location or source identifiers are not authorization evidence (DOC-03 §3).
+- DOC-05 inventory action keys as non-granting candidates, not complete purchase-receipt authorization tuples.
+
+Not established by the reviewed documents: a canonical Product/Variant batch-tracking policy field/source; whether policy is required/optional/not-tracked; Product-to-Variant inheritance/override; policy effective-time/version snapshot; Location lifecycle/status taxonomy; Location receiving eligibility/capability; Location default precedence; or a purchase-receipt-specific Location authorization tuple. No physical schema or policy source may be inferred from the conceptual inventory_batches entity.
+
+### 42.55.2 Recommended Product/Variant batch-tracking policy — PROPOSED
+
+Recommended conceptual policy is an explicit Product/Variant-owned tracking decision with two operational outcomes: **Batch tracking required** or **Batch tracking not required**. Unknown, unset or conflicting policy is not equivalent to not-tracked; it fails closed and blocks A01 until resolved.
+
+Recommended policy ownership and evaluation:
+- Product master owns the default tracking policy for the Product.
+- A Variant inherits the Product policy unless an explicit, authorized Variant-level override is defined. The override must be auditable and cannot silently change historical receipt interpretation.
+- The effective policy is resolved and preserved as a receipt-time decision/snapshot for each accepted slice/allocation. Later Product configuration changes do not rewrite historical accepted slices or posted movements.
+- If tracking is required, every allocation portion must reference the actual physical Batch/Lot and satisfy the required identity/attribute policy. If tracking is not required, only the explicit unbatched path approved by DOC08-FIX-031-D is allowed.
+- A Batch-required policy with missing/ambiguous lot identity or required attributes blocks A01. A missing policy, unresolved inheritance or conflicting Product/Variant configuration also blocks A01.
+
+This proposal does not define literal enum values, physical field names, configuration tables, override permission keys or version storage.
+
+### 42.55.3 Recommended Location eligibility and receiving resolution — PROPOSED
+
+Recommended minimum conceptual eligibility:
+- Location belongs to the same Business as the accepted slice and source receipt.
+- Location is active and explicitly eligible for inventory receiving under the Business's configured Location policy.
+- Server resolves the authoritative Location and its Business/parent relationship; client-supplied identifiers alone are insufficient.
+- Receiving Location is selected/confirmed against the actual physical destination. A configured default may prefill a suggestion, but must not silently override the physical destination or bypass receiver confirmation.
+- Unknown, inactive, cross-Business, non-receiving or otherwise ineligible Location blocks A01.
+- A virtual transit Location is not a normal purchase receiving destination unless a separately approved receiving policy explicitly authorizes that use case.
+
+The exact Location type taxonomy, active/inactive lifecycle, receiving capability representation, Outlet/Warehouse parentage, default precedence and exception authority remain OPEN.
+
+### 42.55.4 Relationship to DOC08-FIX-031 and retained dependencies
+
+DOC08-FIX-031 remains unchanged and controlling for the seven approved conceptual Batch/Location allocation rules. This §42.55 is a follow-on proposal to resolve only the remaining policy-source and eligibility details; it does not narrow, expand or reinterpret the approved FIX.
+
+**PROPOSED / REVIEW — NOT FIX.** Owner decision is required before Product/Variant policy ownership/inheritance/override/snapshot and Location eligibility/confirmation/defaulting recommendations become conceptual FIX.
+
+Still OPEN: authoritative Product/Variant policy source; inheritance/override authority and audit; effective policy snapshot; Location status/type/receiving eligibility; receiver confirmation and default precedence; virtual/transit exception policy; purchase-specific DOC-05 authorization tuple; physical representation/keys/constraints; numeric precision/scale/rounding; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030/031 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+ERD-OPEN-05 remains OPEN. Candidate Data Dictionary acceptance remains 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-09 §11.37; Worklist §15.117.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.56. Owner-approved Product/Variant Batch Policy and Receiving Location Eligibility — DOC08-FIX-032 (22 November 2026)
+
+**FIX — OWNER APPROVED / CONCEPTUAL.** The Owner approved the recommendations previously recorded as PROPOSED / REVIEW in §42.55. This section promotes those recommendations to the conceptual policy contract. DOC08-FIX-031 remains unchanged.
+
+### 42.56.1 Product/Variant Batch-tracking policy
+
+1. The Product master owns an explicit policy outcome: **Batch tracking required** or **Batch tracking not required**.
+2. A Variant inherits the Product policy by default. A Variant-level override is permitted only when explicitly authorized and auditable; an implicit or silent override is prohibited.
+3. The effective policy is resolved for the accepted receipt slice/allocation and preserved as a receipt-time decision/snapshot. Later Product or Variant master-data changes do not rewrite historical accepted slices or posted movements.
+4. Unknown, unset, unresolved inheritance, or conflicting Product/Variant policy fails closed and blocks A01.
+5. Where Batch tracking is required, each allocation portion must identify the actual physical Batch/Lot received and satisfy applicable required identity/attribute requirements. Missing or ambiguous required identity/attributes block A01.
+6. The unbatched path is allowed only when the effective explicit Product/Variant policy says Batch tracking is not required, consistent with DOC08-FIX-031-D.
+
+### 42.56.2 Receiving Location eligibility and confirmation
+
+1. Every receiving Location must belong to the same Business as the accepted slice/source receipt, be active, and be explicitly eligible for inventory receiving under the applicable Business policy.
+2. The server resolves authoritative Location identity and Business/parent relationship; client-supplied identifiers alone are not authoritative.
+3. The receiver confirms the actual physical destination. A configured Location default may prefill a suggestion only; it must not silently determine or override the physical destination or bypass confirmation.
+4. Unknown, inactive, cross-Business, non-receiving or otherwise ineligible Location fails closed and blocks A01.
+5. A virtual transit Location is not a normal purchase-receiving destination unless a separately approved policy explicitly authorizes that use case.
+
+### 42.56.3 Boundaries and unresolved implementation detail
+
+This FIX approves conceptual policy outcomes and fail-closed behavior only. It does **not** approve literal enum values, field/table names, configuration tables, physical policy versioning/snapshot storage, override permission keys, Location type/status taxonomy, default precedence algorithms, physical schema, constraints, or runtime implementation.
+
+Still OPEN: exact policy source/representation and audit evidence; authorization authority for Variant override; receipt-time snapshot representation; Location taxonomy/lifecycle and receiving-capability representation; transit exception authority; purchase-specific DOC-05 actor/scope/approval/SoD/audit tuple; physical objects/keys/FKs/constraints; numeric precision/scale/rounding/conversion; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 and DOC08-FIX-031 remain unchanged. DOC08-FIX-032 does not grant receiving, discrepancy, Batch administration or posting permissions; it does not activate A01 or approve physical/runtime behavior.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-08 DOC08-FIX-032; DOC-09 §11.38; Worklist §15.118.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.57 CW-11 Package E — A01 purchase-receipt authorization boundary audit (22 November 2026)
+
+**AUDIT PASS — PURCHASE-SPECIFIC AUTHORIZATION TUPLE REMAINS OPEN.** A bounded read-only review of DOC-05 §§23.4–23.6, §24, §25.3–25.4 and DOC-03 §§3, 18.2–18.4, 19.3 confirms the following:
+
+1. DOC-03 assigns supplier/purchase request/order/receiving procurement workflow ownership to M08, while M06 owns inventory identity, Batch, movement ledger, balance projections and costing. M06 owns the authoritative stock-ledger effects generated by receipt and other inventory postings.
+2. DOC-05 §23.4 supplies candidate M06 inventory keys, including `M06.inventory_batch.create`, `M06.inventory_movement.record` and projection keys. These are expressly starter vocabulary, not grants or a complete A01 authorization catalogue.
+3. DOC-05 §23.5 requires a separate authorization row for each exact key and actor function, including scope S0–S5, Business/site/Location/assignment relationship, object-state conditions, data class/purpose, SoD conflict, approver and expected audit event. Missing or ambiguous role/key/scope/condition/approver means DENY.
+4. DOC-05 §25.3 provides generic M06 inventory policy tuples, including an Inventory Operator or controlled M06 posting service for movement recording, but conditions that execution on an already-authorized source command. It does not define the Purchase / Goods Receipt-specific actor, approval path, source eligibility or separation between M08 receipt acceptance and M06 posting.
+5. DOC-03 requires server-authoritative tenant resolution, exact resource-owner authorization, idempotency and auditable actor/action/target/scope/purpose/decision/correlation lineage. Those are architecture principles; physical enforcement and evidence remain OPEN.
+
+### 42.57.1 Authorization boundary finding
+
+The supported conceptual ownership boundary is **M08 owns procurement/receipt workflow facts; M06 owns authoritative inventory movement posting**. A successful M08 physical receipt or acceptance decision does not by itself constitute M06 posting authorization. Conversely, a generic M06 movement-recording candidate key does not authorize a caller to bypass the M08 accepted-slice/source-command boundary.
+
+This finding is a cross-document interpretation of DOC-03 and DOC-05, not a new permission grant, role assignment, approval threshold or action-key FIX.
+
+### 42.57.2 Required authorization tuple — still OPEN
+
+A01 authorization acceptance cannot be claimed until a source-backed tuple is defined for each exact operation, at minimum covering:
+- exact action/key and target resource owner (M08 receipt lifecycle versus M06 inventory posting);
+- eligible actor function and, where applicable, controlled service identity;
+- Business plus applicable Outlet/Warehouse/Location/assignment scope;
+- source receipt, accepted-slice state and current-object preconditions;
+- purpose and data classification;
+- initiator/receiver/approver/poster separation and any required approval;
+- server-side tenant and resource relationship resolution;
+- audit evidence, correlation and idempotency lineage; and
+- explicit denial for missing/ambiguous context, unauthorized source state, cross-Business resources, or unresolved required Batch/Location allocation.
+
+The list is a completeness checklist derived from DOC-05 §23.5 and DOC-03 §§18–19; it does not assign actors, permission keys, scope levels, approval thresholds or SoD rules.
+
+**Disposition:** bounded source audit complete; purchase-specific authorization tuple remains OPEN / NOT ACCEPTED. No DOC08 FIX is created. DOC08-FIX-030/031/032 remain unchanged.
+
+Still OPEN: exact M08 receipt/acceptance action catalogue and actor tuple; exact M06 posting action tuple and controlled service boundary; approval/SoD policy; Location/warehouse assignment resolver; Variant override authorization authority; audit event schema/retention; physical authorization enforcement; idempotency/atomicity/concurrency/recovery; tenant enforcement; projection reconciliation; and executed negative/positive authorization evidence.
+
+Related anchors: DOC-05 §§23.4–23.6, 25.3–25.4; DOC-03 §§18–19; DOC-09 §11.39; Worklist §15.119.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.58 CW-11 Package E — A01 quantity conversion, numeric reconciliation and costing boundary audit (22 November 2026)
+
+**AUDIT PASS — CONCEPTUAL RULES RECONCILE; NUMERIC/PHYSICAL PARAMETERS REMAIN OPEN.** This bounded audit cross-checks DOC-04 §§20, 42.25–42.28, 42.49–42.52 and 42.54 against DOC-03 §§3 and 5 and DOC08-FIX-027 through FIX-031. It does not create a new FIX or choose implementation parameters.
+
+### 42.58.1 Source-supported quantity and conversion contract
+
+1. Product base unit is the canonical stock reference. All inventory comparisons, allocation totals and movement reconciliation use Product base units.
+2. Source/input unit and Product base unit are distinct. The conceptual conversion direction is `quantity_base = quantity_input × conversion_factor_base_per_input`.
+3. Conversion must be explicit, valid and compatible with the same Product/Variant context. Missing, ambiguous, incompatible, unknown or unapproved conversion fails closed. No guessed factor, implicit conversion chain, label-only match or silent rounding is permitted.
+4. Conversion factor precision is high internal precision. Invalid quantities are rejected; they are not silently rounded to fit an assumed precision.
+5. The source/receiving workflow preserves entered quantity, input unit and reproducible conversion provenance. The accepted-for-inventory slice is validated in Product base units before A01 posting. Later edits to conversion references must not retroactively alter the historical accepted slice or posted movement.
+6. For each accepted slice, the total of its allocation portions and the total of its positive movement base-quantity deltas must each equal the validated accepted quantity in Product base units. Every portion is positive; over-allocation, under-allocation, duplicate allocation and unexplained residual are prohibited.
+7. The sum of positive movement deltas for one accepted slice must reconcile to that slice only. Different receipt lines, receipt occurrences or accepted slices cannot offset one another.
+
+### 42.58.2 Quantity and costing boundary
+
+- A01 quantity posting is the physical stock-ledger effect. Batch/Location allocation partitions that accepted quantity across stock grains; it must not create additional quantity.
+- Physical Batch identity, FIFO cost-layer identity and MWA valuation are separate concepts. FEFO selects outbound physical batches; FIFO selects cost layers. Costing-only processing must not create a second on-hand movement.
+- MWA remains the default valuation method per Business + Product/Variant + Inventory Location; FIFO is the alternative. MWA pools are not combined across Locations.
+- Total cost is the source of truth for a cost layer; unit cost is derived from total cost / quantity at high internal precision. Unknown cost remains NULL, not zero.
+- After receipt, destination-Location MWA is recalculated from destination resulting quantity and total cost. Cost-layer allocation under MWA supports traceability/reconciliation and does not replace MWA valuation.
+- LRM is limited to suitable proportional allocation. It is not a generic unit-conversion, FIFO/MWA, FX or quantity-residual rule.
+
+### 42.58.3 Explicitly unresolved numeric and physical parameters
+
+The reviewed sources do not authorize:
+- universal quantity/cost precision, scale, maximum magnitude or database numeric type;
+- exact per-Product minimum increment, discrete/fractional eligibility values or capacity;
+- exact conversion-factor values/precision, allowed conversion graph, reciprocal consistency, effective-time/version representation or snapshot storage;
+- a universal rounding mode, tolerance, or rounding boundary for all operations;
+- overflow strategy or numeric implementation algorithm;
+- FIFO/MWA residual allocation method, exact arithmetic sequence or concurrency-safe update;
+- physical constraints, atomicity, idempotency, locking, recovery or executed numeric tests.
+
+DOC08-FIX-029's 0% default receiving tolerance and explicit-policy/authorization-only non-zero exception remain variance policy; they do not authorize rounding, coercion or changing the physically observed/accepted quantity. Tolerance must not be used to force arithmetic reconciliation.
+
+### 42.58.4 Reconciliation and disposition
+
+**PASS — conceptual quantity conversion and reconciliation are internally consistent** across the reviewed A01 contract: accepted source quantity → reproducibly normalized Product base quantity → positive allocation portions → positive movement deltas, with each aggregate equal to the same accepted slice. Costing remains separate from quantity posting.
+
+**OPEN / NOT ACCEPTED:** exact numeric representation/precision/scale/capacity/overflow; Product-specific increment/fraction policy; factor source/precision/version/effective-time and allowed conversion path; conversion snapshot representation; operation-specific rounding boundary; FIFO/MWA residual arithmetic; physical validation/constraints; transaction/locking/idempotency/recovery; and executed positive, negative, fractional, boundary, overflow, replay and reconciliation evidence.
+
+This is a source-consistency audit, not proof of executable behavior or test PASS. No new DOC08 FIX is created. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation or Stage 6 implementation is approved.
+
+Related anchors: DOC-04 §§20.2–20.5, 42.25–42.28, 42.49–42.52, 42.54; DOC-03 §§5 and 18–19; DOC-09 §11.40; Worklist §15.120.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.59 CW-11 Package E — A01 atomicity, idempotency, concurrency and uncertain-commit recovery audit (22 November 2026)
+
+**AUDIT PASS — CONCEPTUAL SAFEGUARDS RECONCILE; PHYSICAL/OPERATIONAL ENFORCEMENT REMAINS OPEN.** This bounded audit cross-checks DOC-04 §§21.4–21.8, 42.46, 42.52 and 42.57–42.58 against DOC-03 §§18.2–18.4 and 21.5–21.6 and the A06/A09 baseline recorded in the current documentation. It does not choose physical mechanisms or create a new FIX.
+
+### 42.59.1 Source-supported A01 safeguards
+
+1. **Same identity + same payload:** a repeated posting request resolves to the previously stored authoritative result and must not create another A01 event or duplicate movement.
+2. **Same identity + changed payload:** conflict; do not silently reuse, overwrite or mutate the prior result.
+3. **Claim + effects:** operation claim and all posting effects must be atomic. A successful A01 outcome must include the complete deterministic movement fan-out for its accepted slice; partial fan-out must not be represented as complete success.
+4. **Uncertain response/commit:** absence of a client response is not evidence that commit failed. Reconcile the authoritative operation/event and its complete movement set before retry; never blindly create a second event or movement.
+5. **Failure:** A06 baseline requires atomic commit and full rollback on failure. Exact write-set, transaction boundary and treatment of external side effects remain unspecified.
+6. **Concurrency:** A06 baseline requires deterministic locking and revalidation after locks are acquired. Concurrent same-key operations must not both produce posting effects. Eligibility and allocation must be rechecked against authoritative state after relevant serialization/locking.
+7. **Projection:** movement ledger remains the stock truth; balance and batch-balance projections must remain consistent/rebuildable and reconcile to ledger and parent Location balance. Projection failure/rebuild must not create a second stock movement.
+8. **Tenant and ownership:** every command/event/resource resolves server-side to one Business; exact resource-owner authorization applies. Client-supplied identifiers are context hints, not authorization proof. M08 receipt facts remain source-owned; M06 posting effects remain inventory-owned.
+9. **Audit lineage:** command/event lineage preserves Business, aggregate/object identity, version, event type, occurred-at, correlation/idempotency reference and actor/service. Audit decision lineage records actor, action, target, scope, purpose, decision/reason and immutable before/after or event reference as required by classification.
+
+### 42.59.2 A01-specific failure and replay scenarios
+
+The conceptual contract requires the following outcomes; these are acceptance scenarios, not executed tests:
+
+| Scenario | Required conceptual outcome | Technical status |
+|---|---|---|
+| Same accepted-slice identity + same canonical payload, sequential retry | Return same authoritative A01 event/result and same complete movement set; no duplicate effects | Canonical payload and physical registry OPEN |
+| Same identity + changed accepted quantity, conversion provenance, Batch/Location allocation or other material payload | Conflict; preserve original outcome; controlled source correction/disposition required | Canonical payload fields and conflict response OPEN |
+| Two concurrent requests for same accepted slice | At most one authoritative posting outcome and one complete movement set | Atomic claim, uniqueness and lock behavior OPEN |
+| Failure before commit | No partial event, movement or claimed operation remains visible as successful; retry is safely possible | Exact transaction/write-set and rollback evidence OPEN |
+| Commit succeeds but response is lost/timeout occurs | Reconcile stored authoritative result; return/replay same result; do not repost | Lookup/recovery protocol and retention OPEN |
+| Partial fan-out or movement/projection write failure | Must not report complete A01 success; transaction rollback or explicit recoverable incomplete state must preserve invariant | Transaction boundary and recovery state OPEN; no incomplete-success policy approved |
+| Projection update fails after ledger effect | Ledger remains authoritative; projection is repaired/rebuilt and reconciled without a second movement | Projection repair mechanism and evidence OPEN |
+| Cross-Business or unauthorized source/resource | Deny; no claim or posting effect is created | Physical tenant/authorization enforcement OPEN |
+
+### 42.59.3 Explicit technical non-decisions
+
+The reviewed source baseline does not approve:
+- physical A01 operation registry/table, operation-key tuple, uniqueness scope or digest/hash algorithm;
+- canonical payload field set, serialization, normalization or conflict response format;
+- key/event retention duration, expiry, replay window or cleanup policy;
+- transaction boundary, exact write-set, isolation level, lock targets/order/granularity, timeout or deadlock handling;
+- retry count/backoff, uncertain-commit lookup protocol, recovery worker, outbox/inbox or distributed transaction pattern;
+- whether projections are updated synchronously or asynchronously, nor the repair/rebuild orchestration;
+- physical incomplete-state vocabulary, alerting/escalation or manual recovery authority;
+- physical tenant/authorization enforcement or executed positive/negative/concurrency/failure-injection evidence.
+
+No exactly-once transport guarantee is inferred. The requirement is duplicate-safe authoritative effect and deterministic replay under the defined operation identity, not an assumption about delivery semantics.
+
+### 42.59.4 Disposition
+
+**PASS — source-backed A01 atomicity/idempotency/concurrency/recovery safeguards are internally consistent at conceptual level.** Same-key/same-payload replay, changed-payload conflict, atomic operation claim plus effects, deterministic lock/revalidation, full rollback, no blind retry after uncertain commit, complete fan-out and projection reconciliation align across DOC-04 and DOC-03.
+
+**OPEN / NOT ACCEPTED:** physical identity registry/key/payload canonicalization/retention; transaction/write-set boundary; lock order/isolation/timeout/deadlock/retry policy; uncertain-commit reconciliation protocol; projection repair/rebuild; tenant and authorization enforcement; failure-state handling; and executed sequential/concurrent/replay/changed-payload/rollback/timeout/partial-fan-out/projection-failure/tenant-isolation evidence.
+
+This is a source-consistency audit only, not an executable design or test PASS. No new DOC08 FIX is created. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, permission, adapter activation or Stage 6 implementation is approved.
+
+Related anchors: DOC-03 §§18.2–18.4, 21.5–21.6; DOC-04 §§21.4–21.8, 42.46, 42.52, 42.57–42.58; DOC-09 §11.41; Worklist §15.121.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.60 CW-11 Package E — A01 projection reconciliation and evidence-closure audit (24 November 2026)
+
+### 42.60.1 Audit scope and source baseline
+
+Read-only cross-check of the A01 receipt contract in §§42.46, 42.52, 42.54 and 42.59 against DOC-03 §§6, 18.3–18.4, 19.3 and 21.5. The review is limited to ledger-to-projection consistency, Batch/Location grain, replay/rebuild safety, source-event attribution and evidence required for Package E acceptance. It does not select a physical projection strategy or perform runtime/database tests.
+
+### 42.60.2 Source-supported invariants
+
+1. **Authoritative stock truth:** posted `inventory_movements` are the immutable physical quantity ledger. Corrections use separately attributable reversal/compensating movements; original posted facts are not rewritten.
+2. **Projection authority boundary:** `inventory_balances` and applicable `inventory_batch_balances` are derived/rebuildable projections, not independent movement sources or write authorities. Rebuilding a projection must not create a second on-hand movement.
+3. **Reconciliation grain:** A01 outcome must remain attributable by Business, Product, nullable/applicable Variant, receiving Location and actual Batch or permitted unbatched state, together with accepted slice, source receipt occurrence/line, A01 event and complete movement set.
+4. **Quantity conservation:** movement fan-out for each accepted slice must be complete and deterministic; movement base deltas reconcile to that accepted slice alone. Batch-level projection totals reconcile to the parent Location balance. Distinct accepted slices/events cannot offset one another.
+5. **Source/projection separation:** M08 receipt facts remain source-owned; M06 ledger effects remain inventory-owned. A downstream projection consumer failure does not erase a committed source-domain fact. Retry, quarantine/dead-letter, replay and reconciliation lifecycle must be explicit in future technical design.
+6. **Freshness and observability:** where projection lag is operationally material, source owner, projection version/freshness and reconciliation state must be visible. A projection cannot mutate source state.
+7. **Replay/rebuild safety:** replaying a source event or rebuilding a read model must reproduce the derived view from authoritative committed facts without creating duplicate A01 events, movements, or costing-only quantity effects.
+
+### 42.60.3 A01 reconciliation/evidence matrix
+
+| Reconciliation assertion | Required evidence to accept | Current disposition |
+|---|---|---|
+| Accepted receipt slice → A01 event → complete movement fan-out | Stable source occurrence/line and accepted-slice lineage; event identity; complete movement membership; no missing/duplicate movement; quantity conservation per slice | Conceptual invariant PASS; physical identity and executed evidence OPEN |
+| Movement ledger → Product/Variant/Location balance | Reproducible ledger-to-projection comparison at exact Business/Product/Variant/Location grain; explicit treatment of pending projection work | Source baseline PASS; physical projection contract and evidence OPEN |
+| Batch movement → Batch balance → parent Location balance | Actual Batch identity where tracking applies; per-Batch quantities reconcile to parent Location total without cross-Business/Product/Variant mixing | Conceptual FIX-031/032 alignment PASS; physical enforcement/evidence OPEN |
+| Retry/replay after committed A01 event | Same operation resolves to same event and movement set; replay does not create a second movement or change accepted quantity | Conceptual rule PASS; physical replay/recovery protocol and tests OPEN |
+| Projection rebuild/repair | Rebuild is deterministic from authoritative ledger and relevant source facts; repeated rebuild is non-additive/idempotent; no new movement is emitted | Required outcome supported; mechanism and executed evidence OPEN |
+| Partial fan-out or failed projection consumer | Incomplete fan-out is not complete success; committed source fact remains authoritative; failed projection work is recoverable, observable and reconcilable | Conceptual boundary PASS; transaction/recovery/quarantine details OPEN |
+| Cross-Business or invalid grain | No projection combines tenant or unrelated Product/Variant/Location/Batch scope; unauthorized/cross-Business source is denied | Conceptual boundary PASS; physical tenant enforcement and negative evidence OPEN |
+
+### 42.60.4 Explicit technical non-decisions and acceptance gaps
+
+Still OPEN / NOT ACCEPTED:
+- exact physical projection objects, keys, unique grain, source watermark/version/cursor and applied-through semantics;
+- synchronous versus asynchronous projection update strategy and permitted/visible lag;
+- deterministic reconciliation query/algorithm, comparison boundary, scheduling and operational ownership;
+- rebuild scope, snapshot/checkpoint provenance, replay ordering, gap detection and recovery from missing/out-of-order/duplicate events;
+- retry, quarantine/dead-letter, poison-event handling, alerting/escalation and manual recovery authority;
+- Batch/Location parent-child aggregation and null-safe unbatched handling at physical level;
+- atomicity boundary between ledger commit, fan-out and projection updates; no distributed transaction or outbox pattern is inferred;
+- tenant isolation, authorization enforcement, monitoring/retention and audit storage;
+- executed positive/negative evidence for duplicate/missing movements, per-slice quantity mismatch, Batch-to-Location mismatch, replay, repeated rebuild, projection lag/failure, event gaps/out-of-order delivery, recovery and cross-Business isolation.
+
+### 42.60.5 Disposition
+
+**PASS — source-backed conceptual projection and reconciliation invariants are internally consistent.** The immutable movement ledger remains authoritative; balance and Batch-balance views remain rebuildable projections; A01 source/event/movement attribution and quantity conservation remain per accepted slice; Batch balances reconcile to parent Location; replay/rebuild must not duplicate physical movement; and downstream projection failure cannot erase the committed source fact.
+
+**OPEN / NOT ACCEPTED — physical projection contract, reconciliation/rebuild protocol, operational recovery/observability, tenant enforcement and executed evidence.** This is a source-consistency audit only, not runtime validation or implementation acceptance. No new DOC08 FIX is created. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physical schema, projection mechanism, permission, adapter activation or Stage 6 implementation is approved.
+
+Related anchors: DOC-03 §§6, 18.3–18.4, 19.3, 21.5.5–21.5.10; DOC-04 §§17.2–17.4, 42.46–42.54, 42.59; DOC-09 §11.42; Worklist §15.122.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.61 CW-11 Package E — Consolidated A01 acceptance matrix and gate disposition (24 November 2026)
+
+### 42.61.1 Purpose and decision rule
+
+This matrix consolidates the bounded source-consistency audits and Owner-approved conceptual FIX decisions recorded in DOC-04 §§42.46–42.60. It is an acceptance-control register, not a physical design approval, implementation authorization or test report.
+
+Statuses are deliberately separated:
+- **CONCEPTUAL PASS:** supported by reviewed source documents and/or an explicit Owner-approved conceptual FIX.
+- **PHYSICAL / TECHNICAL OPEN:** exact physical representation, enforcement or operational mechanism is not accepted.
+- **EVIDENCE NOT EXECUTED:** required runtime, integration, failure-injection, security or reconciliation evidence has not been produced or reviewed in this audit.
+- **NOT ACCEPTED:** the relevant acceptance gate cannot be closed while a required technical or evidence dependency remains open. This status applies to Package E overall.
+
+### 42.61.2 Consolidated acceptance matrix
+
+| Acceptance area | Conceptual disposition | Physical / technical OPEN items | Evidence state | Gate |
+|---|---|---|---|---|
+| 1. Source ownership, identity and quantity disposition | **PASS — DOC08-FIX-027.** Procurement/PO/commercial source facts belong to M08; physical receipt occurrence/line observations and quantity dispositions belong to Receiving; M06 owns A01 admission and stock-ledger effects; Finance/AP owns payable/payment facts. Logical grain is Business + physical Receipt Occurrence + Receipt Line + Accepted-for-Inventory Quantity Slice. Only accepted quantity is posting-eligible. | Physical source objects/keys/FKs; exact source version/amendment semantics; source-to-event identity enforcement; physical disposition representation and duplicate-acceptance constraints. | No executed source-identity, duplicate-acceptance or source-lineage tests reviewed. | **CONCEPTUAL PASS; PHYSICAL OPEN; EVIDENCE NOT EXECUTED.** |
+| 2. Lifecycle and partial receipt/acceptance | **PASS — DOC08-FIX-028.** Arrival, inspection/review, disposition and A01 posting are distinct facts. Partial receipt occurrences and partial accepted slices are independently attributable; later arrival does not enlarge a posted slice. | Literal lifecycle vocabulary/state transitions; physical occurrence/slice representation; transition authorization and audit persistence. | No executed lifecycle-transition or partial-acceptance tests reviewed. | **CONCEPTUAL PASS; PHYSICAL OPEN; EVIDENCE NOT EXECUTED.** |
+| 3. Over-receipt, shortage and tolerance | **PASS — DOC08-FIX-029.** Over-receipt excess cannot auto-accept/post; explicit policy and approval required. Shortage remains PO variance, not received stock. Default tolerance is 0%; non-zero requires explicit policy and authorization and never changes observed/accepted quantity or authorizes rounding. | Exact approval roles/thresholds/SoD; policy storage/effective date/version; shortage and variance workflow representation; enforcement and audit. | No executed over-receipt, shortage, tolerance or unauthorized-approval tests reviewed. | **CONCEPTUAL PASS; POLICY ENFORCEMENT OPEN; EVIDENCE NOT EXECUTED.** |
+| 4. Accepted slice → A01 event → movement cardinality | **PASS — DOC08-FIX-030.** One accepted slice maps to one authoritative logical A01 event; one event produces one-or-more attributable movements (1:N). Every movement belongs to one event/slice; complete deterministic fan-out and per-slice quantity conservation are required. | Physical event/movement keys and FKs; source registry; exact stock-grain identity; event-to-movement orchestration and uniqueness constraints. | No executed fan-out completeness, duplicate, omission or per-slice conservation evidence reviewed. | **CONCEPTUAL PASS; PHYSICAL OPEN; EVIDENCE NOT EXECUTED.** |
+| 5. Batch and Location allocation | **PASS — DOC08-FIX-031.** Same-Business explicit receiving Location; multi-Location split only for observed physical distribution; actual physical Batch/Lot identity where applicable; no artificial split; fail closed for unresolved/invalid allocation; each portion reconciles to one movement and total accepted quantity. | Physical allocation representation/object decision; Location and Batch keys/FKs/attributes; null-safe unbatched handling; receiving eligibility enforcement; exact allocation-to-movement constraints. | No executed split, invalid/cross-Business allocation, Batch/Location conservation or fail-closed tests reviewed. | **CONCEPTUAL PASS; PHYSICAL OPEN; EVIDENCE NOT EXECUTED.** |
+| 6. Product/Variant Batch policy and receiving Location eligibility | **PASS — DOC08-FIX-032.** Product owns explicit Batch-tracking policy; Variant inherits unless an authorized/auditable override exists; effective receipt-time policy is preserved conceptually. Location must be same-Business, active and receiving-eligible; receiver confirms actual destination; default is suggestion only. | Physical policy source/snapshot/version; Variant override authority/audit; Location taxonomy/lifecycle/receiving capability; default precedence; transit exception authority; physical enforcement. | No executed policy inheritance/override, historical snapshot or Location eligibility/tenant-isolation tests reviewed. | **CONCEPTUAL PASS; PHYSICAL OPEN; EVIDENCE NOT EXECUTED.** |
+| 7. Authorization, tenant and audit boundary | **PASS — bounded source interpretation only.** M08 receipt/acceptance does not itself grant M06 posting authority; generic M06 candidate keys are not grants. Server resolves Business/resource owner and exact action; missing/ambiguous scope must deny. | A01-specific M08 action/actor tuple; M06 posting key and controlled service boundary; Business/site/Location/assignment scope; approver and SoD; source-state preconditions; Variant override authority; audit event/retention; physical tenant/RLS/server enforcement. | No executed positive/negative authorization, cross-Business denial, SoD or audit-lineage evidence reviewed. | **CONCEPTUAL PASS; AUTHORIZATION NOT ACCEPTED; EVIDENCE NOT EXECUTED.** |
+| 8. Numeric conversion, quantity conservation and costing boundary | **PASS — conceptual quantity/costing rules reconcile.** Product base unit is canonical; explicit compatible conversion with reproducible provenance; no guessed factor or silent rounding; each accepted slice's portions and positive movement deltas conserve its base quantity. Batch identity, FEFO, FIFO cost layers and Location-scoped MWA remain distinct; costing alone adds no on-hand movement. | Numeric type/precision/scale/capacity/overflow; Product increment/fraction policy; conversion source/factor graph/version/effective time/snapshot; operation-specific rounding; FIFO/MWA residual arithmetic; physical constraints. | No executed positive/negative/fractional/boundary/overflow/replay/numeric reconciliation tests reviewed. | **CONCEPTUAL PASS; NUMERIC IMPLEMENTATION OPEN; EVIDENCE NOT EXECUTED.** |
+| 9. Atomicity, idempotency, concurrency and uncertain-commit recovery | **PASS — conceptual safeguards reconcile.** Same identity/same payload replays original outcome; changed payload conflicts; claim and posting effects atomic; complete fan-out required; deterministic locking and post-lock revalidation; full rollback on failure; uncertain commit reconciled before retry; no blind repost. | Physical registry/key/canonical payload/digest/retention; transaction/write-set boundary; lock targets/order/isolation/timeout/deadlock/retry; recovery protocol and incomplete-state authority; tenant enforcement. No exactly-once transport guarantee or specific mechanism is approved. | No sequential/concurrent replay, changed-payload conflict, rollback, timeout/lost-response, partial-fan-out or failure-recovery tests reviewed. | **CONCEPTUAL PASS; PHYSICAL / OPERATIONAL OPEN; EVIDENCE NOT EXECUTED.** |
+| 10. Projection reconciliation and rebuild | **PASS — conceptual invariants reconcile.** Movement ledger is stock truth; balance and Batch-balance are rebuildable projections; Batch totals reconcile to parent Location; source/event/movement lineage remains complete; replay/rebuild must not create new movements; downstream projection failure cannot erase source commit. | Projection keys/grain/watermarks/versioning; sync/async and lag policy; reconciliation algorithm/boundary/schedule/owner; checkpoint/snapshot and replay/gap recovery; quarantine/dead-letter/alerts/manual recovery; parent-child aggregation; projection transaction boundary and tenant enforcement. | No executed ledger-to-balance, Batch-to-Location, repeated rebuild, projection lag/failure/recovery, event gap/out-of-order or cross-Business tests reviewed. | **CONCEPTUAL PASS; PHYSICAL / OPERATIONAL OPEN; EVIDENCE NOT EXECUTED.** |
+
+### 42.61.3 Cross-cutting acceptance blockers
+
+The following blockers span multiple rows and cannot be treated as closed by conceptual FIX decisions:
+
+1. **Physical data model:** physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; ERD-OPEN-05 remains OPEN. No physical table, column, enum, FK, unique key, registry, allocation object, numeric type or projection schema is approved by this matrix.
+2. **Authorization and tenant enforcement:** A01-specific M08/M06 action tuples, actor/scope/approval/SoD, server-side resource resolution, tenant isolation and audit enforcement remain OPEN.
+3. **Numeric implementation:** precision/scale/capacity/overflow, Product increment/fraction rules, conversion snapshot/version and operation-specific rounding remain OPEN.
+4. **Commit and recovery:** transaction/write-set, locking/isolation/concurrency, idempotency persistence, uncertain-commit reconciliation, retry and incomplete-state/manual recovery remain OPEN.
+5. **Projection operations:** projection freshness/watermarks, reconciliation boundary/algorithm, rebuild/replay/gap handling, monitoring/alerting and recovery ownership remain OPEN.
+6. **Evidence:** all listed A01 acceptance scenarios remain NOT EXECUTED in the reviewed source record. Conceptual scenario descriptions are not test evidence.
+
+### 42.61.4 Consolidated disposition
+
+**CONCEPTUAL CONTRACT: PASS** for the scope explicitly approved by DOC08-FIX-027/028/029/030/031/032 and the bounded audits in §§42.57–42.60.
+
+**PHYSICAL / TECHNICAL ACCEPTANCE: NOT ACCEPTED.** Required physical definitions, enforcement and operational recovery mechanisms remain OPEN.
+
+**EXECUTED EVIDENCE: NOT PROVIDED / NOT EXECUTED.** No runtime, integration, concurrency, failure-injection, authorization, tenant-isolation or projection-reconciliation test result is claimed.
+
+**CW-11 PACKAGE E: IN PROGRESS — ACCEPTANCE NOT MET.** The matrix is a consolidated gap register, not a waiver of blockers and not a declaration that A01 is ready for implementation. Do not move to another source family or Stage 6 until each required technical decision has an authorized source, each physical design has its own review/approval, and required evidence is executed and accepted.
+
+No new DOC08 FIX is created. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No permission, adapter activation, physical schema, SQL/DDL/DML, database mutation or implementation is approved.
+
+Related anchors: DOC-03 §§6, 18–21; DOC-04 §§42.46–42.60; DOC-05 §§23–25; DOC-09 §§11.39–11.42; Worklist §§15.119–15.122.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.62 CW-11 Package E — A01 OPEN-item source and decision-authority triage (24 November 2026)
+
+### 42.62.1 Purpose and method
+
+This is a read-only classification of the OPEN items in §42.61. It identifies the controlling source/domain and the kind of closure required; it does not decide policy, assign individual people, select physical mechanisms or claim implementation evidence. Authority is named only at the documented domain/decision-role level. Where the source does not identify a specific decision owner, that gap is stated explicitly.
+
+### 42.62.2 Items already resolved by the reviewed source baseline — do not reopen
+
+| Topic | Source-backed disposition | Controlling source | Boundary |
+|---|---|---|---|
+| Procurement versus inventory ownership | M08 owns purchase request/order, receiving procurement workflow and procurement commitment; M06 owns inventory identity, Batch, movement ledger, balance projections and costing; M07 owns warehouse/location custody; M02 owns Product catalog/Variant/unit; M16 owns supplier invoice/AP/payment. | DOC-03 §19.1 | Logical ownership is resolved; this does not define physical tables or a new A01 permission tuple. |
+| Ledger and projection authority | Posted inventory movements are immutable stock truth; balances are rebuildable projections, not independent write authorities. | DOC-03 §6; DOC-04 §§17.2–17.4, 42.60 | Do not reopen conceptual authority; physical implementation/reconciliation remains open. |
+| Tenant and domain interaction boundary | Tenant-owned commands/events/resources resolve to one Business; cross-Business access is denied absent an explicit supported relationship and authorization path. | DOC-03 §§18.3–18.5 | Conceptual invariant is established; server/RLS/physical enforcement and tests remain open. |
+| General authorization tuple requirements | DOC-05 §23.5 requires exact key/actor/scope/resource-state/data-purpose/SoD/approver/audit context; ambiguity denies. DOC-05 §25.3 supplies inventory/warehouse resource-family tuples, not a complete A01 M08-to-M06 handoff. | DOC-05 §§23.5, 25.3–25.4; DOC-04 §42.57 | Preserve the general baseline; do not treat candidate keys as grants or claim the A01-specific tuple is resolved. |
+| Conceptual receipt invariants | FIX-027–032 remain the approved conceptual decisions within their stated scope. | DOC-04 §§42.49–42.56; DOC-09 §11.38 | No new FIX or widening of scope. |
+
+### 42.62.3 Class A — Explicit Owner/domain policy decision required
+
+These are unresolved policy choices, not values to be inferred by technical design:
+
+1. **Non-zero tolerance and over-receipt exception policy:** FIX-029 establishes 0% default and requires explicit policy plus authorization for any non-zero exception. The allowed circumstances, limits, effective period and independent approver are not defined in the reviewed A01 sources. Owner policy decision required before any non-zero path can be specified; default remains 0% and excess remains blocked absent approval.
+2. **Variant Batch-policy override authority:** FIX-032 allows an override only when explicitly authorized and auditable. The controlling authority, eligible decision role, scope and revocation/effective-date policy are not identified by the reviewed sources. Owner must assign/approve the policy authority; M02 Product/Variant ownership and M06 inventory enforcement remain distinct.
+3. **Virtual transit Location exception:** FIX-032 excludes virtual transit Locations from normal purchase receiving unless separately approved policy authorizes an exception. The approving authority and permitted exception conditions are not identified. Owner decision required only if the business requires this exception; otherwise the exclusion remains.
+4. **Purchase-order amendment/source-version semantics:** FIX-027 identifies procurement ownership but does not settle which PO amendments can affect an already-arrived, inspected, accepted or posted receipt. M08 is the controlling source domain; the specific policy decision authority and amendment rules are not identified in the reviewed A01 source. Require Owner/domain-owner decision before defining retroactive or post-acceptance behavior.
+5. **Independent approval/SoD for A01 exceptions:** DOC-05 §25.4 requires pending/DENY when no independent eligible approver is assigned and defines no fallback self-approval. A01-specific exception categories and the accountable approver assignment are not established. Owner must assign the policy authority; no self-approval or inferred role is permitted meanwhile.
+
+**Authority gap:** the reviewed documents identify Owner approval for conceptual FIX and logical domain ownership, but do not name individual decision-makers or fully specify delegated authority for the policy items above. Do not invent a person, role grant, approval threshold or fallback. Record an explicit Owner assignment/decision before closing any such item.
+
+### 42.62.4 Class B — Architecture/technical design decision required (not implementation)
+
+| OPEN cluster | Controlling source/domain to consult | Required design output; no choice made here |
+|---|---|---|
+| Physical PO/receipt/source occurrence/line/accepted-slice identity, keys, FKs, amendment linkage and duplicate disposition | M08 source ownership; M06 posting identity; DOC-04 physical dictionary/ERD | Source-to-event lineage and physical relationship/constraint specification. |
+| Receipt lifecycle, partial inspection/acceptance and disposition representation | M08 receiving workflow; M18 inspection/quality where applicable; M06 posting boundary | State/transition and partial-slice representation with authority and audit conditions. |
+| Batch policy source/snapshot, Variant override record and Location lifecycle/receiving eligibility | M02 Product/Variant; M06 Batch/inventory; M07 Location custody | Effective-policy resolution, snapshot provenance, authoritative Location resolver and exception boundary. |
+| Numeric types, precision/scale/capacity/overflow, Product increments/fractions, conversion graph/version/snapshot and operation-specific rounding | M02 unit/Product master; M06 stock quantity/costing; DOC-04 §§20, 42.58 | Reproducible numeric/conversion contract and arithmetic acceptance rules; no numeric parameters are selected by this triage. |
+| A01-specific M08 receipt/acceptance action and M06 posting action, actor/scope/assignment/approver/SoD/audit tuple | M08 and M06 domain owners; DOC-05 authorization/security authority | Exact action catalogue and controlled handoff/authorization specification; candidate keys are not grants. |
+| Atomicity, event/movement fan-out, idempotency identity/payload/retention, locking/isolation/concurrency and uncertain-commit recovery | M06 posting architecture; DOC-03 §§18.3–18.4, 21.5; DOC-04 §42.59 | Transaction/write-set, duplicate-safe retry, conflict and recovery contract. No outbox/inbox/distributed transaction or exactly-once transport is presumed. |
+| Projection grain/watermark/freshness, reconciliation, checkpoint/replay/gap recovery, quarantine/alert/manual recovery | M06 projection/operations ownership; DOC-03 §§6, 18.3, 21.5; DOC-04 §42.60 | Projection lifecycle, reconciliation and operational ownership specification. |
+| Physical tenant enforcement, audit storage/retention and operational observability | M01 tenant boundary; M06/M08 resource owners; security/platform authority; DOC-03 §§18.4–18.5, DOC-05 | Physical enforcement/control design and evidence requirements; no RLS/server mechanism is selected here. |
+
+For each row, if the controlling document does not identify a delegated decision authority, the architecture/data authority must be explicitly assigned by the Owner before the design is accepted. A technical design cannot silently decide unresolved business policy.
+
+### 42.62.5 Class C — Executed evidence required only after separate design/implementation authorization
+
+The following are evidence gates, not requests to execute tests now:
+
+- Source identity, PO amendment, duplicate acceptance and source-to-event lineage.
+- Lifecycle transitions, partial receipt/acceptance, over-receipt, shortage, tolerance and approval/SoD positive/negative cases.
+- Batch-policy inheritance/override/snapshot; valid/invalid Location and Batch; same-Business and cross-Business denial; split allocation and quantity conservation.
+- Numeric valid/invalid/fractional/boundary/overflow/conversion/reconciliation cases.
+- Same-key replay, changed-payload conflict, concurrent duplicate requests, rollback, timeout/lost response, uncertain commit and complete movement fan-out.
+- Ledger-to-balance, Batch-to-parent-Location, repeated rebuild, projection lag/failure, event gap/out-of-order, quarantine/recovery and tenant isolation.
+
+Evidence must be tied to an approved technical design, controlled test environment, test version/commit, expected outcome, actual result and reviewer. No evidence is claimed by this triage. Execution remains blocked until the separate implementation/test authorization gate is granted.
+
+### 42.62.6 Disposition and next gate
+
+**TRIAGE COMPLETE — classification only.** Class A policy decisions remain unmade where stated; Class B technical design remains OPEN; Class C evidence remains NOT EXECUTED and NOT AUTHORIZED. Source-baseline items in §42.62.2 are not reopened. No new DOC08 FIX, no physical design approval, no permission grant, no adapter activation and no implementation authorization are created.
+
+CW-11 Package E remains IN PROGRESS — ACCEPTANCE NOT MET. Continue within A01. The next bounded action is to present only the Class A policy questions to the Owner for explicit decision/authority assignment; do not ask the Owner to approve technical mechanisms or test evidence as a substitute for their separate gates.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.63 CW-11 Package E — A01 Owner Decision Request Register (24 November 2026)
+
+### 42.63.1 Purpose and authority boundary
+
+This register converts only the five Class A items identified in §42.62.3 into explicit Owner decision requests. It is a request for policy decisions or assignment of delegated decision authority, not a technical design proposal. No answer is presumed. The Owner may decide “not permitted / no exception” where applicable; an unanswered item remains OPEN and the existing restrictive baseline continues.
+
+Decision record fields for each request: Owner decision (PENDING), decision authority/delegate (PENDING where applicable), effective date/version (PENDING where policy is adopted), rationale (PENDING), and any review/expiry condition (PENDING). These are record fields to complete after an explicit decision, not new physical schema requirements.
+
+### 42.63.2 Decision request register
+
+| ID | Decision requested from Owner | Explicit choices / questions requiring an answer | Existing baseline until decision | Required record after decision |
+|---|---|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | Decide whether any receiving tolerance or over-receipt exception is permitted beyond the existing 0% default, and define the policy boundary. | (a) Is non-zero tolerance permitted at all? (b) If yes, for which receiving circumstances and quantity basis? (c) What limit(s), effective period and exception conditions apply? (d) Who is the independent approver and may the receiver/initiator ever approve their own exception? (e) Does an approved exception permit acceptance of excess, or merely record a variance pending separate acceptance? | FIX-029 remains: default tolerance 0%; excess is not automatically accepted or posted; any non-zero exception requires explicit policy and authorization. Shortage remains a PO variance, not received stock. No rounding or tolerance changes actual physical quantity. | Explicit allow/deny; scope and limits if allowed; approver/delegation; effective date/version; audit requirement. |
+| ODR-A01-02 — Variant Batch-policy override | Decide whether a Variant may override the Product-owned Batch-tracking policy and assign the authority for any permitted override. | (a) Is override allowed, or must Variant always inherit Product policy? (b) If allowed, which delegated authority may approve it? (c) What Business/Product/Variant scope and effective timing apply? (d) What review, revocation and audit conditions apply? | FIX-032 remains: Product owns the explicit Batch policy; Variant inherits by default; override only if explicitly authorized and auditable. No override grant is inferred. | Allow/deny; authorized decision authority; scope; effective/revocation rules; audit requirements. |
+| ODR-A01-03 — Virtual transit Location receiving exception | Decide whether the business requires any exception to the normal exclusion of virtual transit Locations from purchase receiving. | (a) Is any exception required? (b) If yes, in which precisely bounded physical custody/operational circumstances? (c) Who may authorize the exception? (d) What evidence must confirm actual custody and final receiving destination? | FIX-032 remains: virtual transit Location is not a normal purchase receiving destination unless a separate explicit policy approves an exception. Receiver confirmation of actual physical destination remains required; a default is only a suggestion. | Explicit no-exception or bounded exception policy; approving authority; physical custody conditions; evidence and audit requirements. |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | Decide the business-policy principles for how PO amendments/version changes relate to receipts already arrived, inspected, accepted or posted. M08 remains the source domain responsible for procurement workflow; this request does not ask the Owner to select physical versioning mechanisms. | (a) Which classes of PO amendment may affect only future receipts? (b) Can any amendment affect an arrived but not yet accepted quantity? (c) Can any amendment affect an already accepted slice? (d) Are changes after A01 posting strictly prospective, with correction handled through separately authorized correction lineage? (e) Who may authorize exceptional treatment and what audit trail is required? | FIX-027/028 remain: PO/source line, physical receipt occurrence, receipt line, accepted slice and A01 posting are distinct facts. Posted inventory movements are not silently rewritten; corrections follow the established correction/reversal lineage. No retroactive amendment behavior is inferred. | Owner-approved prospective/retroactive policy boundaries; exception authority; treatment by lifecycle stage; audit/correction principles. |
+| ODR-A01-05 — Independent approver / A01 exception SoD | Assign or approve the policy authority/delegation for independent approval of A01 exceptions and define the independence principle. | (a) Which exception classes require independent approval? (b) What makes an approver independent from the initiating/receiving actor? (c) Which authority may assign eligible approvers? (d) What happens if no eligible independent approver is available? (e) Is escalation required, or must the operation remain pending/denied? | DOC-05 §25.4 remains: absent an independent eligible approver, the operation is pending/DENY; no self-approval or fallback is inferred. DOC-05 remains DRAFT / REVIEW REQUIRED / NOT FINAL; this is not a permission grant. | Exception-to-approval policy; independent eligibility principle; delegation authority; no-approver outcome; audit and escalation rule. |
+
+### 42.63.3 Owner response record
+
+No Owner response has been supplied in this work item. Preserve all five requests as **PENDING / OPEN** until an explicit answer is received and attributable to the Owner or a documented delegate.
+
+| Request ID | Owner decision | Delegated authority | Effective date/version | Status |
+|---|---|---|---|---|
+| ODR-A01-01 | PENDING | PENDING | PENDING | OPEN |
+| ODR-A01-02 | PENDING | PENDING | PENDING | OPEN |
+| ODR-A01-03 | PENDING | PENDING | PENDING | OPEN |
+| ODR-A01-04 | PENDING | PENDING | PENDING | OPEN |
+| ODR-A01-05 | PENDING | PENDING | PENDING | OPEN |
+
+### 42.63.4 Handling rules and non-decisions
+
+1. Do not infer consent from silence, prior conceptual FIX approval or “Ok lakukan”; those approvals authorize preparation of this register, not the policy answers.
+2. A “not permitted / no exception” answer is a valid decision and preserves the restrictive baseline.
+3. Where the Owner delegates a decision, record the delegated authority and scope before treating the answer as binding.
+4. M08/M07/M06/M02/M16 and DOC-05 domain/security authorities may supply requirements and impact analysis within their ownership; they do not silently substitute for Owner policy approval.
+5. Technical details (physical keys/FKs, numeric precision, state encoding, idempotency, transaction isolation, locking, RLS/server enforcement, projection protocol) remain Class B design questions and are not part of this Owner decision form.
+6. Tests and runtime evidence remain Class C and are not authorized by completing this register.
+7. No new DOC08 FIX is created until a decision is explicit, attributable and reviewed against affected source documents.
+
+### 42.63.5 Gate disposition
+
+**REGISTER PREPARED — ALL FIVE OWNER DECISIONS PENDING.** CW-11 Package E remains IN PROGRESS / ACCEPTANCE NOT MET. Existing FIX-027..032 remain unchanged. No physical design, permission, adapter activation, test execution or Stage 6 implementation is approved.
+
+Related anchors: DOC-04 §§42.49–42.62; DOC-05 §25.4; DOC-09 §§11.38, 11.44–11.45; Worklist §§15.124–15.125.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.64 CW-11 Package E — Multi-Business policy architecture recommendation for A01 (24 November 2026)
+
+### 42.64.1 Purpose and status
+
+This section records a bounded architecture recommendation in response to the Owner's request to proceed with the recommended approach for a POS SaaS serving multiple independent Businesses/Tenants. It is a **RECOMMENDATION FOR OWNER REVIEW**, not an approved policy, a new DOC08 FIX, a physical design decision, or implementation authorization. It does not answer or close ODR-A01-01 through ODR-A01-05 in §42.63. All five remain PENDING / OPEN.
+
+### 42.64.2 Recommended policy model
+
+Recommend the model **Global Core Rules + Business-level Configurable Policies + Controlled Exceptions**:
+
+1. **Global Core Rules (platform-wide invariants).** Apply consistently across all Business/Tenant scopes: tenant isolation; server-side Business scoping and authorization; immutable posted inventory movement history with traceable correction lineage; no silent rewrite of accepted or posted facts; quantity conservation and duplicate-safe logical posting; auditability; and fail-closed behavior for unresolved identity, authority, or eligibility. A Business-level setting must not weaken these platform invariants.
+2. **Business-level Configurable Policies.** Permit only explicitly designated operational policies to vary by Business, within platform-defined permitted values and validation boundaries. A policy must have an identifiable owner/authority, scope, effective period/version, rationale, and audit trail. Configuration is not a permission grant and cannot override platform invariants or source-domain ownership.
+3. **Controlled Exceptions.** An exception is separate from ordinary configuration. It requires an explicitly defined eligible category, authorized independent approver where required, bounded scope/quantity/time, recorded rationale and evidence, and auditable outcome. If policy, authority, or eligible approver is unresolved, fail closed or remain pending under the controlling authorization policy; do not infer a fallback.
+
+This model is intended to support different operating needs across retail, wholesale, food service, pharmacy, and distribution Businesses without creating separate inconsistent transaction-integrity rules. Those examples illustrate possible Business diversity; they do not establish industry-specific defaults or compliance rules.
+
+### 42.64.3 A01 application of the model — recommendation only
+
+| ODR | Recommended direction for Owner consideration | Existing binding baseline while unanswered |
+|---|---|---|
+| ODR-A01-01 — Tolerance / over-receipt | Retain 0% as platform default. If the Owner wants configurability, permit only a Business-scoped, explicitly approved policy with defined circumstance, quantity basis, limit, effective version/period and independent approval. A tolerance must not alter actual arrived/accepted quantities or automatically post excess. | FIX-029: 0% default; excess is not automatically accepted/posted; explicit policy and authorization required; shortage remains PO variance. |
+| ODR-A01-02 — Variant Batch override | Keep Product as policy owner and Variant inheritance as default. Any override should be exceptional, explicitly authorized, scoped, time/version bounded, reviewable/revocable and auditable; do not permit an ungoverned per-Variant switch. | FIX-032: Product-owned policy; Variant inherits by default; authorized/auditable override only. |
+| ODR-A01-03 — Virtual transit Location | Keep virtual transit excluded from normal receiving. If a Business need is demonstrated, consider only a separately authorized, narrowly bounded exception with evidence of actual physical custody and destination; do not relabel a virtual Location as physical by configuration alone. | FIX-032: no normal receiving to virtual transit absent separate explicit policy; receiver confirms actual physical destination. |
+| ODR-A01-04 — PO amendments | Recommend prospective treatment as the default: amendments govern future workflow according to receipt lifecycle; they do not silently rewrite arrived, accepted, or posted facts. Any narrowly permitted pre-acceptance treatment must preserve source/version lineage and explicit authority. Posted movements require established correction lineage, not retroactive rewrite. | FIX-027/028: source facts and accepted slices remain distinct; no retroactive amendment behavior inferred; posted movements are not silently rewritten. |
+| ODR-A01-05 — Independent approver / SoD | Require independent approval for defined high-risk exceptions; the Owner must identify categories, eligibility/independence, delegation and escalation. No self-approval. If no eligible approver exists, remain pending/DENY under DOC-05 §25.4. | DOC-05 §25.4: absent independent eligible approver, pending/DENY; no self-approval or fallback. DOC-05 remains DRAFT / REVIEW REQUIRED / NOT FINAL. |
+
+The recommended directions are not operative rules until the Owner explicitly adopts them and the decision record is updated with authority, scope, effective date/version, rationale and review/expiry conditions.
+
+### 42.64.4 Configuration governance requirements — conceptual, not physical design
+
+For any future approved Business-level policy, require the following conceptual controls before a technical design can be accepted:
+
+- **Policy catalogue:** distinguish platform invariants, Business-configurable policy, and controlled exceptions; identify which policy keys are eligible for Business variation.
+- **Authority and scope:** identify the policy owner, approving authority, Business scope, applicable Product/Variant/Location/transaction scope, and whether delegation is permitted.
+- **Effective-time semantics:** define effective-from/effective-until or version boundaries; preserve which policy decision governed a receipt at the time of decision. Later policy edits must not silently rewrite historical receipt/posting facts.
+- **Validation and precedence:** reject unknown, conflicting, out-of-range, or unauthorized settings; define deterministic precedence without allowing Business configuration to weaken global invariants.
+- **Change and exception audit:** retain actor, authority, prior/new policy value, rationale, effective period, approval, evidence and resulting transaction references as applicable.
+- **Fail-closed behavior:** unresolved policy, scope, authority, or approver must not silently fall back to a permissive value.
+- **Tenant isolation:** a Business can configure only its own permitted policy scope; cross-Business reads/writes or policy inheritance are not implied.
+- **Review and lifecycle:** define review, expiry, revocation and impact handling for exceptions and delegated authorities.
+
+These are conceptual acceptance requirements only. No physical policy table, key, column, enum, inheritance engine, cache, snapshot schema, API, RLS policy, authorization permission, runtime resolver or storage mechanism is selected here.
+
+### 42.64.5 Relationship to existing FIX and acceptance gates
+
+This recommendation preserves DOC08-FIX-027 through DOC08-FIX-032 without modification. It does not reopen source-resolved ownership boundaries in DOC-03, and it does not select physical mechanisms for Class B dependencies. Class C runtime/security/concurrency/reconciliation evidence remains NOT EXECUTED / NOT AUTHORIZED. Physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; CW-11 Package E remains IN PROGRESS — ACCEPTANCE NOT MET.
+
+### 42.64.6 Disposition and next gate
+
+**RECOMMENDATION RECORDED — OWNER ADOPTION PENDING.** ODR-A01-01 through ODR-A01-05 remain PENDING / OPEN. No new FIX, permission grant, physical design approval, adapter activation, or Stage 6 implementation authorization is created. The next gate is explicit Owner adoption, rejection, or revision of each policy recommendation, followed by an authority/scope/consistency audit before any register or FIX is changed.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.65 CW-11 Package E — Owner response to ODR-A01-01 (24 November 2026)
+
+**OWNER PRINCIPLE APPROVED — DETAILED EXCEPTION PARAMETERS REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026. It updates only ODR-A01-01 and does not infer answers to ODR-A01-02 through ODR-A01-05.
+
+### 42.65.1 Attributable Owner decision
+
+The Owner approves the following policy principle for A01 receiving:
+
+1. **Global default:** receiving tolerance is 0% for every Business.
+2. **Non-zero exception path:** a Business that requires non-zero tolerance must have a specific policy for that Business; the policy must be explicitly approved and documented.
+3. **Quantity integrity:** tolerance does not alter the actual physically observed or accepted quantity. It is not rounding, coercion, or permission to silently increase/decrease received stock.
+4. **Over-receipt boundary:** excess is not automatically accepted or posted. Any acceptance of excess remains subject to a separately defined and authorized acceptance decision; this response does not itself authorize automatic posting.
+5. **Shortage boundary:** shortage remains a variance against the PO, not received stock or an inventory movement.
+
+### 42.65.2 Decision scope and unresolved parameters
+
+This is an Owner-approved policy principle, not a complete operational exception policy. The following details remain OPEN and must not be invented:
+
+- permitted circumstances and eligible receiving cases for a non-zero policy;
+- quantity basis, limit/threshold and any per-transaction or cumulative cap;
+- independent approver identity/role, delegation and separation-of-duties requirements;
+- effective date/version, duration, expiry/review and revocation;
+- evidence, rationale and audit requirements for each exception;
+- whether an approved tolerance only records a variance or can permit acceptance of excess, and the separate authority required for that acceptance.
+
+Until these details are explicitly decided and recorded, the restrictive baseline remains: 0% default; no automatic excess acceptance/posting; unresolved exception authority fails closed or remains pending.
+
+### 42.65.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% global default approved; non-zero permitted only through a specific, approved and documented Business policy; physical quantity integrity and no automatic excess acceptance/posting preserved | **PARTIALLY APPROVED — POLICY PRINCIPLE DECIDED; PARAMETERS OPEN** |
+| ODR-A01-02 — Variant Batch-policy override | No response supplied | PENDING / OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | No response supplied | PENDING / OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | No response supplied | PENDING / OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+### 42.65.4 Consistency audit against source baseline
+
+- **DOC08-FIX-029 / DOC-04 §42.51:** consistent with the 0% default, explicit-policy/authorization-only exception path, no automatic over-receipt acceptance/posting, shortage as PO variance, and no alteration of physical quantity.
+- **DOC-04 §42.58:** tolerance is not a rounding or numeric reconciliation mechanism; physical quantities and accepted quantities remain truthful and independently reconciled.
+- **DOC-04 §42.62–42.64:** this response resolves only the ODR-A01-01 policy principle. It does not assign an approver, delegate authority, select physical mechanisms, adopt unrelated ODR recommendations, or close Class B/Class C dependencies.
+- **DOC-05 §25.4:** no independent approver or fallback is inferred. Where independent approval is required and no eligible approver exists, the existing pending/DENY baseline remains.
+
+**Audit disposition: CONSISTENT — no conflict with FIX-027..032 identified.** No new FIX is created and DOC08-FIX-029 is not rewritten. This response does not approve physical design, permission grants, adapter activation, tests, or Stage 6 implementation.
+
+### 42.65.5 Next gate
+
+Continue with ODR-A01-02 using the exact request in §42.63.2. Keep ODR-A01-01's unresolved parameters OPEN for a later bounded clarification; do not treat the policy principle as full exception-policy approval.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.66 CW-11 Package E — Owner response to ODR-A01-02 (24 November 2026)
+
+**OWNER POLICY PRINCIPLE APPROVED — AUTHORITY AND OPERATIONAL PARAMETERS REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026 to the recommendation in DOC-04 §42.64.3. It addresses ODR-A01-02 only and does not infer responses to ODR-A01-03 through ODR-A01-05.
+
+### 42.66.1 Attributable Owner decision
+
+The Owner approves the following Variant Batch-policy principle:
+
+1. **Policy ownership:** the Product remains the owner of the explicit Batch-tracking policy.
+2. **Default inheritance:** a Variant inherits the Product's Batch policy by default.
+3. **Controlled override:** a Variant-level override is permitted only as an explicit, authorized and auditable exception. An implicit, silent, or ungoverned per-Variant override is not permitted.
+4. **Receipt-time integrity:** the effective policy applicable to an accepted receipt slice remains a receipt-time decision; later Product or Variant master-data changes must not silently rewrite historical accepted slices or posted movements.
+5. **Fail-closed baseline:** unresolved, unset, conflicting or unauthorized policy resolution continues to block A01 under the existing FIX-032 baseline.
+
+### 42.66.2 Decision scope and unresolved parameters
+
+This approval adopts the policy principle only. The following details remain OPEN and must not be invented:
+
+- the controlling authority and eligible decision role for approving a Variant override;
+- whether and how that authority may be delegated;
+- permitted Business/Product/Variant scope and any limits on the override;
+- effective date/version, duration, expiry, review and revocation rules;
+- required rationale, evidence, audit fields and review responsibility;
+- exact policy source/representation and receipt-time snapshot mechanism;
+- technical enforcement, physical objects/keys/FKs, permissions, APIs, RLS or runtime resolution.
+
+Until these are explicitly decided and reviewed, no override grant is inferred. Product ownership and Variant inheritance remain the default; an unresolved override request must not bypass the existing fail-closed rule.
+
+### 42.66.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed exception parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product remains policy owner; Variant inherits by default; override allowed only as explicit, authorized and auditable exception | **PARTIALLY APPROVED — AUTHORITY / SCOPE / LIFECYCLE PARAMETERS OPEN** |
+| ODR-A01-03 — Virtual transit Location receiving exception | No response supplied | PENDING / OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | No response supplied | PENDING / OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+### 42.66.4 Consistency audit against source baseline
+
+- **DOC08-FIX-032 / DOC-04 §42.56:** consistent with Product-owned explicit Batch policy, Variant inheritance by default, authorized/auditable override only, receipt-time policy preservation, and fail-closed handling for unresolved or conflicting policy.
+- **DOC-04 §42.62–42.64:** this response resolves the ODR-A01-02 policy principle only. It does not assign an authority/delegate, define scope or lifecycle, or select physical/technical mechanisms.
+- **DOC-03 domain ownership:** Product/Variant policy ownership remains with the Product domain; inventory enforcement and receiving boundaries are not reassigned.
+- **DOC-05 authorization boundary:** no permission or eligible approver is inferred. Existing authorization and fail-closed requirements remain unchanged.
+
+**Audit disposition: CONSISTENT — no conflict with FIX-027..032 identified.** No new FIX is created and DOC08-FIX-032 is not rewritten. No physical design, permission grant, adapter activation, test execution or Stage 6 implementation is approved.
+
+### 42.66.5 Next gate
+
+Continue with ODR-A01-03 using the exact request in §42.63.2. Keep ODR-A01-02's authority, scope, effective-time, review/revocation and evidence parameters OPEN for bounded clarification. Do not treat this principle approval as an operational override authorization.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.67 CW-11 Package E — Owner response to ODR-A01-03 (24 November 2026)
+
+**OWNER POLICY PRINCIPLE APPROVED — EXCEPTION CONDITIONS AND AUTHORITY REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026 to the recommendation in DOC-04 §42.64.3. It addresses ODR-A01-03 only and does not infer responses to ODR-A01-04 or ODR-A01-05.
+
+### 42.67.1 Attributable Owner decision
+
+The Owner approves the following virtual transit Location receiving principle:
+
+1. **Normal receiving exclusion:** a virtual Transit Location is not a normal destination for purchase receiving.
+2. **Exception only for demonstrated need:** an exception may be considered only where a genuine business requirement is demonstrated and the exception is explicitly approved.
+3. **Physical custody evidence:** an exception requires evidence of actual physical custody of the goods and confirmation of the real physical receiving destination.
+4. **No configuration-based relabeling:** a virtual Location must not be treated as a physical Location merely because of a configuration setting or label.
+5. **Default remains restrictive:** absent a defined and approved exception, virtual Transit Locations remain excluded from normal receiving; unresolved authority or physical-custody evidence fails closed.
+
+### 42.67.2 Decision scope and unresolved parameters
+
+This approval adopts the policy principle only. The following details remain OPEN and must not be invented:
+
+- the accountable authority and eligible role that may approve an exception;
+- exact qualifying business circumstances and permitted exception scope;
+- required evidence types, custody chain and proof of final physical destination;
+- effective period, expiry, review and revocation;
+- audit record, rationale and exception monitoring;
+- Location taxonomy/lifecycle and physical-versus-virtual classification enforcement;
+- any physical schema, permission, API, RLS, runtime or workflow mechanism.
+
+No exception is authorized by this principle approval alone. Until the open parameters are defined and approved, the default exclusion remains in force.
+
+### 42.67.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product owns Batch policy; Variant inherits by default; override only as explicit, authorized and auditable exception | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | Normal receiving excluded; exception may be considered only for demonstrated business need, explicit approval and evidence of actual physical custody and destination; no configuration-based relabeling | **PARTIALLY APPROVED — EXCEPTION AUTHORITY / CONDITIONS / EVIDENCE OPEN** |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | No response supplied | PENDING / OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+### 42.67.4 Consistency audit against source baseline
+
+- **DOC08-FIX-032 / DOC-04 §42.56:** consistent with exclusion of virtual Transit Locations from normal receiving, explicit exception-policy boundary, and receiver confirmation of actual physical destination.
+- **DOC-04 §42.62–42.64:** this response resolves the ODR-A01-03 policy principle only. It does not assign an approving authority, establish qualifying circumstances, or select physical/technical mechanisms.
+- **DOC-03 Location ownership and DOC-05 authorization boundary:** no Location ownership or permission is reassigned; no approver or delegated authority is inferred.
+
+**Audit disposition: CONSISTENT — no conflict with FIX-027..032 identified.** No new FIX is created and DOC08-FIX-032 is not rewritten. No physical design, permission grant, adapter activation, test execution or Stage 6 implementation is approved.
+
+### 42.67.5 Next gate
+
+Continue with ODR-A01-04 using the exact request in §42.63.2. Keep ODR-A01-03 exception authority, qualifying circumstances, evidence, lifecycle and enforcement parameters OPEN. Do not treat this principle approval as an operational exception authorization.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.68 CW-11 Package E — Owner response to ODR-A01-04 (24 November 2026)
+
+**OWNER POLICY PRINCIPLE APPROVED — LIFECYCLE-SPECIFIC AMENDMENT DETAILS REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026 to the prospective PO-amendment recommendation in DOC-04 §42.64.3. It addresses ODR-A01-04 only and does not infer a response to ODR-A01-05.
+
+### 42.68.1 Attributable Owner decision
+
+The Owner approves the following PO amendment and receipt lifecycle principles:
+
+1. **Prospective treatment:** PO amendments apply prospectively. They must not silently rewrite historical procurement, arrival, inspection, acceptance or inventory-posting facts.
+2. **Before physical arrival:** changes are governed by the applicable PO version and procurement authority; source/version lineage must remain attributable.
+3. **Arrived, not yet accepted:** preserve the fact and evidence of physical arrival and the applicable PO version. Any permitted treatment of the still-unaccepted quantity must be explicit, authorized and auditable; no retroactive erasure or silent substitution.
+4. **Inspected:** preserve inspection results and their source context. A PO amendment does not erase or silently rewrite completed inspection facts.
+5. **Accepted:** accepted receipt facts and accepted quantities are not retroactively rewritten by a PO amendment. Any correction must follow a separately authorized correction lineage.
+6. **Posted to inventory:** posted inventory movements are never silently rewritten by PO amendment. Correction/reversal must use the established, attributable correction lineage.
+7. **Historical traceability:** source PO version, receipt occurrence/line, inspection and accepted-slice facts remain distinct and traceable.
+
+### 42.68.2 Decision scope and unresolved parameters
+
+This approval adopts the policy principle only. The following details remain OPEN and must not be invented:
+
+- exact amendment classes and fields permitted at each receipt lifecycle stage;
+- handling of an arrived but not yet accepted quantity when the PO is amended;
+- effective-version selection and concurrency/locking behavior;
+- authority and approval conditions for exceptional pre-acceptance treatment;
+- correction/reversal authorization, linkage and audit requirements;
+- physical version, snapshot, key, event or lineage representation and runtime implementation.
+
+Until these details are defined and reviewed, no retroactive amendment behavior or exceptional authority is inferred. Preserve historical facts, apply amendments prospectively, and use separately authorized correction lineage where correction is required.
+
+### 42.68.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product owns Batch policy; Variant inherits by default; override only as explicit, authorized and auditable exception | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | Normal receiving excluded; exception only for demonstrated business need, explicit approval and physical custody/destination evidence | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | Prospective treatment approved; historical arrival, inspection, accepted and posted facts must not be silently rewritten; posted correction follows authorized correction/reversal lineage | **PARTIALLY APPROVED — LIFECYCLE / AUTHORITY DETAILS OPEN** |
+| ODR-A01-05 — Independent approver / A01 exception SoD | No response supplied | PENDING / OPEN |
+
+### 42.68.4 Consistency audit against source baseline
+
+- **DOC08-FIX-027 / DOC08-FIX-028:** consistent with distinct PO/source-line, physical receipt occurrence, receipt line, accepted slice and A01 posting facts; no silent rewriting of posted movements.
+- **DOC-04 §42.63.2 and §42.64.3:** consistent with prospective PO amendment treatment and correction through attributable correction lineage.
+- **DOC-03 M08 procurement ownership / M06 inventory posting boundary:** procurement source ownership and inventory posting authority remain distinct; no domain ownership is reassigned.
+- **DOC-05 authorization boundary:** no actor, approver, delegated authority or permission is inferred.
+
+**Audit disposition: CONSISTENT — no conflict with FIX-027..032 identified.** No new FIX is created and existing FIX records are not rewritten. No physical design, permission grant, adapter activation, test execution or Stage 6 implementation is approved.
+
+### 42.68.5 Next gate
+
+Continue with ODR-A01-05 using the exact request in §42.63.2. Keep ODR-A01-04 lifecycle-specific amendment classes, authority, version-selection and correction details OPEN. Do not treat this principle approval as authorization for retroactive PO amendment or inventory mutation.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.69 CW-11 Package E — Owner response to ODR-A01-05 (24 November 2026)
+
+**OWNER APPROVAL — INDEPENDENT APPROVAL / SoD PRINCIPLE ADOPTED; EXCEPTION CLASSIFICATION AND DELEGATION DETAILS REMAIN OPEN.** This append-only response records the Owner's explicit agreement in the project conversation on 24 November 2026 to the proposed independent-approver principles for A01 exceptions.
+
+### 42.69.1 Attributable Owner decision
+
+The Owner approves the following principles:
+
+1. **Independent approval for high-risk exceptions:** A01 exceptions classified as high risk require independent approval. The exact exception classes and risk classification criteria remain OPEN and must be defined in the controlled policy; do not invent the list.
+2. **No self-approval:** the actor who initiates or performs the receiving operation may not approve that same exception.
+3. **Explicit eligibility:** approver independence and eligibility must be explicitly defined, reviewable and auditable; mere role/title or system access is not proof of independence.
+4. **Controlled delegation:** the authority responsible for appointing or delegating eligible approvers must be explicitly identified and recorded before the delegation is relied upon.
+5. **No eligible approver:** if no eligible independent approver is available, the exception operation remains **PENDING / DENY**.
+6. **No fallback:** no self-approval, implicit approval, timeout approval or substitute fallback is inferred. Escalation may be defined by policy, but it cannot convert the operation into approval without an eligible independent approver.
+
+### 42.69.2 Unresolved policy and authority parameters
+
+This is principle-level approval only. Keep the following OPEN:
+
+- exhaustive A01 exception classes requiring independent approval and their risk tiers;
+- objective independence criteria and disqualifying relationships/roles;
+- named authority and scope for appointing, delegating, suspending and revoking eligible approvers;
+- escalation path, service-level expectations and handling of prolonged PENDING / DENY;
+- evidence, audit trail, periodic review and conflict-of-interest controls;
+- policy effective date/version and applicability across Businesses / outlets / organizational scopes.
+
+No named person, role assignment, permission, delegation, account change or security configuration is authorized by this decision.
+
+### 42.69.3 ODR disposition
+
+| Request | Owner response | Status |
+|---|---|---|
+| ODR-A01-01 — Non-zero tolerance / over-receipt | 0% default and controlled Business policy principle approved; detailed parameters remain open | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-02 — Variant Batch-policy override | Product owns Batch policy; Variant inherits by default; override only as explicit, authorized and auditable exception | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-03 — Virtual transit Location receiving exception | Normal receiving excluded; exception only for demonstrated business need, explicit approval and physical custody/destination evidence | PARTIALLY APPROVED — PARAMETERS OPEN |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | Prospective treatment approved; historical facts preserved; posted correction follows authorized correction/reversal lineage | PARTIALLY APPROVED — DETAILS OPEN |
+| ODR-A01-05 — Independent approver / A01 exception SoD | High-risk exceptions require independent approval; initiator/receiver cannot self-approve; no eligible approver means PENDING / DENY; no fallback | **PARTIALLY APPROVED — CLASSIFICATION / DELEGATION DETAILS OPEN** |
+
+### 42.69.4 Consistency audit and security boundary
+
+- **DOC-05 §25.4:** consistent with the existing restrictive baseline: absent an independent eligible approver, operation remains PENDING / DENY; no self-approval or fallback.
+- **Authorization / SoD boundary:** this decision defines policy principles only. It does not grant a permission, assign an approver, create a role, or change an authorization matrix.
+- **DOC08-FIX-027..032:** no conflict identified; no FIX is created or modified.
+- **Class B / Class C boundary:** approver eligibility, delegation mechanics and enforcement remain subject to controlled policy and design review; runtime/security evidence is not executed or authorized.
+
+**Audit disposition: CONSISTENT — DOC-05 §25.4 restrictive baseline preserved.** DOC-05 remains DRAFT / REVIEW REQUIRED / NOT FINAL. No account, permission, RLS/Auth, API/backend, database, production or Stage 6 change is authorized.
+
+### 42.69.5 Consolidation gate
+
+All five ODR-A01 requests now have Owner principle-level responses. Their detailed operational parameters remain open as stated above. Proceed to a consolidated authority/scope/consistency audit of ODR-A01-01..05 and affected source documents. Do not infer full operational policy closure or Package E acceptance from these principle approvals.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+ 
+
+## 42.70 CW-11 Package E — Consolidated read-only audit of ODR-A01-01..05 (24 November 2026)
+
+**AUDIT RESULT: PRINCIPLE-LEVEL DECISIONS CONSISTENT; POLICY CLOSURE NOT MET; CLASS B / CLASS C REMAIN BLOCKED.** This is a documentation-source audit of the five Owner response records in §§42.65–42.69 against the exact request register in §42.63.2, the approved conceptual baseline DOC08-FIX-027..032, the A01 authorization baseline in DOC-05, and the current open/acceptance registers. No runtime or physical-schema inspection is claimed.
+
+### 42.70.1 Source set and audit method
+
+Reviewed on the PR #149 branch:
+- DOC-04 §§42.49–42.56 and §§42.62–42.69 (conceptual contract, Class A/B/C triage, exact ODR wording and Owner responses).
+- DOC-08 / DOC-09 MASTER_FIX_REGISTER.md, DOC08-FIX-027..032 (approved conceptual baseline).
+- DOC-05 AUTHORIZATION_MASTER.md §25.4 and its authorization/SoD requirements (authorization boundary).
+- DOC-09 MASTER_OPEN_REGISTER.md §11.45 and §§11.46–11.51 (open request register, recommendation and response records).
+- Corrective Documentation Worklist §§15.130–15.131 (current task/gate history).
+
+Method: compare adopted principle to exact question and retained baseline; identify unresolved authority/scope/effective-time/evidence parameters; check that no conceptual decision is misrepresented as physical, permission or runtime closure. Audit is read-only and source-derived.
+
+### 42.70.2 Consolidated ODR result
+
+| ODR | Principle-level Owner response | Baseline / consistency result | Remaining Class A policy gaps | Disposition |
+|---|---|---|---|---|
+| A01-01 — tolerance / over-receipt | 0% default; non-zero only via specific approved/documented Business policy; physical quantity unchanged; excess not automatically accepted/posted; shortage remains PO variance | CONSISTENT with FIX-029 and accepted-only posting boundary in FIX-027/028 | Circumstances, quantity basis, limits, whether variance-only or acceptance exception, effective version/period, approver and delegation, expiry/review/revocation, evidence/audit | PARTIALLY APPROVED — OPEN |
+| A01-02 — Variant Batch override | Product owns explicit Batch policy; Variant inherits by default; override only explicit, authorized and auditable; fail-closed if unresolved/conflicting | CONSISTENT with FIX-032 and FIX-031-D; receipt-time policy preserved | Eligible decision authority/delegate, Business/Product/Variant scope, effective time/version, duration, review/revocation, rationale/evidence, authoritative policy source and receipt-time snapshot policy | PARTIALLY APPROVED — OPEN |
+| A01-03 — virtual Transit Location | Excluded from normal receiving; exception considered only for demonstrated business need, explicit approval and actual physical custody/destination evidence; no configuration relabeling | CONSISTENT with FIX-032-G and actual physical destination confirmation | No-exception vs bounded allowed cases, eligible authority, physical custody criteria, scope/effective period, expiry/review/revocation, evidence/audit/monitoring, authoritative Location classification/enforcement policy | PARTIALLY APPROVED — OPEN |
+| A01-04 — PO amendment lifecycle | Prospective treatment; preserve arrival/inspection/accepted/posted facts; correction after posting uses authorized correction/reversal lineage | CONSISTENT with FIX-027/028 source/event/accepted-slice separation and immutable movement/correction lineage | Amendment classes/fields by lifecycle, arrived-but-unaccepted handling, effective PO version/concurrency, exception authority, correction/reversal authorization/linkage/audit, historical version/snapshot rules | PARTIALLY APPROVED — OPEN |
+| A01-05 — independent approver / SoD | High-risk exceptions require independent approval; initiator/receiver cannot self-approve; no eligible approver means PENDING / DENY; no fallback | CONSISTENT with DOC-05 §25.4, which explicitly keeps operation pending/DENY when no independent eligible approver is assigned | Exception classes/risk tiers, objective independence/disqualification criteria, appointing/delegating/suspending/revoking authority and scope, escalation/pending handling, audit evidence/conflict controls/review, effective version and organizational scope | PARTIALLY APPROVED — OPEN |
+
+**Overall:** all five Owner requests have an attributable principle-level response. None is fully operationally closed. The response to A01-05 provides a restrictive principle but does not define the high-risk exception catalogue or appoint/delegate approvers. It therefore does not complete the approval matrix or authorize any actor.
+
+### 42.70.3 Cross-source consistency findings
+
+| Source / control | Finding | Result |
+|---|---|---|
+| DOC08-FIX-027 — M08 procurement/receiving vs M06 posting ownership | Procurement source facts, physical receipt facts and inventory posting remain distinct; M06 consumes authoritative receipt facts and owns A01 ledger admission/effects | PASS — no ownership reassignment |
+| DOC08-FIX-028 — lifecycle / quantity partition / accepted-only posting | Arrival, inspection, disposition, acceptance and A01 posting remain distinct; only validated accepted quantity is posting-eligible | PASS |
+| DOC08-FIX-029 — over-receipt / shortage / tolerance | ODR-A01-01 preserves 0% default, no automatic excess acceptance/posting, shortage as variance and physical quantity integrity | PASS |
+| DOC08-FIX-030 — accepted slice / A01 event / movement cardinality | PO amendment principle preserves accepted-slice and posting lineage; no change to cardinality | PASS |
+| DOC08-FIX-031 — Batch/Location allocation | ODR-A01-03 and A01-02 do not change actual physical Batch/Location allocation rules | PASS |
+| DOC08-FIX-032 — Product/Variant policy and Location eligibility | A01-02 preserves Product ownership and Variant inheritance; A01-03 preserves virtual transit exclusion and physical destination requirement | PASS |
+| DOC-05 §25.4 — independent approver | A01-05 reinforces no self-approval and pending/DENY if no independent eligible approver; no permission/role is assigned | PASS |
+| DOC-04 §42.62.4 — Class B authority assignment | The clause requires Owner assignment of architecture/data authority if the controlling document does not identify a delegated decision authority. The five responses do not name that authority or a delegate | OPEN — OWNER ASSIGNMENT NOT RECORDED |
+| DOC-03 M08/M06/M02/M07 ownership references | ODR responses preserve the named conceptual ownership boundaries; this audit did not establish a new delegation or transfer ownership | PASS at conceptual level; delegated policy authority OPEN |
+
+**No cross-source contradiction was found in the five adopted principles.** This is not a claim that all source documents are final or that authorization acceptance is met.
+
+### 42.70.4 Register and document-control discrepancy — historical pending rows
+
+Two older register locations still contain pre-response PENDING wording:
+1. DOC-04 §42.63.3 contains the original response table with all five ODRs shown as PENDING.
+2. DOC-09 §11.45 contains the original five-row request register with PENDING / OPEN statuses and §11.46 describes the recommendation as not adopted.
+
+These entries predate the explicit response records in DOC-04 §§42.65–42.69 and DOC-09 §§11.47–11.51. Because the documentation workflow is append-only, this audit does not rewrite the historical records. **For current disposition, the later attributable Owner response sections §§42.65–42.69 and §§11.47–11.51 supersede those historical pending statuses to the extent of each stated principle-level decision.** The old rows remain useful as a record of the state before Owner response; they must not be read as the current status. Detailed parameters remain OPEN.
+
+### 42.70.5 Remaining policy and acceptance gates
+
+**Class A policy closure remains OPEN** for every ODR as listed in §42.70.2. The next required governance action is to assign/record the accountable policy/architecture decision authority and close the bounded parameters through explicit Owner decisions or documented delegated decisions. Do not infer these details from the principle approvals.
+
+**Class B remains OPEN:** physical source/receipt/accepted-slice identity, PO version/amendment linkage, receipt lifecycle representation, Batch policy source/snapshot, Location resolver/classification, numeric/conversion rules, exact A01 M08-to-M06 action/actor/scope/approver/audit tuple, idempotency, atomicity/concurrency, tenant enforcement, projection/reconciliation and recovery remain subject to separate design and review. No physical mechanism is selected by this audit.
+
+**Class C remains NOT EXECUTED / NOT AUTHORIZED:** runtime, security, concurrency, replay/recovery, tenant-isolation and reconciliation evidence may only be produced after separate design/implementation/test authorization.
+
+**Package E remains IN PROGRESS / ACCEPTANCE NOT MET.** Physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; adapter activation and Stage 6 remain NOT AUTHORIZED.
+
+### 42.70.6 Audit conclusion and next bounded action
+
+**CONSOLIDATED READ-ONLY AUDIT COMPLETE — PRINCIPLE CONSISTENCY PASS; POLICY / DESIGN / EVIDENCE GATES OPEN.**
+
+No DOC08 FIX is created or modified. No permission, role, approver assignment, delegation, account change, adapter activation, test execution, physical schema approval or implementation authorization is created.
+
+Next bounded action: prepare an Owner-facing policy-gap/authority assignment register that groups the unresolved Class A parameters by decision authority and identifies which must return to Owner versus which may be prepared by M08/M06/M02/M07/DOC-05 owners for review. Keep the work documentation-only and do not start Class B physical design until the applicable policy authority and acceptance gate are explicitly resolved.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+
+## 42.71 CW-11 Package E — Owner-facing Policy Gap & Authority Assignment Register (24 November 2026)
+
+**STATUS: PREPARED FOR OWNER REVIEW — NOT AN AUTHORITY APPOINTMENT, DELEGATION, POLICY CLOSURE OR TECHNICAL DESIGN APPROVAL.** This register operationalizes the next action from §42.70. It separates (1) policy choices reserved for explicit Owner decision, (2) domain/security analysis that may be prepared by the respective source owners, and (3) authority/delegation decisions that must be explicitly recorded. A domain owner’s subject-matter ownership does not, by itself, establish policy approval authority.
+
+### 42.71.1 Governing source and authority boundaries
+
+The register is derived from:
+- DOC-03 §19.1: M02 owns Product/Variant catalog policy; M06 owns inventory identity, Batch, stock movement, balance and cost-layer/costing lineage; M07 owns warehouse/location custody; M08 owns supplier, purchase request/order, receiving procurement workflow and procurement commitment; M16 owns supplier invoice/AP obligation and financial posting; M18 owns quality/inspection/compliance evidence.
+- DOC-03 §19.3–19.4: source-domain ownership and explicit handoffs remain separate; supporting domains do not gain co-ownership or implicit write authority.
+- DOC-05 §25.4: eligibility candidates are not grants; absent an independent eligible approver, an operation remains PENDING / DENY; no fallback self-approval.
+- DOC-04 §§42.62–42.70 and DOC08-FIX-027..032: A01 policy principles and separate Class A/B/C gates.
+- DOC-02 §6: request/PO creation, approval, physical receiving, discrepancy review and supplier payment are distinct controls; uncertain authority fails closed.
+
+**Authority rule:** only the Owner may explicitly assign or approve the accountable policy/architecture decision authority unless a controlling approved source already documents a valid delegation. No such A01-specific delegation is identified in the reviewed sources. This register therefore records the accountable authority as **OWNER ASSIGNMENT REQUIRED / NOT YET RECORDED**. It does not assume that an M-domain owner, security reviewer, manager, administrator or receiver can approve exceptions.
+
+### 42.71.2 Three-lane disposition
+
+| Lane | What belongs in this lane | Who may prepare / decide | Current disposition |
+|---|---|---|---|
+| A — Owner policy decisions | Whether an exception is allowed; policy boundaries; risk appetite; approval principle; effective scope; exception/denial outcome | Owner decides, or an explicitly documented delegate within a recorded scope | OPEN — no A01 policy delegate/authority assignment recorded |
+| B — Domain/security requirements and impact analysis | Workflow facts, source ownership, quantity/custody invariants, policy inputs, candidate scenarios, authorization and SoD requirements | Respective domain/security owners may prepare analysis within their source ownership; this is not policy approval | PREPARATION MAY PROCEED AS DOCUMENTATION ONLY; no formal owner assignment or deliverable acceptance inferred |
+| C — Design / implementation / evidence | Physical schema, keys, constraints, permissions, RLS/API enforcement, runtime behavior, test execution, production changes | Separate design and implementation/test approval gates only | BLOCKED / NOT AUTHORIZED under current Package E status |
+
+### 42.71.3 Owner decisions that must be returned to the Owner
+
+| Gap ID | Related ODR | Decision required from Owner | Inputs that may be prepared before the decision | Current status |
+|---|---|---|---|---|
+| PGA-01 — A01 policy authority | All ODR-A01-01..05 | Name/identify the accountable policy decision authority for each policy family, or explicitly retain each decision at Owner level. If delegating, specify delegate identity/office, scope, limits, effective date, duration, revocation and review. | DOC-03 may map source-domain ownership; DOC-05 may identify security/SoD dependencies. Neither may appoint itself. | OWNER DECISION REQUIRED |
+| PGA-02 — Tolerance and over-receipt policy | ODR-A01-01 | Decide permitted circumstances, quantity basis, limits, whether any exception only records variance or may permit acceptance of excess, effective period and approval boundary. Preserve 0% default and no automatic excess acceptance/posting until explicitly decided. | M08 prepares PO/receiving lifecycle and discrepancy scenarios; M06 identifies accepted-only posting, quantity conservation and stock-ledger impacts; DOC-05 prepares approval/SoD questions. | OWNER DECISION REQUIRED |
+| PGA-03 — Variant Batch-policy override | ODR-A01-02 | Decide whether the override may be used, the eligible decision authority, scope, effective time, review/revocation and exception boundaries. Preserve Product ownership and Variant inheritance baseline. | M02 prepares Product/Variant policy ownership and lifecycle requirements; M06 prepares Batch/stock enforcement impacts; DOC-05 prepares authorization/SoD implications. | OWNER DECISION REQUIRED |
+| PGA-04 — Virtual Transit Location exception | ODR-A01-03 | Decide whether exceptions are prohibited entirely or permitted in narrowly defined circumstances; if permitted, approve custody criteria, scope, authority, evidence and lifecycle. Preserve exclusion from normal receiving until decision. | M07 prepares physical custody, Location lifecycle and destination-confirmation scenarios; M08 prepares receiving handoff; M06 identifies stock-ledger and inventory-location effects; DOC-05 prepares approval controls. | OWNER DECISION REQUIRED |
+| PGA-05 — PO amendment by receipt lifecycle | ODR-A01-04 | Decide amendment classes/fields and permitted treatment at each stage: before arrival, arrived/unaccepted, inspected, accepted, and already posted. Decide any exceptional pre-acceptance authority and correction/reversal approval principle. Preserve prospective treatment and no silent rewrite meanwhile. | M08 prepares PO version and receiving-stage scenarios; M18 supplies inspection/quality facts where applicable; M06 prepares accepted-slice, posting and correction-lineage impacts; M16 identifies only the separate supplier invoice/AP/payment boundary. | OWNER DECISION REQUIRED |
+| PGA-06 — Independent approval / SoD policy | ODR-A01-05 | Decide high-risk exception classes/risk tiers, independence/disqualification criteria, authority for appointing/delegating/revoking eligible approvers, escalation and prolonged-pending outcome. Preserve no self-approval and PENDING / DENY if no eligible independent approver. | DOC-05/security authority prepares action/actor/scope/SoD requirements; M08 and M06 provide exception scenarios in their workflows; Owner decides policy and accountable authority. | OWNER DECISION REQUIRED |
+
+### 42.71.4 Domain-owner preparation matrix — analysis, not delegation
+
+| Domain / source | Bounded analysis it may prepare | Explicit exclusions |
+|---|---|---|
+| M08 — Procurement & Supplier | PO amendment types/version lifecycle; request/PO approval vs receiving separation; physical receiving and discrepancy workflow; arrived-but-unaccepted and partial receipt scenarios; supplier commitment/source lineage | Does not decide inventory posting rules, Batch policy, Location custody, AP/payment policy or its own exception approval authority |
+| M06 — Inventory & Material Ledger | Accepted-slice admission; inventory movement and quantity conservation; over-receipt/shortage stock impacts; Batch/Location allocation impacts; correction/reversal lineage; projection/reconciliation requirements | Does not own/rewrite M08 procurement source facts; does not authorize receipt or grant its own posting/exception permission |
+| M02 — Product, Variant & Pricing | Product-owned Batch-tracking policy inputs; Variant inheritance and override lifecycle requirements; effective policy provenance and historical receipt-time policy requirements | Does not grant M06 inventory actions or independently approve Variant override without explicit authority |
+| M07 — Warehouse & Custody | Physical Location classification/custody lifecycle; actual destination confirmation; transit custody and handoff evidence; warehouse receiving eligibility requirements | Does not own inventory ledger posting or convert virtual Location to physical by configuration alone |
+| M18 — Quality / Inspection / Compliance | Inspection/quality checkpoints, disposition evidence, nonconformance and release requirements where applicable | Does not own procurement PO version or inventory ledger effects; does not imply every receipt requires an M18 inspection |
+| M16 — Finance / AP / Payment | Supplier invoice/AP obligation and payment separation; identify whether a PO amendment has downstream financial-source implications | Does not own PO/receipt source workflow or inventory movement; no payable/payment facts are retroactively rewritten by this register |
+| DOC-05 / security authority | Candidate action catalogue, actor/resource/scope/SoD/approver/audit requirements; independence and fail-closed control requirements; evidence checklist | Does not appoint named approvers, grant roles/permissions, finalize DOC-05 or implement RLS/API enforcement |
+| DOC-03 / architecture authority | Validate single-owner boundaries and explicit cross-domain handoffs; identify unresolved architecture/data authority gaps under §42.62.4 | Does not silently transfer domain ownership or approve business policy/physical design |
+
+**Preparation status:** the table defines eligible analysis boundaries based on documented ownership; it is not a task assignment, appointment or confirmation that any domain team has accepted work. A deliverable becomes an accepted input only after its source, owner, scope and review status are recorded.
+
+### 42.71.5 Required format for domain analysis submissions
+
+Each domain analysis should be documentation-only and contain:
+1. Source document and exact section/decision anchor.
+2. Domain-owned facts and explicit non-owned facts.
+3. Lifecycle scenarios and affected stage(s).
+4. Invariants that must remain true, including relevant FIX-027..032.
+5. Options/risks and consequences, without selecting an Owner policy answer.
+6. Required evidence, audit lineage and fail-closed outcome.
+7. Cross-domain dependencies and the exact decision question returned to Owner.
+8. Open assumptions, missing sources and reviewer/status.
+
+No invented numeric limits, approver names, role grants, schema fields, permission keys, physical states or implementation mechanisms.
+
+### 42.71.6 Gate and checklist status
+
+| Gate | Status |
+|---|---|
+| ODR-A01-01..05 principle-level responses | RECORDED — PARTIALLY APPROVED |
+| PGA-01 accountable policy authority / delegation | OPEN — OWNER ASSIGNMENT REQUIRED |
+| PGA-02 tolerance / over-receipt details | OPEN — OWNER DECISION REQUIRED |
+| PGA-03 Variant override details | OPEN — OWNER DECISION REQUIRED |
+| PGA-04 Transit Location exception details | OPEN — OWNER DECISION REQUIRED |
+| PGA-05 PO amendment lifecycle details | OPEN — OWNER DECISION REQUIRED |
+| PGA-06 independent approval / SoD details | OPEN — OWNER DECISION REQUIRED |
+| Domain/security analysis submissions | NOT YET SUBMITTED — bounded preparation may proceed only as documentation |
+| Class B physical/technical design | OPEN — NOT APPROVED |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET; physical Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED |
+
+### 42.71.7 Next bounded action
+
+The next action is to present the Owner with PGA-01 first: confirm whether A01 policy decisions remain reserved to the Owner or whether specific policy decision authority is delegated, and if delegated, record the exact scope and lifecycle. In parallel only as documentation preparation (not policy approval), domain owners may assemble the bounded input sets in §42.71.4. Do not request all detailed policy decisions as one combined approval before the accountable authority is established.
+
+No DOC08 FIX is created/modified. No role, permission, approver, delegation, account or security configuration is assigned. No physical schema, adapter activation, test execution or Stage 6 implementation is authorized.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+ 
+### 42.72 Owner Decision — PGA-01: A01 Policy Authority Retained by Owner
+
+**Decision date:** 2026-11-24  
+**Decision status:** OWNER APPROVED — AUTHORITY RETAINED AT OWNER LEVEL  
+**Decision scope:** ODR-A01-01 through ODR-A01-05 and related policy gaps PGA-01..PGA-06.
+
+The Owner explicitly selected: **“Setuju: seluruh keputusan kebijakan A01 [tetap pada Owner].”** Accordingly, all A01 policy decisions remain reserved to the Owner. No A01 policy decision authority is delegated to M02, M06, M07, M08, M16, M18, Security, Architecture, or any other domain/function by this decision.
+
+Domain owners and relevant functions may prepare bounded factual/technical analysis, identify impacts, and submit recommendations within the ownership boundaries recorded in §42.71. Such analysis is advisory input only; it is not policy approval, exception approval, authorization to act, or permission to grant access.
+
+Any future delegation requires a separate explicit written Owner decision identifying, at minimum, the delegate/office, exact policy scope and limits, effective date/version, duration, review conditions, and revocation mechanism. Until such a decision exists, the Owner remains the accountable policy decision authority. No implied, temporary, fallback, or domain-derived delegation is permitted.
+
+**Effect on open items:** PGA-01 is CLOSED for the authority-retention choice. PGA-02..PGA-06 remain OPEN for detailed policy decisions by the Owner. ODR-A01-01..05 remain PARTIALLY APPROVED at principle level; this authority decision does not approve their outstanding parameters or operational details.
+
+**No authorization created:** This decision does not appoint approvers, establish roles, grant permissions, authorize self-approval, alter SoD controls, approve physical design, execute tests, activate adapters, change schema, or authorize Stage 6 implementation. Existing fail-closed behavior and DB_PUSH_BLOCKED remain in force.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.73 PGA-02 — Owner-Facing Decision Packet: Tolerance, Over-receipt and Shortage
+
+**Status:** PREPARED FOR OWNER DECISION — NOT APPROVED  
+**Authority:** Per §42.72, all A01 policy decisions remain reserved to the Owner. Domain analysis is advisory only.  
+**Baseline:** DOC-04 §42.51 / DOC08-FIX-029; DOC-04 §§42.49–42.50 / FIX-027/028; DOC-05 authorization and SoD boundary.
+
+### 42.73.1 Fixed baseline — do not reopen
+1. Default tolerance is 0%.
+2. Non-zero tolerance requires an explicit policy and explicit authorization.
+3. Over-receipt excess is not automatically accepted for inventory or posted. It remains separately identifiable and ineligible for A01 until applicable controls are satisfied.
+4. Shortage is a PO discrepancy; the missing quantity is not physically received, not accepted-for-inventory, and creates no inventory movement.
+5. Tolerance cannot change actual physical quantity, rewrite accepted quantity, or itself create receipt, acceptance, or movement.
+6. Approval alone is not physical receipt, acceptance, A01 authorization, or posting.
+
+### 42.73.2 Decisions requested from Owner
+
+| Decision ID | Policy question | Recommended default for Owner consideration |
+|---|---|---|
+| PGA-02-A | Should non-zero tolerance be available as a standing/default Business setting, or only through a separately approved exception policy? | Keep 0% as the only active default. Do not enable non-zero tolerance until the Owner approves a written Business policy with scope, limits, effective period and review/revocation. |
+| PGA-02-B | What is the treatment of an over-receipt? | Record the physically arrived excess separately against the PO line. Do not include it in accepted quantity or A01 posting until explicit prior Owner authorization for the applicable exception and a separate acceptance decision after physical verification. |
+| PGA-02-C | What quantity basis and calculation may a non-zero tolerance use? | No numeric calculation is active yet. If the Owner later permits non-zero tolerance, define its denominator, unit/base-unit conversion, rounding, per-line vs per-PO aggregation and maximum cap explicitly before activation. |
+| PGA-02-D | How should shortage be handled? | Record actual arrived quantity and shortage separately against the PO line. Never create receipt or stock movement for missing quantity. Shortage closure/waiver is a procurement variance disposition, not inventory receipt. |
+| PGA-02-E | Who may authorize a non-zero tolerance or over-receipt exception? | Under §42.72, Owner approval remains required. No domain owner, receiver, initiator or system default may be treated as delegated approval authority. Any future delegation requires a separate written Owner decision. |
+| PGA-02-F | When must exception approval occur? | Before the excess is accepted for inventory or made eligible for A01. Approval must not be inferred retrospectively from a posted movement; any already-posted error follows controlled correction/reversal lineage. |
+
+### 42.73.3 Recommended policy package
+Adopt the following conservative operating rule unless the Owner explicitly chooses otherwise:
+- **Default:** 0% tolerance for every Business and PO line.
+- **Non-zero tolerance:** inactive unless a separate written Owner-approved policy defines applicability, quantity basis, cap, effective date/version, expiry/review/revocation and required evidence.
+- **Over-receipt:** physical excess is recorded as a distinct discrepancy; it is quarantined from accepted-for-inventory quantity and A01 posting until explicit Owner exception authorization and a separate physical acceptance decision are both evidenced.
+- **Shortage:** record only what physically arrived; missing quantity remains a PO variance and never becomes receipt or stock.
+- **Separation of duties:** the initiator/receiver does not self-approve. If no valid independent approval path exists, keep the exception PENDING / DENY under DOC-05 §25.4. No fallback approver is inferred.
+- **Audit:** preserve PO line, ordered quantity/unit, physically arrived quantity/unit, accepted quantity/unit, variance type/amount, conversion provenance, policy version, Owner authorization reference, actor, timestamp, rationale and subsequent disposition as required evidence candidates. This is a logical evidence recommendation, not a physical schema decision.
+
+### 42.73.4 Explicit Owner response required
+The Owner is asked to approve or amend the recommended policy package in §42.73.3, especially the rule that no non-zero tolerance is active without a separate written Owner-approved policy and that over-receipt requires prior Owner exception authorization plus separate physical acceptance.
+
+Any future numeric tolerance, percentage, cap, quantity calculation, Business scope or effective period must be separately specified; this packet does not invent or activate such values.
+
+### 42.73.5 Boundaries and gate
+This packet does not change DOC08-FIX-029 or other FIX records. It does not select physical tables/columns/constraints, numeric precision/scale/rounding implementation, permission tuples, approver assignments, RLS/API enforcement, tests, adapter activation or Stage 6 implementation. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.74 Owner Decision and Read-only Consistency Audit — PGA-02 (24 November 2026)
+
+**OWNER DECISION: APPROVED — RECOMMENDED PGA-02 POLICY PACKAGE ADOPTED.**  
+**Authority:** Owner, consistent with §42.72.  
+**Scope:** PGA-02-A..F; tolerance, over-receipt and shortage handling for A01 Purchase / Goods Receipt.
+
+The Owner explicitly stated: **“Saya menyetujui seluruh rekomendasi PGA-02. Catat sebagai keputusan Owner dan lanjutkan audit dokumentasi.”** The complete recommended policy package in §42.73.3 is adopted as follows:
+
+1. **Default tolerance:** 0% remains the only active default for every Business and PO line.
+2. **Non-zero tolerance:** inactive unless and until a separate written Owner-approved Business policy explicitly defines applicability/scope, quantity basis, cap/limits, effective date/version, expiry/review/revocation and required evidence. No numeric tolerance, cap or calculation is created by this decision.
+3. **Over-receipt:** physically arrived excess is recorded separately against the PO line and remains excluded from accepted-for-inventory quantity and A01 posting until both (a) prior explicit Owner exception authorization for the applicable case and (b) a separate physical verification/acceptance decision are evidenced. Authorization is not itself receipt, acceptance or posting.
+4. **Shortage:** record actual physically arrived quantity and shortage separately against the PO line. Missing quantity is never fabricated as receipt, accepted quantity or inventory movement. Shortage closure/waiver is procurement variance disposition, not inventory receipt.
+5. **Separation of duties:** initiator/receiver cannot approve their own exception. If no valid independent approval path exists, the exception remains PENDING / DENY under DOC-05 §25.4. No fallback approver or delegated authority is inferred.
+6. **Evidence:** retain traceable evidence candidates including PO line and ordered quantity/unit; physically arrived and accepted quantities/units; variance type/amount; reproducible conversion provenance; policy version; Owner authorization reference; actor/time/rationale; and subsequent disposition. This is a logical evidence requirement, not a physical schema selection.
+
+### 42.74.1 Read-only documentation consistency audit
+
+Reviewed the current PR #149 branch source records:
+- DOC-04 §42.51 (DOC08-FIX-029) and §42.73 (PGA-02 decision packet).
+- DOC-09 §11.54–§11.55 (PGA-01 authority retention and PGA-02 proposal).
+- DOC-05 AUTHORIZATION_MASTER.md §25.4 (no grant from design text; no self-approval fallback; PENDING/DENY where no independent eligible approver exists).
+- DOC-02 CATEGORY_WORKFLOW_MASTER.md §6 (procurement/receiving request, PO creation/approval, physical receiving, discrepancy review and supplier payment are distinct controls; unknown authority fails closed).
+- DOC-03 SYSTEM_ARCHITECTURE.md §19.1 (M08 procurement/receiving source workflow; M06 inventory ledger effects; M07 location custody; M16 AP/payment; M02 product/unit policy boundaries).
+
+**Audit findings:**
+- **FIX-029 consistency: PASS.** 0% default, explicit policy/authorization for non-zero tolerance, no automatic excess acceptance/posting, shortage as PO variance, and no rewriting of physical/accepted quantity are preserved.
+- **FIX-027/028 accepted-only posting boundary: PASS.** Only physically arrived and separately accepted quantity may proceed to A01; approval alone does not create receipt, acceptance or posting.
+- **PGA-01 authority consistency: PASS.** The Owner remains the policy authority. The stricter prior Owner authorization requirement for an over-receipt exception is consistent with retained Owner authority; it does not delegate approval to a domain.
+- **DOC-05 §25.4 SoD/fail-closed consistency: PASS.** No self-approval and PENDING/DENY when no valid independent approval path exists are preserved. This decision does not assign or create an independent approver.
+- **DOC-02 / DOC-03 domain-boundary consistency: PASS.** M08 remains source workflow owner; M06 owns stock-ledger effects; M07 physical custody; M16 AP/payment boundary. These responsibilities do not confer A01 policy authority or permissions.
+- **Physical/technical implementation: NOT AUDITED / NOT AUTHORIZED.** No schema, runtime, API/RLS, permissions, tests, or Production behavior is inferred or claimed.
+
+### 42.74.2 Disposition and retained OPEN items
+
+PGA-02 is **CLOSED at the policy-decision level** for the exact package approved above. The following remain OPEN and are not activated by this approval:
+- Any actual non-zero tolerance value, cap or numeric calculation; applicability and effective period for a future non-zero policy.
+- Physical representation, numeric precision/scale, conversion/rounding enforcement and audit storage.
+- Detailed implementation of approval actor/action/scope/SoD controls and evidence enforcement.
+- Physical receiving, posting, atomicity/concurrency/idempotency/recovery, tenant enforcement, projection reconciliation and executed evidence.
+
+ODR-A01-01 moves from PARTIALLY APPROVED to **POLICY PRINCIPLE AND OWNER POLICY PACKAGE APPROVED; technical/physical parameters remain OPEN**. DOC08-FIX-029 is not rewritten or expanded into a numeric tolerance. No new DOC08 FIX is created by this decision.
+
+**Governance:** append-only documentation record. No roles, permissions, approver assignments, delegation, schema, adapter activation, tests, database mutation, migration or Stage 6 implementation are authorized. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET; DB_PUSH_BLOCKED: ACTIVE.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+
+## 42.75 PGA-03 — Owner-Facing Decision Packet: Variant Batch-Policy Override
+
+**Status:** PREPARED FOR OWNER DECISION — NOT APPROVED  
+**Authority:** Under §42.72, all A01 policy decisions remain reserved to the Owner. M02/M06 may prepare analysis only; no delegation is inferred.  
+**Baseline:** DOC-04 §42.56 / DOC08-FIX-032; DOC-03 §19.1; DOC-05 §25.4; DOC-04 §42.71.4–42.71.5.
+
+### 42.75.1 Fixed conceptual baseline — do not reopen
+1. Product master owns an explicit Batch-tracking policy outcome: **Batch tracking required** or **Batch tracking not required**.
+2. Variant inherits the Product policy by default.
+3. Variant-level override is permitted only when explicitly authorized and auditable; implicit or silent override is prohibited.
+4. Effective policy is resolved for the accepted receipt slice/allocation and preserved as a receipt-time decision/snapshot. Later Product/Variant master-data changes do not rewrite historical accepted slices or posted movements.
+5. Unknown, unset, unresolved inheritance, or conflicting Product/Variant policy fails closed and blocks A01.
+6. If Batch tracking is required, each allocation portion must identify the actual physical Batch/Lot received and satisfy applicable required identity/attribute requirements. Missing or ambiguous required identity/attributes block A01.
+7. Unbatched path is allowed only when the effective explicit Product/Variant policy says Batch tracking is not required.
+8. DOC08-FIX-032 does not grant Batch administration, receiving, discrepancy or posting permissions and does not approve physical schema/runtime behavior.
+
+### 42.75.2 Decisions requested from Owner
+
+| Decision ID | Policy question | Recommended default for Owner consideration |
+|---|---|---|
+| PGA-03-A | Should Variant inheritance remain mandatory default? | Yes. Variant always inherits Product policy unless a valid, explicit, auditable override is approved. No implicit local default. |
+| PGA-03-B | Should Variant override be allowed at all? | Allow only as an exceptional, case-specific policy decision; no standing automatic or self-service override. Until explicit Owner approval exists, use Product inheritance. |
+| PGA-03-C | Who may authorize an override? | Owner retains approval authority under §42.72. No Product Manager, M02 operator, receiver, administrator or domain owner is presumed delegated authority. A future delegation requires a separate written Owner decision. |
+| PGA-03-D | May an override relax a Product requirement (required → not required), strengthen it (not required → required), or both? | Do not permit either direction by default. Require explicit Owner decision for the exact Variant and direction. A request that would relax a required Batch policy receives heightened scrutiny and remains blocked absent explicit approval. |
+| PGA-03-E | What scope and lifecycle must an override carry? | Require exact Business, Product and Variant scope; before/after policy outcomes; reason/evidence; effective-from and expiry/review date; approving Owner decision reference; and a traceable policy version. No global or retroactive override. |
+| PGA-03-F | How should unresolved or conflicting policy be handled? | Fail closed and block A01. Do not silently fall back to unbatched or infer a policy from the presence/absence of Batch data. |
+| PGA-03-G | How is historical receipt behavior protected? | Preserve the effective policy and version used for each accepted receipt slice/allocation. Later master-data changes apply prospectively only and do not rewrite historical accepted/posted records. |
+
+### 42.75.3 Recommended policy package
+Adopt the following conservative operating rule unless the Owner explicitly amends it:
+- **Product policy is authoritative:** every Product has an explicit required/not-required outcome; no implicit unknown default.
+- **Variant inheritance is mandatory default:** each Variant follows the current effective Product policy unless a valid override is explicitly approved.
+- **Overrides are exceptional and case-specific:** no standing/self-service override. Owner approval is required for the exact Business/Product/Variant, direction and effective period. Until then, Variant continues to inherit Product policy.
+- **No silent relaxation:** changing a Product-required policy to Variant-not-required is blocked unless the Owner explicitly approves that exact relaxation after considering stock traceability, recall/expiry/quality/costing and operational consequences where relevant. This is a risk-review recommendation, not a claim that all such attributes apply to every Product.
+- **No silent strengthening either:** a not-required to required override also requires explicit approval and a clear effective boundary, so receipt handling is not changed ambiguously mid-process.
+- **Prospective only:** an override applies only from its approved effective boundary. It does not rewrite already accepted receipt slices, existing Batch identities, or posted movements.
+- **Fail closed:** missing Product policy, unresolved inheritance, expired/invalid override, conflicting policy versions or absent required evidence blocks A01; do not assume unbatched.
+- **Audit evidence:** record policy source, Product and Variant identity, Business scope, inherited vs overridden outcome, before/after values, reason, Owner decision reference, effective version/time, expiry/review, actor and audit timestamp. This is a logical evidence recommendation, not physical schema approval.
+
+### 42.75.4 Explicit Owner response required
+The Owner is asked to approve or amend §42.75.3, with particular attention to:
+1. Whether Variant override is allowed only as an exceptional case-specific action.
+2. Whether both relaxation and strengthening require separate explicit Owner approval.
+3. The exact scope/effective-time/evidence requirements.
+4. Whether any additional limits or prohibited override cases should apply.
+
+No approver delegation, permission key, role, numeric threshold, physical policy source, storage field or runtime mechanism is created by this packet.
+
+### 42.75.5 Boundaries and gate
+This packet does not change DOC08-FIX-032. It does not approve enum values, tables/columns, policy version storage, snapshot schema, override permission keys, API/RLS enforcement, Batch administration permissions, tests, adapter activation or Stage 6. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+## 42.76 Owner Decision and Read-only Audit — PGA-03 Variant Batch-Policy Override
+
+**Decision date:** 2026-11-25  
+**Status:** OWNER APPROVED — COMPLETE RECOMMENDATION PACKAGE ADOPTED.  
+**Decision authority:** Owner, consistent with §42.72.  
+**Decision basis:** Owner explicitly approved all recommendations in §42.75.3 without amendment.
+
+### 42.76.1 Adopted Owner policy
+
+1. **Product policy is authoritative.** Every Product must resolve to an explicit Batch-tracking-required or Batch-tracking-not-required outcome. No implicit unknown default is accepted.
+2. **Variant inheritance is mandatory by default.** A Variant follows its Product's effective policy unless a valid explicit override has been approved.
+3. **Override is exceptional and case-specific.** No standing or self-service override exists. Owner approval is required for the exact Business, Product, Variant, override direction and effective period. Until valid approval exists, the Variant inherits the Product policy.
+4. **Both directions require explicit Owner approval.** Neither required→not-required relaxation nor not-required→required strengthening may occur silently. A relaxation must receive heightened risk review, considering traceability, recall, expiry, quality, costing and operational consequences where relevant.
+5. **Prospective effect only.** The override applies from its approved effective boundary and does not rewrite already accepted receipt slices, Batch identities or posted movements.
+6. **Fail closed.** Missing Product policy, unresolved inheritance, expired/invalid override, conflicting policy versions or absent required evidence blocks A01. No silent fallback to unbatched handling is permitted.
+7. **Logical audit evidence.** Evidence must identify policy source, Product and Variant, Business scope, inherited/overridden outcome, before/after values, reason, Owner decision reference, effective version/time, expiry/review, actor and audit timestamp. This is a logical evidence requirement, not approval of physical fields or storage design.
+
+### 42.76.2 Read-only documentation consistency audit
+
+Reviewed the PR #149 branch source records:
+- DOC-04 §42.56 / DOC08-FIX-032 and §42.75.3.
+- DOC-03 §19.1: M02 owns Product/Variant catalog policy inputs; M06 owns Batch/inventory identity and ledger effects; M07 owns physical warehouse/location custody; M08 owns procurement/receiving workflow; M18 owns inspection/quality/compliance evidence where applicable.
+- DOC-05 §25.4: eligibility candidates do not grant permissions; no self-approval fallback; where no independent eligible approver exists, operation remains PENDING/DENY; design text does not establish RLS/API/runtime behavior.
+- DOC-02 §6: category/workflow classification does not grant authority; procurement/receiving and discrepancy review remain distinct; unknown authority fails closed.
+
+**Audit findings:**
+- **DOC08-FIX-032 consistency: PASS.** Product policy authority, Variant default inheritance, explicit/auditable override, receipt-time effective policy preservation, fail-closed unresolved state and actual physical Batch/Lot identity requirements are preserved.
+- **PGA-01 authority consistency: PASS.** Owner remains the A01 policy authority. No delegation to M02, M06, M07, M08, M18, Security or another function is inferred.
+- **DOC-03 ownership consistency: PASS.** Catalog policy input, inventory ledger, physical custody, procurement workflow and quality evidence remain within their documented domain boundaries; no ownership transfer is introduced.
+- **DOC-05 SoD/fail-closed consistency: PASS.** No role, grant, approver assignment or self-approval exception is created. Any approval execution path without a valid independent eligible approver remains PENDING/DENY.
+- **Historical immutability consistency: PASS.** The prospective-only override rule preserves the receipt-time policy decision and does not rewrite accepted or posted history.
+- **Physical/technical implementation: NOT AUDITED / NOT AUTHORIZED.** No schema, enum, field, policy-version storage, snapshot representation, permission key, API/RLS enforcement, runtime behavior, test or Production result is claimed.
+
+### 42.76.3 Disposition and retained OPEN items
+
+PGA-03 is **CLOSED at the Owner policy-decision level** for the complete package in §42.75.3. DOC08-FIX-032 remains unchanged. The following remain OPEN:
+- Physical source and storage of Product/Variant policy and approved override evidence.
+- Physical representation/versioning of receipt-time policy snapshots.
+- Exact technical effective-time/expiry enforcement and conflict resolution.
+- Authorization implementation and independent approver eligibility/assignment.
+- Batch identity/attribute constraints, tenant enforcement, API/RLS and runtime fail-closed enforcement.
+- Concurrency, idempotency, recovery, reconciliation and executed Class C evidence.
+
+No role, permission, approver, delegation, schema, migration, adapter activation, test execution, database mutation or Stage 6 implementation is authorized. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET; Physical Data Dictionary acceptance remains 0/17; canonical physical ERD remains NOT ACCEPTED; DB_PUSH_BLOCKED: ACTIVE.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+## 42.77 PGA-04 — Owner-Facing Decision Packet: Virtual Transit Location Exception
+
+**Status:** PREPARED FOR OWNER DECISION — NOT APPROVED.  
+**Authority:** Under §42.72, all A01 policy decisions remain reserved to the Owner.  
+**Source baseline:** DOC-04 §§42.54.1, 42.54.2, 42.54.7, 42.56.2–42.56.3 and the inventory/transfer conceptual criteria recorded in this document's §16.3–§16.5; DOC-03 §19.1; DOC-05 §25.4; DOC-02 §6.
+
+### 42.77.1 Fixed conceptual baseline — do not reopen
+1. A01 purchase receiving resolves an explicit receiving Location for each allocation portion. The Location must belong to the same Business as the accepted slice, be active and eligible under the applicable receiving policy. Unknown, invalid, cross-Business or ineligible Location blocks A01.
+2. The receiver confirms the actual physical destination. A configured default is suggestion-only and cannot silently establish physical custody.
+3. A virtual transit Location is not a normal purchase-receiving destination unless a separately approved policy explicitly authorizes that use case.
+4. Inventory transfer concepts distinguish dispatch from source into virtual transit and receipt from transit into destination. Separate physical shipments remain separate shipment records; partial/repeated receipts are distinct auditable events.
+5. Transfer closure requires a valid, reconcilable disposition for all quantities. Unresolved investigation blocks closure. Physical movement and custody evidence must not be inferred from a virtual status alone.
+6. M07 owns physical warehouse/location custody; M08 owns procurement/receiving workflow; M06 owns authoritative inventory ledger effects. A domain boundary does not itself grant authority.
+7. DOC-05 §25.4 remains controlling: candidate eligibility is not a grant; no self-approval fallback; absent an independent eligible approver where required, remain PENDING/DENY.
+
+### 42.77.2 Decisions requested from Owner
+| Decision ID | Policy question | Recommended default for Owner consideration |
+|---|---|---|
+| PGA-04-A | Should Virtual Transit remain excluded from normal A01 purchase-receiving destinations? | Yes. Keep exclusion as default; normal purchase receipt goes only to a confirmed, active, same-Business, receiving-eligible physical Location. |
+| PGA-04-B | Should any exception be allowed? | Allow only a narrowly scoped, separately approved exception for a defined Business and documented operational use case. No global, standing or self-service exception. |
+| PGA-04-C | What may an exception represent? | A transit/custody staging step only where the goods' physical custody and movement path are evidenced. Do not treat a virtual transit record as proof that goods physically arrived at a final warehouse or as permission to bypass physical receiving confirmation. |
+| PGA-04-D | What approval and evidence are required? | Prior explicit Owner decision for the exact Business/use case, purpose, source/destination context, effective period and limits; retain shipment/custody evidence, quantities, actors/timestamps and disposition lineage. If an independent eligible approver is required but unavailable, PENDING/DENY. |
+| PGA-04-E | What posting boundary applies? | No automatic A01 stock posting merely because a transit Location is selected. Post only under a separately approved, fully evidenced policy and valid accepted-slice/allocation contract; otherwise block A01. |
+| PGA-04-F | How should lifecycle and unresolved cases be handled? | Keep dispatch, in-transit custody, destination receipt, discrepancy/investigation, return/loss and closure as distinct states/events. Unresolved quantity/custody discrepancy blocks closure and any unsupported posting. |
+| PGA-04-G | What is the temporal and historical boundary? | Prospective only from an explicit effective boundary; no retroactive reinterpretation or rewriting of posted movements/custody history. |
+
+### 42.77.3 Recommended policy package
+Adopt the following conservative rule unless the Owner explicitly amends it:
+- **Default exclusion:** Virtual Transit Location is not eligible as a normal A01 purchase-receiving destination.
+- **Narrow exception only:** Any exception must be separately approved by the Owner for an exact Business, documented use case, purpose, scope, source/destination context, effective-from boundary, expiry/review and revocation conditions. No implied/global permission.
+- **Custody must be real and evidenced:** A virtual transit representation cannot substitute for evidence of physical arrival, handoff, shipment, destination or actual custody. Record actual observed events and responsible actors.
+- **No bypass of receiver confirmation:** The receiver must still confirm the actual physical destination at the appropriate receiving step. A transit stage must not silently become the final destination.
+- **Separate lifecycle events:** Dispatch to transit, transit custody, destination receipt, partial/repeated receipt, discrepancy/investigation, return/loss and closure remain distinguishable. Each quantity must reconcile to a valid disposition before closure.
+- **Posting remains controlled:** A01 does not post merely because a virtual transit Location is selected. Any permitted posting path must have an explicit approved policy and satisfy the accepted-slice, Location/Batch allocation, quantity conservation and M06 posting boundaries. Until those conditions are defined and evidenced, block A01.
+- **Fail closed:** Unknown Location type/eligibility, missing approval, missing custody proof, cross-Business relationship, conflicting lifecycle state or unresolved quantity prevents exception use and/or A01 posting.
+- **Logical audit evidence:** retain Owner decision reference, Business/use-case scope, policy version/effective period, source and destination context, shipment/transfer identity, actual custody events, physical quantities/units, actor/time, discrepancies, investigation and final disposition. This is a logical evidence proposal, not a physical schema.
+
+### 42.77.4 Explicit Owner response required
+The Owner is asked to approve or amend §42.77.3, especially:
+1. Whether the default exclusion remains absolute unless a separate Owner exception is granted.
+2. Whether narrowly scoped case-specific exceptions may be allowed.
+3. Whether exception use is limited to transit/custody staging and cannot replace physical destination confirmation.
+4. Required approval, evidence, effective period, review/revocation and fail-closed conditions.
+5. Whether any prohibited use cases or additional safeguards should apply.
+
+No approver delegation, permission key, role, numeric threshold, physical Location taxonomy, schema, event model or runtime mechanism is created by this packet.
+
+### 42.77.5 Boundaries and gate
+This packet does not amend DOC08-FIX-031 or DOC08-FIX-032. It does not approve literal Location types/statuses, virtual-location flags, tables/columns, transfer state enums, shipment/custody event schema, FK/constraints, approval keys, API/RLS enforcement, runtime behavior, tests, adapter activation or Stage 6. Class B remains OPEN; Class C remains NOT EXECUTED / NOT AUTHORIZED; Package E acceptance remains NOT MET.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
+

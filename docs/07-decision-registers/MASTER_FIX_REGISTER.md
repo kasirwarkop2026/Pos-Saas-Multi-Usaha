@@ -336,3 +336,258 @@ The following remain outside A01 on-hand posting: purchase commitment/order with
 Related decisions: DOC08-FIX-018, DOC08-FIX-019, DOC08-FIX-024, DOC08-FIX-025. Anchors: DOC-04 §§42.42–42.44; DOC-09 §§11.24–11.27; Worklist §§15.104–15.107.
 
 READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## DOC08-FIX-027 — Purchase / Goods Receipt source ownership, posting identity and quantity disposition (Owner-approved conceptual FIX, 22 November 2026)
+
+**Decision authority:** Owner explicitly approved all three recommendations recorded in DOC-04 §42.48. This FIX is conceptual/domain-contract authority only. It does not establish physical schema, implementation behavior, permission grants, or adapter activation.
+
+### FIX-027-A — Domain responsibility ownership
+
+The conceptual responsibility split is fixed as follows:
+
+1. **Purchasing / Procurement** owns purchase requests, purchase orders, ordered source lines, supplier commitments and approved commercial amendments. These facts do not prove physical receipt and do not independently create on-hand movements.
+2. **Receiving / Warehouse Operations** owns physical receipt occurrences, receipt-line observations, received quantity/unit, inspection and discrepancy disposition, and the accepted-for-inventory quantity facts. It is authoritative for physical receipt evidence and quantity disposition, but does not directly mutate the inventory ledger.
+3. **Inventory (M06)** owns authorization-checked A01 admission, the bounded server-owned posting registry, A01 posting identity, immutable `inventory_movements` outcome and projection reconciliation. It consumes authoritative receipt facts; it does not own or rewrite procurement/receiving source records.
+4. **Finance / Accounts Payable** owns supplier invoice, payable, payment and settlement facts. Those commercial/accounting facts do not independently create physical on-hand movement.
+
+This is a conceptual responsibility boundary, not a claim that separate implemented modules, services or physical entities already exist.
+
+### FIX-027-B — Logical posting identity and event grain
+
+The canonical conceptual identity/grain for an accepted Purchase / Goods Receipt posting unit is:
+
+**Business + physical Receipt Occurrence + Receipt Line + Accepted-for-Inventory Quantity Slice.**
+
+The lineage meanings are distinct:
+- purchase source document and purchase source line: commercial lineage / what was ordered;
+- physical receipt occurrence: which distinct physical arrival took place, allowing repeated/partial arrivals;
+- receipt line: which ordered line was observed in that occurrence;
+- accepted quantity slice: the exact quantity portion accepted for inventory;
+- A01 event identity: the idempotently resolved posting event/outcome;
+- inventory movement identity: each immutable stock-grain effect.
+
+A later partial arrival is a distinct receipt occurrence. A separately accepted portion is separately attributable as an accepted quantity slice. A01 movement fan-out may be 1:N when authoritative receipt facts require multiple Product/Variant/Location/Batch stock-grain effects. All resulting effects must remain attributable to the source line and accepted slice.
+
+This FIX does **not** decide physical keys, identifier formats, exact event-to-movement cardinality, one-event-per-line versus whole-receipt orchestration, or physical atomicity. The chosen logical grain must be preserved regardless of the eventual physical orchestration pattern.
+
+### FIX-027-C — Quantity disposition boundary
+
+For each physical receipt-line observation, the conceptual quantity dispositions are distinct:
+
+1. **Physically arrived** — quantity actually presented/received at the receiving point.
+2. **Accepted for inventory** — quantity explicitly accepted and eligible for A01 posting.
+3. **Rejected** — quantity explicitly rejected and ineligible for on-hand posting.
+4. **Unresolved / held / discrepant** — quantity awaiting inspection, count resolution, quality decision or another authorized disposition; ineligible until accepted.
+
+Only the accepted-for-inventory quantity may enter A01 and create a positive on-hand movement under DOC08-FIX-024. Ordered, expected, shipped, invoiced, paid, rejected, held and unresolved quantities do not independently post on-hand.
+
+The source workflow must preserve the entered quantity and unit and reproducible conversion provenance to Product base unit. Duplicate acceptance of the same physical quantity is prohibited conceptually. A later disposition change must be auditable and must not silently rewrite an already posted accepted slice. Any post-commit correction remains governed by DOC08-FIX-025.
+
+**Explicitly OPEN:** arithmetic reconciliation and quantity caps; tolerance; shortage/shrinkage treatment; over-receipt authority; precision, rounding and conversion snapshot/version; partial inspection/acceptance lifecycle; physical representation and enforcement. These details are not inferred by this FIX.
+
+### Boundaries and dependencies
+
+- DOC08-FIX-018/019/024/025/026 remain unchanged and continue to govern registry, identity separation, signed movement semantics, correction lineage and source-family scope.
+- No purchase-receipt permission key or grant is created. DOC-05 must still define exact actor/function, scope, state conditions, approval/SoD, execution owner and audit tuple before authorization acceptance.
+- No source adapter is enabled. No physical entity/table/column/key/FK/enum, source version token, digest, numeric type, transaction model, isolation/locking or recovery implementation is approved.
+- Tenant enforcement, atomicity, concurrency, idempotency/recovery, projection reconciliation and executed evidence remain OPEN.
+- No implementation authorization or runtime acceptance is implied.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. Technical contract dependencies remain OPEN. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §§42.46–42.49; DOC-09 §§11.28–11.31; Worklist §§15.108–15.112.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## DOC08-FIX-028 — Purchase / Goods Receipt lifecycle separation and quantity-control invariants (Owner-approved conceptual FIX, 22 November 2026)
+
+The Owner explicitly approved five conceptual rules, LIF-01 through QTY-03, for the Purchase / Goods Receipt adapter. These rules refine DOC08-FIX-027-C without changing the four-way quantity disposition or the A01 posting boundary.
+
+### LIF-01 — Separate physical receipt, inspection, disposition and inventory posting
+
+Physical arrival, inspection/review, quantity disposition (accepted, rejected, unresolved/held/discrepant), and A01 inventory posting are distinct conceptual facts/steps. Physical arrival alone is not inventory acceptance; acceptance alone does not bypass A01 authorization and posting controls. No literal physical status names, state machine implementation or physical entities are selected.
+
+### LIF-02 — Partial receipt and partial acceptance are permitted
+
+A purchase line may be received across multiple distinct physical receipt occurrences. Within an occurrence, accepted quantity may be less than arrived quantity. An accepted quantity slice may proceed through A01 without waiting for the entire purchase order or all other receipt lines to complete, provided the slice is independently attributable, authorized, validated and protected against duplicate posting. Remaining quantities retain their own disposition and lineage.
+
+### QTY-01 — Quantity reconciliation invariant
+
+At the same receipt-line observation, same measurement basis and compatible unit, the conceptual quantity partition must reconcile:
+
+**Physically Arrived = Accepted-for-Inventory + Rejected + Unresolved/Held/Discrepant.**
+
+The equation is an invariant, not an approved physical formula, numeric type, rounding policy or conversion implementation. Any unit normalization must use reproducible source-owned conversion provenance. A reconciliation mismatch fails closed for A01 admission until resolved; no residual is silently assigned to accepted quantity.
+
+### QTY-02 — Only accepted quantity may post
+
+Only the validated accepted-for-inventory quantity slice is eligible for positive A01 on-hand movement under DOC08-FIX-024. Rejected and unresolved/held/discrepant quantities are excluded. The accepted quantity must be bounded by the reconciled arrived quantity; the exact over-receipt, shortage and tolerance policies remain separate OPEN decisions.
+
+### QTY-03 — One-time posting and immutable history
+
+Each accepted-for-inventory quantity slice may have only one authoritative A01 posting outcome. Duplicate acceptance or replay must not create another movement. A disposition change before posting must be auditable and revalidated. A change after posting must not silently rewrite the accepted slice or movement; any stock correction follows DOC08-FIX-025 with its required lineage.
+
+### FIX-028 — Boundaries and retained OPEN dependencies
+
+This FIX does not select literal lifecycle states, source tables/columns/keys, physical transition model, numeric precision/scale, rounding, conversion snapshot/version, tolerance, over-receipt approval, shortage/shrinkage handling, event-to-movement cardinality, Batch/Location allocation, DOC-05 permission tuple, physical idempotency/recovery, transaction atomicity/concurrency, tenant enforcement, projection reconciliation or executed evidence.
+
+DOC08-FIX-018/019/024/025/026/027 remain unchanged. No permission is granted, no adapter is activated, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. Technical dependencies remain OPEN. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §42.50; DOC-09 §11.32; Worklist §15.112.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+
+## DOC08-FIX-029 — Purchase / Goods Receipt over-receipt, shortage and tolerance controls (Owner-approved conceptual FIX, 22 November 2026)
+
+The Owner explicitly approved all three receiving quantity-variance rules. This FIX refines DOC08-FIX-027-C and DOC08-FIX-028 without changing the accepted-only A01 posting boundary, the physical-arrival quantity, or the immutable movement ledger.
+
+### FIX-029-A — Over-receipt
+
+Quantity physically presented/received above the ordered PO quantity is an over-receipt variance. The excess portion must not be automatically accepted for inventory or automatically posted to on-hand. It requires a specific approval by an authorized party under an explicit policy before the excess portion can be considered for acceptance. Approval does not replace physical receipt, quantity disposition, validation, A01 authorization or posting controls. The excess remains separately identifiable and ineligible for A01 until all applicable controls are satisfied.
+
+### FIX-029-B — Shortage
+
+A quantity physically received below the ordered PO quantity is recorded as a shortage/discrepancy against the PO. The missing quantity is not treated as physically received, accepted-for-inventory, or an inventory movement. Only the quantity actually arrived and separately accepted may be eligible for positive A01 posting under DOC08-FIX-024 and DOC08-FIX-028. The shortage remains a procurement/receiving variance for its own review and resolution; it must not be fabricated as a receipt or movement.
+
+### FIX-029-C — Tolerance
+
+The default receiving tolerance is **0%**. A non-zero tolerance may apply only where an explicit policy and explicit authorization permit it. Tolerance is a variance-control rule; it must never alter, inflate, reduce or otherwise rewrite the quantity physically arrived or the quantity actually accepted. Quantity facts and their source/unit-conversion provenance remain truthful and separately traceable. Tolerance does not independently create receipt, acceptance or inventory movement.
+
+### FIX-029 — Boundaries and retained OPEN dependencies
+
+These rules decide the conceptual Owner policy only. Exact numeric precision/scale, rounding, conversion snapshot/version, PO amendment/version semantics, source representation, approval actor/scope/SoD/audit tuple, and technical enforcement remain OPEN. Event-to-movement cardinality/orchestration and Batch/Location allocation remain OPEN and are the next conceptual contract reviews. Physical keys/constraints, idempotency/recovery, atomicity/concurrency, tenant enforcement, projection reconciliation and executed evidence remain OPEN.
+
+DOC08-FIX-018/019/024/025/026/027/028 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §42.51; DOC-09 §11.33; Worklist §15.113.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## DOC08-FIX-030 — Purchase / Goods Receipt accepted-slice, A01 event and movement cardinality (Owner-approved conceptual FIX, 22 November 2026)
+
+The Owner approved the logical event-to-movement cardinality recommendation. This FIX supplements DOC08-FIX-027/028/029 and preserves the accepted-only A01 posting boundary and immutable movement ledger.
+
+### FIX-030-A — One accepted slice, one authoritative A01 posting event
+
+Each independently attributable Accepted-for-Inventory Quantity Slice has exactly one authoritative logical A01 posting event/outcome. Its lineage preserves Business + physical Receipt Occurrence + Receipt Line + accepted-slice identity. One event does not combine accepted slices from different receipt lines or occurrences; a later partial acceptance is a distinct slice with its own event.
+
+### FIX-030-B — One event, one-or-more movements
+
+A successfully committed A01 posting event produces one or more Inventory Movement ledger entries (1:N). This permits deterministic fan-out when the accepted quantity is allocated across applicable stock-grain effects. Each movement belongs to exactly one event and one accepted slice and retains its originating receipt occurrence and receipt-line lineage. A movement must not combine quantities from multiple events or accepted slices.
+
+### FIX-030-C — Quantity conservation and complete fan-out
+
+The sum of the positive movement base-quantity deltas for an accepted slice must equal its validated accepted quantity normalized to Product base unit, with reproducible conversion provenance. A posting is conceptually complete only when the entire deterministic movement set is attributable and reconciled; partial fan-out is not a successful complete posting. Numeric precision/scale/rounding and physical transaction atomicity remain OPEN.
+
+### FIX-030-D — Replay and immutable correction lineage
+
+Same-identity/same-payload retry resolves to the original authoritative event and complete movement set, never a duplicate. Changed payload for the same identity is a conflict; uncertain commit must be reconciled before retry. Posted movement history is immutable; post-post correction follows DOC08-FIX-025 with separately attributable reversal/compensating lineage.
+
+### FIX-030 — Boundaries and retained OPEN dependencies
+
+This FIX is conceptual only. Exact physical event/movement objects, keys/FKs, stock grain, Batch/Location allocation, numeric implementation, purchase-specific DOC-05 authorization tuple, physical idempotency/recovery, atomicity/isolation/locking/concurrency, tenant enforcement, projection reconciliation and executed evidence remain OPEN. It does not activate the adapter, grant permission, approve physical schema or authorize implementation.
+
+The A12.10/A12.11 exactly-one-movement rule remains scoped to transfer shipment receipt/return details; it is not generalized to Purchase / Goods Receipt. DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §42.52; DOC-09 §11.34; Worklist §15.114.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## DOC08-FIX-031 — Purchase / Goods Receipt Batch and Location allocation (Owner-approved conceptual FIX, 22 November 2026)
+
+The Owner explicitly approved all seven proposed Batch/Location allocation rules. This FIX supplements DOC08-FIX-030 and the existing inventory ledger, batch, projection and costing baseline.
+
+### FIX-031-A — Explicit receiving Location per allocation portion
+
+Every allocation portion resolves to an explicit, eligible receiving Inventory Location within the same Business before A01. A PO, supplier, user session or Business default does not silently establish actual physical Location. A configured default is permissible only under an explicit policy that resolves the actual destination and is preserved in receipt lineage. Unknown, invalid, cross-Business or ineligible Location blocks A01.
+
+### FIX-031-B — Multiple Locations only for observed physical distribution
+
+An accepted slice may split across multiple Locations only when the physical distribution is observed and recorded. No artificial split for projection balancing or default satisfaction. Each portion remains separately attributable.
+
+### FIX-031-C — Actual physical Batch/Lot identity for batch-tracked Product/Variant
+
+Where batch tracking applies, allocation identifies the actual physical Batch/Lot received. Distinct supplier/manufacturer lots remain distinct and cannot be merged merely because Product, Location, expiry or cost match. Do not invent Batch identity from PO or cost-layer identity. Preserve required source/physical attributes; missing or conflicting required identity/attributes block posting.
+
+### FIX-031-D — Unbatched path only under explicit Product/Variant policy
+
+Unbatched allocation is allowed only where an explicit Product/Variant tracking policy says batch tracking is not required. The conceptual path is FIX; authoritative policy source, physical representation and enforcement remain OPEN. No implicit unbatched fallback when tracking is required or unknown.
+
+### FIX-031-E — FEFO, physical Batch and cost-layer separation
+
+FEFO is outbound physical-batch selection, not incoming lot assignment. Receiving records the actual physical lot received. Physical Batch remains distinct from FIFO cost-layer identity and MWA valuation. A01 must not fabricate a cost layer or create extra on-hand movement for costing-only processing.
+
+### FIX-031-F — Allocation grain, cardinality and quantity conservation
+
+Logical allocation grain: one accepted slice + one Product/Variant + one receiving Location + one actual physical Batch or explicitly permitted unbatched state. One accepted slice may produce one-or-more allocation portions; each portion maps to exactly one positive Inventory Movement. Distinct Locations/Batches require separately attributable portions/movements. Portions cannot combine accepted slices or receipt lines.
+
+For each accepted slice, allocation-portion quantities and positive movement base-quantity deltas each sum to the validated accepted quantity in Product base unit. Every portion is positive; over-allocation, under-allocation, duplicate allocation and silent residual are prohibited. Numeric implementation remains OPEN.
+
+### FIX-031-G — Fail-closed allocation, projections and authority boundary
+
+Unresolved, invalid or unreconciled required Location/Batch allocation blocks A01. Portions remain within one Business and the source slice's Product/Variant. Balance projection is Product/Variant/Location scoped; batch-balance projection reconciles to the parent Location balance. Batch create/hold/release, receiving, discrepancy approval and movement posting remain distinct actions. DOC-05 candidate keys are not grants and do not settle the purchase-specific authorization tuple.
+
+### FIX-031 — Boundaries and retained OPEN dependencies
+
+This is a conceptual FIX only. Physical allocation object/table/columns/keys/FKs, Location taxonomy/defaulting, authoritative Product batch-tracking policy source, exact physical Batch identity/attributes, exception handling, physical constraints, numeric precision/scale/rounding, purchase-specific DOC-05 actor/scope/approval/SoD/audit tuple, atomicity/isolation/locking/concurrency/idempotency/recovery, tenant enforcement, projection reconciliation implementation and executed evidence remain OPEN.
+
+DOC08-FIX-030 and DOC08-FIX-018/019/024/025/026/027/028/029 remain unchanged. No permission is granted, no adapter is enabled, and no physical schema/runtime behavior or Stage 6 implementation is approved.
+
+**Status:** FIX — OWNER APPROVED / CONCEPTUAL. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §42.54; DOC-09 §11.36; Worklist §15.116.
+
+READ-ONLY • APPEND-ONLY • `DB_PUSH_BLOCKED: ACTIVE` • Stage 6 implementation NOT AUTHORIZED.
+
+## DOC08-FIX-032 — Product/Variant Batch Policy and Receiving Location Eligibility (Owner-approved conceptual FIX, 22 November 2026)
+
+The Owner explicitly approved the recommendations in DOC-04 §42.55. This FIX establishes conceptual policy outcomes for Batch tracking and purchase-receipt Location eligibility. It supplements DOC08-FIX-030 and DOC08-FIX-031; neither is reopened or changed.
+
+### FIX-032-A — Explicit Product-owned Batch-tracking policy
+
+Product master owns an explicit policy outcome: Batch tracking required or Batch tracking not required. Unknown, unset or conflicting policy is not equivalent to not-tracked and blocks A01.
+
+### FIX-032-B — Variant inheritance and controlled override
+
+Variant inherits the Product policy by default. A Variant-level override is allowed only when explicitly authorized and auditable. Silent/implicit override is prohibited. The exact authorization key and audit representation remain OPEN.
+
+### FIX-032-C — Receipt-time effective policy preservation
+
+The effective Product/Variant policy is resolved for the accepted receipt slice/allocation and preserved as a receipt-time decision/snapshot. Later master-data changes do not rewrite historical accepted slices or posted movements. Physical snapshot/version representation remains OPEN.
+
+### FIX-032-D — Batch identity and unbatched path
+
+When effective policy requires Batch tracking, every allocation portion identifies the actual physical Batch/Lot received and satisfies applicable required identity/attribute requirements; missing or ambiguous required identity/attributes block A01. Unbatched allocation is permitted only under the explicit effective policy that Batch tracking is not required, consistent with FIX-031-D.
+
+### FIX-032-E — Same-Business active receiving-eligible Location
+
+Each receiving Location must be within the same Business, active, and explicitly eligible for inventory receiving under the applicable Business policy. Server-side resolution of authoritative Location identity and Business/parent relationship is required; client-supplied identifiers alone are insufficient. Unknown, inactive, cross-Business or non-receiving Location blocks A01.
+
+### FIX-032-F — Physical destination confirmation and default behavior
+
+Receiver confirms the actual physical destination. A configured Location default may prefill a suggestion only; it cannot silently determine/override the physical destination or bypass confirmation. Exact default precedence and confirmation evidence remain OPEN.
+
+### FIX-032-G — Virtual transit Location boundary
+
+A virtual transit Location is not a normal purchase-receiving destination unless a separately approved policy explicitly authorizes that use case. Exception authority and exact transit taxonomy remain OPEN.
+
+### FIX-032 — Boundaries and retained OPEN dependencies
+
+FIX-032 is conceptual only. It does not approve literal enum values, fields, tables, configuration structures, physical policy snapshot/version storage, override permission keys, Location taxonomy/status representation, default algorithms, physical schema/constraints or runtime behavior. It does not grant receiving, discrepancy, Batch administration or posting permissions and does not activate A01.
+
+Still OPEN: authoritative physical policy source/representation; Variant override authority and audit; snapshot/version representation; Location lifecycle/type/receiving-capability representation; default precedence and confirmation evidence; transit exception authority; purchase-specific DOC-05 actor/scope/approval/SoD/audit tuple; physical objects/keys/FKs/constraints; numeric precision/scale/rounding/conversion; atomicity/isolation/locking/concurrency/idempotency/recovery; tenant enforcement; projection reconciliation implementation; and executed evidence.
+
+DOC08-FIX-030 and DOC08-FIX-031 remain unchanged. ERD-OPEN-05 remains OPEN; candidate Data Dictionary acceptance 0/17; canonical physical ERD NOT ACCEPTED; CW-11 Package E IN PROGRESS / ACCEPTANCE NOT MET; implementation readiness NOT READY.
+
+Related anchors: DOC-04 §42.56; DOC-09 §11.38; Worklist §15.118.
+
+READ-ONLY • APPEND-ONLY • DB_PUSH_BLOCKED: ACTIVE • Stage 6 implementation NOT AUTHORIZED.
