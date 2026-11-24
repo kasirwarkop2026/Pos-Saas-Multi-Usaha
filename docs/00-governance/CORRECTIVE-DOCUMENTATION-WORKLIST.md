@@ -4615,4 +4615,25 @@ Documentation-only, append-only on PR #149 branch. No SQL/DDL/DML, database muta
 **Next bounded step:** prepare the PGA-04 Owner decision packet for Virtual Transit Location exception, preserving the established custody, receiving and inventory-ledger ownership boundaries. Do not infer a technical exception or begin implementation.
 
 Documentation-only, append-only on PR #149 branch. PR remains open/unmerged. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
+ 
+## 15.139 PGA-04 — Prepare Owner Decision Packet: Virtual Transit Location Exception
+
+**Completed:** bounded read-only source review of DOC-04 §§42.54.1–42.54.2, §42.54.7, §42.56.2–42.56.3 and §16.3–§16.5; DOC-03 §19.1; DOC-05 §25.4; DOC-02 §6. Owner-facing packet prepared at DOC-04 §42.77 and indexed at DOC-09/decision register §11.59.
+
+**Fixed baseline preserved:** normal A01 receiving requires an explicit, active, same-Business and receiving-eligible Location; receiver confirms actual physical destination; Virtual Transit Location is excluded from normal purchase receiving unless separately approved. Transfer dispatch, transit custody and destination receipt are distinct conceptual events; closure requires reconciled disposition and unresolved investigation blocks closure.
+
+**Recommended policy package submitted — awaiting Owner decision:**
+- [ ] Keep Virtual Transit Location excluded from normal A01 purchase-receiving destinations by default.
+- [ ] Allow only narrow, case-specific exceptions explicitly approved by Owner for exact Business/use case.
+- [ ] Treat exception only as evidenced transit/custody staging; never as substitute for physical arrival or final destination confirmation.
+- [ ] Preserve separate dispatch, transit custody, destination receipt, discrepancy/investigation, return/loss and closure events.
+- [ ] Require exact scope, purpose, source/destination context, effective boundary, expiry/review/revocation and custody/shipment evidence.
+- [ ] No A01 posting merely because virtual transit is selected; fail closed until valid policy and evidence conditions are met.
+- [ ] Preserve M07 custody, M08 procurement/receiving and M06 inventory-ledger ownership boundaries.
+
+**Open pending response:** PGA-04 remains OWNER DECISION REQUIRED / OPEN. No Location taxonomy, virtual-location flag, event schema, approval key, permission, role, approver assignment, runtime enforcement or physical design is approved.
+
+**Next gate:** obtain explicit Owner approval or amendment of DOC-04 §42.77.3. Do not proceed to PGA-05 or implementation as though PGA-04 were closed.
+
+Documentation-only, append-only on PR #149 branch. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, account/permission change or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED.
 
