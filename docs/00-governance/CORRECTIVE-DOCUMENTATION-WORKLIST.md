@@ -4019,3 +4019,53 @@ No new DOC08 FIX. DOC08-FIX-027/028/029/030/031/032 remain unchanged. No physica
 ### 15.123.5 Governance
 
 Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+
+## 15.124 CW-11 Package E — A01 source-and-Owner-authority gap triage (24 November 2026)
+
+### 15.124.1 Scope and result
+
+Completed a read-only classification of DOC-04 §42.61 OPEN blockers against DOC-03 §§6, 18–19, DOC-05 §§23–25 and the existing A01 FIX/audit baseline. Detailed source/authority mapping is DOC-04 §42.62; concise Open Register view is DOC-09 §11.44.
+
+### 15.124.2 Checklist disposition
+
+| Work item | Classification | Status |
+|---|---|---|
+| Preserve source-resolved domain/ledger/projection/tenant/authorization conceptual boundaries | Existing baseline; do not reopen | DONE — source anchors recorded in DOC-04 §42.62.2 |
+| Identify unresolved Owner/domain policy decisions | Class A | OPEN — Owner decision/authority assignment required |
+| Group physical/technical design dependencies by controlling domain | Class B | DONE — grouped in DOC-04 §42.62.4; designs remain OPEN |
+| Separate post-authorization test/evidence requirements | Class C | DONE — scenarios listed in DOC-04 §42.62.5; NOT EXECUTED / NOT AUTHORIZED |
+| Confirm no inferred role, threshold, physical mechanism, permission or implementation | Governance check | PASS |
+| CW-11 Package E acceptance | Overall gate | NOT MET |
+
+### 15.124.3 Class A decision items awaiting Owner
+
+1. Whether and under what explicit policy non-zero receiving tolerance/over-receipt exception may exist; default remains 0%.
+2. Who has authority to approve and audit a Variant Batch-policy override.
+3. Whether any separately approved virtual transit Location receiving exception is required; otherwise normal exclusion remains.
+4. How PO amendments/version changes affect receipts already arrived, inspected, accepted or posted; M08 is source domain, but specific policy is unresolved.
+5. Who is the independent approver for A01 exception/SoD cases; no self-approval or fallback.
+
+The reviewed source does not identify individual decision-makers or complete delegated authority for these items. Owner must explicitly decide or assign the authority. Do not invent named people, role grants, approval thresholds or default exceptions.
+
+### 15.124.4 Class B design work (blocked pending policy inputs and separate authorization)
+
+- Physical source/receipt/accepted-slice identity, amendment linkage, keys/FKs and duplicate-acceptance constraints.
+- Lifecycle/disposition representation and transition authorization/audit.
+- Product/Variant Batch-policy effective snapshot; Location lifecycle/receiving eligibility and authoritative resolver.
+- Numeric types/precision/scale/capacity/overflow, Product increments/fractions, conversion provenance/version/snapshot and rounding.
+- A01-specific M08 receipt/acceptance and M06 posting action/actor/scope/approval/SoD/audit tuple and controlled handoff.
+- Atomicity, write-set, idempotency identity/payload/retention, locks/isolation/concurrency and uncertain-commit recovery.
+- Projection grain/watermark/freshness, reconciliation/rebuild/gap recovery, quarantine/alerts/manual recovery and physical tenant/audit enforcement.
+
+No technical choice is approved by this work item. Where a delegated design authority is absent from source, Owner assignment is required.
+
+### 15.124.5 Class C evidence gate
+
+All source lineage, lifecycle, approval, Batch/Location, numeric, replay/concurrency/rollback/recovery, projection/rebuild and tenant-isolation evidence remains NOT EXECUTED / NOT AUTHORIZED. Execution requires separate approval of design and implementation, controlled test environment, versioned reproducible evidence and review.
+
+### 15.124.6 Next bounded step and governance
+
+Next: present only the five Class A policy/authority items in §15.124.3 to the Owner for explicit decisions or delegated-authority assignment. Keep Class B technical design and Class C evidence separate. Do not move to another A01 source family; do not declare Package E accepted.
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, deployment or Production change. PR #149 remains open/unmerged; review and merge are separate gates.
