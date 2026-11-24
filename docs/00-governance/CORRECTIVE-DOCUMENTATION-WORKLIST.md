@@ -4170,3 +4170,53 @@ Proceed to ODR-A01-02 using DOC-04 §42.63.2. Keep ODR-A01-01's detailed paramet
 ### 15.127.5 Governance
 
 Documentation-only, append-only on PR #149 branch docs/cw11-a01-purchase-receipt-contract-2026-11-22. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, or Production change. DB_PUSH_BLOCKED: ACTIVE; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
+
+
+## 15.128 CW-11 Package E — Record and audit Owner response to ODR-A01-02 (24 November 2026)
+
+### 15.128.1 Deliverable completed
+
+Recorded the Owner's explicit agreement to the Variant Batch-policy recommendation in DOC-04 §42.66 and DOC-09 §11.48:
+
+- Product remains the owner of the explicit Batch-tracking policy.
+- Variant inherits Product policy by default.
+- Variant override is permitted only as an explicit, authorized and auditable exception.
+- Receipt-time policy integrity and the existing fail-closed baseline are preserved.
+
+### 15.128.2 Consistency audit
+
+| Check | Result |
+|---|---|
+| Consistency with DOC08-FIX-032 / DOC-04 §42.56 | PASS |
+| Consistency with DOC-03 Product/Variant ownership boundary | PASS |
+| Consistency with DOC-04 §§42.62–42.64 recommendation boundary | PASS |
+| New FIX or changed existing FIX | NONE |
+| Override approval authority/delegation assigned | NO — OPEN |
+| Business/Product/Variant scope and limits defined | NO — OPEN |
+| Effective date/version, expiry/review/revocation defined | NO — OPEN |
+| Evidence/audit detail defined | NO — OPEN |
+| Physical policy source/snapshot or runtime mechanism approved | NO — OPEN |
+
+### 15.128.3 Checklist update
+
+| Work item | Status |
+|---|---|
+| ODR-A01-01 policy principle | PARTIALLY APPROVED — detailed parameters OPEN |
+| ODR-A01-01 exception authority/limits/effective period/evidence | OPEN |
+| ODR-A01-02 policy principle | PARTIALLY APPROVED — authority/scope/lifecycle parameters OPEN |
+| ODR-A01-02 override authority/delegation/scope/effective period/revocation/evidence | OPEN |
+| ODR-A01-03 — Virtual transit Location exception | PENDING OWNER |
+| ODR-A01-04 — PO amendment effect on receipt lifecycle | PENDING OWNER |
+| ODR-A01-05 — Independent approver / A01 exception SoD | PENDING OWNER |
+| DOC08-FIX-027..032 | PRESERVED — no change |
+| Class B physical/technical design | OPEN — separate design/review gate |
+| Class C runtime/security/concurrency/reconciliation evidence | NOT EXECUTED / NOT AUTHORIZED |
+| CW-11 Package E acceptance | NOT MET |
+
+### 15.128.4 Next bounded gate
+
+Proceed to ODR-A01-03 using DOC-04 §42.63.2. Keep ODR-A01-01 and ODR-A01-02 unresolved operational parameters OPEN. After all five Owner requests have responses, perform a consolidated authority/scope/consistency audit before final decision dispositions. Do not begin physical design/implementation or move to another A01 source family before Package E acceptance.
+
+### 15.128.5 Governance
+
+Documentation-only, append-only on PR #149 branch `docs/cw11-a01-purchase-receipt-contract-2026-11-22`. No SQL/DDL/DML, database mutation, migration, RLS/Auth, triggers, API/backend, application source, CI workflow, Vercel configuration/deployment, or Production change. `DB_PUSH_BLOCKED: ACTIVE`; Stage 6 implementation NOT AUTHORIZED. PR #149 remains open/unmerged; review and merge remain separate gates.
